@@ -1,0 +1,18 @@
+methods:
+  base: {}
+  tcd:
+    alpha: 0.5
+    beta: 0.5
+    downsample_frames: 4
+    threshold_space: raw_logits
+  dino_heal:
+    dino_checkpoint: facebook/dinov2-large
+    visual_weight: 0.3
+    saliency_weight: 0.7
+    require_dino: true
+  season:
+    alpha: 1.0
+    homogenization_beta: 0.33
+    spatial_noise_std: 0.1
+    attention_layers: [20, 21, 22, 23]
+    epsilon: 1.0e-8

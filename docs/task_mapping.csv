@@ -1,0 +1,6 @@
+task_name,meaning,input_format,output_format,official_metric,evaluator_file
+ORH,Object-Relation Hallucination,"paired basic/hallucination yes-no QA over a video","yes/no prediction per branch",strict pair accuracy,external/VideoHallucer/evaluations/evaluation_utils.py
+TPH,Temporal Hallucination,"paired basic/hallucination yes-no QA over a video","yes/no prediction per branch",strict pair accuracy,external/VideoHallucer/evaluations/evaluation_utils.py
+SDH,Semantic Detail Hallucination,"paired basic/hallucination yes-no QA over a video","yes/no prediction per branch",strict pair accuracy,external/VideoHallucer/evaluations/evaluation_utils.py
+EFH,External Factual Hallucination,"paired basic/hallucination yes-no QA over a video","yes/no prediction per branch",strict pair accuracy,external/VideoHallucer/evaluations/evaluation_utils.py
+ENFH,External Nonfactual Hallucination,"paired basic/hallucination yes-no QA over a video","yes/no prediction per branch",strict pair accuracy,external/VideoHallucer/evaluations/evaluation_utils.py

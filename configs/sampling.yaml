@@ -1,0 +1,4 @@
+num_frames: 8
+strategy: uniform
+short_video_policy: repeat_nearest_linspace
+record_manifest: true

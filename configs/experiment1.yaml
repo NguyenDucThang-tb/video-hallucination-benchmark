@@ -1,0 +1,10 @@
+name: hallucination_benchmark
+seed: 42
+models: [llava-ov-7b, qwen2.5-vl-7b, llava-video-7b]
+methods: [base, tcd, dino_heal, season]
+benchmarks: [vidhalluc, videohallucer, eventhallusion]
+sampling: configs/sampling.yaml
+generation: {max_new_tokens: 128, do_sample: false, temperature: 0.0, num_beams: 1}
+output_dir: results/raw
+manifest_dir: manifests
+resume: true

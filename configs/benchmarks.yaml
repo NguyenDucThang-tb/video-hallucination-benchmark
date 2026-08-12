@@ -1,0 +1,15 @@
+benchmarks:
+  vidhalluc:
+    tasks: [bqa, mcq, sth, tsh]
+    data_root: null
+  videohallucer:
+    tasks: [orh, tph, sdh, efh, enfh]
+    data_root: external/VideoHallucer/videohallucer_datasets
+  eventhallusion:
+    tasks: [entire, misleading, mix]
+    questions_root: external/EventHallusion/questions
+    video_root: null
+  tempcompass: {data_root: null}
+  tvbench: {data_root: null}
+  videomme: {data_root: null}
+  mvbench: {data_root: null}

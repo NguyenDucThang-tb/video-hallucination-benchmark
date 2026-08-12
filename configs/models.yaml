@@ -1,0 +1,13 @@
+models:
+  llava-ov-7b:
+    checkpoint: lmms-lab/llava-onevision-qwen2-7b-ov
+    local_path: null
+    adapter: llava_ov
+  qwen2.5-vl-7b:
+    checkpoint: Qwen/Qwen2.5-VL-7B-Instruct
+    local_path: null
+    adapter: qwen25_vl
+  llava-video-7b:
+    checkpoint: lmms-lab/LLaVA-Video-7B-Qwen2
+    local_path: null
+    adapter: llava_video

@@ -1,0 +1,82 @@
+# Python bytecode and test/tool caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments and local package artifacts
+.venv/
+venv/
+env/
+build/
+dist/
+*.egg-info/
+
+# Editors and operating-system files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+
+# Upstream repositories are reproducibly cloned by scripts/clone_repositories.sh
+external/*
+!external/COMMITS.lock
+
+# Datasets, videos, extracted frames, and caches
+/data/
+/dataset/
+/datasets/
+/videos/
+/frames/
+/cache/
+.cache/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+
+# Model checkpoints and training artifacts
+/checkpoints/
+/models/
+/weights/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Runtime outputs. Keep only directory placeholders.
+results/raw/*
+!results/raw/.gitkeep
+results/metrics/*
+!results/metrics/.gitkeep
+results/tables/*
+!results/tables/.gitkeep
+logs/*
+!logs/.gitkeep
+manifests/*
+!manifests/.gitkeep
+
+# Notebook execution artifacts
+.ipynb_checkpoints/
+wandb/
+runs/
+tensorboard/
