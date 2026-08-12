@@ -34,9 +34,9 @@ Thumbs.db
 credentials*.json
 secrets*.json
 
-# Upstream repositories are reproducibly cloned by scripts/clone_repositories.sh
-external/*
-!external/COMMITS.lock
+# Vendored upstream benchmark code snapshots.
+# Keep nested git metadata out if the sources are refreshed locally.
+external/**/.git/
 
 # Datasets, videos, extracted frames, and caches
 /data/
