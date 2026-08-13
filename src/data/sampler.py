@@ -55,48 +55,75 @@ def sample_video(
     if not capture.isOpened():
         raise RuntimeError(f"Cannot open video: {path}")
     try:
-        total = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+        reported_total = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
         fps = float(capture.get(cv2.CAP_PROP_FPS))
-        if total <= 0:
-            raise RuntimeError(f"Video reports no frames: {path}")
-        chosen = list(indices) if indices is not None else frame_indices(total, num_frames)
-        if len(chosen) != num_frames:
-            raise ValueError(f"Expected {num_frames} indices, got {len(chosen)}")
-        if any(i < 0 or i >= total for i in chosen):
-            raise ValueError(f"Frame index outside [0, {total - 1}]")
-
-        decoded = _decode_chosen_frames(capture, chosen, path, cv2)
     finally:
         capture.release()
+
+    if reported_total <= 0:
+        raise RuntimeError(f"Video reports no frames: {path}")
+
+    requested = list(indices) if indices is not None else None
+    decoded, effective_total, chosen = _decode_video_robust(
+        path=path,
+        num_frames=num_frames,
+        requested_indices=requested,
+        reported_total=reported_total,
+        cv2_module=cv2,
+    )
 
     manifest = FrameManifest(
         video_path=str(path),
         frame_indices=chosen,
-        total_frames=total,
+        total_frames=effective_total,
         fps=fps,
-        duration_seconds=(total / fps if fps > 0 else 0.0),
+        duration_seconds=(effective_total / fps if fps > 0 else 0.0),
         num_frames=num_frames,
         strategy=strategy,
     )
     return np.stack(decoded), manifest
 
 
-def _decode_chosen_frames(capture, chosen: list[int], path: Path, cv2_module) -> list[np.ndarray]:
-    unique_indices = sorted(set(chosen))
-    frame_map: dict[int, np.ndarray] = {}
-    wanted = set(unique_indices)
-    current_index = 0
+def _decode_video_robust(
+    path: Path,
+    num_frames: int,
+    requested_indices: list[int] | None,
+    reported_total: int,
+    cv2_module,
+) -> tuple[list[np.ndarray], int, list[int]]:
+    frames: list[np.ndarray] = []
+    capture = cv2_module.VideoCapture(str(path))
+    if not capture.isOpened():
+        raise RuntimeError(f"Cannot open video: {path}")
+    try:
+        while True:
+            ok, bgr = capture.read()
+            if not ok:
+                break
+            frames.append(cv2_module.cvtColor(bgr, cv2_module.COLOR_BGR2RGB))
+    finally:
+        capture.release()
 
-    while wanted:
-        ok, bgr = capture.read()
-        if not ok:
-            missing = sorted(wanted)
-            raise RuntimeError(
-                f"Failed decoding frame {missing[0]} from {path}; remaining targets: {missing[:8]}"
-            )
-        if current_index in wanted:
-            frame_map[current_index] = cv2_module.cvtColor(bgr, cv2_module.COLOR_BGR2RGB)
-            wanted.remove(current_index)
-        current_index += 1
+    actual_total = len(frames)
+    if actual_total <= 0:
+        raise RuntimeError(f"Could not decode any frame from {path}")
 
-    return [frame_map[index] for index in chosen]
+    effective_total = actual_total
+    if requested_indices is None:
+        chosen = frame_indices(actual_total, num_frames)
+    else:
+        if len(requested_indices) != num_frames:
+            raise ValueError(f"Expected {num_frames} indices, got {len(requested_indices)}")
+        if any(index < 0 for index in requested_indices):
+            raise ValueError("Frame indices must be non-negative")
+        if any(index >= actual_total for index in requested_indices):
+            chosen = frame_indices(actual_total, num_frames)
+        else:
+            chosen = requested_indices
+
+    if reported_total != actual_total:
+        # Preserve the decodable frame count in the manifest; the raw file's
+        # advertised count can be larger than what OpenCV can actually read.
+        effective_total = actual_total
+
+    return [frames[index] for index in chosen], effective_total, chosen
