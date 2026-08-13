@@ -7,7 +7,7 @@ from src.data.schema import PredictionRecord
 
 def description_reference(split: str, event_info: dict) -> str | None:
     """Fixed evaluator: upstream checks interleave, while data calls it mix."""
-    if split == "mix":
+    if split in {"mix", "interleave"}:
         return event_info.get("unexpected")
     if split in {"entire", "misleading"}:
         return event_info.get("caption")

@@ -7,6 +7,8 @@ the released dataset and inference use `mix`. Consequently, upstream routes
 mix descriptions to the misleading template and `event_info.caption`. Our
 separate evaluator maps `mix` to `event_info.unexpected`. Upstream is retained
 unchanged. Reports must show both evaluator variants when GPT judging runs.
+Local data releases may additionally store the `mix` videos under an
+`interleave/` directory; the benchmark loader accepts both layouts.
 
 ## EventHallusion API
 
