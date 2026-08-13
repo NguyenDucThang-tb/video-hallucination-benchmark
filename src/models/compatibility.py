@@ -8,7 +8,7 @@ COMPATIBILITY = {
         "season": (False, "Vision homogenization and decoder attention adapter not GPU-validated"),
     },
     "qwen2.5-vl-7b": {
-        "base": (False, "Hugging Face checkpoint adapter not GPU-validated in this workspace"),
+        "base": (True, "Offline checkpoint load validated on Gadi; base generation adapter enabled"),
         "tcd": (False, "Token-level dual-branch adapter not GPU-validated"),
         "dino_heal": (False, "No validated DINO saliency fusion for Qwen visual encoder"),
         "season": (False, "Qwen vision and decoder attention adapter not GPU-validated"),
