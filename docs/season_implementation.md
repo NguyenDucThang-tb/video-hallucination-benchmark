@@ -8,10 +8,30 @@ token-level contrastive decoder, not frame dropping.
 For eight frames V and query Q, one autoregressive context is evaluated under:
 
 - `vO`: original video representation.
+- `vP`: positive feature-enhanced video representation.
 - `vS`: spatial negative from Gaussian-corrupted video pixels.
 - `vT`: temporal negative produced by layer-wise temporal homogenization.
 
 The same generated prefix is supplied to all three branches at every step.
+
+## Positive feature enhancement
+
+The positive branch injects foreground persistence and directed temporal
+evidence into post-encoder/projector visual embeddings. For visual features
+`V[t,p]`, foreground saliency `F[t,p]`, and persistence
+`P[p] = mean_t F[t,p]`:
+
+```text
+S[t,p]  = alpha_pos * F[t,p] + alpha_spatial * P[p]
+E[t,p]  = normalize(V[t,p] - V[t-1,p]) * ||V[t,p]||
+V'[t,p] = V[t,p] * (1 + S[t,p]) + beta_temporal * E[t,p]
+```
+
+`E[0,p]` is zero. The evidence term is multiplied by the foreground mask before
+normalization, so background patches are excluded from motion evidence. The
+reference implementation is `src.methods.season.enhance_visual_features`; model
+adapters should call it inside a vision-feature hook and preserve the original
+output container format.
 
 ## Temporal homogenization
 
@@ -63,3 +83,8 @@ A model adapter must expose step logits, decoder attention mapped to exact
 frame/patch token ranges, and hooks at every vision layer. If any signal is
 unavailable, compatibility is `unsupported`; neither final-feature averaging
 nor frame dropping substitutes for SEASON.
+
+Video frames are sampled through the OpenCV-backed
+`src.data.sampler.sample_video` path. This is slower than some specialized
+video readers but avoids decoder-specific frame loading failures in the
+benchmark protocol.

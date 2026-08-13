@@ -14,5 +14,8 @@ methods:
     alpha: 1.0
     homogenization_beta: 0.33
     spatial_noise_std: 0.1
+    positive_alpha: 0.4
+    positive_alpha_spatial: 0.4
+    positive_beta_temporal: 0.4
     attention_layers: [20, 21, 22, 23]
     epsilon: 1.0e-8
