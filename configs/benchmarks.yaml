@@ -1,14 +1,14 @@
 benchmarks:
   vidhalluc:
-    tasks: [bqa, mcq, sth, tsh]
-    data_root: null
+    tasks: [ach, sth, tsh]
+    data_root: /scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data
   videohallucer:
     tasks: [orh, tph, sdh, efh, enfh]
-    data_root: external/VideoHallucer/videohallucer_datasets
+    data_root: /scratch/jp09/dd9648/datasets_video_hallu/videohallucer
   eventhallusion:
     tasks: [entire, misleading, mix]
     questions_root: external/EventHallusion/questions
-    video_root: null
+    video_root: /scratch/jp09/dd9648/datasets_video_hallu/eventhallusion/videos
   tempcompass: {data_root: null}
   tvbench: {data_root: null}
   videomme: {data_root: null}
