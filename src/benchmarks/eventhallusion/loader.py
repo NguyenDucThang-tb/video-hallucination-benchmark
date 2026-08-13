@@ -15,6 +15,15 @@ SPLIT_VIDEO_DIRS = {
 }
 
 
+def normalize_yes_no_label(value: str) -> str:
+    text = str(value).strip().lower()
+    if text.startswith("yes"):
+        return "yes"
+    if text.startswith("no"):
+        return "no"
+    return text
+
+
 class EventHallusionLoader(BenchmarkLoader):
     def __init__(self, questions_root: str | Path, video_root: str | Path, splits=None):
         self.questions_root = Path(questions_root)
@@ -32,7 +41,7 @@ class EventHallusionLoader(BenchmarkLoader):
                         sample_id=f"{split}:{video_id}:{index}", benchmark="eventhallusion", task=split,
                         video_path=video_path,
                         prompt=question["question"] + "\nPlease answer yes or no:",
-                        ground_truth=str(question["answer"]).lower(), answer_type="yes_no",
+                        ground_truth=normalize_yes_no_label(str(question["answer"])), answer_type="yes_no",
                         metadata={"event_info": video.get("event_info", {}), "source": str(source)},
                     )
 

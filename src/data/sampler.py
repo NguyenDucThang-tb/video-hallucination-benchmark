@@ -65,13 +65,7 @@ def sample_video(
         if any(i < 0 or i >= total for i in chosen):
             raise ValueError(f"Frame index outside [0, {total - 1}]")
 
-        decoded: list[np.ndarray] = []
-        for index in chosen:
-            capture.set(cv2.CAP_PROP_POS_FRAMES, index)
-            ok, bgr = capture.read()
-            if not ok:
-                raise RuntimeError(f"Failed decoding frame {index} from {path}")
-            decoded.append(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
+        decoded = _decode_chosen_frames(capture, chosen, path, cv2)
     finally:
         capture.release()
 
@@ -85,3 +79,24 @@ def sample_video(
         strategy=strategy,
     )
     return np.stack(decoded), manifest
+
+
+def _decode_chosen_frames(capture, chosen: list[int], path: Path, cv2_module) -> list[np.ndarray]:
+    unique_indices = sorted(set(chosen))
+    frame_map: dict[int, np.ndarray] = {}
+    wanted = set(unique_indices)
+    current_index = 0
+
+    while wanted:
+        ok, bgr = capture.read()
+        if not ok:
+            missing = sorted(wanted)
+            raise RuntimeError(
+                f"Failed decoding frame {missing[0]} from {path}; remaining targets: {missing[:8]}"
+            )
+        if current_index in wanted:
+            frame_map[current_index] = cv2_module.cvtColor(bgr, cv2_module.COLOR_BGR2RGB)
+            wanted.remove(current_index)
+        current_index += 1
+
+    return [frame_map[index] for index in chosen]
