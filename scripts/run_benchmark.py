@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 import time
+from collections import defaultdict
 from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -106,6 +108,68 @@ def output_paths(config: dict, model: str, method: str, benchmark: str) -> tuple
     )
 
 
+def count_loader_samples(loader) -> int:
+    return sum(1 for _ in loader.iter_samples())
+
+
+def print_progress(message: str) -> None:
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}", flush=True)
+
+
+def flatten_metrics(prefix: str, value, output: dict[str, object]) -> None:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            flatten_metrics(f"{prefix}.{key}" if prefix else key, child, output)
+    else:
+        output[prefix] = value
+
+
+def write_metrics_bundle(config: dict) -> dict[str, str]:
+    raw_root = PROJECT / config["output_dir"]
+    metrics_root = PROJECT / "results" / "metrics"
+    tables_root = PROJECT / "results" / "tables"
+    metrics_root.mkdir(parents=True, exist_ok=True)
+    tables_root.mkdir(parents=True, exist_ok=True)
+
+    grouped = defaultdict(list)
+    for path in sorted(raw_root.glob("*.jsonl")):
+        for record in read_jsonl(path):
+            grouped[(record.model, record.method, record.benchmark)].append(record)
+
+    metrics = {}
+    for (model, method, benchmark), records in grouped.items():
+        key = f"{model}/{method}/{benchmark}"
+        metrics[key] = evaluate_records(benchmark, records)
+
+    metrics_path = metrics_root / f"{config['name']}.metrics.json"
+    metrics_path.write_text(json.dumps(metrics, indent=2, sort_keys=True), encoding="utf-8")
+
+    rows = []
+    for result_key, value in metrics.items():
+        row = {"result_key": result_key}
+        flatten_metrics("", value, row)
+        rows.append(row)
+    columns = sorted({key for row in rows for key in row}) if rows else ["result_key"]
+
+    csv_path = tables_root / f"{config['name']}.results.csv"
+    with csv_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    md_path = tables_root / f"{config['name']}.results.md"
+    md_lines = ["| " + " | ".join(columns) + " |", "|" + "|".join(["---"] * len(columns)) + "|"]
+    md_lines.extend("| " + " | ".join(str(row.get(column, "N/A")) for column in columns) + " |" for row in rows)
+    md_path.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
+
+    return {
+        "metrics_json": str(metrics_path),
+        "results_csv": str(csv_path),
+        "results_md": str(md_path),
+    }
+
+
 def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit: int | None = None) -> dict:
     model = instantiate_model(job["model"])
     method = instantiate_method(job["method"], model)
@@ -117,10 +181,17 @@ def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit:
     records: list[PredictionRecord] = []
 
     sampling = load_yaml(PROJECT / config["sampling"])
+    total_samples = count_loader_samples(loader)
+    print_progress(
+        f"START {job['model']} / {job['method']} / {job['benchmark']} | total={total_samples} "
+        f"| resume_valid={len(resume_keys)} | limit={limit if limit is not None else 'full'}"
+    )
     seen = 0
+    skipped = 0
     for sample in loader.iter_samples():
         resume_key = (sample.sample_id, job["model"], job["method"], sample.benchmark, sample.task)
         if resume_key in resume_keys:
+            skipped += 1
             continue
         started = time.perf_counter()
         frames, manifest = sample_video(
@@ -164,18 +235,27 @@ def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit:
             }, ensure_ascii=False, sort_keys=True) + "\n")
         records.append(record)
         seen += 1
+        processed = skipped + seen
+        print_progress(
+            f"DONE  {job['benchmark']} {processed}/{total_samples} | new={seen} | sample={sample.sample_id} "
+            f"| parse={record.parser_status} | correct={record.is_correct}"
+        )
         if limit is not None and seen >= limit:
             break
 
     summary_records = read_jsonl(predictions_path)
     summary = evaluate_records(job["benchmark"], summary_records)
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    print_progress(
+        f"END   {job['model']} / {job['method']} / {job['benchmark']} | wrote={len(summary_records)} total records"
+    )
     return {
         "job": job,
         "predictions": str(predictions_path),
         "summary": str(summary_path),
         "manifest": str(manifest_path),
         "n_new_records": len(records),
+        "n_total_samples": total_samples,
     }
 
 
@@ -205,8 +285,13 @@ def main():
         try:
             results.append(run_job(config, job, generation_config, args.limit))
         except Exception as exc:
+            print_progress(f"ERROR {job['model']} / {job['method']} / {job['benchmark']} | {exc!r}")
             results.append({"job": job, "error": repr(exc)})
-    print(json.dumps({"executed": results}, indent=2))
+    bundle = write_metrics_bundle(config)
+    print_progress(
+        f"AGGREGATED metrics -> {bundle['metrics_json']} | table -> {bundle['results_csv']}"
+    )
+    print(json.dumps({"executed": results, "artifacts": bundle}, indent=2))
 
 
 if __name__ == "__main__":
