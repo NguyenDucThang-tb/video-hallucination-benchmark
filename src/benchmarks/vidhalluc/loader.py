@@ -76,6 +76,13 @@ def build_ach_prompt(question: str, choices: dict[str, str]) -> str:
     return "\n".join(lines)
 
 
+def build_bqa_prompt(question: str) -> str:
+    return (
+        f"{question.strip()}\n"
+        "Answer using only 'yes' or 'no'."
+    )
+
+
 def build_tsh_prompt(question: str) -> str:
     return (
         f"{question.strip()}\n"
@@ -97,7 +104,7 @@ class VidHallucLoader(BenchmarkLoader):
     def __init__(self, data_root: str | Path, tasks: list[str] | None = None):
         self.video_root = Path(data_root)
         self.annotation_root = self._resolve_annotation_root(self.video_root)
-        self.tasks = [task.lower() for task in (tasks or ["ach", "sth", "tsh"])]
+        self.tasks = [task.lower() for task in (tasks or ["bqa", "mcq", "sth", "tsh"])]
         self.video_index = build_video_index(self.video_root)
 
     def _resolve_annotation_root(self, video_root: Path) -> Path:
@@ -109,14 +116,49 @@ class VidHallucLoader(BenchmarkLoader):
 
     def iter_samples(self) -> Iterable[BenchmarkSample]:
         for task in self.tasks:
-            if task == "ach":
-                yield from self._iter_ach()
+            if task == "bqa":
+                yield from self._iter_bqa()
+            elif task in {"ach", "mcq"}:
+                yield from self._iter_ach(task_name="mcq")
             elif task == "tsh":
                 yield from self._iter_tsh()
             elif task == "sth":
                 yield from self._iter_sth()
             else:
                 raise ValueError(f"Unsupported VidHalluc task: {task}")
+
+    def _iter_bqa(self) -> Iterable[BenchmarkSample]:
+        data = json.loads((self.annotation_root / "ach_binaryqa.json").read_text(encoding="utf-8"))
+        for section_id, section in data.items():
+            if not isinstance(section, list):
+                continue
+            for question_index, item in enumerate(section):
+                question = str(item.get("q", "")).strip()
+                answers = item.get("a", {})
+                if not question or not isinstance(answers, dict):
+                    continue
+                for clip_name, answer in answers.items():
+                    video_path = find_video(clip_name, self.video_index)
+                    if video_path is None:
+                        continue
+                    gt = normalize_text(answer)
+                    if gt not in {"yes", "no"}:
+                        continue
+                    yield BenchmarkSample(
+                        sample_id=f"bqa:{section_id}:{question_index}:{clip_name}",
+                        benchmark="vidhalluc",
+                        task="bqa",
+                        video_path=video_path,
+                        prompt=build_bqa_prompt(question),
+                        ground_truth=gt,
+                        answer_type="yes_no",
+                        metadata={
+                            "source": "ach_binaryqa.json",
+                            "section": section_id,
+                            "question_index": question_index,
+                            "video_name": clip_name,
+                        },
+                    )
 
     def _iter_tsh(self) -> Iterable[BenchmarkSample]:
         data = json.loads((self.annotation_root / "tsh.json").read_text(encoding="utf-8"))
@@ -162,7 +204,7 @@ class VidHallucLoader(BenchmarkLoader):
                 },
             )
 
-    def _iter_ach(self) -> Iterable[BenchmarkSample]:
+    def _iter_ach(self, task_name: str = "mcq") -> Iterable[BenchmarkSample]:
         data = json.loads((self.annotation_root / "ach_mcq.json").read_text(encoding="utf-8"))
         for section_id, section in data.items():
             for clip_name, item in section.items():
@@ -174,9 +216,9 @@ class VidHallucLoader(BenchmarkLoader):
                 if gt not in LETTERS:
                     continue
                 yield BenchmarkSample(
-                    sample_id=f"ach:{section_id}:{clip_name}",
+                    sample_id=f"{task_name}:{section_id}:{clip_name}",
                     benchmark="vidhalluc",
-                    task="ach",
+                    task=task_name,
                     video_path=video_path,
                     prompt=build_ach_prompt(str(item["Question"]), choices),
                     ground_truth=gt,

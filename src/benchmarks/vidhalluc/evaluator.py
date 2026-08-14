@@ -19,7 +19,15 @@ def _parse_sth_scene_change(text: str) -> str | None:
 
 def evaluate_classification(records: list[PredictionRecord]) -> dict:
     tasks = {}
-    for task in ("ach", "sth", "tsh"):
+    for task in ("bqa", "mcq", "sth", "tsh"):
+        if task == "bqa":
+            score, count, correct = accuracy(r.is_correct for r in records if r.task == task)
+            tasks[task] = {"accuracy": score, "n": count, "correct": correct}
+            continue
+        if task == "mcq":
+            score, count, correct = accuracy(r.is_correct for r in records if r.task in {"ach", "mcq"})
+            tasks[task] = {"accuracy": score, "n": count, "correct": correct}
+            continue
         if task == "sth":
             correct_flags = []
             for record in records:

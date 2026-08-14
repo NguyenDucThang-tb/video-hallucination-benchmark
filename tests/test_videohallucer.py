@@ -13,5 +13,6 @@ def make(branch, correct, pair="p"):
 
 def test_official_metric_requires_both_pair_branches_correct():
     metric = pair_accuracy([make("basic", True), make("hallucination", False)])
-    assert metric["value"] == 0.0
-    assert pair_accuracy([make("basic", True), make("hallucination", True)])["value"] == 1.0
+    assert metric["metric"] == "strict_pair_accuracy"
+    assert metric["orh"]["accuracy"] == 0.0
+    assert pair_accuracy([make("basic", True), make("hallucination", True)])["orh"]["accuracy"] == 1.0

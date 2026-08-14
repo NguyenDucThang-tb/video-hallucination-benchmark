@@ -1,6 +1,6 @@
 benchmarks:
   vidhalluc:
-    tasks: [ach, sth, tsh]
+    tasks: [bqa, mcq, sth, tsh]
     data_root: /scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data
   videohallucer:
     tasks: [orh, tph, sdh, efh, enfh]
