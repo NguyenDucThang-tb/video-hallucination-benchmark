@@ -26,9 +26,29 @@ class InferenceMethod(ABC):
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> MethodOutput:
         raise NotImplementedError
 
+    def generate_batch(
+        self,
+        batch_video_frames: list[np.ndarray],
+        prompts: list[str],
+        generation_config: GenerationConfig,
+    ) -> list[MethodOutput]:
+        return [
+            self.generate(video_frames, prompt, generation_config)
+            for video_frames, prompt in zip(batch_video_frames, prompts)
+        ]
+
 
 class BaseMethod(InferenceMethod):
     name = "base"
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> MethodOutput:
         return MethodOutput(self.model.generate(video_frames, prompt, generation_config))
+
+    def generate_batch(
+        self,
+        batch_video_frames: list[np.ndarray],
+        prompts: list[str],
+        generation_config: GenerationConfig,
+    ) -> list[MethodOutput]:
+        texts = self.model.generate_batch(batch_video_frames, prompts, generation_config)
+        return [MethodOutput(text) for text in texts]

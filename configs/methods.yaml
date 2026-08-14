@@ -1,5 +1,6 @@
 methods:
-  base: {}
+  base:
+    batch_size: 4
   tcd:
     alpha: 0.5
     beta: 0.5

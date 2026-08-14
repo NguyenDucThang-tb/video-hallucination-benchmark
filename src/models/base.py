@@ -34,6 +34,19 @@ class ModelAdapter(ABC):
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
         raise NotImplementedError
 
+    def generate_batch(
+        self,
+        batch_video_frames: list[np.ndarray],
+        prompts: list[str],
+        generation_config: GenerationConfig,
+    ) -> list[str]:
+        if len(batch_video_frames) != len(prompts):
+            raise ValueError("batch_video_frames and prompts must have the same length")
+        return [
+            self.generate(video_frames, prompt, generation_config)
+            for video_frames, prompt in zip(batch_video_frames, prompts)
+        ]
+
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs: Any) -> Any:
         raise NotImplementedError(f"{self.name} does not expose branch preparation")
 

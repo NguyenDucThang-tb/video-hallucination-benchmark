@@ -117,6 +117,108 @@ def print_progress(message: str) -> None:
     print(f"[{timestamp}] {message}", flush=True)
 
 
+def emit_record(
+    *,
+    sample,
+    sample_manifest,
+    raw_output,
+    parse,
+    is_correct,
+    runtime_seconds: float,
+    job: dict,
+    model,
+    method,
+    sampling: dict,
+    generation_config: GenerationConfig,
+) -> PredictionRecord:
+    return PredictionRecord(
+        sample_id=sample.sample_id,
+        model=job["model"],
+        method=job["method"],
+        benchmark=sample.benchmark,
+        task=sample.task,
+        prompt=sample.prompt,
+        frame_indices=sample_manifest.frame_indices,
+        raw_output=raw_output.text,
+        normalized_output=parse.value,
+        ground_truth=sample.ground_truth,
+        is_correct=is_correct,
+        parser_status=parse.status,
+        error=parse.error,
+        model_checkpoint=model.checkpoint,
+        method_config=getattr(method, "config", {}) or {},
+        sampling_config=sampling,
+        generation_config=generation_config.__dict__,
+        runtime_seconds=runtime_seconds,
+        metadata={**sample.metadata, "manifest": sample_manifest.to_dict(), **raw_output.diagnostics},
+    )
+
+
+def flush_batch(
+    *,
+    batch_samples,
+    batch_frames,
+    batch_manifests,
+    method,
+    generation_config: GenerationConfig,
+    predictions_path: Path,
+    manifest_path: Path,
+    job: dict,
+    model,
+    sampling: dict,
+    seen: int,
+    skipped: int,
+    total_samples: int,
+    records: list[PredictionRecord],
+) -> int:
+    if not batch_samples:
+        return seen
+
+    started = time.perf_counter()
+    raw_outputs = method.generate_batch(
+        [item["frames"] for item in batch_frames],
+        [item.prompt for item in batch_samples],
+        generation_config,
+    )
+    batch_runtime = time.perf_counter() - started
+    per_sample_runtime = batch_runtime / max(len(batch_samples), 1)
+
+    for sample, sample_manifest, raw_output in zip(batch_samples, batch_manifests, raw_outputs):
+        parse = normalize_prediction(sample, raw_output.text)
+        is_correct = None if parse.value is None else parse.value == sample.ground_truth
+        if sample.task == "sth":
+            is_correct = None
+        record = emit_record(
+            sample=sample,
+            sample_manifest=sample_manifest,
+            raw_output=raw_output,
+            parse=parse,
+            is_correct=is_correct,
+            runtime_seconds=per_sample_runtime,
+            job=job,
+            model=model,
+            method=method,
+            sampling=sampling,
+            generation_config=generation_config,
+        )
+        append_jsonl(predictions_path, record)
+        with manifest_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({
+                "sample_id": sample.sample_id,
+                "benchmark": sample.benchmark,
+                "task": sample.task,
+                "manifest": sample_manifest.to_dict(),
+            }, ensure_ascii=False, sort_keys=True) + "\n")
+        records.append(record)
+        seen += 1
+        processed = skipped + seen
+        print_progress(
+            f"DONE  {job['benchmark']} {processed}/{total_samples} | new={seen} | sample={sample.sample_id} "
+            f"| parse={record.parser_status} | correct={record.is_correct} | batch={len(batch_samples)}"
+        )
+    return seen
+
+
 def flatten_metrics(prefix: str, value, output: dict[str, object]) -> None:
     if isinstance(value, dict):
         for key, child in value.items():
@@ -179,6 +281,7 @@ def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit:
     )
     resume_keys = valid_resume_keys(predictions_path) if config.get("resume", True) else set()
     records: list[PredictionRecord] = []
+    batch_size = max(1, int(getattr(method, "config", {}).get("batch_size", 1)))
 
     sampling = load_yaml(PROJECT / config["sampling"])
     total_samples = count_loader_samples(loader)
@@ -188,60 +291,65 @@ def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit:
     )
     seen = 0
     skipped = 0
+    batch_samples = []
+    batch_frames = []
+    batch_manifests = []
     for sample in loader.iter_samples():
         resume_key = (sample.sample_id, job["model"], job["method"], sample.benchmark, sample.task)
         if resume_key in resume_keys:
             skipped += 1
             continue
-        started = time.perf_counter()
         frames, manifest = sample_video(
             sample.video_path,
             num_frames=sampling["num_frames"],
             strategy=sampling["strategy"],
         )
-        raw_output = method.generate(frames, sample.prompt, generation_config)
-        parse = normalize_prediction(sample, raw_output.text)
-        is_correct = None if parse.value is None else parse.value == sample.ground_truth
-        if sample.task == "sth":
-            is_correct = None
-        record = PredictionRecord(
-            sample_id=sample.sample_id,
-            model=job["model"],
-            method=job["method"],
-            benchmark=sample.benchmark,
-            task=sample.task,
-            prompt=sample.prompt,
-            frame_indices=manifest.frame_indices,
-            raw_output=raw_output.text,
-            normalized_output=parse.value,
-            ground_truth=sample.ground_truth,
-            is_correct=is_correct,
-            parser_status=parse.status,
-            error=parse.error,
-            model_checkpoint=model.checkpoint,
-            method_config=getattr(method, "config", {}) or {},
-            sampling_config=sampling,
-            generation_config=generation_config.__dict__,
-            runtime_seconds=time.perf_counter() - started,
-            metadata={**sample.metadata, "manifest": manifest.to_dict(), **raw_output.diagnostics},
-        )
-        append_jsonl(predictions_path, record)
-        with manifest_path.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps({
-                "sample_id": sample.sample_id,
-                "benchmark": sample.benchmark,
-                "task": sample.task,
-                "manifest": manifest.to_dict(),
-            }, ensure_ascii=False, sort_keys=True) + "\n")
-        records.append(record)
-        seen += 1
-        processed = skipped + seen
-        print_progress(
-            f"DONE  {job['benchmark']} {processed}/{total_samples} | new={seen} | sample={sample.sample_id} "
-            f"| parse={record.parser_status} | correct={record.is_correct}"
-        )
+        batch_samples.append(sample)
+        batch_frames.append({"sample_id": sample.sample_id, "frames": frames})
+        batch_manifests.append(manifest)
+        should_flush = len(batch_samples) >= batch_size
+        if limit is not None:
+            remaining = limit - seen
+            should_flush = should_flush or len(batch_samples) >= remaining
+        if should_flush:
+            seen = flush_batch(
+                batch_samples=batch_samples,
+                batch_frames=batch_frames,
+                batch_manifests=batch_manifests,
+                method=method,
+                generation_config=generation_config,
+                predictions_path=predictions_path,
+                manifest_path=manifest_path,
+                job=job,
+                model=model,
+                sampling=sampling,
+                seen=seen,
+                skipped=skipped,
+                total_samples=total_samples,
+                records=records,
+            )
+            batch_samples = []
+            batch_frames = []
+            batch_manifests = []
         if limit is not None and seen >= limit:
             break
+
+    seen = flush_batch(
+        batch_samples=batch_samples,
+        batch_frames=batch_frames,
+        batch_manifests=batch_manifests,
+        method=method,
+        generation_config=generation_config,
+        predictions_path=predictions_path,
+        manifest_path=manifest_path,
+        job=job,
+        model=model,
+        sampling=sampling,
+        seen=seen,
+        skipped=skipped,
+        total_samples=total_samples,
+        records=records,
+    )
 
     summary_records = read_jsonl(predictions_path)
     summary = evaluate_records(job["benchmark"], summary_records)
