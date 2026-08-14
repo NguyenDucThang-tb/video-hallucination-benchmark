@@ -30,6 +30,7 @@ class Qwen25VLAdapter(ModelAdapter):
 
         self.torch = torch
         self.processor = AutoProcessor.from_pretrained(self.model_path, local_files_only=self._is_local_only())
+        self._configure_padding()
         self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             self.model_path,
             torch_dtype=self._torch_dtype(),
@@ -37,6 +38,16 @@ class Qwen25VLAdapter(ModelAdapter):
             local_files_only=self._is_local_only(),
         ).eval()
         self.device = next(self.model.parameters()).device
+
+    def _configure_padding(self) -> None:
+        tokenizer = getattr(self.processor, "tokenizer", None)
+        if tokenizer is None:
+            return
+        tokenizer.padding_side = "left"
+        if getattr(tokenizer, "pad_token_id", None) is None and getattr(tokenizer, "eos_token", None) is not None:
+            tokenizer.pad_token = tokenizer.eos_token
+        if hasattr(self.processor, "padding_side"):
+            self.processor.padding_side = "left"
 
     def _resolve_model_path(self, local_path: str | None, checkpoint: str) -> str:
         for candidate in (
@@ -88,6 +99,7 @@ class Qwen25VLAdapter(ModelAdapter):
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
+        prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -99,7 +111,7 @@ class Qwen25VLAdapter(ModelAdapter):
                 use_cache=True,
             )
 
-        generated_ids = output_ids[:, inputs["input_ids"].shape[1]:]
+        generated_ids = output_ids[:, prompt_length:]
         answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
         return answer.strip()
 
