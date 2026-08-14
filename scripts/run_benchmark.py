@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import sys
 import time
 from collections import defaultdict
@@ -55,6 +56,15 @@ def load_method_configs() -> dict:
     return load_yaml(PROJECT / "configs/methods.yaml")["methods"]
 
 
+def resolve_method_config(name: str) -> dict:
+    config = dict(load_method_configs()[name])
+    if name == "base":
+        override = os.environ.get("BASE_BATCH_SIZE")
+        if override:
+            config["batch_size"] = int(override)
+    return config
+
+
 def load_benchmark_configs() -> dict:
     return load_yaml(PROJECT / "configs/benchmarks.yaml")["benchmarks"]
 
@@ -68,7 +78,7 @@ def instantiate_model(name: str):
 
 def instantiate_method(name: str, model):
     if name == "base":
-        return BaseMethod(model, load_method_configs()[name])
+        return BaseMethod(model, resolve_method_config(name))
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 
