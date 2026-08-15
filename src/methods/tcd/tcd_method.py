@@ -38,8 +38,10 @@ class TCDMethod(InferenceMethod):
     name = "tcd"
 
     def __init__(self, model, config=None):
-        super().__init__(model, config)
-        self.tcd = TCDConfig(**(config or {}))
+        raw_config = dict(config or {})
+        super().__init__(model, raw_config)
+        tcd_config = {field: raw_config[field] for field in TCDConfig.__dataclass_fields__ if field in raw_config}
+        self.tcd = TCDConfig(**tcd_config)
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> MethodOutput:
         if not self.model.supports_step_logits:
