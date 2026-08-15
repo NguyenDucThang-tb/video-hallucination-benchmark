@@ -22,7 +22,7 @@ from src.data.schema import PredictionRecord
 from src.evaluation.normalize import normalize_prediction
 from src.methods.base import BaseMethod
 from src.methods.tcd import TCDMethod
-from src.models import GenerationConfig, Qwen25VLAdapter
+from src.models import GenerationConfig, LlavaOVAdapter, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
 from src.utils.config import load_yaml
 
@@ -72,6 +72,8 @@ def load_benchmark_configs() -> dict:
 
 def instantiate_model(name: str):
     config = load_model_configs()[name]
+    if config["adapter"] == "llava_ov":
+        return LlavaOVAdapter(config["checkpoint"], config.get("local_path"))
     if config["adapter"] == "qwen25_vl":
         return Qwen25VLAdapter(config["checkpoint"], config.get("local_path"))
     raise RuntimeError(f"Model adapter not implemented yet for {name}")

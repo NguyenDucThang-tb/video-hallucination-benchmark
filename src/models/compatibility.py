@@ -2,7 +2,7 @@ from __future__ import annotations
 
 COMPATIBILITY = {
     "llava-ov-7b": {
-        "base": (False, "Hugging Face checkpoint adapter not GPU-validated in this workspace"),
+        "base": (True, "LLaVA-OneVision adapter enabled locally; validate with a smoke run before full benchmark"),
         "tcd": (False, "Token-level dual-branch adapter not GPU-validated"),
         "dino_heal": (False, "Upstream patch targets CLIP Video-LLaVA; OV architecture differs"),
         "season": (False, "Vision homogenization and decoder attention adapter not GPU-validated"),

@@ -1,0 +1,10 @@
+name: hallucination_benchmark_llava_ov_base
+seed: 42
+models: [llava-ov-7b]
+methods: [base]
+benchmarks: [vidhalluc, videohallucer, eventhallusion]
+sampling: configs/sampling.yaml
+generation: {max_new_tokens: 128, do_sample: false, temperature: 0.0, num_beams: 1}
+output_dir: results/raw
+manifest_dir: manifests
+resume: true
