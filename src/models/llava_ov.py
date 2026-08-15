@@ -232,7 +232,7 @@ class LlavaOVAdapter(ModelAdapter):
         frame_features = []
         patch_saliency = []
         for idx, (start, end) in enumerate(spans):
-            pooled = image_features[start:end].mean(dim=0, keepdim=True).cpu().numpy()
+            pooled = image_features[start:end].mean(dim=0, keepdim=True).detach().cpu().numpy()
             frame_features.append(pooled)
             patch_saliency.append(np.asarray([frame_saliency[idx]], dtype=np.float32))
 
