@@ -21,6 +21,7 @@ from src.data.sampler import sample_video
 from src.data.schema import PredictionRecord
 from src.evaluation.normalize import normalize_prediction
 from src.methods.base import BaseMethod
+from src.methods.tcd import TCDMethod
 from src.models import GenerationConfig, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
 from src.utils.config import load_yaml
@@ -79,6 +80,8 @@ def instantiate_model(name: str):
 def instantiate_method(name: str, model):
     if name == "base":
         return BaseMethod(model, resolve_method_config(name))
+    if name == "tcd":
+        return TCDMethod(model, resolve_method_config(name))
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .base import GenerationConfig, ModelAdapter
+from .base import GenerationConfig, ModelAdapter, StepOutput
 
 
 @dataclass(frozen=True)
@@ -170,3 +170,97 @@ class Qwen25VLAdapter(ModelAdapter):
             )[0]
             answers.append(answer.strip())
         return answers
+
+    def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
+        messages = self._frames_to_messages(video_frames, prompt)
+        text = self.processor.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+        images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
+        inputs = self.processor(
+            text=[text],
+            images=images,
+            return_tensors="pt",
+            padding=True,
+        )
+        return {
+            key: value.to(self.device) if hasattr(value, "to") else value
+            for key, value in inputs.items()
+        }
+
+    def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
+        if branch not in {"original", "tcd_negative"}:
+            raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
+        inputs = self._prepare_inputs(video_frames, prompt)
+        return {
+            "branch": branch,
+            "model_inputs": inputs,
+            "past_key_values": None,
+            "generated_count": 0,
+        }
+
+    def _sync_generated_tokens(self, state, token_ids: list[int]) -> None:
+        if len(token_ids) <= state["generated_count"]:
+            return
+
+        new_token_ids = token_ids[state["generated_count"] :]
+        inputs = state["model_inputs"]
+        token_tensor = self.torch.tensor([new_token_ids], device=self.device, dtype=inputs["input_ids"].dtype)
+        inputs["input_ids"] = self.torch.cat([inputs["input_ids"], token_tensor], dim=1)
+
+        if "attention_mask" in inputs:
+            extra_mask = self.torch.ones(
+                (1, len(new_token_ids)),
+                device=self.device,
+                dtype=inputs["attention_mask"].dtype,
+            )
+            inputs["attention_mask"] = self.torch.cat([inputs["attention_mask"], extra_mask], dim=1)
+
+        if "mm_token_type_ids" in inputs:
+            extra_token_types = self.torch.zeros(
+                (1, len(new_token_ids)),
+                device=self.device,
+                dtype=inputs["mm_token_type_ids"].dtype,
+            )
+            inputs["mm_token_type_ids"] = self.torch.cat([inputs["mm_token_type_ids"], extra_token_types], dim=1)
+
+        state["generated_count"] = len(token_ids)
+
+    def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
+        self._sync_generated_tokens(state, token_ids)
+        inputs = state["model_inputs"]
+        prepared = self.model.prepare_inputs_for_generation(
+            input_ids=inputs["input_ids"],
+            past_key_values=state["past_key_values"],
+            attention_mask=inputs.get("attention_mask"),
+            inputs_embeds=inputs.get("inputs_embeds"),
+            pixel_values=inputs.get("pixel_values"),
+            pixel_values_videos=inputs.get("pixel_values_videos"),
+            image_grid_thw=inputs.get("image_grid_thw"),
+            video_grid_thw=inputs.get("video_grid_thw"),
+            second_per_grid_ts=inputs.get("second_per_grid_ts"),
+            mm_token_type_ids=inputs.get("mm_token_type_ids"),
+            use_cache=True,
+            is_first_iteration=state["past_key_values"] is None,
+        )
+        with self.torch.inference_mode():
+            outputs = self.model(
+                **prepared,
+                output_attentions=output_attentions,
+                return_dict=True,
+            )
+        state["past_key_values"] = outputs.past_key_values
+        logits = outputs.logits[0, -1].float().detach().cpu().numpy()
+        return StepOutput(logits=logits)
+
+    def token_id_to_text(self, token_id: int) -> str:
+        return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)
+
+    def is_eos(self, token_id: int) -> bool:
+        return token_id == getattr(self.processor.tokenizer, "eos_token_id", None)
+
+    @property
+    def supports_step_logits(self) -> bool:
+        return True
