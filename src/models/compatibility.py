@@ -4,7 +4,7 @@ COMPATIBILITY = {
     "llava-ov-7b": {
         "base": (True, "LLaVA-OneVision adapter enabled locally; validate with a smoke run before full benchmark"),
         "tcd": (True, "Token-level dual-branch adapter enabled for LLaVA-OV; validate with a smoke run before full benchmark"),
-        "dino_heal": (False, "Upstream patch targets CLIP Video-LLaVA; OV architecture differs"),
+        "dino_heal": (True, "DINO saliency fusion enabled for LLaVA-OV; validate with a smoke run before full benchmark"),
         "season": (False, "Vision homogenization and decoder attention adapter not GPU-validated"),
     },
     "qwen2.5-vl-7b": {

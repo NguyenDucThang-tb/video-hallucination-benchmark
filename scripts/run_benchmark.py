@@ -21,6 +21,7 @@ from src.data.sampler import sample_video
 from src.data.schema import PredictionRecord
 from src.evaluation.normalize import normalize_prediction
 from src.methods.base import BaseMethod
+from src.methods.dino_heal.dino_heal_method import DINOHealMethod
 from src.methods.tcd import TCDMethod
 from src.models import GenerationConfig, LlavaOVAdapter, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
@@ -84,6 +85,8 @@ def instantiate_method(name: str, model):
         return BaseMethod(model, resolve_method_config(name))
     if name == "tcd":
         return TCDMethod(model, resolve_method_config(name))
+    if name == "dino_heal":
+        return DINOHealMethod(model, resolve_method_config(name))
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 

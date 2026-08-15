@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from .base import GenerationConfig, ModelAdapter, StepOutput
+from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
 
 
 class LlavaOVAdapter(ModelAdapter):
@@ -32,6 +33,8 @@ class LlavaOVAdapter(ModelAdapter):
             local_files_only=self._is_local_only(),
         ).eval()
         self.device = next(self.model.parameters()).device
+        self._dino_processor = None
+        self._dino_model = None
 
     def _resolve_model_path(self, local_path: str | None, checkpoint: str) -> str:
         for candidate in (
@@ -94,6 +97,49 @@ class LlavaOVAdapter(ModelAdapter):
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
         return inputs, prompt_length
 
+    def _ensure_dino_loaded(self, checkpoint: str):
+        if self._dino_model is not None and self._dino_processor is not None:
+            return self._dino_processor, self._dino_model
+
+        from transformers import AutoImageProcessor, AutoModel
+
+        self._dino_processor = AutoImageProcessor.from_pretrained(
+            checkpoint,
+            local_files_only=self._is_local_only(),
+        )
+        self._dino_model = AutoModel.from_pretrained(
+            checkpoint,
+            torch_dtype=self._torch_dtype(),
+            device_map="auto",
+            local_files_only=self._is_local_only(),
+        ).eval()
+        return self._dino_processor, self._dino_model
+
+    def _compute_dino_saliency(self, video_frames: np.ndarray, checkpoint: str) -> tuple[np.ndarray, dict]:
+        from PIL import Image
+
+        processor, dino_model = self._ensure_dino_loaded(checkpoint)
+        images = [Image.fromarray(np.asarray(frame, dtype=np.uint8)) for frame in video_frames]
+        dino_inputs = processor(images=images, return_tensors="pt")
+        dino_inputs = {
+            key: value.to(self.device) if hasattr(value, "to") else value
+            for key, value in dino_inputs.items()
+        }
+
+        with self.torch.inference_mode():
+            outputs = dino_model(**dino_inputs, output_hidden_states=True, return_dict=True)
+
+        tokens = outputs.last_hidden_state[:, 1:, :].float()
+        patch_scores = tokens.norm(dim=-1)
+        patch_scores = patch_scores / (patch_scores.max(dim=1, keepdim=True).values + 1e-6)
+        frame_scores = patch_scores.mean(dim=1).cpu().numpy().astype(np.float32)
+        diagnostics = {
+            "dino_loaded": True,
+            "dino_patch_tokens": int(patch_scores.shape[1]),
+            "dino_frame_saliency_mean": float(frame_scores.mean()),
+        }
+        return frame_scores, diagnostics
+
     def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
         inputs, _ = self._build_inputs(video_frames, prompt)
         return inputs
@@ -114,6 +160,103 @@ class LlavaOVAdapter(ModelAdapter):
         generated_ids = output_ids[:, prompt_length:]
         answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
         return answer.strip()
+
+    def generate_dino_heal(self, video_frames, prompt: str, generation_config: GenerationConfig, config: dict):
+        dino_config = DINOHealConfig(
+            visual_weight=float(config.get("visual_weight", 0.3)),
+            saliency_weight=float(config.get("saliency_weight", 0.7)),
+            require_dino=bool(config.get("require_dino", True)),
+        )
+        checkpoint = config.get("dino_checkpoint", "facebook/dinov2-large")
+        diagnostics = {
+            "dino_loaded": False,
+            "dino_checkpoint": checkpoint,
+        }
+
+        frame_saliency, dino_diag = self._compute_dino_saliency(video_frames, checkpoint)
+        diagnostics.update(dino_diag)
+
+        inputs, prompt_length = self._build_inputs(video_frames, prompt)
+        batch_num_images = inputs.get("batch_num_images")
+        image_sizes = inputs.get("image_sizes")
+        if image_sizes is None:
+            raise RuntimeError("LLaVA-OV inputs are missing image_sizes for DINO-HEAL")
+
+        if batch_num_images is None:
+            counts = [1] * int(image_sizes.shape[0])
+        else:
+            counts = [int(x) for x in batch_num_images.detach().cpu().tolist()]
+
+        image_outputs = self.model.get_image_features(
+            pixel_values=inputs["pixel_values"],
+            image_sizes=image_sizes,
+            batch_num_images=batch_num_images,
+        )
+        image_features = image_outputs.pooler_output.float()
+        feature_lens = []
+        for count in counts:
+            for _ in range(count):
+                feature_lens.append(None)
+        # Infer token spans per frame from placeholder count match; fallback to equal chunking.
+        total_tokens = int(image_features.shape[0])
+        n_frames = len(video_frames)
+        base = total_tokens // n_frames
+        remainder = total_tokens % n_frames
+        spans = []
+        start = 0
+        for idx in range(n_frames):
+            size = base + (1 if idx < remainder else 0)
+            spans.append((start, start + size))
+            start += size
+
+        frame_features = []
+        patch_saliency = []
+        for idx, (start, end) in enumerate(spans):
+            pooled = image_features[start:end].mean(dim=0, keepdim=True).cpu().numpy()
+            frame_features.append(pooled)
+            patch_saliency.append(np.asarray([frame_saliency[idx]], dtype=np.float32))
+
+        features_np = np.stack(frame_features, axis=0)
+        saliency_np = np.stack(patch_saliency, axis=0)
+        fused_np = fuse_saliency(features_np, saliency_np, dino_config)
+        fused_scale = fused_np[..., 0].mean(axis=1)
+        fused_scale = np.maximum(fused_scale, 0.0).astype(np.float32)
+
+        scaling = self.torch.ones((total_tokens, 1), device=self.device, dtype=image_features.dtype)
+        for idx, (start, end) in enumerate(spans):
+            scaling[start:end] = 1.0 + self.torch.tensor(
+                fused_scale[idx],
+                device=self.device,
+                dtype=image_features.dtype,
+            )
+
+        holder = {"applied": False}
+
+        def projector_hook(module, module_inputs, module_output):
+            scaled = module_output * scaling[: module_output.shape[0]].unsqueeze(1)
+            holder["applied"] = True
+            return scaled
+
+        handle = self.model.model.multi_modal_projector.register_forward_hook(projector_hook)
+        try:
+            with self.torch.inference_mode():
+                output_ids = self.model.generate(
+                    **inputs,
+                    max_new_tokens=generation_config.max_new_tokens,
+                    do_sample=False,
+                    temperature=None,
+                    num_beams=1,
+                    use_cache=True,
+                )
+        finally:
+            handle.remove()
+
+        diagnostics["dino_hook_applied"] = holder["applied"]
+        diagnostics["dino_scale_mean"] = float(fused_scale.mean())
+        diagnostics["dino_scale_max"] = float(fused_scale.max())
+        generated_ids = output_ids[:, prompt_length:]
+        answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
+        return answer, diagnostics
 
     def generate_batch(
         self,
