@@ -140,6 +140,26 @@ class LlavaOVAdapter(ModelAdapter):
         }
         return frame_scores, diagnostics
 
+    def _coerce_feature_tensor(self, value):
+        if hasattr(value, "float") and hasattr(value, "shape"):
+            return value.float()
+        if isinstance(value, (list, tuple)):
+            tensors = [item for item in value if hasattr(item, "float") and hasattr(item, "shape")]
+            if not tensors:
+                raise TypeError(f"Unable to extract tensor features from {type(value).__name__}")
+            if len(tensors) == 1:
+                return tensors[0].float()
+            return self.torch.cat([tensor.float() for tensor in tensors], dim=0)
+        raise TypeError(f"Unsupported feature container: {type(value).__name__}")
+
+    def _extract_image_features(self, image_outputs):
+        if hasattr(image_outputs, "pooler_output") and image_outputs.pooler_output is not None:
+            return self._coerce_feature_tensor(image_outputs.pooler_output)
+        if hasattr(image_outputs, "last_hidden_state") and image_outputs.last_hidden_state is not None:
+            hidden = self._coerce_feature_tensor(image_outputs.last_hidden_state)
+            return hidden.reshape(-1, hidden.shape[-1])
+        return self._coerce_feature_tensor(image_outputs)
+
     def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
         inputs, _ = self._build_inputs(video_frames, prompt)
         return inputs
@@ -192,7 +212,7 @@ class LlavaOVAdapter(ModelAdapter):
             image_sizes=image_sizes,
             batch_num_images=batch_num_images,
         )
-        image_features = image_outputs.pooler_output.float()
+        image_features = self._extract_image_features(image_outputs)
         feature_lens = []
         for count in counts:
             for _ in range(count):
