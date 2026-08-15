@@ -1,6 +1,6 @@
 models:
   llava-ov-7b:
-    checkpoint: lmms-lab/llava-onevision-qwen2-7b-ov
+    checkpoint: llava-hf/llava-onevision-qwen2-7b-ov-hf
     local_path: null
     adapter: llava_ov
   qwen2.5-vl-7b:

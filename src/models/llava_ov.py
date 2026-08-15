@@ -17,7 +17,7 @@ class LlavaOVAdapter(ModelAdapter):
         self.model_path = self._resolve_model_path(local_path, checkpoint)
 
         import torch
-        from transformers import AutoProcessor, LlavaForConditionalGeneration
+        from transformers import AutoProcessor, LlavaOnevisionForConditionalGeneration
 
         self.torch = torch
         self.processor = AutoProcessor.from_pretrained(
@@ -25,7 +25,7 @@ class LlavaOVAdapter(ModelAdapter):
             local_files_only=self._is_local_only(),
         )
         self._configure_padding()
-        self.model = LlavaForConditionalGeneration.from_pretrained(
+        self.model = LlavaOnevisionForConditionalGeneration.from_pretrained(
             self.model_path,
             torch_dtype=self._torch_dtype(),
             device_map="auto",
