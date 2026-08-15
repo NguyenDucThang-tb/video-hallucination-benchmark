@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .base import GenerationConfig, ModelAdapter
+from .base import GenerationConfig, ModelAdapter, StepOutput
 
 
 class LlavaOVAdapter(ModelAdapter):
@@ -94,6 +94,10 @@ class LlavaOVAdapter(ModelAdapter):
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
         return inputs, prompt_length
 
+    def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
+        inputs, _ = self._build_inputs(video_frames, prompt)
+        return inputs
+
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
         inputs, prompt_length = self._build_inputs(video_frames, prompt)
 
@@ -168,3 +172,76 @@ class LlavaOVAdapter(ModelAdapter):
             )[0]
             answers.append(answer.strip())
         return answers
+
+    def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
+        if branch not in {"original", "tcd_negative"}:
+            raise NotImplementedError(f"LLaVA-OV adapter does not support branch {branch}")
+        inputs = self._prepare_inputs(video_frames, prompt)
+        return {
+            "branch": branch,
+            "model_inputs": inputs,
+            "past_key_values": None,
+            "generated_count": 0,
+        }
+
+    def _sync_generated_tokens(self, state, token_ids: list[int]) -> None:
+        if len(token_ids) <= state["generated_count"]:
+            return
+
+        new_token_ids = token_ids[state["generated_count"] :]
+        inputs = state["model_inputs"]
+        token_tensor = self.torch.tensor([new_token_ids], device=self.device, dtype=inputs["input_ids"].dtype)
+        inputs["input_ids"] = self.torch.cat([inputs["input_ids"], token_tensor], dim=1)
+
+        if "attention_mask" in inputs:
+            extra_mask = self.torch.ones(
+                (1, len(new_token_ids)),
+                device=self.device,
+                dtype=inputs["attention_mask"].dtype,
+            )
+            inputs["attention_mask"] = self.torch.cat([inputs["attention_mask"], extra_mask], dim=1)
+
+        if "mm_token_type_ids" in inputs:
+            extra_token_types = self.torch.zeros(
+                (1, len(new_token_ids)),
+                device=self.device,
+                dtype=inputs["mm_token_type_ids"].dtype,
+            )
+            inputs["mm_token_type_ids"] = self.torch.cat([inputs["mm_token_type_ids"], extra_token_types], dim=1)
+
+        state["generated_count"] = len(token_ids)
+
+    def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
+        self._sync_generated_tokens(state, token_ids)
+        inputs = state["model_inputs"]
+        prepared = self.model.prepare_inputs_for_generation(
+            input_ids=inputs["input_ids"],
+            past_key_values=state["past_key_values"],
+            inputs_embeds=inputs.get("inputs_embeds"),
+            pixel_values=inputs.get("pixel_values"),
+            image_sizes=inputs.get("image_sizes"),
+            pixel_values_videos=inputs.get("pixel_values_videos"),
+            image_sizes_videos=inputs.get("image_sizes_videos"),
+            attention_mask=inputs.get("attention_mask"),
+            use_cache=True,
+            is_first_iteration=state["past_key_values"] is None,
+        )
+        with self.torch.inference_mode():
+            outputs = self.model(
+                **prepared,
+                output_attentions=output_attentions,
+                return_dict=True,
+            )
+        state["past_key_values"] = outputs.past_key_values
+        logits = outputs.logits[0, -1].float().detach().cpu().numpy()
+        return StepOutput(logits=logits)
+
+    def token_id_to_text(self, token_id: int) -> str:
+        return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)
+
+    def is_eos(self, token_id: int) -> bool:
+        return token_id == getattr(self.processor.tokenizer, "eos_token_id", None)
+
+    @property
+    def supports_step_logits(self) -> bool:
+        return True
