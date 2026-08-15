@@ -8,6 +8,7 @@ methods:
     downsample_frames: 4
     threshold_space: raw_logits
   dino_heal:
+    batch_size: 1
     dino_checkpoint: facebook/dinov2-large
     visual_weight: 0.3
     saliency_weight: 0.7

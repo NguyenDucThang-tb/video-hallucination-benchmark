@@ -60,10 +60,9 @@ def load_method_configs() -> dict:
 
 def resolve_method_config(name: str) -> dict:
     config = dict(load_method_configs()[name])
-    if name == "base":
-        override = os.environ.get("BASE_BATCH_SIZE")
-        if override:
-            config["batch_size"] = int(override)
+    override = os.environ.get(f"{name.upper()}_BATCH_SIZE")
+    if override:
+        config["batch_size"] = int(override)
     return config
 
 
