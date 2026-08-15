@@ -51,6 +51,9 @@ class LlavaOVAdapter(ModelAdapter):
     def _is_local_only(self) -> bool:
         return Path(self.model_path).exists()
 
+    def _checkpoint_is_local(self, checkpoint: str) -> bool:
+        return Path(checkpoint).expanduser().exists()
+
     def _torch_dtype(self):
         if self.torch.cuda.is_available():
             if hasattr(self.torch.cuda, "is_bf16_supported") and self.torch.cuda.is_bf16_supported():
@@ -97,7 +100,7 @@ class LlavaOVAdapter(ModelAdapter):
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
         return inputs, prompt_length
 
-    def _ensure_dino_loaded(self, checkpoint: str):
+    def _ensure_dino_loaded(self, checkpoint: str, device: str = "cpu"):
         if self._dino_model is not None and self._dino_processor is not None:
             return self._dino_processor, self._dino_model
 
@@ -105,24 +108,39 @@ class LlavaOVAdapter(ModelAdapter):
 
         self._dino_processor = AutoImageProcessor.from_pretrained(
             checkpoint,
-            local_files_only=self._is_local_only(),
+            local_files_only=self._checkpoint_is_local(checkpoint),
         )
-        self._dino_model = AutoModel.from_pretrained(
-            checkpoint,
-            torch_dtype=self._torch_dtype(),
-            device_map="auto",
-            local_files_only=self._is_local_only(),
-        ).eval()
+        model_kwargs = {
+            "local_files_only": self._checkpoint_is_local(checkpoint),
+        }
+        if device == "cpu":
+            self._dino_model = AutoModel.from_pretrained(
+                checkpoint,
+                **model_kwargs,
+            ).to("cpu").eval()
+        else:
+            self._dino_model = AutoModel.from_pretrained(
+                checkpoint,
+                torch_dtype=self._torch_dtype(),
+                device_map="auto",
+                **model_kwargs,
+            ).eval()
         return self._dino_processor, self._dino_model
 
-    def _compute_dino_saliency(self, video_frames: np.ndarray, checkpoint: str) -> tuple[np.ndarray, dict]:
+    def _compute_dino_saliency(
+        self,
+        video_frames: np.ndarray,
+        checkpoint: str,
+        device: str = "cpu",
+    ) -> tuple[np.ndarray, dict]:
         from PIL import Image
 
-        processor, dino_model = self._ensure_dino_loaded(checkpoint)
+        processor, dino_model = self._ensure_dino_loaded(checkpoint, device=device)
         images = [Image.fromarray(np.asarray(frame, dtype=np.uint8)) for frame in video_frames]
         dino_inputs = processor(images=images, return_tensors="pt")
+        dino_device = next(dino_model.parameters()).device
         dino_inputs = {
-            key: value.to(self.device) if hasattr(value, "to") else value
+            key: value.to(dino_device) if hasattr(value, "to") else value
             for key, value in dino_inputs.items()
         }
 
@@ -135,6 +153,7 @@ class LlavaOVAdapter(ModelAdapter):
         frame_scores = patch_scores.mean(dim=1).cpu().numpy().astype(np.float32)
         diagnostics = {
             "dino_loaded": True,
+            "dino_device": str(dino_device),
             "dino_patch_tokens": int(patch_scores.shape[1]),
             "dino_frame_saliency_mean": float(frame_scores.mean()),
         }
@@ -188,12 +207,18 @@ class LlavaOVAdapter(ModelAdapter):
             require_dino=bool(config.get("require_dino", True)),
         )
         checkpoint = config.get("dino_checkpoint", "facebook/dinov2-large")
+        dino_device = str(config.get("dino_device", "cpu"))
         diagnostics = {
             "dino_loaded": False,
             "dino_checkpoint": checkpoint,
+            "dino_device": dino_device,
         }
 
-        frame_saliency, dino_diag = self._compute_dino_saliency(video_frames, checkpoint)
+        frame_saliency, dino_diag = self._compute_dino_saliency(
+            video_frames,
+            checkpoint,
+            device=dino_device,
+        )
         diagnostics.update(dino_diag)
 
         inputs, prompt_length = self._build_inputs(video_frames, prompt)
