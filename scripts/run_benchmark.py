@@ -211,8 +211,6 @@ def flush_batch(
     for sample, sample_manifest, raw_output in zip(batch_samples, batch_manifests, raw_outputs):
         parse = normalize_prediction(sample, raw_output.text)
         is_correct = None if parse.value is None else parse.value == sample.ground_truth
-        if sample.task == "sth":
-            is_correct = None
         record = emit_record(
             sample=sample,
             sample_manifest=sample_manifest,
