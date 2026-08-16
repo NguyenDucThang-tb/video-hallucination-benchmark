@@ -39,14 +39,21 @@ def parse_args():
 
 def build_plan(config: dict) -> list[dict]:
     plan = []
-    for model in config["models"]:
-        for method in config["methods"]:
-            supported, note = check_compatibility(model, method)
-            for benchmark in config["benchmarks"]:
-                plan.append({
-                    "model": model, "method": method, "benchmark": benchmark,
-                    "status": "ready" if supported else "N/A", "note": note,
-                })
+    benchmark_configs = load_benchmark_configs()
+    for benchmark in config["benchmarks"]:
+        benchmark_tasks = benchmark_configs[benchmark].get("tasks") or [None]
+        for task in benchmark_tasks:
+            for model in config["models"]:
+                for method in config["methods"]:
+                    supported, note = check_compatibility(model, method)
+                    plan.append({
+                        "model": model,
+                        "method": method,
+                        "benchmark": benchmark,
+                        "task": task,
+                        "status": "ready" if supported else "N/A",
+                        "note": note,
+                    })
     return plan
 
 
@@ -110,14 +117,15 @@ def evaluate_records(benchmark: str, records: list[PredictionRecord]) -> dict:
     raise RuntimeError(f"No evaluator for benchmark {benchmark}")
 
 
-def output_paths(config: dict, model: str, method: str, benchmark: str) -> tuple[Path, Path]:
+def output_paths(config: dict, model: str, method: str, benchmark: str, task: str | None) -> tuple[Path, Path]:
     raw_root = PROJECT / config["output_dir"]
     summary_root = PROJECT / "results" / "summary"
     manifest_root = PROJECT / config["manifest_dir"]
     raw_root.mkdir(parents=True, exist_ok=True)
     summary_root.mkdir(parents=True, exist_ok=True)
     manifest_root.mkdir(parents=True, exist_ok=True)
-    stem = f"{config['name']}__{model}__{method}__{benchmark}"
+    task_suffix = f"__{task}" if task else ""
+    stem = f"{config['name']}__{model}__{method}__{benchmark}{task_suffix}"
     return (
         raw_root / f"{stem}.jsonl",
         summary_root / f"{stem}.summary.json",
@@ -236,6 +244,13 @@ def flush_batch(
     return seen
 
 
+def group_samples_by_task(loader) -> dict[str, list]:
+    grouped: dict[str, list] = defaultdict(list)
+    for sample in loader.iter_samples():
+        grouped[sample.task].append(sample)
+    return grouped
+
+
 def flatten_metrics(prefix: str, value, output: dict[str, object]) -> None:
     if isinstance(value, dict):
         for key, child in value.items():
@@ -289,21 +304,32 @@ def write_metrics_bundle(config: dict) -> dict[str, str]:
     }
 
 
-def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit: int | None = None) -> dict:
+def run_job(
+    config: dict,
+    job: dict,
+    generation_config: GenerationConfig,
+    samples: list | None = None,
+    limit: int | None = None,
+) -> dict:
     model = instantiate_model(job["model"])
     method = instantiate_method(job["method"], model)
     loader = instantiate_loader(job["benchmark"])
+    task = job.get("task")
+    if samples is None:
+        samples = list(loader.iter_samples())
+    elif task is not None:
+        samples = [sample for sample in samples if sample.task == task]
     predictions_path, summary_path, manifest_path = output_paths(
-        config, job["model"], job["method"], job["benchmark"]
+        config, job["model"], job["method"], job["benchmark"], task
     )
     resume_keys = valid_resume_keys(predictions_path) if config.get("resume", True) else set()
     records: list[PredictionRecord] = []
     batch_size = max(1, int(getattr(method, "config", {}).get("batch_size", 1)))
 
     sampling = load_yaml(PROJECT / config["sampling"])
-    total_samples = count_loader_samples(loader)
+    total_samples = len(samples)
     print_progress(
-        f"START {job['model']} / {job['method']} / {job['benchmark']} | total={total_samples} "
+        f"START {job['model']} / {job['method']} / {job['benchmark']} / {task or 'all'} | total={total_samples} "
         f"| resume_valid={len(resume_keys)} | limit={limit if limit is not None else 'full'}"
     )
     seen = 0
@@ -311,7 +337,7 @@ def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit:
     batch_samples = []
     batch_frames = []
     batch_manifests = []
-    for sample in loader.iter_samples():
+    for sample in samples:
         resume_key = (sample.sample_id, job["model"], job["method"], sample.benchmark, sample.task)
         if resume_key in resume_keys:
             skipped += 1
@@ -372,7 +398,7 @@ def run_job(config: dict, job: dict, generation_config: GenerationConfig, limit:
     summary = evaluate_records(job["benchmark"], summary_records)
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print_progress(
-        f"END   {job['model']} / {job['method']} / {job['benchmark']} | wrote={len(summary_records)} total records"
+        f"END   {job['model']} / {job['method']} / {job['benchmark']} / {task or 'all'} | wrote={len(summary_records)} total records"
     )
     return {
         "job": job,
@@ -406,12 +432,24 @@ def main():
         )
     generation_config = GenerationConfig(**config["generation"])
     results = []
-    for job in ready:
-        try:
-            results.append(run_job(config, job, generation_config, args.limit))
-        except Exception as exc:
-            print_progress(f"ERROR {job['model']} / {job['method']} / {job['benchmark']} | {exc!r}")
-            results.append({"job": job, "error": repr(exc)})
+    grouped_samples: dict[str, dict[str, list]] = {}
+    for benchmark in config["benchmarks"]:
+        loader = instantiate_loader(benchmark)
+        grouped_samples[benchmark] = group_samples_by_task(loader)
+
+    for benchmark in config["benchmarks"]:
+        benchmark_tasks = load_benchmark_configs()[benchmark].get("tasks") or [None]
+        for task in benchmark_tasks:
+            task_jobs = [job for job in ready if job["benchmark"] == benchmark and job.get("task") == task]
+            task_samples = grouped_samples.get(benchmark, {}).get(task, [])
+            for job in task_jobs:
+                try:
+                    results.append(run_job(config, job, generation_config, samples=task_samples, limit=args.limit))
+                except Exception as exc:
+                    print_progress(
+                        f"ERROR {job['model']} / {job['method']} / {job['benchmark']} / {task or 'all'} | {exc!r}"
+                    )
+                    results.append({"job": job, "error": repr(exc)})
     bundle = write_metrics_bundle(config)
     print_progress(
         f"AGGREGATED metrics -> {bundle['metrics_json']} | table -> {bundle['results_csv']}"
