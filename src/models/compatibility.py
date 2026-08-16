@@ -10,8 +10,8 @@ COMPATIBILITY = {
     "qwen2.5-vl-7b": {
         "base": (True, "Offline checkpoint load validated on Gadi; base generation adapter enabled"),
         "tcd": (True, "Token-level dual-branch adapter enabled for Qwen; validate with a smoke run before full benchmark"),
-        "dino_heal": (False, "No validated DINO saliency fusion for Qwen visual encoder"),
-        "season": (False, "Qwen vision and decoder attention adapter not GPU-validated"),
+        "dino_heal": (True, "Qwen DINO saliency fusion adapter enabled; validate with a smoke run before full benchmark"),
+        "season": (True, "Qwen vision and decoder attention adapter enabled; validate with a smoke run before full benchmark"),
     },
     "llava-video-7b": {
         "base": (False, "LLaVA Video checkpoint adapter not GPU-validated in this workspace"),
