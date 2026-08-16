@@ -9,5 +9,7 @@ def macro_average(values: Mapping[str, float | None]) -> float | None:
 
 
 def accuracy(correct: Iterable[bool | None]) -> tuple[float | None, int, int]:
-    valid = [value for value in correct if value is not None]
-    return ((sum(valid) / len(valid)) if valid else None, len(valid), sum(valid))
+    values = list(correct)
+    total = len(values)
+    correct_count = sum(value is True for value in values)
+    return (correct_count / total if total else None, total, correct_count)

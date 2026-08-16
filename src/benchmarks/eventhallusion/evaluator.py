@@ -19,18 +19,16 @@ def evaluate_binary(records: list[PredictionRecord]) -> dict[str, dict]:
     for record in records:
         grouped[record.task].append(record)
     output = {}
-    all_valid = []
     for split, items in grouped.items():
         valid = [r for r in items if r.is_correct is not None]
-        all_valid.extend(valid)
         output[split] = {
             "n": len(items), "n_valid": len(valid),
             "n_parser_error": sum(r.parser_status != "valid" for r in items),
             "n_missing": sum(r.parser_status == "missing" for r in items),
-            "accuracy": sum(r.is_correct is True for r in valid) / len(valid) if valid else None,
+            "accuracy": sum(r.is_correct is True for r in items) / len(items) if items else None,
         }
     output["overall"] = {
-        "n_valid": len(all_valid),
-        "accuracy": sum(r.is_correct is True for r in all_valid) / len(all_valid) if all_valid else None,
+        "n_valid": sum(1 for r in records if r.is_correct is not None),
+        "accuracy": sum(r.is_correct is True for r in records) / len(records) if records else None,
     }
     return output
