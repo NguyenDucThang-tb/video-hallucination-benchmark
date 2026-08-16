@@ -22,6 +22,7 @@ from src.data.schema import PredictionRecord
 from src.evaluation.normalize import normalize_prediction
 from src.methods.base import BaseMethod
 from src.methods.dino_heal.dino_heal_method import DINOHealMethod
+from src.methods.season.season_method import SeasonMethod
 from src.methods.tcd import TCDMethod
 from src.models import GenerationConfig, LlavaOVAdapter, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
@@ -80,8 +81,20 @@ def load_benchmark_configs() -> dict:
 def instantiate_model(name: str):
     config = load_model_configs()[name]
     if config["adapter"] == "llava_ov":
+        checkpoint = str(config["checkpoint"])
+        if "qwen2.5-vl" in checkpoint.lower():
+            raise RuntimeError(
+                f"Model config for {name} looks like a Qwen checkpoint ({checkpoint}); "
+                "please check configs/models.yaml before running llava_ov jobs."
+            )
         return LlavaOVAdapter(config["checkpoint"], config.get("local_path"))
     if config["adapter"] == "qwen25_vl":
+        checkpoint = str(config["checkpoint"])
+        if "llava" in checkpoint.lower():
+            raise RuntimeError(
+                f"Model config for {name} looks like a LLaVA checkpoint ({checkpoint}); "
+                "please check configs/models.yaml before running qwen25_vl jobs."
+            )
         return Qwen25VLAdapter(config["checkpoint"], config.get("local_path"))
     raise RuntimeError(f"Model adapter not implemented yet for {name}")
 
@@ -93,6 +106,8 @@ def instantiate_method(name: str, model):
         return TCDMethod(model, resolve_method_config(name))
     if name == "dino_heal":
         return DINOHealMethod(model, resolve_method_config(name))
+    if name == "season":
+        return SeasonMethod(model, resolve_method_config(name))
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 
