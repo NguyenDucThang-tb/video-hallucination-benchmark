@@ -179,6 +179,48 @@ class LlavaOVAdapter(ModelAdapter):
             return hidden.reshape(-1, hidden.shape[-1])
         return self._coerce_feature_tensor(image_outputs)
 
+    def _scale_projector_output(self, output, scaling):
+        if hasattr(output, "last_hidden_state") and output.last_hidden_state is not None:
+            scaled, applied = self._scale_projector_output(output.last_hidden_state, scaling)
+            if applied:
+                output.last_hidden_state = scaled
+            return output, applied
+
+        if isinstance(output, (tuple, list)):
+            updated = list(output)
+            applied = False
+            for idx, item in enumerate(updated):
+                scaled, item_applied = self._scale_projector_output(item, scaling)
+                if item_applied:
+                    updated[idx] = scaled
+                    applied = True
+            return type(output)(updated), applied
+
+        if not hasattr(output, "shape"):
+            return output, False
+
+        tensor = output
+        if tensor.ndim == 2:
+            token_count = min(int(tensor.shape[0]), int(scaling.shape[0]))
+            if token_count <= 0:
+                return output, False
+            tensor[:token_count] = tensor[:token_count] * scaling[:token_count].unsqueeze(-1).to(tensor.dtype)
+            return tensor, True
+
+        if tensor.ndim >= 3:
+            token_axis = -2
+            token_count = min(int(tensor.shape[token_axis]), int(scaling.shape[0]))
+            if token_count <= 0:
+                return output, False
+            view_shape = [1] * tensor.ndim
+            view_shape[token_axis] = token_count
+            tensor_slice = tensor.narrow(token_axis, 0, token_count)
+            scaled = tensor_slice * scaling[:token_count].view(*view_shape).to(tensor.dtype)
+            tensor.narrow(token_axis, 0, token_count).copy_(scaled)
+            return tensor, True
+
+        return output, False
+
     def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
         inputs, _ = self._build_inputs(video_frames, prompt)
         return inputs
@@ -278,8 +320,8 @@ class LlavaOVAdapter(ModelAdapter):
         holder = {"applied": False}
 
         def projector_hook(module, module_inputs, module_output):
-            scaled = module_output * scaling[: module_output.shape[0]].unsqueeze(1)
-            holder["applied"] = True
+            scaled, applied = self._scale_projector_output(module_output, scaling)
+            holder["applied"] = holder["applied"] or applied
             return scaled
 
         handle = self.model.model.multi_modal_projector.register_forward_hook(projector_hook)
