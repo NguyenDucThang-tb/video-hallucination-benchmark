@@ -41,8 +41,13 @@ def parse_args():
 def build_plan(config: dict) -> list[dict]:
     plan = []
     benchmark_configs = load_benchmark_configs()
-    for benchmark in config["benchmarks"]:
-        benchmark_tasks = benchmark_configs[benchmark].get("tasks") or [None]
+    for benchmark_entry in config["benchmarks"]:
+        if isinstance(benchmark_entry, str):
+            benchmark = benchmark_entry
+            benchmark_tasks = benchmark_configs[benchmark].get("tasks") or [None]
+        else:
+            benchmark = benchmark_entry["name"]
+            benchmark_tasks = benchmark_entry.get("tasks") or benchmark_configs[benchmark].get("tasks") or [None]
         for task in benchmark_tasks:
             for model in config["models"]:
                 for method in config["methods"]:
@@ -446,12 +451,24 @@ def main():
     generation_config = GenerationConfig(**config["generation"])
     results = []
     grouped_samples: dict[str, dict[str, list]] = {}
-    for benchmark in config["benchmarks"]:
+    benchmark_task_overrides: dict[str, list[str] | None] = {}
+    for benchmark_entry in config["benchmarks"]:
+        if isinstance(benchmark_entry, str):
+            benchmark = benchmark_entry
+            tasks_override = None
+        else:
+            benchmark = benchmark_entry["name"]
+            tasks_override = benchmark_entry.get("tasks")
+        benchmark_task_overrides[benchmark] = tasks_override
         loader = instantiate_loader(benchmark)
         grouped_samples[benchmark] = group_samples_by_task(loader)
 
-    for benchmark in config["benchmarks"]:
-        benchmark_tasks = load_benchmark_configs()[benchmark].get("tasks") or [None]
+    for benchmark_entry in config["benchmarks"]:
+        if isinstance(benchmark_entry, str):
+            benchmark = benchmark_entry
+        else:
+            benchmark = benchmark_entry["name"]
+        benchmark_tasks = benchmark_task_overrides.get(benchmark) or load_benchmark_configs()[benchmark].get("tasks") or [None]
         for task in benchmark_tasks:
             task_jobs = [job for job in ready if job["benchmark"] == benchmark and job.get("task") == task]
             task_samples = grouped_samples.get(benchmark, {}).get(task, [])
