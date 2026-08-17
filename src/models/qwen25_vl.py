@@ -197,6 +197,81 @@ class Qwen25VLAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
 
+    def _clone_input_value(self, value):
+        if hasattr(value, "clone"):
+            return value.clone()
+        if isinstance(value, np.ndarray):
+            return value.copy()
+        return value
+
+    def _gaussian_noise_like(self, value, std: float, seed: int):
+        if std <= 0:
+            return value
+        rng = np.random.default_rng(seed)
+        if hasattr(value, "detach") and hasattr(value, "dtype"):
+            noise = self.torch.from_numpy(rng.normal(0.0, std, size=tuple(value.shape)).astype(np.float32)).to(
+                device=value.device,
+                dtype=value.dtype,
+            )
+            return value + noise
+        if isinstance(value, np.ndarray):
+            noise = rng.normal(0.0, std, size=value.shape).astype(np.float32)
+            return value + noise.astype(value.dtype, copy=False)
+        return value
+
+    def _temporal_homogenize_value(self, value, beta: float):
+        if beta <= 0:
+            return value
+        if hasattr(value, "ndim") and value.ndim >= 4:
+            # Support [frames, channels, height, width] or [batch, frames, ...].
+            if value.ndim == 4:
+                context = value.mean(dim=0, keepdim=True) if hasattr(value, "mean") else value.mean(axis=0, keepdims=True)
+                return (1.0 - beta) * value + beta * context
+            if value.ndim >= 5:
+                frame_axis = 1
+                context = value.mean(dim=frame_axis, keepdim=True) if hasattr(value, "mean") else value.mean(axis=frame_axis, keepdims=True)
+                return (1.0 - beta) * value + beta * context
+        if isinstance(value, np.ndarray) and value.ndim >= 4:
+            if value.ndim == 4:
+                context = value.mean(axis=0, keepdims=True)
+                return (1.0 - beta) * value + beta * context
+            context = value.mean(axis=1, keepdims=True)
+            return (1.0 - beta) * value + beta * context
+        return value
+
+    def _apply_branch_transform(self, inputs: dict, branch: str, **kwargs) -> dict:
+        branch_inputs = {key: self._clone_input_value(value) for key, value in inputs.items()}
+        if branch == "original":
+            return branch_inputs
+
+        if branch == "spatial_negative":
+            noise_std = float(kwargs.get("noise_std", 0.1))
+            seed = int(kwargs.get("seed", 0))
+            for key in ("pixel_values", "pixel_values_videos"):
+                if key in branch_inputs and branch_inputs[key] is not None:
+                    branch_inputs[key] = self._gaussian_noise_like(branch_inputs[key], noise_std, seed)
+            return branch_inputs
+
+        if branch == "temporal_homogenized":
+            beta = float(kwargs.get("beta", 0.33))
+            for key in ("pixel_values", "pixel_values_videos"):
+                if key in branch_inputs and branch_inputs[key] is not None:
+                    branch_inputs[key] = self._temporal_homogenize_value(branch_inputs[key], beta)
+            return branch_inputs
+
+        if branch == "tcd_negative":
+            # Keep the TCD branch as a time-downsampled perturbation, but make it
+            # explicit that it should differ from the original frames.
+            stride = int(kwargs.get("stride", 2))
+            for key in ("pixel_values_videos", "pixel_values"):
+                if key in branch_inputs and branch_inputs[key] is not None:
+                    value = branch_inputs[key]
+                    if hasattr(value, "__getitem__") and getattr(value, "ndim", 0) >= 4:
+                        branch_inputs[key] = value[..., ::stride, :, :] if value.ndim >= 5 else value[::stride]
+            return branch_inputs
+
+        raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
+
     def _ensure_dino_loaded(self, checkpoint: str, device: str = "cpu"):
         if self._dino_model is not None and self._dino_processor is not None:
             return self._dino_processor, self._dino_model
@@ -287,10 +362,13 @@ class Qwen25VLAdapter(ModelAdapter):
             scaling[begin:end] = scale_value
         return scaling, spans
 
-    def _apply_token_scaling_to_output(self, output, scaling):
+    def _apply_token_scaling_to_output(self, output, frame_scores: np.ndarray):
         tensor = self._coerce_feature_tensor(output)
         if tensor is None:
             return output, False
+
+        total_tokens = int(tensor.shape[0] if tensor.ndim == 2 else tensor.shape[-2])
+        scaling, _ = self._build_token_scaling(total_tokens, frame_scores)
 
         scaled = False
         if tensor.ndim == 2:
@@ -328,6 +406,7 @@ class Qwen25VLAdapter(ModelAdapter):
         if branch not in {"original", "tcd_negative", "spatial_negative", "temporal_homogenized"}:
             raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
         inputs = self._prepare_inputs(video_frames, prompt)
+        inputs = self._apply_branch_transform(inputs, branch, **kwargs)
         return {
             "branch": branch,
             "model_inputs": inputs,
@@ -447,38 +526,16 @@ class Qwen25VLAdapter(ModelAdapter):
         if pixel_values is None:
             raise RuntimeError("Qwen inputs are missing pixel_values for DINO-HEAL")
 
-        total_tokens = int(pixel_values.shape[0]) if hasattr(pixel_values, "shape") else len(video_frames)
-        n_frames = len(video_frames)
-        base = max(total_tokens // max(n_frames, 1), 1)
-        remainder = total_tokens % max(n_frames, 1)
-        spans = []
-        start = 0
-        for idx in range(n_frames):
-            size = base + (1 if idx < remainder else 0)
-            spans.append((start, start + size))
-            start += size
-
-        frame_features = []
-        patch_saliency = []
-        for idx, _span in enumerate(spans):
-            frame_features.append(np.zeros((1, 1), dtype=np.float32))
-            patch_saliency.append(np.asarray([frame_saliency[idx]], dtype=np.float32))
-
-        features_np = np.stack(frame_features, axis=0)
-        saliency_np = np.stack(patch_saliency, axis=0)
+        features_np = np.zeros((len(video_frames), 1, 1), dtype=np.float32)
+        saliency_np = np.asarray(frame_saliency, dtype=np.float32)[:, None, None]
         fused_np = fuse_saliency(features_np, saliency_np, dino_config)
         fused_scale = fused_np[..., 0].mean(axis=1)
         fused_scale = np.maximum(fused_scale, 0.0).astype(np.float32)
 
-        scaling = self.torch.ones((total_tokens, 1), device=self.device, dtype=self._torch_dtype())
-        for idx, (start, end) in enumerate(spans):
-            scaling[start:end] = 1.0 + self.torch.tensor(fused_scale[idx], device=self.device, dtype=scaling.dtype)
-        scaling = scaling.squeeze(-1)
-
         holder = {"applied": False}
 
         def vision_hook(module, module_inputs, module_output):
-            scaled_output, applied = self._apply_token_scaling_to_output(module_output, scaling)
+            scaled_output, applied = self._apply_token_scaling_to_output(module_output, fused_scale)
             holder["applied"] = holder["applied"] or applied
             return scaled_output
 
