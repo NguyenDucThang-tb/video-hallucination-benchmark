@@ -248,6 +248,82 @@ class Qwen25VLAdapter(ModelAdapter):
         }
         return frame_scores, diagnostics
 
+    def _coerce_feature_tensor(self, value):
+        if value is None:
+            return None
+        if hasattr(value, "last_hidden_state"):
+            return self._coerce_feature_tensor(value.last_hidden_state)
+        if hasattr(value, "hidden_states"):
+            hidden_states = value.hidden_states
+            if isinstance(hidden_states, (tuple, list)) and hidden_states:
+                return self._coerce_feature_tensor(hidden_states[-1])
+        if isinstance(value, (tuple, list)):
+            for item in value:
+                tensor = self._coerce_feature_tensor(item)
+                if tensor is not None:
+                    return tensor
+            return None
+        if hasattr(value, "shape") and hasattr(value, "dtype"):
+            return value
+        return None
+
+    def _build_token_scaling(self, total_tokens: int, frame_scores: np.ndarray) -> tuple["torch.Tensor", list[tuple[int, int]]]:
+        n_frames = max(int(len(frame_scores)), 1)
+        base = max(total_tokens // n_frames, 1)
+        remainder = total_tokens % n_frames
+        spans: list[tuple[int, int]] = []
+        start = 0
+        for idx in range(n_frames):
+            size = base + (1 if idx < remainder else 0)
+            spans.append((start, min(start + size, total_tokens)))
+            start += size
+
+        scaling = self.torch.ones((total_tokens,), device=self.device, dtype=self._torch_dtype())
+        for idx, (begin, end) in enumerate(spans):
+            if begin >= total_tokens:
+                break
+            end = max(begin + 1, min(end, total_tokens))
+            scale_value = 1.0 + float(frame_scores[min(idx, len(frame_scores) - 1)])
+            scaling[begin:end] = scale_value
+        return scaling, spans
+
+    def _apply_token_scaling_to_output(self, output, scaling):
+        tensor = self._coerce_feature_tensor(output)
+        if tensor is None:
+            return output, False
+
+        scaled = False
+        if tensor.ndim == 2:
+            token_count = min(int(tensor.shape[0]), int(scaling.shape[0]))
+            if token_count > 0:
+                tensor[:token_count] = tensor[:token_count] * scaling[:token_count].unsqueeze(-1).to(tensor.dtype)
+                scaled = True
+        elif tensor.ndim >= 3:
+            token_count = min(int(tensor.shape[-2]), int(scaling.shape[0]))
+            if token_count > 0:
+                view_shape = [1] * tensor.ndim
+                view_shape[-2] = token_count
+                tensor_slice = tensor[..., :token_count, :]
+                tensor[..., :token_count, :] = tensor_slice * scaling[:token_count].view(*view_shape).to(tensor.dtype)
+                scaled = True
+
+        if not scaled:
+            return output, False
+
+        if hasattr(output, "last_hidden_state"):
+            output.last_hidden_state = tensor
+            return output, True
+        if isinstance(output, tuple):
+            output_list = list(output)
+            replaced = False
+            for idx, item in enumerate(output_list):
+                if self._coerce_feature_tensor(item) is not None:
+                    output_list[idx] = tensor
+                    replaced = True
+                    break
+            return tuple(output_list), replaced
+        return tensor, True
+
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
         if branch not in {"original", "tcd_negative", "spatial_negative", "temporal_homogenized"}:
             raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
@@ -397,16 +473,22 @@ class Qwen25VLAdapter(ModelAdapter):
         scaling = self.torch.ones((total_tokens, 1), device=self.device, dtype=self._torch_dtype())
         for idx, (start, end) in enumerate(spans):
             scaling[start:end] = 1.0 + self.torch.tensor(fused_scale[idx], device=self.device, dtype=scaling.dtype)
+        scaling = scaling.squeeze(-1)
 
         holder = {"applied": False}
 
         def vision_hook(module, module_inputs, module_output):
-            if hasattr(module_output, "hidden_states"):
-                holder["applied"] = True
-            return module_output
+            scaled_output, applied = self._apply_token_scaling_to_output(module_output, scaling)
+            holder["applied"] = holder["applied"] or applied
+            return scaled_output
 
         try:
-            vision_module = getattr(self.model, "visual", None) or getattr(self.model, "vision_tower", None)
+            vision_module = (
+                getattr(self.model, "visual", None)
+                or getattr(self.model, "vision_tower", None)
+                or getattr(getattr(self.model, "model", None), "visual", None)
+                or getattr(getattr(self.model, "model", None), "vision_tower", None)
+            )
             handle = vision_module.register_forward_hook(vision_hook) if vision_module is not None else None
         except Exception:
             handle = None
