@@ -199,6 +199,53 @@ def emit_record(
     )
 
 
+def emit_failure_record(
+    *,
+    sample,
+    error: Exception,
+    stage: str,
+    job: dict,
+    model,
+    method,
+    sampling: dict,
+    generation_config: GenerationConfig,
+    frame_indices: list[int] | None = None,
+    manifest: dict | None = None,
+) -> PredictionRecord:
+    return PredictionRecord(
+        sample_id=sample.sample_id,
+        model=job["model"],
+        method=job["method"],
+        benchmark=sample.benchmark,
+        task=sample.task,
+        prompt=sample.prompt,
+        frame_indices=frame_indices or [],
+        raw_output="",
+        normalized_output=None,
+        ground_truth=sample.ground_truth,
+        is_correct=None,
+        parser_status="missing",
+        error=f"{stage}: {error!r}",
+        model_checkpoint=model.checkpoint,
+        method_config=getattr(method, "config", {}) or {},
+        sampling_config=sampling,
+        generation_config=generation_config.__dict__,
+        metadata={**sample.metadata, "failure_stage": stage, "manifest": manifest},
+    )
+
+
+def persist_record(record: PredictionRecord, predictions_path: Path, manifest_path: Path) -> None:
+    append_jsonl(predictions_path, record)
+    with manifest_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({
+            "sample_id": record.sample_id,
+            "benchmark": record.benchmark,
+            "task": record.task,
+            "manifest": record.metadata.get("manifest"),
+            "error": record.error,
+        }, ensure_ascii=False, sort_keys=True) + "\n")
+
+
 def flush_batch(
     *,
     batch_samples,
@@ -220,11 +267,38 @@ def flush_batch(
         return seen
 
     started = time.perf_counter()
-    raw_outputs = method.generate_batch(
-        [item["frames"] for item in batch_frames],
-        [item.prompt for item in batch_samples],
-        generation_config,
-    )
+    try:
+        raw_outputs = method.generate_batch(
+            [item["frames"] for item in batch_frames],
+            [item.prompt for item in batch_samples],
+            generation_config,
+        )
+        if len(raw_outputs) != len(batch_samples):
+            raise RuntimeError(
+                f"generate_batch returned {len(raw_outputs)} outputs for {len(batch_samples)} samples"
+            )
+    except Exception as exc:
+        for sample, sample_manifest in zip(batch_samples, batch_manifests):
+            record = emit_failure_record(
+                sample=sample,
+                error=exc,
+                stage="generation",
+                job=job,
+                model=model,
+                method=method,
+                sampling=sampling,
+                generation_config=generation_config,
+                frame_indices=sample_manifest.frame_indices,
+                manifest=sample_manifest.to_dict(),
+            )
+            persist_record(record, predictions_path, manifest_path)
+            records.append(record)
+            seen += 1
+            print_progress(
+                f"FAIL  {job['benchmark']} {skipped + seen}/{total_samples} | new={seen} "
+                f"| sample={sample.sample_id} | stage=generation"
+            )
+        return seen
     batch_runtime = time.perf_counter() - started
     per_sample_runtime = batch_runtime / max(len(batch_samples), 1)
 
@@ -244,14 +318,7 @@ def flush_batch(
             sampling=sampling,
             generation_config=generation_config,
         )
-        append_jsonl(predictions_path, record)
-        with manifest_path.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps({
-                "sample_id": sample.sample_id,
-                "benchmark": sample.benchmark,
-                "task": sample.task,
-                "manifest": sample_manifest.to_dict(),
-            }, ensure_ascii=False, sort_keys=True) + "\n")
+        persist_record(record, predictions_path, manifest_path)
         records.append(record)
         seen += 1
         processed = skipped + seen
@@ -285,7 +352,7 @@ def write_metrics_bundle(config: dict) -> dict[str, str]:
     tables_root.mkdir(parents=True, exist_ok=True)
 
     grouped = defaultdict(list)
-    for path in sorted(raw_root.glob("*.jsonl")):
+    for path in sorted(raw_root.glob(f"{config['name']}__*.jsonl")):
         for record in read_jsonl(path):
             grouped[(record.model, record.method, record.benchmark)].append(record)
 
@@ -360,11 +427,33 @@ def run_job(
         if resume_key in resume_keys:
             skipped += 1
             continue
-        frames, manifest = sample_video(
-            sample.video_path,
-            num_frames=sampling["num_frames"],
-            strategy=sampling["strategy"],
-        )
+        try:
+            frames, manifest = sample_video(
+                sample.video_path,
+                num_frames=sampling["num_frames"],
+                strategy=sampling["strategy"],
+            )
+        except Exception as exc:
+            record = emit_failure_record(
+                sample=sample,
+                error=exc,
+                stage="video_sampling",
+                job=job,
+                model=model,
+                method=method,
+                sampling=sampling,
+                generation_config=generation_config,
+            )
+            persist_record(record, predictions_path, manifest_path)
+            records.append(record)
+            seen += 1
+            print_progress(
+                f"FAIL  {job['benchmark']} {skipped + seen}/{total_samples} | new={seen} "
+                f"| sample={sample.sample_id} | stage=video_sampling"
+            )
+            if limit is not None and seen >= limit:
+                break
+            continue
         batch_samples.append(sample)
         batch_frames.append({"sample_id": sample.sample_id, "frames": frames})
         batch_manifests.append(manifest)

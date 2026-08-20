@@ -70,6 +70,10 @@ results/metrics/*
 !results/metrics/.gitkeep
 results/tables/*
 !results/tables/.gitkeep
+!results/tables/final_results.csv
+!results/tables/final_results.md
+!results/tables/final_results.tex
+!results/tables/final_results.json
 logs/*
 !logs/.gitkeep
 manifests/*

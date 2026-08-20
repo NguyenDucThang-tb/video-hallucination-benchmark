@@ -1,0 +1,13 @@
+Models,Training-free,VidHalluc_BQA,VidHalluc_MCQ,VidHalluc_STH,VidHalluc_TSH,VidHalluc_AVG,VideoHallucer_ORH,VideoHallucer_TPH,VideoHallucer_SDH,VideoHallucer_EFH,VideoHallucer_ENFH,VideoHallucer_AVG,EventHallusion_AVG
+LLaVA-OV-7B - Base,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-OV-7B - TCD,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-OV-7B - DINO-HEAL,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-OV-7B - SEASON,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+Qwen2.5-VL-7B - Base,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+Qwen2.5-VL-7B - TCD,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+Qwen2.5-VL-7B - DINO-HEAL,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+Qwen2.5-VL-7B - SEASON,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-Video-7B - Base,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-Video-7B - TCD,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-Video-7B - DINO-HEAL,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+LLaVA-Video-7B - SEASON,Yes,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A

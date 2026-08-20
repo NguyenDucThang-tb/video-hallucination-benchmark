@@ -3,16 +3,42 @@ from __future__ import annotations
 
 import argparse
 import csv
+import importlib.util
 import json
+import sys
 from pathlib import Path
 
+PROJECT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT))
 
-def flatten(prefix, value, output):
-    if isinstance(value, dict):
-        for key, child in value.items():
-            flatten(f"{prefix}.{key}" if prefix else key, child, output)
-    else:
-        output[prefix] = value
+
+def _load_check_compatibility():
+    source = PROJECT / "src" / "models" / "compatibility.py"
+    spec = importlib.util.spec_from_file_location("benchmark_compatibility", source)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load compatibility matrix from {source}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.check_compatibility
+
+
+check_compatibility = _load_check_compatibility()
+
+
+MODELS = ("llava-ov-7b", "qwen2.5-vl-7b", "llava-video-7b")
+METHODS = ("base", "tcd", "dino_heal", "season")
+DISPLAY_MODEL = {
+    "llava-ov-7b": "LLaVA-OV-7B",
+    "qwen2.5-vl-7b": "Qwen2.5-VL-7B",
+    "llava-video-7b": "LLaVA-Video-7B",
+}
+DISPLAY_METHOD = {"base": "Base", "tcd": "TCD", "dino_heal": "DINO-HEAL", "season": "SEASON"}
+COLUMNS = (
+    "Models", "Training-free",
+    "VidHalluc_BQA", "VidHalluc_MCQ", "VidHalluc_STH", "VidHalluc_TSH", "VidHalluc_AVG",
+    "VideoHallucer_ORH", "VideoHallucer_TPH", "VideoHallucer_SDH", "VideoHallucer_EFH",
+    "VideoHallucer_ENFH", "VideoHallucer_AVG", "EventHallusion_AVG",
+)
 
 
 def nested_get(mapping: dict, path: str):
@@ -24,125 +50,94 @@ def nested_get(mapping: dict, path: str):
     return current
 
 
-def build_paper_rows(metrics: dict) -> list[dict]:
-    grouped = {}
-    for result_key, value in metrics.items():
-        model, method, benchmark = result_key.split("/", 2)
-        grouped.setdefault((model, method), {})[benchmark] = value
+def percent(value) -> str:
+    if value is None or isinstance(value, bool):
+        return "N/A"
+    return f"{100.0 * float(value):.2f}"
 
+
+def build_final_rows(metrics: dict) -> list[dict[str, str]]:
     rows = []
-    for (model, method), benchmarks in sorted(grouped.items()):
-        vidhalluc = benchmarks.get("vidhalluc", {})
-        videohallucer = benchmarks.get("videohallucer", {})
-        eventhallusion = benchmarks.get("eventhallusion", {})
-        rows.append({
-            "Model": f"{model} + {method}",
-            "VidHalluc_BQA": nested_get(vidhalluc, "bqa.accuracy"),
-            "VidHalluc_MCQ": nested_get(vidhalluc, "mcq.accuracy") or nested_get(vidhalluc, "ach.accuracy"),
-            "VidHalluc_STH": nested_get(vidhalluc, "sth.accuracy"),
-            "VidHalluc_TSH": nested_get(vidhalluc, "tsh.accuracy"),
-            "VidHalluc_AVG": nested_get(vidhalluc, "avg.accuracy"),
-            "VideoHallucer_ORH": nested_get(videohallucer, "orh.accuracy"),
-            "VideoHallucer_TPH": nested_get(videohallucer, "tph.accuracy"),
-            "VideoHallucer_SDH": nested_get(videohallucer, "sdh.accuracy"),
-            "VideoHallucer_EFH": nested_get(videohallucer, "efh.accuracy"),
-            "VideoHallucer_ENFH": nested_get(videohallucer, "enfh.accuracy"),
-            "VideoHallucer_AVG": nested_get(videohallucer, "avg.accuracy") or nested_get(videohallucer, "value"),
-            "EventHallusion_entire": nested_get(eventhallusion, "entire.accuracy"),
-            "EventHallusion_misleading": nested_get(eventhallusion, "misleading.accuracy"),
-            "EventHallusion_AVG": nested_get(eventhallusion, "overall.accuracy"),
-        })
+    for model in MODELS:
+        for method in METHODS:
+            supported, _ = check_compatibility(model, method)
+            grouped = {
+                benchmark: metrics.get(f"{model}/{method}/{benchmark}", {})
+                for benchmark in ("vidhalluc", "videohallucer", "eventhallusion")
+            }
+            if not supported:
+                grouped = {benchmark: {} for benchmark in grouped}
+            vh = grouped["vidhalluc"]
+            vhr = grouped["videohallucer"]
+            eh = grouped["eventhallusion"]
+            rows.append({
+                "Models": f"{DISPLAY_MODEL[model]} - {DISPLAY_METHOD[method]}",
+                "Training-free": "Yes",
+                "VidHalluc_BQA": percent(nested_get(vh, "bqa.accuracy")),
+                "VidHalluc_MCQ": percent(nested_get(vh, "mcq.accuracy")),
+                "VidHalluc_STH": percent(nested_get(vh, "sth.accuracy")),
+                "VidHalluc_TSH": percent(nested_get(vh, "tsh.accuracy")),
+                "VidHalluc_AVG": percent(nested_get(vh, "avg.accuracy")),
+                "VideoHallucer_ORH": percent(nested_get(vhr, "orh.accuracy")),
+                "VideoHallucer_TPH": percent(nested_get(vhr, "tph.accuracy")),
+                "VideoHallucer_SDH": percent(nested_get(vhr, "sdh.accuracy")),
+                "VideoHallucer_EFH": percent(nested_get(vhr, "efh.accuracy")),
+                "VideoHallucer_ENFH": percent(nested_get(vhr, "enfh.accuracy")),
+                "VideoHallucer_AVG": percent(nested_get(vhr, "avg.accuracy")),
+                "EventHallusion_AVG": percent(nested_get(eh, "overall.accuracy")),
+            })
     return rows
 
 
-def stringify(value):
-    if value is None:
-        return ""
-    return str(value)
-
-
-def write_paper_markdown(rows: list[dict], output: Path) -> None:
+def write_markdown(rows: list[dict[str, str]], output: Path) -> None:
     lines = [
-        "| Model | VidHalluc |  |  |  |  | VideoHallucer |  |  |  |  |  | EventHallusion |  |  |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
-        "|  | BQA | MCQ | STH | TSH | AVG | ORH | TPH | SDH | EFH | ENFH | AVG | entire | misleading | AVG |",
+        "| Models | Training-free | VidHalluc |  |  |  |  | VideoHallucer |  |  |  |  |  | EventHallusion |",
+        "|---|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "|  |  | BQA | MCQ | STH | TSH | AVG | ORH | TPH | SDH | EFH | ENFH | AVG | AVG |",
     ]
-    for row in rows:
-        lines.append(
-            "| " + " | ".join([
-                stringify(row["Model"]),
-                stringify(row["VidHalluc_BQA"]),
-                stringify(row["VidHalluc_MCQ"]),
-                stringify(row["VidHalluc_STH"]),
-                stringify(row["VidHalluc_TSH"]),
-                stringify(row["VidHalluc_AVG"]),
-                stringify(row["VideoHallucer_ORH"]),
-                stringify(row["VideoHallucer_TPH"]),
-                stringify(row["VideoHallucer_SDH"]),
-                stringify(row["VideoHallucer_EFH"]),
-                stringify(row["VideoHallucer_ENFH"]),
-                stringify(row["VideoHallucer_AVG"]),
-                stringify(row["EventHallusion_entire"]),
-                stringify(row["EventHallusion_misleading"]),
-                stringify(row["EventHallusion_AVG"]),
-            ]) + " |"
-        )
+    lines.extend("| " + " | ".join(row[column] for column in COLUMNS) + " |" for row in rows)
+    lines.extend([
+        "",
+        "All values are percentages. N/A means not executed, incomplete, or unsupported.",
+        "VidHalluc AVG is the strict macro-average of BQA/MCQ/official STH/TSH; VideoHallucer AVG is the macro-average of five strict pair accuracies; EventHallusion AVG is sample-weighted binary accuracy over all configured splits.",
+    ])
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_paper_latex(rows: list[dict], output: Path) -> None:
-    columns = [
-        "Model", "VidHalluc_BQA", "VidHalluc_MCQ", "VidHalluc_STH", "VidHalluc_TSH", "VidHalluc_AVG",
-        "VideoHallucer_ORH", "VideoHallucer_TPH", "VideoHallucer_SDH", "VideoHallucer_EFH",
-        "VideoHallucer_ENFH", "VideoHallucer_AVG", "EventHallusion_entire",
-        "EventHallusion_misleading", "EventHallusion_AVG",
+def write_latex(rows: list[dict[str, str]], output: Path) -> None:
+    lines = [
+        r"\begin{tabular}{llccccc|cccccc|c}",
+        r"\toprule",
+        r"\multirow{2}{*}{Models} & \multirow{2}{*}{Training-free} & \multicolumn{5}{c|}{VidHalluc} & \multicolumn{6}{c|}{VideoHallucer} & EventHallusion \\",
+        r" & & BQA & MCQ & STH & TSH & AVG & ORH & TPH & SDH & EFH & ENFH & AVG & AVG \\",
+        r"\midrule",
     ]
-    lines = [" & ".join(columns) + r" \\"]
     for row in rows:
-        lines.append(" & ".join(stringify(row[column]) for column in columns) + r" \\")
+        values = [row[column].replace("_", r"\_") for column in COLUMNS]
+        lines.append(" & ".join(values) + r" \\")
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True)
     parser.add_argument("--output-dir", default="results/tables")
     args = parser.parse_args()
-
     source = Path(args.input)
     metric_file = source if source.is_file() else source / "metrics.json"
     metrics = json.loads(metric_file.read_text(encoding="utf-8")) if metric_file.exists() else {}
-
     output = Path(args.output_dir)
     output.mkdir(parents=True, exist_ok=True)
-
-    detailed_rows = []
-    for key, value in metrics.items():
-        row = {"result_key": key}
-        flatten("", value, row)
-        detailed_rows.append(row)
-    detailed_columns = sorted({key for row in detailed_rows for key in row}) if detailed_rows else ["result_key"]
-    with (output / "detailed_results.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=detailed_columns)
+    rows = build_final_rows(metrics)
+    with (output / "final_results.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=COLUMNS)
         writer.writeheader()
-        writer.writerows(detailed_rows)
-
-    paper_rows = build_paper_rows(metrics)
-    paper_columns = [
-        "Model",
-        "VidHalluc_BQA", "VidHalluc_MCQ", "VidHalluc_STH", "VidHalluc_TSH", "VidHalluc_AVG",
-        "VideoHallucer_ORH", "VideoHallucer_TPH", "VideoHallucer_SDH", "VideoHallucer_EFH",
-        "VideoHallucer_ENFH", "VideoHallucer_AVG",
-        "EventHallusion_entire", "EventHallusion_misleading", "EventHallusion_AVG",
-    ]
-    with (output / "results.csv").open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=paper_columns)
-        writer.writeheader()
-        writer.writerows(paper_rows)
-
-    write_paper_markdown(paper_rows, output / "results.md")
-    write_paper_latex(paper_rows, output / "results.tex")
-    print(f"Wrote paper-style CSV/Markdown/LaTeX tables to {output}")
+        writer.writerows(rows)
+    write_markdown(rows, output / "final_results.md")
+    write_latex(rows, output / "final_results.tex")
+    (output / "final_results.json").write_text(json.dumps(rows, indent=2), encoding="utf-8")
+    print(f"Wrote final_results.csv/.md/.tex/.json to {output}")
 
 
 if __name__ == "__main__":

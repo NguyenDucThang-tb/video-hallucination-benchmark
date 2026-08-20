@@ -1,7 +1,9 @@
 # Reproducible VideoLLM Hallucination Benchmark
 
-This project evaluates Base, TCD, DINO-HEAL, and a paper-faithful SEASON
-reimplementation under one deterministic eight-frame protocol. Upstream
+This project is an audit-oriented harness for Base, TCD, DINO-HEAL, and
+SEASON under one deterministic eight-frame protocol. TCD is a paper-based
+reimplementation; the current DINO-HEAL and SEASON adapters are partial and
+disabled for research tables. Upstream
 benchmark code snapshots are vendored in `external/` so a plain `git clone`
 contains the code needed to run on another machine. Large datasets, videos,
 and model checkpoints are still kept outside git.
@@ -19,7 +21,7 @@ python3 scripts/smoke_test.py
 python3 scripts/run_benchmark.py --config configs/experiment1.yaml --dry-run
 python3 scripts/run_benchmark.py --config configs/experiment1.yaml --smoke-test
 python3 scripts/evaluate_results.py --input results/raw
-python3 scripts/aggregate_results.py --input results/metrics
+python3 scripts/aggregate_results.py --input results/metrics/metrics.json
 ```
 
 Large checkpoints are deliberately not downloaded by setup scripts. Configure
@@ -41,6 +43,6 @@ If you need to refresh the vendored upstream snapshots, use
 - Valid predictions are resumed, not overwritten.
 
 Read [experimental_protocol.md](docs/experimental_protocol.md),
-[season_implementation.md](docs/season_implementation.md), and
+[method_equivalence_report.md](docs/method_equivalence_report.md), and
 [compatibility_matrix.md](docs/compatibility_matrix.md) before interpreting a
 result table.

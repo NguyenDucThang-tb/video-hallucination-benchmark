@@ -1,11 +1,19 @@
 from __future__ import annotations
 
 from src.benchmarks.base import BenchmarkSample
-from src.evaluation.parsers import ParseResult, parse_ab_ba, parse_mcq, parse_yes_no
+from src.evaluation.parsers import (
+    ParseResult,
+    parse_ab_ba,
+    parse_leading_yes_no,
+    parse_mcq,
+    parse_yes_no,
+)
 
 
 def normalize_prediction(sample: BenchmarkSample, raw_output: str) -> ParseResult:
     if sample.answer_type == "yes_no":
+        if sample.benchmark == "eventhallusion":
+            return parse_leading_yes_no(raw_output)
         return parse_yes_no(raw_output)
     if sample.answer_type == "mcq":
         return parse_mcq(raw_output, sample.choices)

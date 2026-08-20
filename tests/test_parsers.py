@@ -17,4 +17,6 @@ def test_mcq_parser():
 def test_tsh_parser():
     assert parse_ab_ba("AB").value == "AB"
     assert parse_ab_ba("Answer: BA").value == "BA"
+    assert parse_ab_ba("Action A happens before Action B.").value == "AB"
+    assert parse_ab_ba("Action A happens after Action B.").value == "BA"
     assert parse_ab_ba("A then B").status == "unparseable"

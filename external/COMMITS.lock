@@ -1,3 +1,4 @@
-VideoHallucer 8b785d1680465911cd2ce80c9f652837c0ba2abd
-EventHallusion aa544c21c7cd93b4685423cb94f77ab441f754bc
-VidHalluc e753864f5c2500c38523f97992355e2352bf8732
+# component commit branch official_url
+VideoHallucer 8b785d1680465911cd2ce80c9f652837c0ba2abd main https://github.com/patrick-tssn/VideoHallucer
+EventHallusion aa544c21c7cd93b4685423cb94f77ab441f754bc master https://github.com/Stevetich/EventHallusion
+VidHalluc e753864f5c2500c38523f97992355e2352bf8732 main https://github.com/CyL97/VidHalluc

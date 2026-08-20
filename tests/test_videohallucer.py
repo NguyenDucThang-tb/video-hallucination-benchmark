@@ -16,3 +16,10 @@ def test_official_metric_requires_both_pair_branches_correct():
     assert metric["metric"] == "strict_pair_accuracy"
     assert metric["orh"]["accuracy"] == 0.0
     assert pair_accuracy([make("basic", True), make("hallucination", True)])["orh"]["accuracy"] == 1.0
+
+
+def test_incomplete_pair_is_counted_as_incorrect():
+    result = pair_accuracy([make("basic", True)])
+    assert result["orh"]["n_pairs"] == 1
+    assert result["orh"]["n_missing_pairs"] == 1
+    assert result["orh"]["accuracy"] == 0.0

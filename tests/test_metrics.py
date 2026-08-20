@@ -1,4 +1,4 @@
-from src.evaluation.metrics import accuracy, macro_average
+from src.evaluation.metrics import accuracy, macro_average, strict_macro_average
 
 
 def test_macro_average_ignores_missing_tasks():
@@ -8,4 +8,9 @@ def test_macro_average_ignores_missing_tasks():
 
 def test_missing_prediction_is_not_valid():
     score, n, correct = accuracy([True, False, None])
-    assert (score, n, correct) == (0.5, 2, 1)
+    assert (score, n, correct) == (1 / 3, 3, 1)
+
+
+def test_strict_macro_average_requires_every_task():
+    assert strict_macro_average({"a": 0.5, "b": 1.0}) == 0.75
+    assert strict_macro_average({"a": 0.5, "b": None}) is None

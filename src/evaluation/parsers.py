@@ -25,6 +25,14 @@ def parse_yes_no(text: str) -> ParseResult:
     return ParseResult(matches[0], "valid")
 
 
+def parse_leading_yes_no(text: str) -> ParseResult:
+    """EventHallusion's official parser accepts yes/no only at the start."""
+    match = re.match(r"\s*(yes|no)\b", text, flags=re.IGNORECASE)
+    if match is None:
+        return ParseResult(None, "unparseable", "response does not start with yes/no")
+    return ParseResult(match.group(1).lower(), "valid")
+
+
 def parse_ab_ba(text: str) -> ParseResult:
     compact = re.sub(r"[^A-Za-z]", "", text).upper()
     exact = re.search(r"\b(AB|BA)\b", text.upper())
@@ -32,6 +40,18 @@ def parse_ab_ba(text: str) -> ParseResult:
         return ParseResult(exact.group(1), "valid")
     if compact in {"AB", "BA"}:
         return ParseResult(compact, "valid")
+    lowered = text.lower()
+    if "not clear" in lowered or "no clear" in lowered:
+        return ParseResult(None, "unparseable", "model reported unclear action order")
+    mentions = list(re.finditer(r"action\s*([ab])", lowered))
+    if len(mentions) >= 2:
+        first, second = mentions[0].group(1).upper(), mentions[1].group(1).upper()
+        between = lowered[mentions[0].end():mentions[1].start()]
+        if "after" in between:
+            first, second = second, first
+        value = first + second
+        if value in {"AB", "BA"}:
+            return ParseResult(value, "valid")
     return ParseResult(None, "unparseable", "no standalone AB/BA answer")
 
 

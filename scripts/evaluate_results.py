@@ -20,9 +20,22 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True)
     parser.add_argument("--output", default="results/metrics/metrics.json")
+    parser.add_argument(
+        "--experiment",
+        help="Experiment-name prefix before '__'. Required when an input directory contains multiple experiments.",
+    )
     args = parser.parse_args()
     source = Path(args.input)
-    files = [source] if source.is_file() else sorted(source.glob("*.jsonl"))
+    if source.is_file():
+        files = [source]
+    else:
+        files = sorted(source.glob(f"{args.experiment}__*.jsonl" if args.experiment else "*.jsonl"))
+        experiment_names = {path.name.split("__", 1)[0] for path in files if "__" in path.name}
+        if args.experiment is None and len(experiment_names) > 1:
+            names = ", ".join(sorted(experiment_names))
+            raise SystemExit(
+                f"Input contains multiple experiments ({names}). Pass --experiment to avoid mixing runs."
+            )
     grouped = defaultdict(list)
     for path in files:
         for record in read_jsonl(path):

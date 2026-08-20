@@ -63,6 +63,13 @@ def find_video(video_id: str | None, index: dict[str, Path]) -> Path | None:
     return None
 
 
+def unresolved_video_path(root: Path, video_id: str | None) -> Path:
+    name = Path(str(video_id or "unknown")).name
+    if not Path(name).suffix:
+        name = f"{name}.mp4"
+    return root / "__unresolved__" / name
+
+
 def build_ach_prompt(question: str, choices: dict[str, str]) -> str:
     lines = [
         question.strip(),
@@ -139,11 +146,11 @@ class VidHallucLoader(BenchmarkLoader):
                     continue
                 for clip_name, answer in answers.items():
                     video_path = find_video(clip_name, self.video_index)
-                    if video_path is None:
-                        continue
                     gt = normalize_text(answer)
                     if gt not in {"yes", "no"}:
                         continue
+                    video_resolved = video_path is not None
+                    video_path = video_path or unresolved_video_path(self.video_root, clip_name)
                     yield BenchmarkSample(
                         sample_id=f"bqa:{section_id}:{question_index}:{clip_name}",
                         benchmark="vidhalluc",
@@ -157,6 +164,8 @@ class VidHallucLoader(BenchmarkLoader):
                             "section": section_id,
                             "question_index": question_index,
                             "video_name": clip_name,
+                            "expected_clip_count": len(answers),
+                            "video_resolved": video_resolved,
                         },
                     )
 
@@ -164,11 +173,11 @@ class VidHallucLoader(BenchmarkLoader):
         data = json.loads((self.annotation_root / "tsh.json").read_text(encoding="utf-8"))
         for sample_id, item in data.items():
             video_path = find_video(item.get("video"), self.video_index)
-            if video_path is None:
-                continue
             gt = str(item.get("Correct Answer", "")).strip().upper()
             if gt not in {"AB", "BA"}:
                 continue
+            video_resolved = video_path is not None
+            video_path = video_path or unresolved_video_path(self.video_root, item.get("video"))
             yield BenchmarkSample(
                 sample_id=f"tsh:{sample_id}",
                 benchmark="vidhalluc",
@@ -177,17 +186,23 @@ class VidHallucLoader(BenchmarkLoader):
                 prompt=build_tsh_prompt(str(item["Question"])),
                 ground_truth=gt,
                 answer_type="ab_ba",
-                metadata={"source": "tsh.json", "video_name": item.get("video")},
+                metadata={
+                    "source": "tsh.json",
+                    "video_name": item.get("video"),
+                    "video_resolved": video_resolved,
+                },
             )
 
     def _iter_sth(self) -> Iterable[BenchmarkSample]:
         data = json.loads((self.annotation_root / "sth.json").read_text(encoding="utf-8"))
         for video_id, item in data.items():
             video_path = find_video(video_id, self.video_index)
-            if video_path is None:
-                continue
             scene_change = str(item.get("Scene change", "")).strip().lower()
             locations = str(item.get("Locations", "")).strip()
+            if scene_change not in {"yes", "no"}:
+                continue
+            video_resolved = video_path is not None
+            video_path = video_path or unresolved_video_path(self.video_root, video_id)
             yield BenchmarkSample(
                 sample_id=f"sth:{video_id}",
                 benchmark="vidhalluc",
@@ -201,6 +216,7 @@ class VidHallucLoader(BenchmarkLoader):
                     "video_name": video_id,
                     "scene_change": scene_change,
                     "locations": locations,
+                    "video_resolved": video_resolved,
                 },
             )
 
@@ -209,12 +225,12 @@ class VidHallucLoader(BenchmarkLoader):
         for section_id, section in data.items():
             for clip_name, item in section.items():
                 video_path = find_video(clip_name, self.video_index)
-                if video_path is None:
-                    continue
                 choices = {str(key).upper(): str(value) for key, value in item.get("Choices", {}).items()}
                 gt = str(item.get("Correct Answer", "")).strip().upper()
                 if gt not in LETTERS:
                     continue
+                video_resolved = video_path is not None
+                video_path = video_path or unresolved_video_path(self.video_root, clip_name)
                 yield BenchmarkSample(
                     sample_id=f"{task_name}:{section_id}:{clip_name}",
                     benchmark="vidhalluc",
@@ -224,5 +240,10 @@ class VidHallucLoader(BenchmarkLoader):
                     ground_truth=gt,
                     answer_type="mcq",
                     choices=choices,
-                    metadata={"source": "ach_mcq.json", "section": section_id, "video_name": clip_name},
+                    metadata={
+                        "source": "ach_mcq.json",
+                        "section": section_id,
+                        "video_name": clip_name,
+                        "video_resolved": video_resolved,
+                    },
                 )

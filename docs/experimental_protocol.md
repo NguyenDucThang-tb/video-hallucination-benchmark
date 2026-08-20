@@ -33,11 +33,13 @@ separate protocol, never silently mixed into the 8-frame table.
 
 ## Evaluation
 
-- VidHalluc reports BQA, MCQ, STH, TSH and macro-average over available tasks.
+- VidHalluc reports BQA, MCQ, STH and TSH. Its AVG is emitted only when all
+  four official task scores exist; STH remains N/A without SimCSE description
+  scoring.
 - VideoHallucer reports strict pair accuracy: both basic and hallucination
   questions in a pair must be correct.
-- EventHallusion reports binary accuracy per split and overall. Description
-  judging requires `OPENAI_API_KEY`; it is skipped without that variable.
+- EventHallusion reports binary accuracy per split and sample-weighted overall.
+  Description judging requires the official judge/API and is N/A when absent.
   Main results use the corrected `mix` reference (`event_info.unexpected`).
 - Temporal understanding average is mean(TempCompass, TVBench).
 - Conventional understanding average is mean(VideoMME, MVBench).

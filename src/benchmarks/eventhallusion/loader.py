@@ -42,7 +42,11 @@ class EventHallusionLoader(BenchmarkLoader):
                         video_path=video_path,
                         prompt=question["question"] + "\nPlease answer yes or no:",
                         ground_truth=normalize_yes_no_label(str(question["answer"])), answer_type="yes_no",
-                        metadata={"event_info": video.get("event_info", {}), "source": str(source)},
+                        metadata={
+                            "event_info": video.get("event_info", {}),
+                            "source": str(source),
+                            "video_resolved": video_path.is_file(),
+                        },
                     )
 
 

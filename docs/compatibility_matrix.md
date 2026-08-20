@@ -6,18 +6,18 @@ reported unless both are true.
 
 | Model | Method | Algorithm | Runnable now | Note |
 |---|---|---:|---:|---|
-| LLaVA-OV-7B | Base | yes | no | checkpoint adapter and GPU validation pending |
-| LLaVA-OV-7B | TCD | yes | no | needs synchronized token-level dual branch |
-| LLaVA-OV-7B | DINO-HEAL | unverified | no | upstream CLIP patch is not API-compatible |
-| LLaVA-OV-7B | SEASON | yes | no | needs per-vision-layer homogenization hooks |
-| Qwen2.5-VL-7B | Base | yes | no | checkpoint adapter and GPU validation pending |
-| Qwen2.5-VL-7B | TCD | yes | no | needs synchronized token-level dual branch |
-| Qwen2.5-VL-7B | DINO-HEAL | unverified | no | Qwen vision grid/fusion differs from CLIP |
-| Qwen2.5-VL-7B | SEASON | yes | no | needs Qwen vision and decoder attention hooks |
+| LLaVA-OV-7B | Base | yes | no | adapter exists; no committed real-video GPU validation artifact |
+| LLaVA-OV-7B | TCD | yes | no | reimplementation is not artifact-backed validated |
+| LLaVA-OV-7B | DINO-HEAL | partial | no | frame-scalar token-norm saliency is not paper patch attention |
+| LLaVA-OV-7B | SEASON | partial | no | per-layer homogenization and exact attention mapping are absent |
+| Qwen2.5-VL-7B | Base | yes | no | prior external runs are not committed validation artifacts |
+| Qwen2.5-VL-7B | TCD | yes | no | anomalous prior results; no artifact-backed validation |
+| Qwen2.5-VL-7B | DINO-HEAL | partial | no | frame-scalar token-norm saliency is not paper patch attention |
+| Qwen2.5-VL-7B | SEASON | partial | no | input-only homogenization and unproven attention mapping |
 | LLaVA-Video-7B | Base | yes | no | checkpoint adapter and GPU validation pending |
 | LLaVA-Video-7B | TCD | yes | no | needs synchronized token-level dual branch |
 | LLaVA-Video-7B | DINO-HEAL | conditional | no | only if CLIP tower satisfies upstream contract |
 | LLaVA-Video-7B | SEASON | yes | no | needs per-vision-layer homogenization hooks |
 
-The method-level numerical implementation and contracts are tested. No full
-7B checkpoint was downloaded or claimed as validated during project setup.
+Numerical helper tests do not constitute model-method validation. All pairs are
+disabled until a real checkpoint and real video smoke artifact is committed.

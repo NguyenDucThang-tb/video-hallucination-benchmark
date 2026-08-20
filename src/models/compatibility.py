@@ -2,16 +2,16 @@ from __future__ import annotations
 
 COMPATIBILITY = {
     "llava-ov-7b": {
-        "base": (True, "LLaVA-OneVision adapter enabled locally; validate with a smoke run before full benchmark"),
-        "tcd": (True, "Token-level dual-branch adapter enabled for LLaVA-OV; validate with a smoke run before full benchmark"),
-        "dino_heal": (True, "DINO saliency fusion enabled for LLaVA-OV; validate with a smoke run before full benchmark"),
-        "season": (False, "Vision homogenization and decoder attention adapter not GPU-validated"),
+        "base": (False, "Adapter code exists, but this checkout has no artifact-backed real-video GPU validation"),
+        "tcd": (False, "Local TCD reimplementation has no artifact-backed real-video GPU validation for LLaVA-OV"),
+        "dino_heal": (False, "Local DINO fusion is not paper-faithful at patch level and lacks artifact-backed GPU validation"),
+        "season": (False, "Local SEASON implementation is incomplete and not artifact-backed GPU validated"),
     },
     "qwen2.5-vl-7b": {
-        "base": (True, "Offline checkpoint load validated on Gadi; base generation adapter enabled"),
-        "tcd": (True, "Token-level dual-branch adapter enabled for Qwen; validate with a smoke run before full benchmark"),
-        "dino_heal": (True, "Qwen DINO saliency fusion adapter enabled; validate with a smoke run before full benchmark"),
-        "season": (True, "Qwen vision and decoder attention adapter enabled; validate with a smoke run before full benchmark"),
+        "base": (False, "Adapter code exists, but prior Gadi runs are not committed as validation artifacts"),
+        "tcd": (False, "Local TCD reimplementation lacks artifact-backed end-to-end validation and previously produced anomalous results"),
+        "dino_heal": (False, "Local DINO fusion is not paper-faithful at patch level and lacks artifact-backed validation"),
+        "season": (False, "Local SEASON implementation is incomplete and lacks artifact-backed validation"),
     },
     "llava-video-7b": {
         "base": (False, "LLaVA Video checkpoint adapter not GPU-validated in this workspace"),

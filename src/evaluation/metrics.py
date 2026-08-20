@@ -8,6 +8,13 @@ def macro_average(values: Mapping[str, float | None]) -> float | None:
     return sum(valid) / len(valid) if valid else None
 
 
+def strict_macro_average(values: Mapping[str, float | None]) -> float | None:
+    """Average a fixed metric family only when every component is available."""
+    if not values or any(value is None for value in values.values()):
+        return None
+    return sum(float(value) for value in values.values()) / len(values)
+
+
 def accuracy(correct: Iterable[bool | None]) -> tuple[float | None, int, int]:
     values = list(correct)
     total = len(values)

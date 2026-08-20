@@ -30,10 +30,16 @@ class VideoHallucerLoader(BenchmarkLoader):
                 pair_id = f"{task}:{pair_index}"
                 for branch in ("basic", "hallucination"):
                     item = row[branch]
+                    video_path = self.root / folder / "videos" / item["video"]
                     yield BenchmarkSample(
                         sample_id=f"{pair_id}:{branch}", benchmark="videohallucer", task=task,
-                        video_path=self.root / folder / "videos" / item["video"],
+                        video_path=video_path,
                         prompt=item["question"] + "\nAnswer the question using 'yes' or 'no'.",
                         ground_truth=item["answer"].lower(), answer_type="yes_no",
-                        metadata={"pair_id": pair_id, "branch": branch, "source": str(source)},
+                        metadata={
+                            "pair_id": pair_id,
+                            "branch": branch,
+                            "source": str(source),
+                            "video_resolved": video_path.is_file(),
+                        },
                     )

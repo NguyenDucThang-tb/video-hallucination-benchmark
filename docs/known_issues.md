@@ -18,10 +18,10 @@ parser errors. Binary evaluation does not require an API.
 
 ## VideoHallucer parser
 
-The upstream regex searches expected yes/no anywhere in the full answer. This
-can count contradictory text. Our parser requires exactly one unique yes/no
-token and marks both-token responses ambiguous. Both definitions are recorded
-when reproducing official numbers.
+The upstream strict-pair evaluator searches the expected yes/no token anywhere
+in the full answer; this can count contradictory text. The local primary
+VideoHallucer metric now uses that upstream rule for comparability, while the
+stored parser status still marks both-token responses ambiguous for auditing.
 
 The README command contains `--eval_obj`, but `evaluation.py` defines
 `--eval_obj_rel`. Dataset statistics and current JSON counts may differ due to

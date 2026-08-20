@@ -56,7 +56,20 @@ def test_vidhalluc_loader_reads_bqa_mcq_tsh_sth(tmp_path):
     sth = next(sample for sample in samples if sample.task == "sth")
 
     assert bqa.ground_truth == "yes"
+    assert bqa.metadata["expected_clip_count"] == 2
     assert mcq.choices["B"] == "jump"
     assert mcq.ground_truth == "B"
     assert tsh.ground_truth == "AB"
     assert sth.metadata["scene_change"] == "yes"
+
+
+def test_missing_video_is_emitted_for_explicit_failure_accounting(tmp_path):
+    root = tmp_path / "vidhalluc"
+    data = root / "data"
+    data.mkdir(parents=True)
+    (root / "tsh.json").write_text(json.dumps({
+        "1": {"video": "missing", "Question": "Action A. run\nAction B. jump", "Correct Answer": "AB"}
+    }))
+    sample = next(iter(VidHallucLoader(data, ["tsh"]).iter_samples()))
+    assert sample.metadata["video_resolved"] is False
+    assert "__unresolved__" in str(sample.video_path)
