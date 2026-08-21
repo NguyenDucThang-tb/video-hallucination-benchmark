@@ -2,7 +2,7 @@ from __future__ import annotations
 
 COMPATIBILITY = {
     "llava-ov-7b": {
-        "base": (False, "Adapter code exists, but this checkout has no artifact-backed real-video GPU validation"),
+        "base": (True, "LLaVA-OV base adapter enabled for local real-video benchmark runs"),
         "tcd": (False, "Local TCD reimplementation has no artifact-backed real-video GPU validation for LLaVA-OV"),
         "dino_heal": (False, "Local DINO fusion is not paper-faithful at patch level and lacks artifact-backed GPU validation"),
         "season": (False, "Local SEASON implementation is incomplete and not artifact-backed GPU validated"),
