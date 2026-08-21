@@ -11,7 +11,7 @@ methods:
     all_masked_behavior: original_argmax
   dino_heal:
     batch_size: 1
-    dino_checkpoint: facebook/dinov2-large
+    dino_checkpoint: /scratch/jp09/dd9648/huggingface/dinov2-large
     dino_device: cpu
     visual_weight: 0.3
     saliency_weight: 0.7
