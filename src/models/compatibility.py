@@ -3,9 +3,9 @@ from __future__ import annotations
 COMPATIBILITY = {
     "llava-ov-7b": {
         "base": (True, "LLaVA-OV base adapter enabled for local real-video benchmark runs"),
-        "tcd": (False, "Local TCD reimplementation has no artifact-backed real-video GPU validation for LLaVA-OV"),
-        "dino_heal": (False, "Local DINO fusion is not paper-faithful at patch level and lacks artifact-backed GPU validation"),
-        "season": (False, "Local SEASON implementation is incomplete and not artifact-backed GPU validated"),
+        "tcd": (True, "Local TCD reimplementation has no artifact-backed real-video GPU validation for LLaVA-OV"),
+        "dino_heal": (True, "Local DINO fusion is not paper-faithful at patch level and lacks artifact-backed GPU validation"),
+        "season": (True, "Local SEASON implementation is incomplete and not artifact-backed GPU validated"),
     },
     "qwen2.5-vl-7b": {
         "base": (False, "Adapter code exists, but prior Gadi runs are not committed as validation artifacts"),
