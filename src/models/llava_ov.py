@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .base import GenerationConfig, ModelAdapter, StepOutput
+from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
 
 
@@ -478,9 +478,10 @@ class LlavaOVAdapter(ModelAdapter):
         step_diagnostics["sync_generated_seconds"] = time.perf_counter() - started
         inputs = state["model_inputs"]
         is_first_iteration = state["past_key_values"] is None
+        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
         started = time.perf_counter()
         prepared = self.model.prepare_inputs_for_generation(
-            input_ids=inputs["input_ids"],
+            input_ids=input_ids,
             past_key_values=state["past_key_values"],
             inputs_embeds=inputs.get("inputs_embeds"),
             pixel_values=inputs.get("pixel_values") if is_first_iteration else None,

@@ -52,10 +52,13 @@ transformation has been removed.
 
 Both adapters construct the two branches independently and retain independent KV
 caches. At each timestep they receive the same selected prefix. Transformers'
-`prepare_inputs_for_generation` is responsible for slicing cached text input and
-dropping visual tensors after the first iteration. New diagnostics record input
-lengths, attention-mask lengths, cache presence, and whether visual tensors were
-supplied on every step.
+generation API in the profiled environment did not slice cached text input unless
+the caller supplied the next sequence length. A real H200 profile exposed prompt
+lengths growing from 23,447 to 23,450 tokens despite a populated cache. The
+adapters now explicitly pass only `input_ids[:, -1:]` after prefill while retaining
+the complete growing attention mask. New diagnostics record input lengths,
+attention-mask lengths, cache presence, and whether visual tensors were supplied
+on every step.
 
 The paper does not define behavior when the threshold masks the entire
 vocabulary. The local default falls back to the original branch's argmax so a run
@@ -77,6 +80,12 @@ for every generated token in both TCD branches. Both adapters now supply visual
 tensors only when their branch cache is empty. The profiler's vision-tower hooks
 and `vision_inputs_supplied_steps` counter must confirm one vision pass per branch
 on the actual installed Transformers/checkpoint combination.
+
+The first H200 profile after the visual-input fix confirmed one vision pass per
+branch, but also found ineffective text-cache slicing: later original-branch
+forwards grew from about 4.46 to 6.15 and 8.11 seconds while processing the full
+23k-token multimodal prefix. This prompted the explicit one-token cached-input
+fix above. A second H200 profile is required before compatibility can be enabled.
 
 `scripts/profile_tcd.py` measures model load, video sampling, branch preprocessing,
 vision forwards, first/subsequent token forwards, input preparation, prefix sync,

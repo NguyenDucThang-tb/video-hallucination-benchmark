@@ -7,6 +7,11 @@ from typing import Any
 import numpy as np
 
 
+def select_decode_input_ids(input_ids: Any, past_key_values: Any | None) -> Any:
+    """Use the full prompt for prefill and only the newest token with a cache."""
+    return input_ids if past_key_values is None else input_ids[:, -1:]
+
+
 @dataclass(frozen=True)
 class GenerationConfig:
     max_new_tokens: int = 128
