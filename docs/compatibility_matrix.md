@@ -7,11 +7,11 @@ reported unless both are true.
 | Model | Method | Algorithm | Runnable now | Note |
 |---|---|---:|---:|---|
 | LLaVA-OV-7B | Base | yes | no | adapter exists; no committed real-video GPU validation artifact |
-| LLaVA-OV-7B | TCD | yes | no | reimplementation is not artifact-backed validated |
+| LLaVA-OV-7B | TCD | yes | no | paper-based reimplementation; post-audit real-video GPU validation pending |
 | LLaVA-OV-7B | DINO-HEAL | partial | no | frame-scalar token-norm saliency is not paper patch attention |
 | LLaVA-OV-7B | SEASON | partial | no | per-layer homogenization and exact attention mapping are absent |
 | Qwen2.5-VL-7B | Base | yes | no | prior external runs are not committed validation artifacts |
-| Qwen2.5-VL-7B | TCD | yes | no | anomalous prior results; no artifact-backed validation |
+| Qwen2.5-VL-7B | TCD | yes | no | double-downsampling fixed; post-audit real-video GPU validation pending |
 | Qwen2.5-VL-7B | DINO-HEAL | partial | no | frame-scalar token-norm saliency is not paper patch attention |
 | Qwen2.5-VL-7B | SEASON | partial | no | input-only homogenization and unproven attention mapping |
 | LLaVA-Video-7B | Base | yes | no | checkpoint adapter and GPU validation pending |

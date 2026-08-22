@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -260,14 +261,8 @@ class Qwen25VLAdapter(ModelAdapter):
             return branch_inputs
 
         if branch == "tcd_negative":
-            # Keep the TCD branch as a time-downsampled perturbation, but make it
-            # explicit that it should differ from the original frames.
-            stride = int(kwargs.get("stride", 2))
-            for key in ("pixel_values_videos", "pixel_values"):
-                if key in branch_inputs and branch_inputs[key] is not None:
-                    value = branch_inputs[key]
-                    if hasattr(value, "__getitem__") and getattr(value, "ndim", 0) >= 4:
-                        branch_inputs[key] = value[..., ::stride, :, :] if value.ndim >= 5 else value[::stride]
+            # TCDMethod already passes the chronological frame subset. Transforming
+            # processor outputs here would downsample twice and invalidate grid metadata.
             return branch_inputs
 
         raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
@@ -405,15 +400,39 @@ class Qwen25VLAdapter(ModelAdapter):
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
         if branch not in {"original", "tcd_negative", "spatial_negative", "temporal_homogenized"}:
             raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
+        started = time.perf_counter()
         inputs = self._prepare_inputs(video_frames, prompt)
         inputs = self._apply_branch_transform(inputs, branch, **kwargs)
+        input_shapes = {
+            key: list(value.shape)
+            for key, value in inputs.items()
+            if hasattr(value, "shape")
+        }
         return {
             "branch": branch,
             "model_inputs": inputs,
             "past_key_values": None,
             "generated_count": 0,
             "vision_attn": None,
+            "profile": bool(kwargs.get("profile", False)),
+            "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "diagnostics": {
+                "frame_count": int(len(video_frames)),
+                "preprocessing_seconds": time.perf_counter() - started,
+                "input_shapes": input_shapes,
+                "decode_steps": [],
+                "decode_call_count": 0,
+                "cache_hit_steps": 0,
+                "vision_inputs_supplied_steps": 0,
+                "cuda_sync_seconds": 0.0,
+            },
         }
+
+    def _profile_sync(self, state) -> None:
+        if state.get("profile") and self.torch.cuda.is_available():
+            started = time.perf_counter()
+            self.torch.cuda.synchronize()
+            state["diagnostics"]["cuda_sync_seconds"] += time.perf_counter() - started
 
     def prepare_positive_branch(self, video_frames: np.ndarray, prompt: str, foreground, **kwargs):
         return self.prepare_branch(video_frames, prompt, branch="original", **kwargs)
@@ -446,30 +465,61 @@ class Qwen25VLAdapter(ModelAdapter):
         state["generated_count"] = len(token_ids)
 
     def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
+        step_diagnostics = {
+            "step": state["diagnostics"]["decode_call_count"],
+            "past_before": state["past_key_values"] is not None,
+        }
+        self._profile_sync(state)
+        started = time.perf_counter()
         self._sync_generated_tokens(state, token_ids)
+        self._profile_sync(state)
+        step_diagnostics["sync_generated_seconds"] = time.perf_counter() - started
         inputs = state["model_inputs"]
+        is_first_iteration = state["past_key_values"] is None
+        started = time.perf_counter()
         prepared = self.model.prepare_inputs_for_generation(
             input_ids=inputs["input_ids"],
             past_key_values=state["past_key_values"],
             attention_mask=inputs.get("attention_mask"),
             inputs_embeds=inputs.get("inputs_embeds"),
-            pixel_values=inputs.get("pixel_values"),
-            pixel_values_videos=inputs.get("pixel_values_videos"),
+            pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
+            pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,
             image_grid_thw=inputs.get("image_grid_thw"),
             video_grid_thw=inputs.get("video_grid_thw"),
             second_per_grid_ts=inputs.get("second_per_grid_ts"),
             mm_token_type_ids=inputs.get("mm_token_type_ids"),
             use_cache=True,
-            is_first_iteration=state["past_key_values"] is None,
+            is_first_iteration=is_first_iteration,
         )
+        self._profile_sync(state)
+        step_diagnostics["prepare_inputs_seconds"] = time.perf_counter() - started
+        step_diagnostics["input_ids_length"] = int(prepared["input_ids"].shape[1])
+        step_diagnostics["attention_mask_length"] = int(prepared["attention_mask"].shape[1]) if prepared.get("attention_mask") is not None else None
+        step_diagnostics["vision_inputs_supplied"] = any(
+            prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+        )
+        state["diagnostics"]["decode_call_count"] += 1
+        state["diagnostics"]["cache_hit_steps"] += int(step_diagnostics["past_before"])
+        state["diagnostics"]["vision_inputs_supplied_steps"] += int(step_diagnostics["vision_inputs_supplied"])
+        self._profile_sync(state)
+        started = time.perf_counter()
         with self.torch.inference_mode():
             outputs = self.model(
                 **prepared,
                 output_attentions=output_attentions,
                 return_dict=True,
             )
+        self._profile_sync(state)
+        step_diagnostics["forward_seconds"] = time.perf_counter() - started
+        started = time.perf_counter()
         state["past_key_values"] = outputs.past_key_values
-        logits = outputs.logits[0, -1].float().detach().cpu().numpy()
+        logits = outputs.logits[0, -1].float().detach()
+        if not state["preserve_logits_on_device"]:
+            logits = logits.cpu().numpy()
+        step_diagnostics["cache_update_seconds"] = time.perf_counter() - started
+        step_diagnostics["past_after"] = state["past_key_values"] is not None
+        if state["profile"]:
+            state["diagnostics"]["decode_steps"].append(step_diagnostics)
         frame_attention = None
         if output_attentions and getattr(outputs, "attentions", None) is not None:
             frame_attention = self._summarize_frame_attention(outputs.attentions, inputs)
@@ -572,6 +622,9 @@ class Qwen25VLAdapter(ModelAdapter):
 
     def token_id_to_text(self, token_id: int) -> str:
         return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)
+
+    def decode_token_ids(self, token_ids: list[int]) -> str:
+        return self.processor.tokenizer.decode(token_ids, skip_special_tokens=True).strip()
 
     def is_eos(self, token_id: int) -> bool:
         return token_id == getattr(self.processor.tokenizer, "eos_token_id", None)

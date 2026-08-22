@@ -176,6 +176,13 @@ def emit_record(
     sampling: dict,
     generation_config: GenerationConfig,
 ) -> PredictionRecord:
+    method_diagnostics = dict(raw_output.diagnostics)
+    negative_positions = method_diagnostics.get("negative_frame_positions")
+    if negative_positions is not None:
+        method_diagnostics["negative_frame_indices"] = [
+            sample_manifest.frame_indices[position]
+            for position in negative_positions
+        ]
     return PredictionRecord(
         sample_id=sample.sample_id,
         model=job["model"],
@@ -195,7 +202,7 @@ def emit_record(
         sampling_config=sampling,
         generation_config=generation_config.__dict__,
         runtime_seconds=runtime_seconds,
-        metadata={**sample.metadata, "manifest": sample_manifest.to_dict(), **raw_output.diagnostics},
+        metadata={**sample.metadata, "manifest": sample_manifest.to_dict(), **method_diagnostics},
     )
 
 

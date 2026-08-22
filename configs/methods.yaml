@@ -7,6 +7,7 @@ methods:
     beta: 0.5
     downsample_frames: 4
     threshold_space: raw_logits
+    all_masked_behavior: original_argmax
   dino_heal:
     batch_size: 1
     dino_checkpoint: facebook/dinov2-large

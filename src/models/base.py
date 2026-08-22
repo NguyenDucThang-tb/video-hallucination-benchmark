@@ -56,6 +56,9 @@ class ModelAdapter(ABC):
     def token_id_to_text(self, token_id: int) -> str:
         raise NotImplementedError
 
+    def decode_token_ids(self, token_ids: list[int]) -> str:
+        return "".join(self.token_id_to_text(token_id) for token_id in token_ids)
+
     @property
     def supports_step_logits(self) -> bool:
         return False
