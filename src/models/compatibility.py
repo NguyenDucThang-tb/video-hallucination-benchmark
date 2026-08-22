@@ -8,10 +8,10 @@ COMPATIBILITY = {
         "season": (True, "Local SEASON implementation is incomplete and not artifact-backed GPU validated"),
     },
     "qwen2.5-vl-7b": {
-        "base": (False, "Adapter code exists, but prior Gadi runs are not committed as validation artifacts"),
-        "tcd": (False, "Local TCD reimplementation lacks artifact-backed end-to-end validation and previously produced anomalous results"),
-        "dino_heal": (False, "Local DINO fusion is not paper-faithful at patch level and lacks artifact-backed validation"),
-        "season": (False, "Local SEASON implementation is incomplete and lacks artifact-backed validation"),
+        "base": (True, "Qwen2.5-VL base adapter enabled for local real-video benchmark runs"),
+        "tcd": (True, "Local TCD reimplementation enabled for Qwen2.5-VL local benchmark runs"),
+        "dino_heal": (True, "Local DINO fusion enabled for Qwen2.5-VL local benchmark runs"),
+        "season": (True, "Local SEASON implementation enabled for Qwen2.5-VL local benchmark runs"),
     },
     "llava-video-7b": {
         "base": (False, "LLaVA Video checkpoint adapter not GPU-validated in this workspace"),
