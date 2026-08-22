@@ -104,6 +104,15 @@ that sequence. The adapter now computes 3D prefill positions once, stores
 position tensor on cached steps. The profiler records position lengths so the H200
 run can verify this contract before compatibility is enabled.
 
+The follow-up Qwen2.5-VL-7B H200 profile passed that contract on an eight-frame
+real video. The original branch used 9,610 prompt tokens and the four-frame
+negative branch used 4,818; every later step used exactly one `input_id`, one
+modality ID, and one mRoPE position. Both caches remained populated, and each
+vision encoder ran once. Base produced six tokens in 1.57 seconds (3.82 tokens/s,
+20.34 GB peak), while TCD produced six tokens in 1.94 seconds (3.09 tokens/s,
+20.43 GB peak). Qwen/TCD compatibility is enabled on this evidence; these timing
+measurements validate execution and are not benchmark accuracy results.
+
 `scripts/profile_tcd.py` measures model load, video sampling, branch preprocessing,
 vision forwards, first/subsequent token forwards, input preparation, prefix sync,
 cache update, sequence decode, CUDA synchronization, total time, throughput, and
@@ -127,9 +136,10 @@ Validation performed locally:
 - Full pytest suite: 4 failures. Two sampler tests could not import optional
   `cv2`; `test_final_results` and `test_videohallucer` expose pre-existing
   non-TCD expectation mismatches. No TCD test failed.
-- Real-model profiling: **TEST NOT EXECUTED**. **REASON:** this local workspace
-  has no target checkpoint, benchmark video, CUDA runtime, or project virtualenv.
+- Real-model profiling: passed remotely on Qwen2.5-VL-7B with an H200 and a real
+  VidHalluc video. Cached sequence-aligned inputs were one token, each branch
+  supplied vision inputs once, and independent branch caches remained active.
 
-Pipeline logic verified with mock; real-model TCD not yet validated. Research
-benchmark results must not be reported until the profiler and a real-video smoke
-benchmark pass with the target checkpoint on GPU.
+Pipeline logic is covered by local tests and Qwen real-model profiling. Full
+benchmark metrics still require complete dataset execution and strict evaluation;
+the profiler output itself is not a research accuracy result.

@@ -9,7 +9,7 @@ COMPATIBILITY = {
     },
     "qwen2.5-vl-7b": {
         "base": (True, "Qwen2.5-VL base adapter enabled for local real-video benchmark runs"),
-        "tcd": (False, "Paper-based TCD reimplementation; post-audit real-video GPU validation is pending for Qwen2.5-VL"),
+        "tcd": (True, "Paper-based TCD reimplementation validated with cached dual-branch decoding on Qwen2.5-VL/H200"),
         "dino_heal": (True, "Local DINO fusion enabled for Qwen2.5-VL local benchmark runs"),
         "season": (True, "Local SEASON implementation enabled for Qwen2.5-VL local benchmark runs"),
     },
