@@ -3,7 +3,7 @@ import pytest
 
 from src.methods.tcd import TCDConfig, chronological_downsample, contrast_logits
 from src.models.base import select_decode_input_ids
-from src.models.qwen25_vl import Qwen25VLAdapter
+from src.models.qwen25_vl import Qwen25VLAdapter, cached_mrope_position_ids
 
 
 def test_tcd_negative_is_chronological_subset_of_original_eight():
@@ -54,3 +54,14 @@ def test_cached_decode_forwards_only_the_newest_token():
         input_ids[:, -1:],
     )
     assert select_decode_input_ids(token_types, object()).shape == (1, 1)
+
+
+def test_cached_qwen_mrope_positions_cover_only_newest_token():
+    attention_mask = np.ones((2, 12), dtype=np.int64)
+    rope_deltas = np.asarray([[100], [200]], dtype=np.int64)
+
+    position_ids = cached_mrope_position_ids(attention_mask, rope_deltas)
+
+    assert position_ids.shape == (3, 2, 1)
+    np.testing.assert_array_equal(position_ids[:, 0, 0], [111, 111, 111])
+    np.testing.assert_array_equal(position_ids[:, 1, 0], [211, 211, 211])

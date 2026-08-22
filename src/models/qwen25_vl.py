@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import os
 import time
 from dataclasses import dataclass
@@ -10,6 +11,27 @@ import numpy as np
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
+
+
+def cached_mrope_position_ids(attention_mask, rope_deltas):
+    """Build one-token Qwen mRoPE positions without expanding over the full prefix."""
+    if hasattr(attention_mask, "long"):
+        text_position = attention_mask.long().cumsum(dim=-1)[:, -1:] - 1
+        text_position = text_position.masked_fill(attention_mask[:, -1:] == 0, 0)
+        position_ids = text_position.unsqueeze(0).expand(3, -1, -1)
+        deltas = rope_deltas.to(device=position_ids.device, dtype=position_ids.dtype)
+        if deltas.ndim == 1:
+            deltas = deltas.unsqueeze(-1)
+        return position_ids + deltas
+
+    mask = np.asarray(attention_mask)
+    text_position = np.cumsum(mask, axis=-1)[:, -1:] - 1
+    text_position = np.where(mask[:, -1:] == 0, 0, text_position)
+    position_ids = np.repeat(text_position[None, ...], 3, axis=0)
+    deltas = np.asarray(rope_deltas)
+    if deltas.ndim == 1:
+        deltas = deltas[:, None]
+    return position_ids + deltas
 
 
 @dataclass(frozen=True)
@@ -412,6 +434,7 @@ class Qwen25VLAdapter(ModelAdapter):
             "branch": branch,
             "model_inputs": inputs,
             "past_key_values": None,
+            "rope_deltas": None,
             "generated_count": 0,
             "vision_attn": None,
             "profile": bool(kwargs.get("profile", False)),
@@ -464,6 +487,44 @@ class Qwen25VLAdapter(ModelAdapter):
 
         state["generated_count"] = len(token_ids)
 
+    def _branch_position_ids(self, state, is_first_iteration: bool):
+        inputs = state["model_inputs"]
+        if not is_first_iteration:
+            if state["rope_deltas"] is None:
+                raise RuntimeError("Qwen cached decoding is missing branch-specific rope_deltas")
+            return cached_mrope_position_ids(inputs["attention_mask"], state["rope_deltas"])
+
+        rope_model = getattr(self.model, "model", None)
+        rope_function = getattr(rope_model, "get_rope_index", None)
+        if rope_function is None:
+            rope_function = getattr(rope_model, "compute_3d_position_ids", None)
+        if rope_function is None:
+            raise RuntimeError("Qwen model does not expose an mRoPE position helper for manual cached decoding")
+
+        rope_kwargs = {
+            "input_ids": inputs["input_ids"],
+            "mm_token_type_ids": inputs.get("mm_token_type_ids"),
+            "image_grid_thw": inputs.get("image_grid_thw"),
+            "video_grid_thw": inputs.get("video_grid_thw"),
+            "second_per_grid_ts": inputs.get("second_per_grid_ts"),
+            "attention_mask": inputs.get("attention_mask"),
+        }
+        parameters = inspect.signature(rope_function).parameters
+        accepts_kwargs = any(parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values())
+        if not accepts_kwargs:
+            rope_kwargs = {key: value for key, value in rope_kwargs.items() if key in parameters}
+
+        rope_result = rope_function(**rope_kwargs)
+        if isinstance(rope_result, tuple) and len(rope_result) == 2:
+            position_ids, rope_deltas = rope_result
+        else:
+            position_ids = rope_result
+            rope_deltas = getattr(rope_model, "rope_deltas", None)
+        if rope_deltas is None:
+            raise RuntimeError("Qwen mRoPE helper did not return or store rope_deltas")
+        state["rope_deltas"] = rope_deltas.detach().clone()
+        return position_ids
+
     def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
         step_diagnostics = {
             "step": state["diagnostics"]["decode_call_count"],
@@ -476,15 +537,17 @@ class Qwen25VLAdapter(ModelAdapter):
         step_diagnostics["sync_generated_seconds"] = time.perf_counter() - started
         inputs = state["model_inputs"]
         is_first_iteration = state["past_key_values"] is None
-        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
+        position_ids = self._branch_position_ids(state, is_first_iteration)
         mm_token_type_ids = inputs.get("mm_token_type_ids")
         if mm_token_type_ids is not None:
             mm_token_type_ids = select_decode_input_ids(mm_token_type_ids, state["past_key_values"])
         started = time.perf_counter()
         prepared = self.model.prepare_inputs_for_generation(
-            input_ids=input_ids,
+            input_ids=inputs["input_ids"],
+            next_sequence_length=None if is_first_iteration else 1,
             past_key_values=state["past_key_values"],
             attention_mask=inputs.get("attention_mask"),
+            position_ids=position_ids,
             inputs_embeds=inputs.get("inputs_embeds"),
             pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
             pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,
@@ -502,6 +565,10 @@ class Qwen25VLAdapter(ModelAdapter):
         prepared_token_types = prepared.get("mm_token_type_ids")
         step_diagnostics["mm_token_type_ids_length"] = (
             int(prepared_token_types.shape[-1]) if prepared_token_types is not None else None
+        )
+        prepared_position_ids = prepared.get("position_ids")
+        step_diagnostics["position_ids_length"] = (
+            int(prepared_position_ids.shape[-1]) if prepared_position_ids is not None else None
         )
         step_diagnostics["vision_inputs_supplied"] = any(
             prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")

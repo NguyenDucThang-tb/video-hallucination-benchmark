@@ -94,6 +94,16 @@ an `o_proj` matrix-shape error. Qwen now slices both sequence-aligned tensors an
 supplies image/video grid metadata only during prefill. This path remains disabled
 until another real-model profile confirms one-token cached inputs and modality IDs.
 
+Inspection of the installed Transformers 5.16 development API showed that the
+generic generation helper slices `input_ids` when `next_sequence_length` is set,
+but the adapter's manual loop bypassed Qwen's normal generation-time mRoPE setup.
+With a full attention mask and no explicit positions, Qwen reconstructed positions
+for the complete 3,171-token prefix and broadcast the one-token hidden state across
+that sequence. The adapter now computes 3D prefill positions once, stores
+`rope_deltas` independently in each TCD branch, and supplies a `[3, batch, 1]`
+position tensor on cached steps. The profiler records position lengths so the H200
+run can verify this contract before compatibility is enabled.
+
 `scripts/profile_tcd.py` measures model load, video sampling, branch preprocessing,
 vision forwards, first/subsequent token forwards, input preparation, prefix sync,
 cache update, sequence decode, CUDA synchronization, total time, throughput, and

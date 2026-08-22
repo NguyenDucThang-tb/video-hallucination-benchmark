@@ -74,6 +74,7 @@ def summarize_branch(diagnostics: dict) -> dict:
         "vision_supplied_steps": sum(bool(step.get("vision_inputs_supplied")) for step in steps),
         "input_ids_lengths": [step.get("input_ids_length") for step in steps],
         "mm_token_type_ids_lengths": [step.get("mm_token_type_ids_length") for step in steps],
+        "position_ids_lengths": [step.get("position_ids_length") for step in steps],
         "attention_mask_lengths": [step.get("attention_mask_length") for step in steps],
         "past_before": [step.get("past_before") for step in steps],
         "past_after": [step.get("past_after") for step in steps],
