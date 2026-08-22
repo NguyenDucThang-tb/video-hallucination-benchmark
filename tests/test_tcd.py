@@ -47,8 +47,10 @@ def test_qwen_tcd_negative_is_not_downsampled_after_processing():
 
 def test_cached_decode_forwards_only_the_newest_token():
     input_ids = np.arange(12).reshape(1, 12)
+    token_types = np.zeros((1, 12), dtype=np.int64)
     assert select_decode_input_ids(input_ids, None).shape == (1, 12)
     np.testing.assert_array_equal(
         select_decode_input_ids(input_ids, object()),
         input_ids[:, -1:],
     )
+    assert select_decode_input_ids(token_types, object()).shape == (1, 1)

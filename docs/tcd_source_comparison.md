@@ -87,6 +87,13 @@ forwards grew from about 4.46 to 6.15 and 8.11 seconds while processing the full
 23k-token multimodal prefix. This prompted the explicit one-token cached-input
 fix above. A second H200 profile is required before compatibility can be enabled.
 
+A subsequent Qwen H200 profile exposed a model-specific mRoPE contract. Slicing
+only cached `input_ids` while forwarding the complete `mm_token_type_ids` made a
+one-token hidden state broadcast against 3,171 multimodal positions, failing with
+an `o_proj` matrix-shape error. Qwen now slices both sequence-aligned tensors and
+supplies image/video grid metadata only during prefill. This path remains disabled
+until another real-model profile confirms one-token cached inputs and modality IDs.
+
 `scripts/profile_tcd.py` measures model load, video sampling, branch preprocessing,
 vision forwards, first/subsequent token forwards, input preparation, prefix sync,
 cache update, sequence decode, CUDA synchronization, total time, throughput, and

@@ -477,6 +477,9 @@ class Qwen25VLAdapter(ModelAdapter):
         inputs = state["model_inputs"]
         is_first_iteration = state["past_key_values"] is None
         input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
+        mm_token_type_ids = inputs.get("mm_token_type_ids")
+        if mm_token_type_ids is not None:
+            mm_token_type_ids = select_decode_input_ids(mm_token_type_ids, state["past_key_values"])
         started = time.perf_counter()
         prepared = self.model.prepare_inputs_for_generation(
             input_ids=input_ids,
@@ -485,10 +488,10 @@ class Qwen25VLAdapter(ModelAdapter):
             inputs_embeds=inputs.get("inputs_embeds"),
             pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
             pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,
-            image_grid_thw=inputs.get("image_grid_thw"),
-            video_grid_thw=inputs.get("video_grid_thw"),
-            second_per_grid_ts=inputs.get("second_per_grid_ts"),
-            mm_token_type_ids=inputs.get("mm_token_type_ids"),
+            image_grid_thw=inputs.get("image_grid_thw") if is_first_iteration else None,
+            video_grid_thw=inputs.get("video_grid_thw") if is_first_iteration else None,
+            second_per_grid_ts=inputs.get("second_per_grid_ts") if is_first_iteration else None,
+            mm_token_type_ids=mm_token_type_ids,
             use_cache=True,
             is_first_iteration=is_first_iteration,
         )
@@ -496,6 +499,10 @@ class Qwen25VLAdapter(ModelAdapter):
         step_diagnostics["prepare_inputs_seconds"] = time.perf_counter() - started
         step_diagnostics["input_ids_length"] = int(prepared["input_ids"].shape[1])
         step_diagnostics["attention_mask_length"] = int(prepared["attention_mask"].shape[1]) if prepared.get("attention_mask") is not None else None
+        prepared_token_types = prepared.get("mm_token_type_ids")
+        step_diagnostics["mm_token_type_ids_length"] = (
+            int(prepared_token_types.shape[-1]) if prepared_token_types is not None else None
+        )
         step_diagnostics["vision_inputs_supplied"] = any(
             prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
         )
