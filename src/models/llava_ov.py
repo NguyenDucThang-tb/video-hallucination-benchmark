@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import time
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 
 import numpy as np
@@ -459,17 +459,35 @@ class LlavaOVAdapter(ModelAdapter):
 
     def enable_season_attention(self, attention_layers: tuple[int, ...]) -> None:
         self._season_attention_layers = tuple(attention_layers)
-        setter = getattr(self.model, "set_attn_implementation", None)
-        if callable(setter):
-            setter("eager")
-            return
+
+    def _attention_configs(self):
+        configs = []
         for config in (
             getattr(self.model, "config", None),
             getattr(getattr(self.model, "language_model", None), "config", None),
             getattr(getattr(self.model, "model", None), "config", None),
         ):
-            if config is not None:
-                setattr(config, "_attn_implementation", "eager")
+            if config is not None and id(config) not in {id(item) for item in configs}:
+                configs.append(config)
+        return configs
+
+    @contextmanager
+    def _temporary_attention_implementation(self, implementation: str):
+        configs = self._attention_configs()
+        originals = [getattr(config, "_attn_implementation", None) for config in configs]
+        setter = getattr(self.model, "set_attn_implementation", None)
+        restore_value = next((value for value in originals if value), "sdpa")
+        try:
+            if callable(setter):
+                setter(implementation)
+            for config in configs:
+                setattr(config, "_attn_implementation", implementation)
+            yield
+        finally:
+            if callable(setter):
+                setter(restore_value)
+            for config, original in zip(configs, originals):
+                setattr(config, "_attn_implementation", original or restore_value)
 
     def _vision_layers(self):
         roots = (
@@ -681,6 +699,7 @@ class LlavaOVAdapter(ModelAdapter):
                 )
             prefill_forward_seconds = time.perf_counter() - prefill_started
             state["past_key_values"] = prefix_outputs.past_key_values
+            del prefix_outputs
             prepared = self.model.prepare_inputs_for_generation(
                 input_ids=inputs["input_ids"][:, -1:],
                 past_key_values=state["past_key_values"],
@@ -722,7 +741,12 @@ class LlavaOVAdapter(ModelAdapter):
         state["diagnostics"]["vision_inputs_supplied_steps"] += int(step_diagnostics["vision_inputs_supplied"])
         self._profile_sync(state)
         started = time.perf_counter()
-        with self._season_vision_hooks(state), self.torch.inference_mode():
+        attention_context = (
+            self._temporary_attention_implementation("eager")
+            if output_attentions
+            else nullcontext()
+        )
+        with attention_context, self._season_vision_hooks(state), self.torch.inference_mode():
             outputs = self.model(
                 **prepared,
                 output_attentions=output_attentions,
