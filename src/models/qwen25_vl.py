@@ -50,12 +50,19 @@ class Qwen25VLAdapter(ModelAdapter):
         self.checkpoint = checkpoint
         self.local_path = local_path
         self.model_path = self._resolve_model_path(local_path, checkpoint)
+        self.min_pixels = self._resolve_pixel_budget("QWEN25_VL_MIN_PIXELS")
+        self.max_pixels = self._resolve_pixel_budget("QWEN25_VL_MAX_PIXELS")
 
         import torch
         from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
 
         self.torch = torch
-        self.processor = AutoProcessor.from_pretrained(self.model_path, local_files_only=self._is_local_only())
+        processor_kwargs = {"local_files_only": self._is_local_only()}
+        if self.min_pixels is not None:
+            processor_kwargs["min_pixels"] = self.min_pixels
+        if self.max_pixels is not None:
+            processor_kwargs["max_pixels"] = self.max_pixels
+        self.processor = AutoProcessor.from_pretrained(self.model_path, **processor_kwargs)
         self._configure_padding()
         self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             self.model_path,
@@ -91,6 +98,13 @@ class Qwen25VLAdapter(ModelAdapter):
 
     def _is_local_only(self) -> bool:
         return Path(self.model_path).exists()
+
+    def _resolve_pixel_budget(self, env_name: str) -> int | None:
+        raw = os.environ.get(env_name)
+        if not raw:
+            return None
+        value = int(raw)
+        return value if value > 0 else None
 
     def _checkpoint_is_local(self, checkpoint: str) -> bool:
         return Path(checkpoint).expanduser().exists()
