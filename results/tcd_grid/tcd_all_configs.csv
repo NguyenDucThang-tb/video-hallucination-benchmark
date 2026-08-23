@@ -1,0 +1,5 @@
+model,benchmark,dataset_revision,negative_frame_count,alpha,beta,status,metric,score,artifact
+*,videohallucer,current-upstream-8b785d1,2,1.0,0.1,BLOCKED_BY_BASELINE_GATE,,,
+*,videohallucer,current-upstream-8b785d1,2,0.5,0.5,BLOCKED_BY_BASELINE_GATE,,,
+*,videohallucer,current-upstream-8b785d1,4,1.0,0.1,BLOCKED_BY_BASELINE_GATE,,,
+*,videohallucer,current-upstream-8b785d1,4,0.5,0.5,BLOCKED_BY_BASELINE_GATE,,,

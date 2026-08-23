@@ -1,0 +1,6 @@
+task,annotation_rows,basic,hallucination,valid_pairs,missing_videos,missing_branches,dataset_revision
+ORH,200,200,200,200,183,0,current-upstream-8b785d1
+TPH,176,176,176,176,165,0,current-upstream-8b785d1
+SDH,200,200,200,200,400,0,current-upstream-8b785d1
+EFH,200,200,200,200,200,0,current-upstream-8b785d1
+ENFH,200,200,200,200,200,0,current-upstream-8b785d1

@@ -29,7 +29,7 @@ class DummyTCDModel:
 
 
 def test_tcd_method_prefers_contrasted_token():
-    method = TCDMethod(DummyTCDModel(), {"alpha": 0.5, "beta": 0.0, "downsample_frames": 2})
+    method = TCDMethod(DummyTCDModel(), {"alpha": 0.5, "beta": 0.0, "negative_frame_count": 2})
     output = method.generate(np.zeros((4, 2, 2, 3), dtype=np.uint8), "q", GenerationConfig(max_new_tokens=1))
     assert output.text == "B"
     assert output.diagnostics["negative_frame_positions"] == [0, 3]
@@ -46,7 +46,7 @@ def test_tcd_branches_receive_the_same_generated_prefix():
         return state
 
     model.prepare_branch = capture
-    TCDMethod(model, {"alpha": 0.5, "beta": 0.0, "downsample_frames": 2}).generate(
+    TCDMethod(model, {"alpha": 0.5, "beta": 0.0, "negative_frame_count": 2}).generate(
         np.zeros((4, 2, 2, 3), dtype=np.uint8), "q", GenerationConfig(max_new_tokens=2)
     )
     assert states[0]["prefixes"] == states[1]["prefixes"]
@@ -59,7 +59,7 @@ def test_tcd_all_masked_fallback_is_explicitly_counted():
 
     output = TCDMethod(
         AllMaskedModel(),
-        {"alpha": 0.5, "beta": 0.5, "downsample_frames": 2},
+        {"alpha": 0.5, "beta": 0.5, "negative_frame_count": 2},
     ).generate(np.zeros((4, 2, 2, 3), dtype=np.uint8), "q", GenerationConfig(max_new_tokens=1))
     assert output.diagnostics["all_masked_fallbacks"] == 1
     assert output.diagnostics["all_masked_behavior"] == "original_argmax"
@@ -75,7 +75,7 @@ def test_tcd_all_masked_strict_mode_raises():
         {
             "alpha": 0.5,
             "beta": 0.5,
-            "downsample_frames": 2,
+            "negative_frame_count": 2,
             "all_masked_behavior": "error",
         },
     )
@@ -128,7 +128,7 @@ class SpyModel:
 
 def test_tcd_cache_prefix_eos_and_vision_contract():
     model = SpyModel()
-    output = TCDMethod(model, {"downsample_frames": 4, "beta": 0.0}).generate(
+    output = TCDMethod(model, {"negative_frame_count": 4, "beta": 0.0}).generate(
         np.zeros((8, 2, 2, 3), dtype=np.uint8),
         "same prompt",
         GenerationConfig(max_new_tokens=3),
@@ -148,7 +148,7 @@ def test_tcd_cache_prefix_eos_and_vision_contract():
 
 def test_tcd_generate_batch_runs_each_sample_once():
     model = SpyModel()
-    outputs = TCDMethod(model, {"downsample_frames": 2, "beta": 0.0}).generate_batch(
+    outputs = TCDMethod(model, {"negative_frame_count": 2, "beta": 0.0}).generate_batch(
         [np.zeros((4, 2, 2, 3), dtype=np.uint8)] * 2,
         ["first", "second"],
         GenerationConfig(max_new_tokens=1),

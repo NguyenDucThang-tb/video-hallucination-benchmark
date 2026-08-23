@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 from typing import Iterable
 
@@ -25,7 +26,9 @@ class VideoHallucerLoader(BenchmarkLoader):
         for task in self.tasks:
             folder, filename = TASKS[task]
             source = self.root / folder / filename
-            rows = json.loads(source.read_text(encoding="utf-8"))
+            source_bytes = source.read_bytes()
+            rows = json.loads(source_bytes)
+            annotation_sha256 = hashlib.sha256(source_bytes).hexdigest()
             for pair_index, row in enumerate(rows):
                 pair_id = f"{task}:{pair_index}"
                 for branch in ("basic", "hallucination"):
@@ -40,6 +43,9 @@ class VideoHallucerLoader(BenchmarkLoader):
                             "pair_id": pair_id,
                             "branch": branch,
                             "source": str(source),
+                            "annotation_sha256": annotation_sha256,
+                            "expected_task_pairs": len(rows),
+                            "expected_task_branches": 2 * len(rows),
                             "video_resolved": video_path.is_file(),
                         },
                     )

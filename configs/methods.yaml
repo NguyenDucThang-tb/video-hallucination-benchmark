@@ -5,7 +5,8 @@ methods:
     batch_size: 1
     alpha: 0.5
     beta: 0.5
-    downsample_frames: 4
+    # TCD papers use r for the number of frames retained in the contrastive video.
+    negative_frame_count: 4
     threshold_space: raw_logits
     all_masked_behavior: original_argmax
   dino_heal:

@@ -2,10 +2,10 @@
 
 | Method | Official evidence | Local relationship | Confirmed aligned behavior | Material gap | Research-table status |
 | --- | --- | --- | --- | --- | --- |
-| Base | Model APIs only | Local adapters | Eight pre-sampled frames, fixed prompt, greedy generation | No committed real-video GPU validation artifact in this checkout | Unsupported / N/A |
-| TCD | arXiv:2409.16597 | Reimplementation from paper; complete source not confirmed in EventHallusion | Chronological subset of the same eight frames; synchronized generated prefix; `(1+a)z_ori-a*z_con`; `b*max(z_ori)` mask; original-logit fallback if all masked | Adapter cache/shape behavior has not been artifact-backed validated for real checkpoints; prior anomalous results cannot be treated as evidence | Partial, unsupported / N/A |
+| Base | Model APIs only | Local adapters | Eight pre-sampled frames, fixed prompt, greedy generation | Current TPH revision and universal 8-frame protocol do not reproduce paper-v1 VideoHallucer | Local protocol only |
+| TCD | arXiv:2409.16597 | Reimplementation from paper; complete source not confirmed in EventHallusion | Chronological subset of the same eight frames; synchronized generated prefix; `(1+a)z_ori-a*z_con`; `b*max(z_ori)` mask; original-logit fallback if all masked | Base gate failed and the four-point comparison grid has not run | Not validated / blocked |
 | DINO-HEAL | VidHalluc `e753864`; arXiv:2412.03735 | Partial adaptation | DINO load is mandatory and failure raises; configured fusion weights are 0.3/0.7; no CLIP-only fallback is accepted | Paper uses last-layer, head-averaged CLS-to-patch attention aligned to visual patches. Local adapters derive token norms, reduce to frame scalars and scale broad feature spans | Partial, not paper-faithful, unsupported / N/A |
-| SEASON | arXiv:2512.04643 | Partial paper-based reimplementation | Three token-level branches and contrastive-logit/JSD helper formulas exist | Temporal homogenization is applied once to input tensors instead of after each vision layer; frame attention is not proven to use exact preceding-token-to-visual-token ranges; no artifact-backed validation | Partial, unsupported / N/A |
+| SEASON | arXiv:2512.04643 | Partial paper-based reimplementation | LLaVA-OV has three token-level branches, layer hooks and contrastive-logit/JSD helpers | Exact frame-token mapping, attention/caches and real-video traces remain unverified; Qwen remains partial | Not validated / blocked |
 | Positive feature enhancement | User-proposed extension | Independent experimental module | Foreground persistence and directed motion helpers are unit tested | It is not a SEASON paper component and is not invoked by `SeasonMethod` | Excluded from SEASON claims/table |
 
 ## TCD details

@@ -23,15 +23,15 @@ found in its public source tree. Therefore:
 | Negative branch | Chronologically downsampled `S(V)` | Not implemented | Chronological subset of the already sampled input frames | MATCH | Paper Eq. 2; `chronological_downsample` |
 | Negative source | Downsample original video | Not specified in code | Uses the same manifest frames; does not reopen the video | MATCH | `scripts/run_benchmark.py` samples once before method dispatch |
 | Frame order | Chronological | Not implemented | Sorted uniform positions, no shuffle or reversal | MATCH | `chronological_downsample`; unit test |
-| Frame counts | LLaVA-NeXT 32/8, VILA 12/8, VideoChat2 16/4 | Not implemented | Benchmark protocol 8/4 for all supported adapters | PARTIAL | Paper Sec. 5 implementation details; `configs/sampling.yaml`, `configs/methods.yaml` |
-| Qwen negative processing | Not discussed | Not implemented | Fixed: processor receives exactly 4 negative frames; no second stride | MATCH | `Qwen25VLAdapter._apply_branch_transform`; regression test |
+| Frame counts | LLaVA-NeXT 32/8, VILA 12/8, VideoChat2 16/4 | Not implemented | Controlled local protocol uses 8 original frames and explicit `negative_frame_count` | PARTIAL | Paper Sec. 5 implementation details; local configs |
+| Qwen negative processing | Not discussed | Not implemented | Processor receives exactly `negative_frame_count` frames; no second stride | MATCH | Qwen adapter; regression test |
 | Visual metadata | Must describe each branch input | Not implemented | Processor independently creates pixel tensors and grid metadata for each branch | MATCH | Qwen/LLaVA `prepare_branch` and `_prepare_inputs` |
 | Prompt | Same `x` in both branches | Not implemented | Same prompt passed to both `prepare_branch` calls | MATCH | Paper Eqs. 1-2; `TCDMethod.generate` |
 | Generated prefix | Same `y_<t` in both branches | Not implemented | Same `generated` list passed to both `decode_step` calls | MATCH | Paper Eqs. 1-2; SpyModel test |
 | Token-level decoding | Logits contrasted at every autoregressive timestep | Not implemented | One original and one negative forward per output token | MATCH | Paper Sec. 4; `TCDMethod.generate` |
 | Contrast formula | `(1+alpha) z_ori - alpha z_con` | Not implemented | Same formula | MATCH | Paper Eq. 3; `contrast_logits` |
 | Threshold | `t=beta*max(z_ori)` in raw-logit space | Not implemented | Same threshold; values of mixed `z` below it become `-inf` | MATCH | Paper Eqs. 4-5; `contrast_logits` |
-| Alpha/beta defaults | Ablation favors alpha 0.5; beta is robust around 0.5 | Not implemented | alpha 0.5, beta 0.5 | MATCH | Paper Sec. 5; `configs/methods.yaml` |
+| Comparison grid | SEASON appendix uses frame counts 2/4 and `(alpha,beta)` pairs `(1.0,0.1)`/`(0.5,0.5)` | Not implemented | One default only; full grid not executed | NOT VALIDATED | `docs/tcd_grid_search_report.md` |
 | All-masked behavior | Not specified | Not implemented | Explicit `original_argmax` fallback, counted in diagnostics; strict `error` mode available | PARTIAL | `TCDConfig.all_masked_behavior`; fallback tests |
 | Token selection | Highest-probability token; greedy search | Standard template is greedy | `argmax` over masked logits | MATCH | Paper Secs. 4-5; `TCDMethod.generate` |
 | EOS | Not detailed | Standard generation stopping criteria | Stops when adapter EOS token is selected | PARTIAL | Adapter `is_eos`; EOS unit test |
@@ -110,8 +110,9 @@ negative branch used 4,818; every later step used exactly one `input_id`, one
 modality ID, and one mRoPE position. Both caches remained populated, and each
 vision encoder ran once. Base produced six tokens in 1.57 seconds (3.82 tokens/s,
 20.34 GB peak), while TCD produced six tokens in 1.94 seconds (3.09 tokens/s,
-20.43 GB peak). Qwen/TCD compatibility is enabled on this evidence; these timing
-measurements validate execution and are not benchmark accuracy results.
+20.43 GB peak). These timings validate execution only; they do not pass the Base
+reproducibility gate or validate benchmark accuracy. Main compatibility remains
+disabled until the gate and parameter grid are resolved.
 
 `scripts/profile_tcd.py` measures model load, video sampling, branch preprocessing,
 vision forwards, first/subsequent token forwards, input preparation, prefix sync,
@@ -125,7 +126,7 @@ timings are not reported here and compatibility remains disabled.
 
 ## Final classification
 
-`PARTIALLY CORRECT`
+`NOT VALIDATED`
 
 Validation performed locally:
 

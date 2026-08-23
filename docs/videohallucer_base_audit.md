@@ -17,16 +17,16 @@ TCD/DINO-HEAL COMPARISON IS NOT VALID YET.
 ```
 
 The bundled annotation JSON files are byte-identical to current upstream, but
-the paper protocol and the local experiment protocol are not equivalent. The
-paper does not evaluate LLaVA-OV-7B, Qwen2.5-VL-7B, or LLaVA-Video-7B. It uses
-each evaluated baseline's default generation and frame settings, whereas this
-repository enforces exactly eight uniformly sampled frames and greedy decoding
-for every model. The paper's original Temporal split also differs from current
-upstream data. No Base raw predictions, videos, GPU environment, or checkpoints
+neither relevant paper protocol is fully established. The original VideoHallucer
+paper does not evaluate LLaVA-OV-7B, Qwen2.5-VL-7B, or LLaVA-Video-7B and uses
+baseline-specific defaults. SEASON Table 1 does use those backbones and states a
+common eight-frame setup, but does not publish annotation hashes, exact frame
+indices, processor revisions or checkpoint revisions. The VideoHallucer paper's
+original Temporal split also differs from current upstream data. No Base raw predictions, videos, GPU environment, or checkpoints
 are present in this local workspace, so the Gadi Base runs cannot be audited
 record by record here.
 
-The gate therefore stops before any TCD or DINO-HEAL assessment.
+The gate therefore stops before any TCD, DINO-HEAL or SEASON assessment.
 
 ## 2. Environment And Provenance
 
@@ -73,7 +73,7 @@ ORH contains two repeated basic branch contents at annotation indices 117/148
 and 119/138, but no duplicated complete pair. This is reported separately as
 `duplicate_branch_rows=2`; it is not treated as a duplicate pair.
 
-There is a version conflict that prevents paper reproduction:
+There is a version conflict that prevents VideoHallucer-paper-v1 reproduction:
 
 - Paper v1 reports 200 pairs / 400 branch questions for TPH.
 - Current upstream JSON has 176 pairs / 352 branch questions.
@@ -82,6 +82,10 @@ There is a version conflict that prevents paper reproduction:
 
 Therefore the current dataset matches current upstream source, but it does not
 match the paper v1 Temporal protocol.
+
+SEASON Table 1 does not identify its VideoHallucer annotation revision. Because
+it was submitted after the upstream duplicate-removal note, current-upstream use
+is plausible but remains an inference, not evidence.
 
 ```text
 DATASET MISMATCH (paper v1 versus current upstream Temporal split)
@@ -124,10 +128,11 @@ paper baselines and use their own chat templates.
 | Frame ordering | chronological | baseline-specific chronological sampling | chronological | Partly |
 | Resize/crop | baseline-specific | model processor-specific | HF processor-specific | Unverified |
 
-For example, official LLaVA-NeXT-Video uses 32 uniformly sampled frames, while
+For example, original-VideoHallucer LLaVA-NeXT-Video uses 32 uniformly sampled frames, while
 PLLaVA is initialized with 16 frames. The paper explicitly says it retains each
 model's default `num_of_frames`. A universal 8-frame protocol is a valid local
-controlled experiment, but it is not the paper protocol.
+controlled experiment and matches SEASON's stated frame count, but exact SEASON
+sampling indices, short-video behavior and preprocessing are not reported.
 
 ```text
 PROTOCOL MISMATCH
@@ -202,15 +207,14 @@ A pair is correct only when both the basic question
 and the hallucination question are correct.
 ```
 
-Local `_pair_stats` follows this rule and counts incomplete observed pairs as
-incorrect. However, its denominator is the number of pair IDs present in the
-prediction records, not the number of pairs in annotation. If a complete pair
-is silently absent from raw outputs, that pair is absent from the denominator.
-This can inflate accuracy.
+Local `_pair_stats` follows this rule. New records carry
+`expected_task_pairs` from the annotation loader, so incomplete or entirely
+absent pairs remain in the denominator. Legacy records without this metadata
+are labeled `UNVERIFIED_DENOMINATOR`; their observed-only diagnostic score is
+not exposed as research `accuracy`.
 
-The new audit instead uses the annotation inventory as the denominator and
-reports missing records explicitly. This distinction must be resolved before
-the Base gate can pass.
+The independent audit also uses the annotation inventory as denominator and
+reports missing records explicitly.
 
 Reported audit metrics are:
 

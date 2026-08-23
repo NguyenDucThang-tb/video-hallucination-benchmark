@@ -14,7 +14,7 @@ from src.models.base import GenerationConfig
 class TCDConfig:
     alpha: float = 0.5
     beta: float = 0.5
-    downsample_frames: int = 4
+    negative_frame_count: int = 4
     threshold_space: str = "raw_logits"
     all_masked_behavior: str = "original_argmax"
     profile: bool = False
@@ -24,6 +24,8 @@ class TCDConfig:
             raise ValueError("TCD alpha must be non-negative")
         if not 0 <= self.beta <= 1:
             raise ValueError("TCD beta must be within [0, 1]")
+        if self.negative_frame_count <= 0:
+            raise ValueError("TCD negative_frame_count must be positive")
         if self.threshold_space != "raw_logits":
             raise ValueError("The EventHallusion paper defines the TCD threshold in raw-logit space")
         if self.all_masked_behavior not in {"original_argmax", "error"}:
@@ -75,7 +77,9 @@ class TCDMethod(InferenceMethod):
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> MethodOutput:
         if not self.model.supports_step_logits:
             raise RuntimeError(f"TCD unsupported: {self.model.name} adapter has no step logits")
-        negative, negative_indices = chronological_downsample(video_frames, self.tcd.downsample_frames)
+        negative, negative_indices = chronological_downsample(
+            video_frames, self.tcd.negative_frame_count
+        )
         original_state = self.model.prepare_branch(
             video_frames,
             prompt,

@@ -22,14 +22,34 @@ def _pair_stats(records: list[PredictionRecord]) -> dict[str, float | int | None
 
     complete = [items for items in pairs.values() if set(items) == {"basic", "hallucination"}]
     strict_correct = sum(all(official_hit(item) for item in items.values()) for items in complete)
-    total_pairs = len(pairs)
+    declared_counts = {
+        int(record.metadata["expected_task_pairs"])
+        for record in records
+        if record.metadata.get("expected_task_pairs") is not None
+    }
+    if len(declared_counts) > 1:
+        raise ValueError(f"Conflicting expected_task_pairs metadata: {sorted(declared_counts)}")
+    has_annotation_denominator = bool(declared_counts)
+    expected_pairs = next(iter(declared_counts), len(pairs))
+    if len(pairs) > expected_pairs:
+        raise ValueError(
+            f"Observed {len(pairs)} VideoHallucer pairs, more than declared {expected_pairs}"
+        )
     return {
-        "n_pairs": total_pairs,
+        "n_pairs": expected_pairs,
+        "n_observed_pairs": len(pairs),
         "n_complete_pairs": len(complete),
-        "n_missing_pairs": total_pairs - len(complete),
+        "n_missing_pairs": expected_pairs - len(complete),
         "correct_pairs": strict_correct,
         "n_parser_error_records": sum(r.parser_status != "valid" for r in records),
-        "accuracy": strict_correct / total_pairs if total_pairs else None,
+        "denominator_source": "annotation_metadata" if declared_counts else "unverified_observed_records",
+        "protocol_status": "VALID" if has_annotation_denominator else "UNVERIFIED_DENOMINATOR",
+        "observed_only_accuracy": strict_correct / len(pairs) if pairs else None,
+        "accuracy": (
+            strict_correct / expected_pairs
+            if has_annotation_denominator and expected_pairs
+            else None
+        ),
     }
 
 

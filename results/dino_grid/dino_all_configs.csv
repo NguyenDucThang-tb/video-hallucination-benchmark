@@ -1,0 +1,5 @@
+model,benchmark,dataset_revision,normalization,dino_variant,status,metric,score,artifact
+*,videohallucer,current-upstream-8b785d1,enabled,with_registers,BLOCKED_BY_BASELINE_GATE,,,
+*,videohallucer,current-upstream-8b785d1,enabled,without_registers,BLOCKED_BY_BASELINE_GATE,,,
+*,videohallucer,current-upstream-8b785d1,disabled,with_registers,BLOCKED_BY_BASELINE_GATE,,,
+*,videohallucer,current-upstream-8b785d1,disabled,without_registers,BLOCKED_BY_BASELINE_GATE,,,

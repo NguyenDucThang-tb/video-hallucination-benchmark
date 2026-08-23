@@ -127,6 +127,44 @@ def build_inventory(
     return inventory, summary
 
 
+def build_pair_inventory(branch_inventory: list[dict]) -> list[dict]:
+    pairs: dict[tuple[str, str], dict[str, dict]] = defaultdict(dict)
+    for row in branch_inventory:
+        pairs[(row["task"], row["pair_id"])][row["branch"]] = row
+    output = []
+    for (task, pair_id), branches in sorted(pairs.items()):
+        basic = branches.get("basic", {})
+        hallucination = branches.get("hallucination", {})
+        output.append({
+            "task": task,
+            "pair_id": pair_id,
+            "basic_sample_id": basic.get("sample_id", ""),
+            "hallucination_sample_id": hallucination.get("sample_id", ""),
+            "video_basic": basic.get("video_path", ""),
+            "video_hallucination": hallucination.get("video_path", ""),
+            "ground_truth_basic": basic.get("ground_truth", ""),
+            "ground_truth_hallucination": hallucination.get("ground_truth", ""),
+            "pair_valid": set(branches) == {"basic", "hallucination"},
+        })
+    return output
+
+
+def dataset_inventory_rows(summary: dict[str, dict], revision: str) -> list[dict]:
+    return [
+        {
+            "task": task.upper(),
+            "annotation_rows": values["raw_annotation_rows"],
+            "basic": values["basic_rows"],
+            "hallucination": values["hallucination_rows"],
+            "valid_pairs": values["valid_pairs"],
+            "missing_videos": values["missing_videos"],
+            "missing_branches": values["missing_branches"],
+            "dataset_revision": revision,
+        }
+        for task, values in summary.items()
+    ]
+
+
 def read_jsonl_files(raw_dir: Path) -> tuple[list[dict], list[str]]:
     records = []
     errors = []
@@ -342,16 +380,34 @@ def main() -> None:
     args = parse_args()
     annotations = load_annotations(args.dataset_root)
     inventory, summary = build_inventory(args.dataset_root, annotations)
+    pair_inventory = build_pair_inventory(inventory)
     records, jsonl_errors = read_jsonl_files(args.raw_dir)
     audit_rows, latest, counts = create_record_audit(records, inventory)
     metric_rows = pair_metric_rows(inventory, latest, counts)
 
     write_csv(
         args.output_dir / "videohallucer_pair_inventory.csv",
+        pair_inventory,
+        [
+            "task", "pair_id", "basic_sample_id", "hallucination_sample_id",
+            "video_basic", "video_hallucination", "ground_truth_basic",
+            "ground_truth_hallucination", "pair_valid",
+        ],
+    )
+    write_csv(
+        args.output_dir / "videohallucer_branch_inventory.csv",
         inventory,
         [
             "sample_id", "pair_id", "task", "branch", "video_path", "video_exists",
             "question", "prompt", "ground_truth", "source",
+        ],
+    )
+    write_csv(
+        args.output_dir / "videohallucer_dataset_inventory.csv",
+        dataset_inventory_rows(summary, "current-upstream-8b785d1"),
+        [
+            "task", "annotation_rows", "basic", "hallucination", "valid_pairs",
+            "missing_videos", "missing_branches", "dataset_revision",
         ],
     )
     write_csv(
