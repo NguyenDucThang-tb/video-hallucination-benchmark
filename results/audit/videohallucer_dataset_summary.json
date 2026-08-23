@@ -1,0 +1,60 @@
+{
+  "jsonl_errors": [],
+  "tasks": {
+    "efh": {
+      "basic_rows": 200,
+      "duplicate_branch_rows": 0,
+      "duplicate_pairs": 0,
+      "hallucination_rows": 200,
+      "missing_branches": 0,
+      "missing_videos": 200,
+      "raw_annotation_rows": 200,
+      "unique_videos": 200,
+      "valid_pairs": 200
+    },
+    "enfh": {
+      "basic_rows": 200,
+      "duplicate_branch_rows": 0,
+      "duplicate_pairs": 0,
+      "hallucination_rows": 200,
+      "missing_branches": 0,
+      "missing_videos": 200,
+      "raw_annotation_rows": 200,
+      "unique_videos": 200,
+      "valid_pairs": 200
+    },
+    "orh": {
+      "basic_rows": 200,
+      "duplicate_branch_rows": 2,
+      "duplicate_pairs": 0,
+      "hallucination_rows": 200,
+      "missing_branches": 0,
+      "missing_videos": 183,
+      "raw_annotation_rows": 200,
+      "unique_videos": 183,
+      "valid_pairs": 200
+    },
+    "sdh": {
+      "basic_rows": 200,
+      "duplicate_branch_rows": 0,
+      "duplicate_pairs": 0,
+      "hallucination_rows": 200,
+      "missing_branches": 0,
+      "missing_videos": 400,
+      "raw_annotation_rows": 200,
+      "unique_videos": 400,
+      "valid_pairs": 200
+    },
+    "tph": {
+      "basic_rows": 176,
+      "duplicate_branch_rows": 0,
+      "duplicate_pairs": 0,
+      "hallucination_rows": 176,
+      "missing_branches": 0,
+      "missing_videos": 165,
+      "raw_annotation_rows": 176,
+      "unique_videos": 165,
+      "valid_pairs": 176
+    }
+  }
+}

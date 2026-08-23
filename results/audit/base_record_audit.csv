@@ -1,0 +1,1 @@
+model,task,pair_id,branch,sample_id,video_path,video_exists,frame_indices,prompt_hash,prompt_matches_annotation,raw_output,parsed_output,official_parsed_output,strict_local_parsed_output,ground_truth,parser_status,strict_local_parser_status,is_correct,error,duplicate_records,source_file,source_line
