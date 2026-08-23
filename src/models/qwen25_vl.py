@@ -680,8 +680,7 @@ class Qwen25VLAdapter(ModelAdapter):
             if not attn_layers:
                 return None
             stacked = np.stack(attn_layers, axis=0).astype(np.float32)
-            heads = np.ones((stacked.shape[0], 1), dtype=np.float32)
-            return stacked[:, None, :, :]
+            return stacked[:, None, :, None]
         except Exception:
             return None
 
