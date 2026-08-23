@@ -3,6 +3,7 @@ from __future__ import annotations
 import inspect
 import os
 import time
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -100,6 +101,37 @@ class Qwen25VLAdapter(ModelAdapter):
                 return self.torch.bfloat16
             return self.torch.float16
         return self.torch.float32
+
+    def _attention_configs(self):
+        configs = []
+        for candidate in (
+            getattr(self.model, "config", None),
+            getattr(getattr(self.model, "model", None), "config", None),
+            getattr(getattr(self.model, "language_model", None), "config", None),
+        ):
+            if candidate is not None and candidate not in configs:
+                configs.append(candidate)
+        return configs
+
+    @contextmanager
+    def _temporary_attention_implementation(self, implementation: str):
+        configs = self._attention_configs()
+        originals = [getattr(config, "_attn_implementation", None) for config in configs]
+        setter = getattr(self.model, "set_attn_implementation", None)
+        try:
+            if callable(setter):
+                setter(implementation)
+            else:
+                for config in configs:
+                    setattr(config, "_attn_implementation", implementation)
+            yield
+        finally:
+            restore_value = "sdpa"
+            if callable(setter):
+                setter(originals[0] or restore_value)
+            else:
+                for config, original in zip(configs, originals):
+                    setattr(config, "_attn_implementation", original or restore_value)
 
     def _frames_to_messages(self, video_frames: np.ndarray, prompt: str) -> list[dict]:
         from PIL import Image
@@ -578,7 +610,12 @@ class Qwen25VLAdapter(ModelAdapter):
         state["diagnostics"]["vision_inputs_supplied_steps"] += int(step_diagnostics["vision_inputs_supplied"])
         self._profile_sync(state)
         started = time.perf_counter()
-        with self.torch.inference_mode():
+        attention_context = (
+            self._temporary_attention_implementation("eager")
+            if output_attentions
+            else nullcontext()
+        )
+        with attention_context, self.torch.inference_mode():
             outputs = self.model(
                 **prepared,
                 output_attentions=output_attentions,
