@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
+from src.methods.season.attention_diagnosis import frame_attention
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 
@@ -680,7 +681,7 @@ class Qwen25VLAdapter(ModelAdapter):
             if not attn_layers:
                 return None
             stacked = np.stack(attn_layers, axis=0).astype(np.float32)
-            return stacked[:, None, :, None]
+            return frame_attention(stacked[:, None, :, None]).astype(np.float32)
         except Exception:
             return None
 
