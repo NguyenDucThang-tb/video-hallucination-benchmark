@@ -112,8 +112,11 @@ the existing processor and preserves its `input_ids`, attention mask, image
 sizes, pixel values, and independent branch caches. Vision inputs are supplied
 only on the first prefill for each branch.
 
-Image-token spans are derived from `config.image_token_index`. Exactly eight
-contiguous spans must be present. A mismatch is a hard failure because
+Image-token spans are derived from `config.image_token_index`. If the processor
+emits one contiguous image-token block per frame, those spans are used directly.
+If LLaVA-OneVision emits a single contiguous image-token block for all eight
+frames, that block is split in frame order into eight nearly equal spans. A
+non-contiguous or otherwise ambiguous layout is a hard failure because
 bucketizing unrelated attention positions would no longer implement SEASON.
 
 Decoder attention is switched to the eager implementation before the SEASON
@@ -173,8 +176,9 @@ outputs.
 
 - The official authors have not released code used by this repository.
 - Gaussian noise placement and variance are reconstructed from the paper.
-- Equal OneVision crop counts per sampled frame are an adapter assumption and
-  are validated at runtime.
+- Equal OneVision crop/token counts per sampled frame are adapter assumptions
+  when the processor emits one merged visual-token block; this strategy is
+  recorded in prediction diagnostics as `visual_token_span_strategy`.
 - CPU storage for original per-layer contexts favors memory safety over speed.
 - Qwen2.5-VL's older SEASON path remains partial and disabled; this work targets
   LLaVA-OneVision.

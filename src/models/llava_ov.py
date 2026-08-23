@@ -581,11 +581,30 @@ class LlavaOVAdapter(ModelAdapter):
                 start = position
             previous = position
         spans.append((start, previous + 1))
+        if len(spans) == 1 and state["frame_count"] > 1:
+            start, end = spans[0]
+            total = end - start
+            base = total // state["frame_count"]
+            remainder = total % state["frame_count"]
+            if base <= 0:
+                raise RuntimeError(
+                    "Unable to map decoder attention to frames: image-token block "
+                    f"has {total} tokens for {state['frame_count']} frames"
+                )
+            split_spans = []
+            cursor = start
+            for frame_index in range(state["frame_count"]):
+                size = base + (1 if frame_index < remainder else 0)
+                split_spans.append((cursor, cursor + size))
+                cursor += size
+            state["diagnostics"]["visual_token_span_strategy"] = "single_contiguous_block_split_by_frame_order"
+            return split_spans
         if len(spans) != state["frame_count"]:
             raise RuntimeError(
                 "Unable to map decoder attention to frames: "
                 f"found {len(spans)} image-token spans for {state['frame_count']} frames"
             )
+        state["diagnostics"]["visual_token_span_strategy"] = "one_contiguous_span_per_frame"
         return spans
 
     def _extract_frame_attention(self, state, attentions) -> np.ndarray:
