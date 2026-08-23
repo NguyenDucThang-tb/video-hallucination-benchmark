@@ -15,6 +15,15 @@ SPLIT_VIDEO_DIRS = {
 }
 
 
+def candidate_video_ids(split: str, video_id: str) -> tuple[str, ...]:
+    if split in {"mix", "interleave"}:
+        if video_id.startswith("mix_"):
+            return (video_id, video_id.replace("mix_", "interleave_", 1))
+        if video_id.startswith("interleave_"):
+            return (video_id, video_id.replace("interleave_", "mix_", 1))
+    return (video_id,)
+
+
 def normalize_yes_no_label(value: str) -> str:
     text = str(value).strip().lower()
     if text.startswith("yes"):
@@ -57,10 +66,11 @@ def resolve_video_path(video_root: str | Path, split: str, video_id: str) -> Pat
     except KeyError as exc:
         raise ValueError(f"Unknown EventHallusion split: {split}") from exc
     for folder in candidates:
-        candidate = root / folder / f"{video_id}.mp4"
-        if candidate.is_file():
-            return candidate
-    return root / candidates[0] / f"{video_id}.mp4"
+        for candidate_id in candidate_video_ids(split, video_id):
+            candidate = root / folder / f"{candidate_id}.mp4"
+            if candidate.is_file():
+                return candidate
+    return root / candidates[0] / f"{candidate_video_ids(split, video_id)[0]}.mp4"
 
 
 def description_reference(split: str, event_info: dict) -> str | None:
