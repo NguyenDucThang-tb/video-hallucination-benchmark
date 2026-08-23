@@ -652,7 +652,7 @@ class Qwen25VLAdapter(ModelAdapter):
             raise RuntimeError("Qwen inputs are missing pixel_values for DINO-HEAL")
 
         features_np = np.zeros((len(video_frames), 1, 1), dtype=np.float32)
-        saliency_np = np.asarray(frame_saliency, dtype=np.float32)[:, None, None]
+        saliency_np = np.asarray(frame_saliency, dtype=np.float32)[:, None]
         fused_np = fuse_saliency(features_np, saliency_np, dino_config)
         fused_scale = fused_np[..., 0].mean(axis=1)
         fused_scale = np.maximum(fused_scale, 0.0).astype(np.float32)
@@ -671,11 +671,16 @@ class Qwen25VLAdapter(ModelAdapter):
                 or getattr(getattr(self.model, "model", None), "visual", None)
                 or getattr(getattr(self.model, "model", None), "vision_tower", None)
             )
-            handle = vision_module.register_forward_hook(vision_hook) if vision_module is not None else None
+            if vision_module is None:
+                raise RuntimeError("Qwen vision module not found for DINO-HEAL hook")
+            handle = vision_module.register_forward_hook(vision_hook)
         except Exception:
+            if bool(config.get("require_dino", True)):
+                raise
             handle = None
 
         try:
+            prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
             with self.torch.inference_mode():
                 output_ids = self.model.generate(
                     **inputs,
@@ -692,7 +697,9 @@ class Qwen25VLAdapter(ModelAdapter):
         diagnostics["dino_hook_applied"] = holder["applied"]
         diagnostics["dino_scale_mean"] = float(fused_scale.mean())
         diagnostics["dino_scale_max"] = float(fused_scale.max())
-        answer = self.processor.batch_decode(output_ids[:, inputs["input_ids"].shape[1]:], skip_special_tokens=True)[0].strip()
+        if not holder["applied"] and bool(config.get("require_dino", True)):
+            raise RuntimeError("Qwen DINO-HEAL hook did not modify any vision output")
+        answer = self.processor.batch_decode(output_ids[:, prompt_length:], skip_special_tokens=True)[0].strip()
         return answer, diagnostics
 
     def token_id_to_text(self, token_id: int) -> str:

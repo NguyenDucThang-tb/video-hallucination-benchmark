@@ -21,6 +21,14 @@ def test_patch_fusion_rejects_frame_only_saliency():
         fuse_saliency(np.zeros((2, 3, 4)), np.zeros((2,)), DINOHealConfig())
 
 
+def test_qwen_frame_saliency_can_be_represented_as_single_patch():
+    features = np.zeros((8, 1, 1), dtype=np.float32)
+    frame_saliency = np.linspace(0.0, 1.0, 8, dtype=np.float32)
+    result = fuse_saliency(features, frame_saliency[:, None], DINOHealConfig())
+    assert result.shape == features.shape
+    assert result[-1, 0, 0] > result[0, 0, 0]
+
+
 def test_dino_failure_has_no_silent_base_fallback():
     class FailedDinoModel:
         name = "failed"
