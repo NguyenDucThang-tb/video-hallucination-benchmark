@@ -647,8 +647,13 @@ class Qwen25VLAdapter(ModelAdapter):
         if state["profile"]:
             state["diagnostics"]["decode_steps"].append(step_diagnostics)
         frame_attention = None
-        if output_attentions and getattr(outputs, "attentions", None) is not None:
-            frame_attention = self._summarize_frame_attention(outputs.attentions, inputs)
+        if output_attentions:
+            decoder_attentions = getattr(outputs, "attentions", None)
+            if decoder_attentions is None:
+                language_output = getattr(outputs, "language_model_output", None)
+                decoder_attentions = getattr(language_output, "attentions", None)
+            if decoder_attentions is not None:
+                frame_attention = self._summarize_frame_attention(decoder_attentions, inputs)
         return StepOutput(logits=logits, frame_attention=frame_attention)
 
     def _summarize_frame_attention(self, attentions, inputs) -> np.ndarray | None:
