@@ -12,7 +12,7 @@ at the exact commits below. Relevant directory comparisons were byte-identical.
 | Benchmark loaders/evaluators | Sources above | SHAs above | `src/benchmarks/` | Independent adaptation/reimplementation | Repository license; upstream attribution applies to behavior | Implemented against upstream schemas and metric code; not official upstream code. |
 | TCD | https://arxiv.org/abs/2409.16597 | paper source inspected | `src/methods/tcd/` | Paper-based reimplementation | Local repository license | No complete token-level TCD source was confirmed in locked EventHallusion tree. |
 | DINO-HEAL adapters | https://arxiv.org/abs/2412.03735 | paper plus VidHalluc SHA above | `src/methods/dino_heal/`, `src/models/` | Partial independent adaptation | Local repository license | Current adapters do not reproduce final-layer CLS-to-patch fusion and are disabled. |
-| SEASON | https://arxiv.org/abs/2512.04643 | paper source inspected | `src/methods/season/`, `src/models/` | Partial paper-based reimplementation | Local repository license | No official code provenance is claimed; model hooks are incomplete. |
+| SEASON | https://arxiv.org/abs/2512.04643 | paper source inspected | `src/methods/season/`, `src/models/llava_ov.py` | Paper-grounded local reimplementation pending GPU validation | Local repository license | No official code provenance is claimed; ambiguous implementation details are documented. |
 
 `external/COMMITS.lock` records the same SHAs, branches and URLs. Snapshot code
 is retained for audit/attribution only; absence of a license is not permission

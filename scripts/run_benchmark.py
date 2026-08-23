@@ -7,6 +7,7 @@ import json
 import os
 import sys
 import time
+import traceback
 from collections import defaultdict
 from pathlib import Path
 
@@ -29,16 +30,25 @@ from src.models.compatibility import check_compatibility
 from src.utils.config import load_yaml
 
 
+DEBUG_ERRORS = False
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/experiment1.yaml")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--smoke-test", action="store_true")
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--debug-errors", action="store_true")
+    parser.add_argument(
+        "--allow-unvalidated",
+        action="store_true",
+        help="Run adapters marked pending validation; intended for smoke tests only",
+    )
     return parser.parse_args()
 
 
-def build_plan(config: dict) -> list[dict]:
+def build_plan(config: dict, allow_unvalidated: bool = False) -> list[dict]:
     plan = []
     benchmark_configs = load_benchmark_configs()
     for benchmark_entry in config["benchmarks"]:
@@ -57,8 +67,9 @@ def build_plan(config: dict) -> list[dict]:
                         "method": method,
                         "benchmark": benchmark,
                         "task": task,
-                        "status": "ready" if supported else "N/A",
+                        "status": "ready" if supported or allow_unvalidated else "N/A",
                         "note": note,
+                        "validation_override": bool(allow_unvalidated and not supported),
                     })
     return plan
 
@@ -219,6 +230,17 @@ def emit_failure_record(
     frame_indices: list[int] | None = None,
     manifest: dict | None = None,
 ) -> PredictionRecord:
+    failure_metadata = {
+        **sample.metadata,
+        "failure_stage": stage,
+        "manifest": manifest,
+        "exception_class": type(error).__name__,
+        "exception_message": str(error),
+    }
+    if DEBUG_ERRORS:
+        failure_metadata["traceback"] = "".join(
+            traceback.format_exception(type(error), error, error.__traceback__)
+        )
     return PredictionRecord(
         sample_id=sample.sample_id,
         model=job["model"],
@@ -237,7 +259,7 @@ def emit_failure_record(
         method_config=getattr(method, "config", {}) or {},
         sampling_config=sampling,
         generation_config=generation_config.__dict__,
-        metadata={**sample.metadata, "failure_stage": stage, "manifest": manifest},
+        metadata=failure_metadata,
     )
 
 
@@ -285,6 +307,18 @@ def flush_batch(
                 f"generate_batch returned {len(raw_outputs)} outputs for {len(batch_samples)} samples"
             )
     except Exception as exc:
+        if DEBUG_ERRORS:
+            first_sample = batch_samples[0]
+            print(
+                "\nSEASON/benchmark generation failed\n"
+                f"model={job['model']}\nmethod={job['method']}\n"
+                f"benchmark={job['benchmark']}\ntask={job.get('task')}\n"
+                f"sample={first_sample.sample_id}\n"
+                f"exception={type(exc).__name__}\nmessage={exc}\n"
+                f"traceback:\n{traceback.format_exc()}",
+                file=sys.stderr,
+                flush=True,
+            )
         for sample, sample_manifest in zip(batch_samples, batch_manifests):
             record = emit_failure_record(
                 sample=sample,
@@ -525,12 +559,14 @@ def run_job(
 
 
 def main():
+    global DEBUG_ERRORS
     args = parse_args()
+    DEBUG_ERRORS = args.debug_errors
     config_path = Path(args.config)
     if not config_path.is_absolute():
         config_path = PROJECT / config_path
     config = load_yaml(config_path)
-    plan = build_plan(config)
+    plan = build_plan(config, allow_unvalidated=args.allow_unvalidated)
     print(json.dumps({"config": str(config_path), "jobs": plan}, indent=2))
     if args.dry_run:
         return

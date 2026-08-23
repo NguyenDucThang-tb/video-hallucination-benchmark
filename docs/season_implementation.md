@@ -1,89 +1,185 @@
-# SEASON Partial Reimplementation
+# SEASON Paper-Grounded Local Reimplementation
 
-Source: SEASON, CVPR 2026 / arXiv:2512.04643. This is a training-free,
-token-level contrastive decoder, not frame dropping.
+Primary reference: **SEASON: Mitigating Temporal Hallucination in Video Large
+Language Models via Self-Diagnostic Contrastive Decoding**, CVPR 2026,
+arXiv:2512.04643.
 
-## Notation and branches
+There is no public official implementation used by this repository. This code
+is a paper-grounded local reimplementation. It is not claimed to be official,
+and the LLaVA-OneVision adapter remains disabled in the normal compatibility
+matrix until a real-video GPU smoke report passes.
 
-For eight frames V and query Q, the paper evaluates:
+## Algorithm
 
-- `vO`: original video representation.
-- `vS`: spatial negative from Gaussian-corrupted video pixels.
-- `vT`: temporal negative produced by layer-wise temporal homogenization.
+For the same deterministic eight sampled frames and prompt, SEASON maintains
+three independent autoregressive states and KV caches:
 
-The same generated prefix is supplied to all three branches at every step.
+- `original`: the unmodified frames.
+- `spatial_negative`: deterministic Gaussian-corrupted frames.
+- `temporal_homogenized`: the original frames with layer-wise temporal feature
+  homogenization in the vision encoder.
 
-## Separate positive-feature extension
+Every branch receives the same selected output token at every decoding step.
+No branch calls ordinary text generation and no output text is modified after
+generation.
 
-The SEASON paper does not define a positive branch. The local experimental
-module injects foreground persistence and directed temporal
-evidence into post-encoder/projector visual embeddings. For visual features
-`V[t,p]`, foreground saliency `F[t,p]`, and persistence
-`P[p] = mean_t F[t,p]`:
+### Spatial negative
+
+Paper specification: create a spatially corrupted negative with Gaussian noise
+following the visual contrastive decoding setup.
+
+Our interpretation: add zero-mean Gaussian noise in pixel space, clip to the
+input range, and seed it from the prompt hash. The default standard deviation
+is `0.1` of the pixel range.
+
+Reason: the paper specifies Gaussian corruption but does not publish code or a
+checkpoint-specific injection hook.
+
+Potential deviation: the exact noise variance and whether corruption happened
+before or after a particular upstream normalization stage are not stated.
+
+### Temporal negative
+
+At every vision layer `l`, the original branch captures the ordinary layer
+output and computes its frame mean `d_l`. The temporal branch then applies
 
 ```text
-S[t,p]  = alpha_pos * F[t,p] + alpha_spatial * P[p]
-E[t,p]  = normalize(V[t,p] - V[t-1,p]) * ||V[t,p]||
-V'[t,p] = V[t,p] * (1 + S[t,p]) + beta_temporal * E[t,p]
+h_l,t = (1 - beta) * h'_l,t + beta * d_l
 ```
 
-`E[0,p]` is zero. The evidence term is multiplied by the foreground mask before
-normalization, so background patches are excluded from motion evidence. The
-implementation is `src.methods.season.enhance_visual_features`. It is not
-called by `SeasonMethod` and must not be used as evidence of SEASON fidelity.
+The default is `beta=0.33`. The original contexts are stored on CPU after each
+layer to reduce GPU memory and copied back only when the matching temporal
+layer executes.
 
-## Temporal homogenization
+Paper specification: `d_l` is precomputed from a standard forward on the
+original video and is used at every vision layer.
 
-At every vision layer l, first compute the ordinary layer output for frame t:
+Our interpretation: LLaVA-OneVision may create multiple equal-sized crops for
+each frame. The leading vision batch dimension is grouped as
+`[frames, crops_per_frame, ...]`; the mean is taken over the frame dimension
+while crop and patch positions are preserved.
+
+Reason: this preserves spatial correspondence across the eight frame groups.
+
+Potential deviation: the paper does not discuss OneVision's dynamic multi-crop
+representation. The adapter rejects non-divisible shapes rather than silently
+guessing a grouping.
+
+### Self diagnosis
+
+For decoder layers `[20, 21, 22, 23]`, the adapter obtains attention from the
+preceding text token to the exact contiguous image-token span for every frame.
+It sums heads, selected layers, and visual patches, then applies softmax over
+the eight frame scores.
+
+The two Jensen-Shannon divergences are
 
 ```text
-h'[l,t] = E[l](h[l-1,t])
-d[l]    = mean_t h'[l,t]
-h[l,t]  = (1-beta) h'[l,t] + beta d[l]
-```
-
-This must recur across vision layers. The current Qwen adapter instead modifies
-pixel input once, so it is partial and disabled. Paper grid:
-`(alpha,beta)` in `{(1.0,0.33),(0.5,0.25)}`.
-
-## Token-level self diagnosis
-
-For decoder attention layers J = `[20,21,22,23]`, sum heads, selected layers,
-and visual patches in each frame for the preceding text token, then softmax
-over frames:
-
-```text
-A_frame(v) = softmax_t sum_k (sum_{j in J} A_j)(y[i-1], v[t,k])
-D_S = JSD(A_frame(vO), A_frame(vS))
-D_T = JSD(A_frame(vO), A_frame(vT))
+D_S = JSD(A_original, A_spatial)
+D_T = JSD(A_original, A_temporal)
 w_S = D_S / (D_S + D_T)
 w_T = D_T / (D_S + D_T)
 ```
 
-When both divergences are numerically zero, the implementation uses equal
-weights and logs the degenerate diagnosis.
+When both divergences are numerically zero, both weights are `0.5`. Missing,
+mis-shaped, negative, or non-finite attention raises an error.
 
-## Contrastive decoding
+The first prompt forward is split before its final token. The long multimodal
+prefix is cached without decoder attention; only the final prompt token is
+then evaluated with `output_attentions=True`. This obtains the paper's
+preceding-token query without materializing a full square prompt-attention
+matrix.
 
-At each output token:
+### Contrastive decoding
+
+At each token, equation 6 is implemented as
 
 ```text
-z = (1 + alpha) zO - alpha * (w_S zS + w_T zT)
-y_i = argmax(z)
+z = (1 + alpha) * z_original
+    - alpha * (w_S * z_spatial + w_T * z_temporal)
+next_token = argmax(z)
 ```
 
-The selected token must be appended to all three branch contexts and KV caches
-must remain separate. The current adapters have not demonstrated exact visual
-token ranges and preceding-token attention on a real checkpoint.
+The default is `alpha=1.0`. Logits remain on the model device, must share the
+same one-dimensional vocabulary shape, and must contain only finite values.
+Greedy token selection preserves the benchmark policy: no sampling,
+temperature zero, and one beam.
 
-## Adapter requirements
+## LLaVA-OneVision integration
 
-A model adapter must expose step logits, decoder attention mapped to exact
-frame/patch token ranges, and hooks at every vision layer. If any signal is
-unavailable, compatibility is `unsupported`; neither final-feature averaging
-nor frame dropping substitutes for SEASON.
+The target checkpoint is `llava-onevision-qwen2-7b-ov-hf`. The adapter uses
+the existing processor and preserves its `input_ids`, attention mask, image
+sizes, pixel values, and independent branch caches. Vision inputs are supplied
+only on the first prefill for each branch.
 
-Video frames are sampled through the OpenCV-backed
-`src.data.sampler.sample_video` path. This is slower than some specialized
-video readers but avoids decoder-specific frame loading failures in the
-benchmark protocol.
+Image-token spans are derived from `config.image_token_index`. Exactly eight
+contiguous spans must be present. A mismatch is a hard failure because
+bucketizing unrelated attention positions would no longer implement SEASON.
+
+Decoder attention is switched to the eager implementation before the SEASON
+run. This is required because SDPA may not return attention weights.
+
+## Eight-frame protocol
+
+SEASON receives the frames already produced by `src.data.sampler.sample_video`.
+It does not read or sample a video itself. `SeasonMethod` rejects any input
+whose first dimension is not exactly eight. The existing prediction manifest
+therefore remains the source of frame indices for Base, TCD, DINO-HEAL, and
+SEASON.
+
+## Configuration
+
+```yaml
+season:
+  batch_size: 1
+  alpha: 1.0
+  homogenization_beta: 0.33
+  spatial_noise_std: 0.1
+  attention_layers: [20, 21, 22, 23]
+  expected_frame_count: 8
+  epsilon: 1.0e-8
+```
+
+The paper also evaluates `(alpha, beta)=(0.5, 0.25)`. Hyperparameter changes
+must be recorded in the result metadata and should not be mixed in one table
+without an explicit experiment name.
+
+## Validation
+
+Pure numerical and fake-adapter integration tests are included. They are not
+model validation. Run the real checkpoint smoke test before enabling SEASON:
+
+```bash
+PYTHONPATH=. ./.venv/bin/python scripts/smoke_season.py \
+  --video /path/to/one/real/video.mp4 \
+  --prompt 'Answer the benchmark question...' \
+  --model-path "$MODEL_DIR" \
+  --steps 8
+```
+
+For a three-sample benchmark diagnostic while compatibility is pending:
+
+```bash
+PYTHONPATH=. ./.venv/bin/python scripts/run_benchmark.py \
+  --config /tmp/experiment_llava_ov_season_videohallucer.yaml \
+  --limit 3 --allow-unvalidated --debug-errors
+```
+
+Do not run the full benchmark until all five VideoHallucer tasks have no
+generation failures and the smoke JSON contains non-empty Base and SEASON
+outputs.
+
+## Known limitations
+
+- The official authors have not released code used by this repository.
+- Gaussian noise placement and variance are reconstructed from the paper.
+- Equal OneVision crop counts per sampled frame are an adapter assumption and
+  are validated at runtime.
+- CPU storage for original per-layer contexts favors memory safety over speed.
+- Qwen2.5-VL's older SEASON path remains partial and disabled; this work targets
+  LLaVA-OneVision.
+- A GPU smoke artifact is still required before normal compatibility is marked
+  runnable.
+
+The unrelated positive-feature experiment in `positive_features.py` is not
+part of SEASON and is not invoked by `SeasonMethod`.

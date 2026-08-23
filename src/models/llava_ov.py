@@ -2,12 +2,20 @@ from __future__ import annotations
 
 import os
 import time
+from contextlib import contextmanager
 from pathlib import Path
 
 import numpy as np
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
+from src.methods.season.attention_diagnosis import frame_attention
+from src.methods.season.vision_homogenization import (
+    blend_temporal_hidden,
+    frame_mean_context,
+    replace_hidden_states,
+    unwrap_hidden_states,
+)
 
 
 class LlavaOVAdapter(ModelAdapter):
@@ -36,6 +44,7 @@ class LlavaOVAdapter(ModelAdapter):
         self.device = next(self.model.parameters()).device
         self._dino_processor = None
         self._dino_model = None
+        self._season_attention_layers = (20, 21, 22, 23)
 
     def _resolve_model_path(self, local_path: str | None, checkpoint: str) -> str:
         for candidate in (
@@ -405,7 +414,13 @@ class LlavaOVAdapter(ModelAdapter):
         return answers
 
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
-        if branch not in {"original", "tcd_negative"}:
+        supported_branches = {
+            "original",
+            "tcd_negative",
+            "spatial_negative",
+            "temporal_homogenized",
+        }
+        if branch not in supported_branches:
             raise NotImplementedError(f"LLaVA-OV adapter does not support branch {branch}")
         started = time.perf_counter()
         inputs = self._prepare_inputs(video_frames, prompt)
@@ -421,6 +436,11 @@ class LlavaOVAdapter(ModelAdapter):
             "generated_count": 0,
             "profile": bool(kwargs.get("profile", False)),
             "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "frame_count": int(len(video_frames)),
+            "attention_layers": tuple(kwargs.get("attention_layers", self._season_attention_layers)),
+            "homogenization_beta": float(kwargs.get("beta", 0.0)),
+            "reference_state": kwargs.get("reference_state"),
+            "vision_layer_contexts": {},
             "diagnostics": {
                 "frame_count": int(len(video_frames)),
                 "preprocessing_seconds": time.perf_counter() - started,
@@ -430,8 +450,157 @@ class LlavaOVAdapter(ModelAdapter):
                 "cache_hit_steps": 0,
                 "vision_inputs_supplied_steps": 0,
                 "cuda_sync_seconds": 0.0,
+                "vision_hook_calls": 0,
+                "vision_context_layers": [],
+                "attention_layers_used": [],
+                "visual_token_spans": [],
             },
         }
+
+    def enable_season_attention(self, attention_layers: tuple[int, ...]) -> None:
+        self._season_attention_layers = tuple(attention_layers)
+        setter = getattr(self.model, "set_attn_implementation", None)
+        if callable(setter):
+            setter("eager")
+            return
+        for config in (
+            getattr(self.model, "config", None),
+            getattr(getattr(self.model, "language_model", None), "config", None),
+            getattr(getattr(self.model, "model", None), "config", None),
+        ):
+            if config is not None:
+                setattr(config, "_attn_implementation", "eager")
+
+    def _vision_layers(self):
+        roots = (
+            getattr(self.model, "vision_tower", None),
+            getattr(getattr(self.model, "model", None), "vision_tower", None),
+        )
+        paths = (
+            ("vision_model", "encoder", "layers"),
+            ("encoder", "layers"),
+            ("vision_model", "encoder", "layer"),
+            ("encoder", "layer"),
+        )
+        for root in roots:
+            if root is None:
+                continue
+            for path in paths:
+                value = root
+                for name in path:
+                    value = getattr(value, name, None)
+                    if value is None:
+                        break
+                if value is not None and hasattr(value, "__len__"):
+                    return value
+        raise RuntimeError("LLaVA-OV vision encoder layers could not be located")
+
+    @contextmanager
+    def _season_vision_hooks(self, state):
+        branch = state["branch"]
+        if branch not in {"original", "temporal_homogenized"}:
+            yield
+            return
+
+        layers = self._vision_layers()
+        handles = []
+        for layer_index, layer in enumerate(layers):
+            if branch == "original":
+                def capture_hook(module, module_inputs, module_output, index=layer_index):
+                    hidden = unwrap_hidden_states(module_output)
+                    context = frame_mean_context(hidden, state["frame_count"])
+                    state["vision_layer_contexts"][index] = context.detach().to("cpu")
+                    state["diagnostics"]["vision_hook_calls"] += 1
+                    return module_output
+
+                handles.append(layer.register_forward_hook(capture_hook))
+            else:
+                def homogenize_hook(module, module_inputs, module_output, index=layer_index):
+                    reference = state.get("reference_state")
+                    if reference is None:
+                        raise RuntimeError("SEASON temporal branch is missing original reference state")
+                    context = reference["vision_layer_contexts"].get(index)
+                    if context is None:
+                        raise RuntimeError(
+                            f"SEASON original branch did not capture vision layer {index}"
+                        )
+                    hidden = unwrap_hidden_states(module_output)
+                    blended = blend_temporal_hidden(
+                        hidden,
+                        context,
+                        state["homogenization_beta"],
+                    )
+                    state["diagnostics"]["vision_hook_calls"] += 1
+                    return replace_hidden_states(module_output, blended)
+
+                handles.append(layer.register_forward_hook(homogenize_hook))
+        try:
+            yield
+        finally:
+            for handle in handles:
+                handle.remove()
+            state["diagnostics"]["vision_context_layers"] = sorted(
+                state["vision_layer_contexts"]
+                if branch == "original"
+                else state["reference_state"]["vision_layer_contexts"]
+            )
+
+    def _visual_token_spans(self, state) -> list[tuple[int, int]]:
+        input_ids = state["model_inputs"]["input_ids"][0]
+        token_id = getattr(self.model.config, "image_token_index", None)
+        if token_id is None:
+            token_id = getattr(self.processor, "image_token_id", None)
+        if token_id is None:
+            raise RuntimeError("LLaVA-OV config does not expose image_token_index")
+        positions = (input_ids == int(token_id)).nonzero(as_tuple=False).flatten().tolist()
+        if not positions:
+            raise RuntimeError("LLaVA-OV prompt contains no expanded image tokens")
+        spans = []
+        start = previous = positions[0]
+        for position in positions[1:]:
+            if position != previous + 1:
+                spans.append((start, previous + 1))
+                start = position
+            previous = position
+        spans.append((start, previous + 1))
+        if len(spans) != state["frame_count"]:
+            raise RuntimeError(
+                "Unable to map decoder attention to frames: "
+                f"found {len(spans)} image-token spans for {state['frame_count']} frames"
+            )
+        return spans
+
+    def _extract_frame_attention(self, state, attentions) -> np.ndarray:
+        if attentions is None:
+            raise RuntimeError(
+                "LLaVA-OV returned no decoder attentions; SEASON requires eager attention"
+            )
+        spans = self._visual_token_spans(state)
+        selected = []
+        used = []
+        for layer_index in state["attention_layers"]:
+            if layer_index < 0 or layer_index >= len(attentions):
+                raise RuntimeError(
+                    f"SEASON attention layer {layer_index} is outside decoder depth {len(attentions)}"
+                )
+            layer = attentions[layer_index]
+            if layer is None or layer.ndim != 4:
+                raise RuntimeError(f"Decoder attention layer {layer_index} has invalid shape")
+            key_length = int(layer.shape[-1])
+            if spans[-1][1] > key_length:
+                raise RuntimeError(
+                    f"Image token span ends at {spans[-1][1]}, attention key length is {key_length}"
+                )
+            query = layer[0, :, -1, :].float()
+            per_frame = self.torch.stack([
+                query[:, start:end].sum(dim=-1) for start, end in spans
+            ], dim=-1)
+            selected.append(per_frame.detach().cpu().numpy()[:, :, None])
+            used.append(layer_index)
+        values = np.stack(selected, axis=0)
+        state["diagnostics"]["attention_layers_used"] = used
+        state["diagnostics"]["visual_token_spans"] = [list(span) for span in spans]
+        return frame_attention(values)
 
     def _profile_sync(self, state) -> None:
         if state.get("profile") and self.torch.cuda.is_available():
@@ -478,33 +647,82 @@ class LlavaOVAdapter(ModelAdapter):
         step_diagnostics["sync_generated_seconds"] = time.perf_counter() - started
         inputs = state["model_inputs"]
         is_first_iteration = state["past_key_values"] is None
-        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
         started = time.perf_counter()
-        prepared = self.model.prepare_inputs_for_generation(
-            input_ids=input_ids,
-            past_key_values=state["past_key_values"],
-            inputs_embeds=inputs.get("inputs_embeds"),
-            pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
-            image_sizes=inputs.get("image_sizes"),
-            pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,
-            image_sizes_videos=inputs.get("image_sizes_videos"),
-            attention_mask=inputs.get("attention_mask"),
-            use_cache=True,
-            is_first_iteration=is_first_iteration,
-        )
+        vision_supplied = False
+        prefill_forward_seconds = 0.0
+        if output_attentions and is_first_iteration:
+            if int(inputs["input_ids"].shape[1]) < 2:
+                raise RuntimeError("SEASON needs at least two prompt tokens for preceding-token attention")
+            prefix_ids = inputs["input_ids"][:, :-1]
+            prefix_mask = inputs.get("attention_mask")
+            if prefix_mask is not None:
+                prefix_mask = prefix_mask[:, :-1]
+            prefix = self.model.prepare_inputs_for_generation(
+                input_ids=prefix_ids,
+                past_key_values=None,
+                inputs_embeds=None,
+                pixel_values=inputs.get("pixel_values"),
+                image_sizes=inputs.get("image_sizes"),
+                pixel_values_videos=inputs.get("pixel_values_videos"),
+                image_sizes_videos=inputs.get("image_sizes_videos"),
+                attention_mask=prefix_mask,
+                use_cache=True,
+                is_first_iteration=True,
+            )
+            vision_supplied = any(
+                prefix.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+            )
+            prefill_started = time.perf_counter()
+            with self._season_vision_hooks(state), self.torch.inference_mode():
+                prefix_outputs = self.model(
+                    **prefix,
+                    output_attentions=False,
+                    return_dict=True,
+                )
+            prefill_forward_seconds = time.perf_counter() - prefill_started
+            state["past_key_values"] = prefix_outputs.past_key_values
+            prepared = self.model.prepare_inputs_for_generation(
+                input_ids=inputs["input_ids"][:, -1:],
+                past_key_values=state["past_key_values"],
+                inputs_embeds=None,
+                pixel_values=None,
+                image_sizes=inputs.get("image_sizes"),
+                pixel_values_videos=None,
+                image_sizes_videos=inputs.get("image_sizes_videos"),
+                attention_mask=inputs.get("attention_mask"),
+                use_cache=True,
+                is_first_iteration=False,
+            )
+        else:
+            input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
+            prepared = self.model.prepare_inputs_for_generation(
+                input_ids=input_ids,
+                past_key_values=state["past_key_values"],
+                inputs_embeds=inputs.get("inputs_embeds"),
+                pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
+                image_sizes=inputs.get("image_sizes"),
+                pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,
+                image_sizes_videos=inputs.get("image_sizes_videos"),
+                attention_mask=inputs.get("attention_mask"),
+                use_cache=True,
+                is_first_iteration=is_first_iteration,
+            )
+            vision_supplied = any(
+                prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+            )
         self._profile_sync(state)
         step_diagnostics["prepare_inputs_seconds"] = time.perf_counter() - started
         step_diagnostics["input_ids_length"] = int(prepared["input_ids"].shape[1])
         step_diagnostics["attention_mask_length"] = int(prepared["attention_mask"].shape[1]) if prepared.get("attention_mask") is not None else None
-        step_diagnostics["vision_inputs_supplied"] = any(
-            prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
-        )
+        step_diagnostics["vision_inputs_supplied"] = vision_supplied
+        step_diagnostics["split_attention_prefill"] = bool(output_attentions and is_first_iteration)
+        step_diagnostics["prefill_forward_seconds"] = prefill_forward_seconds
         state["diagnostics"]["decode_call_count"] += 1
         state["diagnostics"]["cache_hit_steps"] += int(step_diagnostics["past_before"])
         state["diagnostics"]["vision_inputs_supplied_steps"] += int(step_diagnostics["vision_inputs_supplied"])
         self._profile_sync(state)
         started = time.perf_counter()
-        with self.torch.inference_mode():
+        with self._season_vision_hooks(state), self.torch.inference_mode():
             outputs = self.model(
                 **prepared,
                 output_attentions=output_attentions,
@@ -521,7 +739,16 @@ class LlavaOVAdapter(ModelAdapter):
         step_diagnostics["past_after"] = state["past_key_values"] is not None
         if state["profile"]:
             state["diagnostics"]["decode_steps"].append(step_diagnostics)
-        return StepOutput(logits=logits)
+        decoder_attentions = getattr(outputs, "attentions", None)
+        if decoder_attentions is None:
+            language_output = getattr(outputs, "language_model_output", None)
+            decoder_attentions = getattr(language_output, "attentions", None)
+        attention = (
+            self._extract_frame_attention(state, decoder_attentions)
+            if output_attentions
+            else None
+        )
+        return StepOutput(logits=logits, frame_attention=attention)
 
     def token_id_to_text(self, token_id: int) -> str:
         return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)
@@ -534,4 +761,12 @@ class LlavaOVAdapter(ModelAdapter):
 
     @property
     def supports_step_logits(self) -> bool:
+        return True
+
+    @property
+    def supports_frame_attention(self) -> bool:
+        return True
+
+    @property
+    def supports_vision_layer_hooks(self) -> bool:
         return True
