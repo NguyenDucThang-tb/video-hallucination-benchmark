@@ -17,6 +17,7 @@ class FrameManifest:
     num_frames: int = 8
     strategy: str = "uniform"
     short_video_policy: str = "repeat_nearest_linspace"
+    video_reader: str = "opencv_robust_full_decode"
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -35,13 +36,28 @@ def frame_indices(total_frames: int, num_frames: int = 8) -> list[int]:
     return np.rint(np.linspace(0, total_frames - 1, num_frames)).astype(int).tolist()
 
 
+def vidhalluc_frame_indices(total_frames: int, fps: float, max_frames: int = 32) -> list[int]:
+    """Reproduce VidHalluc's public one-frame-per-second then cap-at-32 policy."""
+    if total_frames <= 0:
+        raise ValueError("total_frames must be positive")
+    if max_frames <= 0:
+        raise ValueError("max_frames must be positive")
+    rounded_fps = round(fps)
+    if rounded_fps <= 0:
+        raise ValueError("VidHalluc sampling requires a positive rounded FPS")
+    chosen = list(range(0, total_frames, rounded_fps))
+    if len(chosen) > max_frames:
+        chosen = np.linspace(0, total_frames - 1, max_frames, dtype=int).tolist()
+    return chosen
+
+
 def sample_video(
     video_path: str | Path,
     num_frames: int = 8,
     strategy: str = "uniform",
     indices: list[int] | None = None,
 ) -> tuple[np.ndarray, FrameManifest]:
-    if strategy != "uniform":
+    if strategy not in {"uniform", "vidhalluc_official"}:
         raise ValueError(f"Unsupported sampling strategy: {strategy}")
     try:
         import cv2
@@ -67,6 +83,8 @@ def sample_video(
     decoded, effective_total, chosen = _decode_video_robust(
         path=path,
         num_frames=num_frames,
+        strategy=strategy,
+        fps=fps,
         requested_indices=requested,
         reported_total=reported_total,
         cv2_module=cv2,
@@ -78,8 +96,13 @@ def sample_video(
         total_frames=effective_total,
         fps=fps,
         duration_seconds=(effective_total / fps if fps > 0 else 0.0),
-        num_frames=num_frames,
+        num_frames=len(chosen),
         strategy=strategy,
+        short_video_policy=(
+            "one_frame_per_second_no_padding"
+            if strategy == "vidhalluc_official"
+            else "repeat_nearest_linspace"
+        ),
     )
     return np.stack(decoded), manifest
 
@@ -87,6 +110,8 @@ def sample_video(
 def _decode_video_robust(
     path: Path,
     num_frames: int,
+    strategy: str,
+    fps: float,
     requested_indices: list[int] | None,
     reported_total: int,
     cv2_module,
@@ -110,14 +135,22 @@ def _decode_video_robust(
 
     effective_total = actual_total
     if requested_indices is None:
-        chosen = frame_indices(actual_total, num_frames)
+        chosen = (
+            vidhalluc_frame_indices(actual_total, fps, num_frames)
+            if strategy == "vidhalluc_official"
+            else frame_indices(actual_total, num_frames)
+        )
     else:
-        if len(requested_indices) != num_frames:
+        if strategy == "uniform" and len(requested_indices) != num_frames:
             raise ValueError(f"Expected {num_frames} indices, got {len(requested_indices)}")
         if any(index < 0 for index in requested_indices):
             raise ValueError("Frame indices must be non-negative")
         if any(index >= actual_total for index in requested_indices):
-            chosen = frame_indices(actual_total, num_frames)
+            chosen = (
+                vidhalluc_frame_indices(actual_total, fps, num_frames)
+                if strategy == "vidhalluc_official"
+                else frame_indices(actual_total, num_frames)
+            )
         else:
             chosen = requested_indices
 

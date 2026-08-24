@@ -5,6 +5,7 @@ import argparse
 import csv
 import json
 import os
+import subprocess
 import sys
 import time
 import traceback
@@ -92,6 +93,70 @@ def resolve_method_config(name: str) -> dict:
 
 def load_benchmark_configs() -> dict:
     return load_yaml(PROJECT / "configs/benchmarks.yaml")["benchmarks"]
+
+
+def resolve_sampling_config(benchmark: str, task: str | None) -> dict:
+    sampling = dict(load_yaml(PROJECT / "configs/sampling.yaml"))
+    benchmark_config = load_benchmark_configs()[benchmark]
+    task_sampling = benchmark_config.get("task_sampling", {})
+    if task is not None:
+        sampling.update(task_sampling.get(task, {}))
+    return sampling
+
+
+def _git_head() -> str | None:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=PROJECT, text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def write_vidhalluc_resolved_config(config: dict, args, plan: list[dict], runtime: dict | None = None) -> None:
+    if not any(job["benchmark"] == "vidhalluc" and job.get("task") in {"tsh", "sth"} for job in plan):
+        return
+    audit_root = PROJECT / "results" / "audit"
+    audit_root.mkdir(parents=True, exist_ok=True)
+    model_configs = load_model_configs()
+    payload = {
+        "status": "resolved_before_or_during_execution",
+        "repository_head": _git_head(),
+        "experiment": config,
+        "cli_overrides": {
+            "limit": args.limit,
+            "allow_unvalidated": args.allow_unvalidated,
+            "debug_errors": args.debug_errors,
+        },
+        "jobs": [job for job in plan if job["benchmark"] == "vidhalluc" and job.get("task") in {"tsh", "sth"}],
+        "models": {
+            name: {
+                **model_configs[name],
+                "resolved_checkpoint_path": os.environ.get("MODEL_DIR") or model_configs[name].get("local_path") or model_configs[name]["checkpoint"],
+                "model_revision": model_configs[name].get("revision"),
+                "processor_revision": model_configs[name].get("processor_revision"),
+                "quantization": model_configs[name].get("quantization"),
+            }
+            for name in config["models"]
+        },
+        "sampling": {
+            task: resolve_sampling_config("vidhalluc", task)
+            for task in ("tsh", "sth")
+        },
+        "generation": {
+            **config["generation"],
+            "top_p": config["generation"].get("top_p"),
+            "eos_token_id": config["generation"].get("eos_token_id"),
+            "pad_token_id": config["generation"].get("pad_token_id"),
+        },
+        "dataset": load_benchmark_configs()["vidhalluc"],
+        "seed": config.get("seed"),
+        "resume": config.get("resume", True),
+        "runtime": runtime or {},
+    }
+    (audit_root / "vidhalluc_tsh_sth_resolved_config.json").write_text(
+        json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
+    )
 
 
 def instantiate_model(name: str):
@@ -436,6 +501,8 @@ def run_job(
     generation_config: GenerationConfig,
     samples: list | None = None,
     limit: int | None = None,
+    cli_args=None,
+    plan: list[dict] | None = None,
 ) -> dict:
     model = instantiate_model(job["model"])
     method = instantiate_method(job["method"], model)
@@ -452,7 +519,16 @@ def run_job(
     records: list[PredictionRecord] = []
     batch_size = max(1, int(getattr(method, "config", {}).get("batch_size", 1)))
 
-    sampling = load_yaml(PROJECT / config["sampling"])
+    sampling = resolve_sampling_config(job["benchmark"], task)
+    if cli_args is not None and plan is not None:
+        write_vidhalluc_resolved_config(config, cli_args, plan, runtime={
+            "model": job["model"],
+            "method": job["method"],
+            "task": task,
+            "device": str(getattr(model, "device", "unknown")),
+            "dtype": str(getattr(model, "_torch_dtype", lambda: "unknown")()),
+            "batch_size": batch_size,
+        })
     total_samples = len(samples)
     print_progress(
         f"START {job['model']} / {job['method']} / {job['benchmark']} / {task or 'all'} | total={total_samples} "
@@ -567,6 +643,7 @@ def main():
         config_path = PROJECT / config_path
     config = load_yaml(config_path)
     plan = build_plan(config, allow_unvalidated=args.allow_unvalidated)
+    write_vidhalluc_resolved_config(config, args, plan)
     print(json.dumps({"config": str(config_path), "jobs": plan}, indent=2))
     if args.dry_run:
         return
@@ -606,7 +683,10 @@ def main():
             task_samples = grouped_samples.get(benchmark, {}).get(task, [])
             for job in task_jobs:
                 try:
-                    results.append(run_job(config, job, generation_config, samples=task_samples, limit=args.limit))
+                    results.append(run_job(
+                        config, job, generation_config, samples=task_samples, limit=args.limit,
+                        cli_args=args, plan=plan,
+                    ))
                 except Exception as exc:
                     print_progress(
                         f"ERROR {job['model']} / {job['method']} / {job['benchmark']} / {task or 'all'} | {exc!r}"

@@ -55,6 +55,72 @@ def parse_ab_ba(text: str) -> ParseResult:
     return ParseResult(None, "unparseable", "no standalone AB/BA answer")
 
 
+def parse_vidhalluc_tsh_official(text: str) -> ParseResult:
+    """Port of VidHalluc ``eval/evaluation/eval_tsh.py``.
+
+    The upstream parser intentionally does not strip punctuation or surrounding
+    whitespace before its exact AB/BA checks. Keep that behavior here so the
+    reproduction metric remains distinguishable from the more permissive local
+    diagnostic parser above.
+    """
+    answer = text.lower()
+    if answer in {"ab", "ba", "a", "b"}:
+        return ParseResult(answer.upper(), "valid")
+    if "not clear" in answer or "no clear" in answer:
+        return ParseResult(None, "unparseable", "official parser returned None")
+
+    has_action_a = "action a" in answer
+    has_action_b = "action b" in answer
+    if has_action_a and has_action_b:
+        if "before" in answer:
+            match = re.search(
+                r"(action [ab]|[ab][\.\)])[^before]+before[^action]*?(action [ab]|[ab][\.\)])",
+                answer,
+            )
+            if match:
+                return ParseResult(match.group(1)[-1].upper() + match.group(2)[-1].upper(), "valid")
+        elif "then" in answer:
+            match = re.search(
+                r"(action [ab]|[ab][\.\)])[^then]+then[^action]*?(action [ab]|[ab][\.\)])",
+                answer,
+            )
+            if match:
+                return ParseResult(match.group(1)[-1].upper() + match.group(2)[-1].upper(), "valid")
+        elif "after" in answer:
+            match = re.search(
+                r"(action [ab]|[ab][\.\)])[^after]+after[^action]*?(action [ab]|[ab][\.\)])",
+                answer,
+            )
+            if match:
+                return ParseResult(match.group(2)[-1].upper() + match.group(1)[-1].upper(), "valid")
+
+        positions = [
+            (match.start(), match.group(1)[-1].upper())
+            for match in re.finditer(r"(action [ab]|[ab][\.\)])", answer)
+        ]
+        positions.sort()
+        return ParseResult("".join(action for _, action in positions), "valid")
+    if has_action_a:
+        return ParseResult("A", "valid")
+    if has_action_b:
+        return ParseResult("B", "valid")
+    return ParseResult(None, "unparseable", "official parser returned None")
+
+
+def parse_vidhalluc_sth(text: str) -> tuple[ParseResult, str | None]:
+    """Parse the two fields consumed by VidHalluc's official STH evaluator."""
+    if ", Locations: " in text:
+        scene_part, locations = text.split(", Locations: ", 1)
+    else:
+        scene_part, locations = text, None
+    # Preserve upstream's split behavior, then expose invalid values as None
+    # instead of silently mutating them to the negative class at record level.
+    scene_change = scene_part.split(": ", 1)[-1].split(",", 1)[0].strip().lower()
+    if scene_change not in {"yes", "no"}:
+        return ParseResult(None, "unparseable", "official STH field is not yes/no"), locations
+    return ParseResult(scene_change, "valid"), locations.strip() if locations is not None else None
+
+
 def parse_mcq(text: str, choices: Mapping[str, str] | None = None) -> ParseResult:
     letters = [x.upper() for x in _unique_matches(r"\b([A-D])\b", text)]
     if len(letters) == 1:

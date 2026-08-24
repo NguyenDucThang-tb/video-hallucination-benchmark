@@ -63,6 +63,18 @@ def find_video(video_id: str | None, index: dict[str, Path]) -> Path | None:
     return None
 
 
+def find_video_exact(video_id: str | None, index: dict[str, Path]) -> Path | None:
+    """Resolve VidHalluc TSH/STH using the upstream exact filename semantics."""
+    if video_id is None:
+        return None
+    text = str(video_id).strip()
+    path = Path(text)
+    for candidate in (text, path.name, path.stem):
+        if candidate in index:
+            return index[candidate]
+    return None
+
+
 def unresolved_video_path(root: Path, video_id: str | None) -> Path:
     name = Path(str(video_id or "unknown")).name
     if not Path(name).suffix:
@@ -91,18 +103,17 @@ def build_bqa_prompt(question: str) -> str:
 
 
 def build_tsh_prompt(question: str) -> str:
-    return (
-        f"{question.strip()}\n"
-        "Sort these two actions in the order they occur in the video.\n"
-        "Answer with only AB or BA."
+    return question + (
+        "Sort these two actions in the order they occur in the video, and return which action "
+        "happen before which one. If you only detect one action, return that action."
     )
 
 
 def build_sth_prompt() -> str:
     return (
-        "Watch the video and determine whether a scene change occurs. "
-        "If no change occurs, answer exactly: 'Scene change: No, Locations: None'. "
-        "If a change occurs, answer exactly in this format: "
+        "Watch the given video and determine if a scene change occurs. "
+        "If no change occurs, respond: 'Scene change: No, Locations: None'. "
+        "If there is a scene change, respond in the format: "
         "'Scene change: Yes, Locations: from [location1] to [location2].'"
     )
 
@@ -172,10 +183,10 @@ class VidHallucLoader(BenchmarkLoader):
     def _iter_tsh(self) -> Iterable[BenchmarkSample]:
         data = json.loads((self.annotation_root / "tsh.json").read_text(encoding="utf-8"))
         for sample_id, item in data.items():
-            video_path = find_video(item.get("video"), self.video_index)
+            video_path = find_video_exact(item.get("video"), self.video_index)
             gt = str(item.get("Correct Answer", "")).strip().upper()
             if gt not in {"AB", "BA"}:
-                continue
+                raise ValueError(f"Invalid TSH label for annotation {sample_id}: {gt!r}")
             video_resolved = video_path is not None
             video_path = video_path or unresolved_video_path(self.video_root, item.get("video"))
             yield BenchmarkSample(
@@ -188,6 +199,7 @@ class VidHallucLoader(BenchmarkLoader):
                 answer_type="ab_ba",
                 metadata={
                     "source": "tsh.json",
+                    "annotation_id": str(sample_id),
                     "video_name": item.get("video"),
                     "video_resolved": video_resolved,
                 },
@@ -196,11 +208,11 @@ class VidHallucLoader(BenchmarkLoader):
     def _iter_sth(self) -> Iterable[BenchmarkSample]:
         data = json.loads((self.annotation_root / "sth.json").read_text(encoding="utf-8"))
         for video_id, item in data.items():
-            video_path = find_video(video_id, self.video_index)
+            video_path = find_video_exact(video_id, self.video_index)
             scene_change = str(item.get("Scene change", "")).strip().lower()
             locations = str(item.get("Locations", "")).strip()
             if scene_change not in {"yes", "no"}:
-                continue
+                raise ValueError(f"Invalid STH label for annotation {video_id}: {scene_change!r}")
             video_resolved = video_path is not None
             video_path = video_path or unresolved_video_path(self.video_root, video_id)
             yield BenchmarkSample(
@@ -213,6 +225,7 @@ class VidHallucLoader(BenchmarkLoader):
                 answer_type="text",
                 metadata={
                     "source": "sth.json",
+                    "annotation_id": str(video_id),
                     "video_name": video_id,
                     "scene_change": scene_change,
                     "locations": locations,

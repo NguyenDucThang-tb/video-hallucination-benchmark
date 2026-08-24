@@ -45,6 +45,7 @@ class LlavaOVAdapter(ModelAdapter):
         self._dino_processor = None
         self._dino_model = None
         self._season_attention_layers = (20, 21, 22, 23)
+        self._generation_diagnostics = []
 
     def _resolve_model_path(self, local_path: str | None, checkpoint: str) -> str:
         for candidate in (
@@ -108,6 +109,17 @@ class LlavaOVAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
+        self._last_input_audit = {
+            "rendered_prompt": text,
+            "model_input_keys": sorted(inputs),
+            "model_input_shapes": {
+                key: list(value.shape) for key, value in inputs.items() if hasattr(value, "shape")
+            },
+            "vision_tensor_supplied": any(
+                inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+            ),
+            "video_frame_count": int(len(video_frames)),
+        }
         return inputs, prompt_length
 
     def _ensure_dino_loaded(self, checkpoint: str, device: str = "cpu"):
@@ -237,6 +249,7 @@ class LlavaOVAdapter(ModelAdapter):
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
         inputs, prompt_length = self._build_inputs(video_frames, prompt)
+        self._generation_diagnostics = [dict(self._last_input_audit)]
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -392,6 +405,21 @@ class LlavaOVAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
         prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
+        common_shapes = {
+            key: list(value.shape) for key, value in inputs.items() if hasattr(value, "shape")
+        }
+        self._generation_diagnostics = [
+            {
+                "rendered_prompt": text,
+                "model_input_keys": sorted(inputs),
+                "model_input_shapes": common_shapes,
+                "vision_tensor_supplied": any(
+                    inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+                ),
+                "video_frame_count": int(len(frames)),
+            }
+            for text, frames in zip(texts, batch_video_frames)
+        ]
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -412,6 +440,11 @@ class LlavaOVAdapter(ModelAdapter):
             )[0]
             answers.append(answer.strip())
         return answers
+
+    def consume_generation_diagnostics(self, expected_count: int) -> list[dict]:
+        values = self._generation_diagnostics
+        self._generation_diagnostics = []
+        return values if len(values) == expected_count else [{} for _ in range(expected_count)]
 
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
         supported_branches = {
@@ -454,6 +487,7 @@ class LlavaOVAdapter(ModelAdapter):
                 "vision_context_layers": [],
                 "attention_layers_used": [],
                 "visual_token_spans": [],
+                **dict(getattr(self, "_last_input_audit", {})),
             },
         }
 

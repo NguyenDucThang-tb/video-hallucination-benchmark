@@ -7,6 +7,7 @@ from src.evaluation.parsers import (
     parse_leading_yes_no,
     parse_mcq,
     parse_yes_no,
+    parse_vidhalluc_tsh_official,
 )
 
 
@@ -18,5 +19,7 @@ def normalize_prediction(sample: BenchmarkSample, raw_output: str) -> ParseResul
     if sample.answer_type == "mcq":
         return parse_mcq(raw_output, sample.choices)
     if sample.answer_type == "ab_ba":
+        if sample.benchmark == "vidhalluc" and sample.task == "tsh":
+            return parse_vidhalluc_tsh_official(raw_output)
         return parse_ab_ba(raw_output)
     return ParseResult(raw_output.strip(), "valid")

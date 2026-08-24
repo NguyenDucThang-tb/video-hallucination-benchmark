@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.data.sampler import frame_indices, sample_video
+from src.data.sampler import frame_indices, sample_video, vidhalluc_frame_indices
 
 
 def test_uniform_indices_are_deterministic():
@@ -10,6 +10,14 @@ def test_uniform_indices_are_deterministic():
 
 def test_short_video_repeats_indices():
     assert frame_indices(3, 8) == [0, 0, 1, 1, 1, 1, 2, 2]
+
+
+def test_vidhalluc_sampling_uses_one_frame_per_second_and_caps_at_32():
+    assert vidhalluc_frame_indices(100, 25.0, 32) == [0, 25, 50, 75]
+    indices = vidhalluc_frame_indices(1000, 25.0, 32)
+    assert len(indices) == 32
+    assert indices[0] == 0
+    assert indices[-1] == 999
 
 
 def test_sample_short_video_returns_exactly_eight(tmp_path):

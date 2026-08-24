@@ -42,7 +42,9 @@ class BaseMethod(InferenceMethod):
     name = "base"
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> MethodOutput:
-        return MethodOutput(self.model.generate(video_frames, prompt, generation_config))
+        text = self.model.generate(video_frames, prompt, generation_config)
+        diagnostics = self.model.consume_generation_diagnostics(1)[0]
+        return MethodOutput(text, diagnostics)
 
     def generate_batch(
         self,
@@ -51,4 +53,5 @@ class BaseMethod(InferenceMethod):
         generation_config: GenerationConfig,
     ) -> list[MethodOutput]:
         texts = self.model.generate_batch(batch_video_frames, prompts, generation_config)
-        return [MethodOutput(text) for text in texts]
+        diagnostics = self.model.consume_generation_diagnostics(len(texts))
+        return [MethodOutput(text, diag) for text, diag in zip(texts, diagnostics)]

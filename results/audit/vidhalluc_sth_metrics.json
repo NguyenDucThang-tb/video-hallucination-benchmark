@@ -1,0 +1,6 @@
+{
+  "official_status": "SIMCSE_NOT_AVAILABLE",
+  "description_accuracy": null,
+  "overall_score": null,
+  "reason": "No local raw VidHalluc records or SimCSE checkpoint are available in this workspace. Run scripts/audit_vidhalluc_tsh_sth.py on Gadi."
+}

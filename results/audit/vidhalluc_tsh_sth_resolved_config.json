@@ -1,0 +1,21 @@
+{
+  "status": "NOT EXECUTED IN LOCAL WORKSPACE",
+  "reason": "The resolved runtime artifact is written by scripts/run_benchmark.py on Gadi.",
+  "repository_head_before_patch": "352aa15efee5a3386fe62df150d56ed8f5cc9eb2",
+  "dataset_root": "/scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data",
+  "task_sampling": {
+    "sth": {"num_frames": 32, "strategy": "vidhalluc_official", "video_reader": "opencv_robust_full_decode"},
+    "tsh": {"num_frames": 32, "strategy": "vidhalluc_official", "video_reader": "opencv_robust_full_decode"}
+  },
+  "unresolved_fields": [
+    "model_revision",
+    "processor_revision",
+    "resolved_checkpoint_path",
+    "device",
+    "dtype",
+    "quantization",
+    "batch_size",
+    "limit",
+    "resume_records"
+  ]
+}

@@ -1,0 +1,1 @@
+sample_id,model,method,ground_truth,raw_model_output,local_prediction,official_prediction,diagnostic_prediction,parse_status,correct_status,parser_difference,runtime_error

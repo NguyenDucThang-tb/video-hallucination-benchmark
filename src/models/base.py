@@ -64,6 +64,9 @@ class ModelAdapter(ABC):
     def decode_token_ids(self, token_ids: list[int]) -> str:
         return "".join(self.token_id_to_text(token_id) for token_id in token_ids)
 
+    def consume_generation_diagnostics(self, expected_count: int) -> list[dict[str, Any]]:
+        return [{} for _ in range(expected_count)]
+
     @property
     def supports_step_logits(self) -> bool:
         return False

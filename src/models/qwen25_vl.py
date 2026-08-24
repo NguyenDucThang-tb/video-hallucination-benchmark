@@ -74,6 +74,7 @@ class Qwen25VLAdapter(ModelAdapter):
         self.device = next(self.model.parameters()).device
         self._dino_processor = None
         self._dino_model = None
+        self._generation_diagnostics = []
 
     def _configure_padding(self) -> None:
         tokenizer = getattr(self.processor, "tokenizer", None)
@@ -177,6 +178,18 @@ class Qwen25VLAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
+        self._generation_diagnostics = [{
+            "rendered_prompt": text,
+            "model_input_keys": sorted(inputs),
+            "model_input_shapes": {
+                key: list(value.shape) for key, value in inputs.items() if hasattr(value, "shape")
+            },
+            "vision_tensor_supplied": any(
+                inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+            ),
+            "video_grid_supplied": inputs.get("video_grid_thw") is not None,
+            "video_frame_count": int(len(video_frames)),
+        }]
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -227,6 +240,22 @@ class Qwen25VLAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
         prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
+        common_shapes = {
+            key: list(value.shape) for key, value in inputs.items() if hasattr(value, "shape")
+        }
+        self._generation_diagnostics = [
+            {
+                "rendered_prompt": text,
+                "model_input_keys": sorted(inputs),
+                "model_input_shapes": common_shapes,
+                "vision_tensor_supplied": any(
+                    inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+                ),
+                "video_grid_supplied": inputs.get("video_grid_thw") is not None,
+                "video_frame_count": int(len(frames)),
+            }
+            for text, frames in zip(texts, batch_video_frames)
+        ]
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -248,6 +277,11 @@ class Qwen25VLAdapter(ModelAdapter):
             answers.append(answer.strip())
         return answers
 
+    def consume_generation_diagnostics(self, expected_count: int) -> list[dict]:
+        values = self._generation_diagnostics
+        self._generation_diagnostics = []
+        return values if len(values) == expected_count else [{} for _ in range(expected_count)]
+
     def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
         messages = self._frames_to_messages(video_frames, prompt)
         text = self.processor.apply_chat_template(
@@ -262,10 +296,23 @@ class Qwen25VLAdapter(ModelAdapter):
             return_tensors="pt",
             padding=True,
         )
-        return {
+        prepared = {
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
+        self._last_input_audit = {
+            "rendered_prompt": text,
+            "model_input_keys": sorted(prepared),
+            "model_input_shapes": {
+                key: list(value.shape) for key, value in prepared.items() if hasattr(value, "shape")
+            },
+            "vision_tensor_supplied": any(
+                prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+            ),
+            "video_grid_supplied": prepared.get("video_grid_thw") is not None,
+            "video_frame_count": int(len(video_frames)),
+        }
+        return prepared
 
     def _clone_input_value(self, value):
         if hasattr(value, "clone"):
@@ -495,6 +542,7 @@ class Qwen25VLAdapter(ModelAdapter):
                 "cache_hit_steps": 0,
                 "vision_inputs_supplied_steps": 0,
                 "cuda_sync_seconds": 0.0,
+                **dict(getattr(self, "_last_input_audit", {})),
             },
         }
 

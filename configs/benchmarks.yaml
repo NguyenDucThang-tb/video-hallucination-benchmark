@@ -2,6 +2,9 @@ benchmarks:
   vidhalluc:
     tasks: [bqa, mcq, sth, tsh]
     data_root: /scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data
+    task_sampling:
+      sth: {num_frames: 32, strategy: vidhalluc_official, video_reader: opencv_robust_full_decode}
+      tsh: {num_frames: 32, strategy: vidhalluc_official, video_reader: opencv_robust_full_decode}
   videohallucer:
     tasks: [orh, tph, sdh, efh, enfh]
     data_root: /scratch/jp09/dd9648/datasets_video_hallu/videohallucer
