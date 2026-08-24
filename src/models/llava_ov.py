@@ -82,17 +82,21 @@ class LlavaOVAdapter(ModelAdapter):
         if hasattr(self.processor, "padding_side"):
             self.processor.padding_side = "left"
 
-    def _frames_to_conversation(self, video_frames: np.ndarray, prompt: str) -> tuple[list[dict], list]:
-        from PIL import Image
-
-        images = [Image.fromarray(np.asarray(frame, dtype=np.uint8)) for frame in video_frames]
-        content = [{"type": "image"} for _ in images]
-        content.append({"type": "text", "text": prompt})
-        conversation = [{"role": "user", "content": content}]
-        return conversation, images
+    def _frames_to_conversation(self, video_frames: np.ndarray, prompt: str) -> tuple[list[dict], np.ndarray]:
+        video = np.asarray(video_frames, dtype=np.uint8)
+        if video.ndim != 4 or video.shape[-1] != 3 or len(video) == 0:
+            raise ValueError("video_frames must have shape [frames, height, width, 3]")
+        conversation = [{
+            "role": "user",
+            "content": [
+                {"type": "video"},
+                {"type": "text", "text": prompt},
+            ],
+        }]
+        return conversation, video
 
     def _build_inputs(self, video_frames: np.ndarray, prompt: str) -> tuple[dict, int]:
-        conversation, images = self._frames_to_conversation(video_frames, prompt)
+        conversation, video = self._frames_to_conversation(video_frames, prompt)
         text = self.processor.apply_chat_template(
             conversation,
             tokenize=False,
@@ -100,7 +104,7 @@ class LlavaOVAdapter(ModelAdapter):
         )
         inputs = self.processor(
             text=[text],
-            images=images,
+            videos=[video],
             return_tensors="pt",
             padding=True,
         )
@@ -118,6 +122,7 @@ class LlavaOVAdapter(ModelAdapter):
             "vision_tensor_supplied": any(
                 inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
             ),
+            "video_modality_supplied": inputs.get("pixel_values_videos") is not None,
             "video_frame_count": int(len(video_frames)),
         }
         return inputs, prompt_length
@@ -287,26 +292,13 @@ class LlavaOVAdapter(ModelAdapter):
         diagnostics.update(dino_diag)
 
         inputs, prompt_length = self._build_inputs(video_frames, prompt)
-        batch_num_images = inputs.get("batch_num_images")
-        image_sizes = inputs.get("image_sizes")
-        if image_sizes is None:
-            raise RuntimeError("LLaVA-OV inputs are missing image_sizes for DINO-HEAL")
+        pixel_values_videos = inputs.get("pixel_values_videos")
+        if pixel_values_videos is None:
+            raise RuntimeError("LLaVA-OV inputs are missing pixel_values_videos for DINO-HEAL")
 
-        if batch_num_images is None:
-            counts = [1] * int(image_sizes.shape[0])
-        else:
-            counts = [int(x) for x in batch_num_images.detach().cpu().tolist()]
-
-        image_outputs = self.model.get_image_features(
-            pixel_values=inputs["pixel_values"],
-            image_sizes=image_sizes,
-            batch_num_images=batch_num_images,
-        )
-        image_features = self._extract_image_features(image_outputs)
-        feature_lens = []
-        for count in counts:
-            for _ in range(count):
-                feature_lens.append(None)
+        video_outputs = self.model.get_video_features(pixel_values=pixel_values_videos)
+        image_features = self._extract_image_features(video_outputs)
+        image_features = image_features.reshape(-1, image_features.shape[-1])
         # Infer token spans per frame from placeholder count match; fallback to equal chunking.
         total_tokens = int(image_features.shape[0])
         n_frames = len(video_frames)
@@ -380,11 +372,11 @@ class LlavaOVAdapter(ModelAdapter):
             return []
 
         batch_conversations = []
-        batch_images = []
+        batch_videos = []
         for video_frames, prompt in zip(batch_video_frames, prompts):
-            conversation, images = self._frames_to_conversation(video_frames, prompt)
+            conversation, video = self._frames_to_conversation(video_frames, prompt)
             batch_conversations.append(conversation)
-            batch_images.append(images)
+            batch_videos.append(video)
 
         texts = [
             self.processor.apply_chat_template(
@@ -396,7 +388,7 @@ class LlavaOVAdapter(ModelAdapter):
         ]
         inputs = self.processor(
             text=texts,
-            images=batch_images,
+            videos=batch_videos,
             return_tensors="pt",
             padding=True,
         )
@@ -416,6 +408,7 @@ class LlavaOVAdapter(ModelAdapter):
                 "vision_tensor_supplied": any(
                     inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
                 ),
+                "video_modality_supplied": inputs.get("pixel_values_videos") is not None,
                 "video_frame_count": int(len(frames)),
             }
             for text, frames in zip(texts, batch_video_frames)
@@ -599,14 +592,14 @@ class LlavaOVAdapter(ModelAdapter):
 
     def _visual_token_spans(self, state) -> list[tuple[int, int]]:
         input_ids = state["model_inputs"]["input_ids"][0]
-        token_id = getattr(self.model.config, "image_token_index", None)
+        token_id = getattr(self.model.config, "video_token_index", None)
         if token_id is None:
-            token_id = getattr(self.processor, "image_token_id", None)
+            token_id = getattr(self.processor, "video_token_id", None)
         if token_id is None:
-            raise RuntimeError("LLaVA-OV config does not expose image_token_index")
+            raise RuntimeError("LLaVA-OV config does not expose video_token_index")
         positions = (input_ids == int(token_id)).nonzero(as_tuple=False).flatten().tolist()
         if not positions:
-            raise RuntimeError("LLaVA-OV prompt contains no expanded image tokens")
+            raise RuntimeError("LLaVA-OV prompt contains no expanded video tokens")
         spans = []
         start = previous = positions[0]
         for position in positions[1:]:
@@ -622,7 +615,7 @@ class LlavaOVAdapter(ModelAdapter):
             remainder = total % state["frame_count"]
             if base <= 0:
                 raise RuntimeError(
-                    "Unable to map decoder attention to frames: image-token block "
+                    "Unable to map decoder attention to frames: video-token block "
                     f"has {total} tokens for {state['frame_count']} frames"
                 )
             split_spans = []

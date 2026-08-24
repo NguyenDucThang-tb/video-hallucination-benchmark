@@ -149,27 +149,30 @@ class Qwen25VLAdapter(ModelAdapter):
                 for config, original in zip(configs, originals):
                     setattr(config, "_attn_implementation", original or restore_value)
 
-    def _frames_to_messages(self, video_frames: np.ndarray, prompt: str) -> list[dict]:
-        from PIL import Image
-
-        content = []
-        for frame in video_frames:
-            content.append({"type": "image", "image": Image.fromarray(np.asarray(frame, dtype=np.uint8))})
-        content.append({"type": "text", "text": prompt})
-        return [{"role": "user", "content": content}]
+    def _frames_to_messages(self, video_frames: np.ndarray, prompt: str) -> tuple[list[dict], np.ndarray]:
+        video = np.asarray(video_frames, dtype=np.uint8)
+        if video.ndim != 4 or video.shape[-1] != 3 or len(video) == 0:
+            raise ValueError("video_frames must have shape [frames, height, width, 3]")
+        messages = [{
+            "role": "user",
+            "content": [
+                {"type": "video"},
+                {"type": "text", "text": prompt},
+            ],
+        }]
+        return messages, video
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
-        messages = self._frames_to_messages(video_frames, prompt)
+        messages, video = self._frames_to_messages(video_frames, prompt)
         text = self.processor.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=True,
         )
 
-        images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
         inputs = self.processor(
             text=[text],
-            images=images,
+            videos=[video],
             return_tensors="pt",
             padding=True,
         )
@@ -188,6 +191,7 @@ class Qwen25VLAdapter(ModelAdapter):
                 inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
             ),
             "video_grid_supplied": inputs.get("video_grid_thw") is not None,
+            "video_modality_supplied": inputs.get("pixel_values_videos") is not None,
             "video_frame_count": int(len(video_frames)),
         }]
 
@@ -216,7 +220,12 @@ class Qwen25VLAdapter(ModelAdapter):
         if not batch_video_frames:
             return []
 
-        batch_messages = [self._frames_to_messages(video_frames, prompt) for video_frames, prompt in zip(batch_video_frames, prompts)]
+        message_video_pairs = [
+            self._frames_to_messages(video_frames, prompt)
+            for video_frames, prompt in zip(batch_video_frames, prompts)
+        ]
+        batch_messages = [messages for messages, _ in message_video_pairs]
+        videos = [video for _, video in message_video_pairs]
         texts = [
             self.processor.apply_chat_template(
                 messages,
@@ -225,13 +234,9 @@ class Qwen25VLAdapter(ModelAdapter):
             )
             for messages in batch_messages
         ]
-        images = [
-            [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
-            for messages in batch_messages
-        ]
         inputs = self.processor(
             text=texts,
-            images=images,
+            videos=videos,
             return_tensors="pt",
             padding=True,
         )
@@ -252,6 +257,7 @@ class Qwen25VLAdapter(ModelAdapter):
                     inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
                 ),
                 "video_grid_supplied": inputs.get("video_grid_thw") is not None,
+                "video_modality_supplied": inputs.get("pixel_values_videos") is not None,
                 "video_frame_count": int(len(frames)),
             }
             for text, frames in zip(texts, batch_video_frames)
@@ -283,16 +289,15 @@ class Qwen25VLAdapter(ModelAdapter):
         return values if len(values) == expected_count else [{} for _ in range(expected_count)]
 
     def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
-        messages = self._frames_to_messages(video_frames, prompt)
+        messages, video = self._frames_to_messages(video_frames, prompt)
         text = self.processor.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=True,
         )
-        images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
         inputs = self.processor(
             text=[text],
-            images=images,
+            videos=[video],
             return_tensors="pt",
             padding=True,
         )
@@ -310,6 +315,7 @@ class Qwen25VLAdapter(ModelAdapter):
                 prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
             ),
             "video_grid_supplied": prepared.get("video_grid_thw") is not None,
+            "video_modality_supplied": prepared.get("pixel_values_videos") is not None,
             "video_frame_count": int(len(video_frames)),
         }
         return prepared
@@ -710,10 +716,7 @@ class Qwen25VLAdapter(ModelAdapter):
             return None
         try:
             attn_layers = []
-            pixel_values = inputs.get("pixel_values")
-            if pixel_values is None:
-                return None
-            n_frames = int(pixel_values.shape[0]) if hasattr(pixel_values, "shape") else 1
+            n_frames = int(getattr(self, "_last_input_audit", {}).get("video_frame_count", 1))
             for layer in attentions:
                 layer = layer.detach().float().cpu().numpy()
                 if layer.ndim != 4:
@@ -751,9 +754,9 @@ class Qwen25VLAdapter(ModelAdapter):
         diagnostics.update(dino_diag)
 
         inputs = self._prepare_inputs(video_frames, prompt)
-        pixel_values = inputs.get("pixel_values")
+        pixel_values = inputs.get("pixel_values_videos")
         if pixel_values is None:
-            raise RuntimeError("Qwen inputs are missing pixel_values for DINO-HEAL")
+            raise RuntimeError("Qwen inputs are missing pixel_values_videos for DINO-HEAL")
 
         features_np = np.zeros((len(video_frames), 1, 1), dtype=np.float32)
         saliency_np = np.asarray(frame_saliency, dtype=np.float32)[:, None]
