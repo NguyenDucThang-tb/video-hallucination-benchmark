@@ -11,11 +11,11 @@ implemented method exists. SEASON is listed as SEASON, not as our method.
 
 ## Deterministic input
 
-Every video is decoded once through `src.data.sampler.sample_video`. Eight
-indices are produced by rounding an inclusive linear spacing from frame 0 to
-frame N-1. When N < 8, nearest indices repeat. The manifest records path,
-indices, actual frame count, FPS, duration, and policy. Methods receive the
-already sampled array; they cannot resample the source video.
+Every video is decoded once through `src.data.sampler.sample_video`. The default
+controlled method protocol uses eight rounded-linspace frames. VidHalluc TSH/STH
+instead use the public approximately one-frame-per-second policy capped at 32.
+The manifest records path, indices, actual frame count, FPS, duration, and policy.
+Methods receive the already sampled array; they cannot resample the source video.
 
 TCD takes a chronological subset of positions from these eight frames. It
 does not open the video again and does not shuffle or reverse frames.

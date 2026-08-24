@@ -22,6 +22,10 @@ def test_tsh_reports_official_and_diagnostic_denominators_separately():
     assert result["valid_only_accuracy"] == 1 / 2
     assert result["parse_coverage"] == 2 / 3
     assert result["unparseable_count"] == 1
+    assert result["parsed_AB"] == 1
+    assert result["parsed_BA"] == 1
+    assert result["empty_output_count"] == 0
+    assert result["incorrect"] == 2
 
 
 def test_none_is_not_mutated_to_false_at_record_level():

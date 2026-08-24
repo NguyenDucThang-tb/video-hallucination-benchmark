@@ -2,13 +2,13 @@
 
 Audit date: 2026-08-25
 
-Local repository commit before this patch: `352aa15efee5a3386fe62df150d56ed8f5cc9eb2`.
+Local repository baseline for the expanded audit: `bfde71a927e954e6b29be0aa2686bd8ab3271cd8`.
 The working tree was clean when the audit started.
 
 Upstream reference: <https://github.com/CyL97/VidHalluc>. The vendored files under
-`external/VidHalluc` match the current public TSH/STH evaluator and inference files,
-but the upstream Git commit is not pinned in this repository. Dataset revision is
-therefore not verified.
+`external/VidHalluc` match the locked TSH/STH evaluator and inference files at
+`e753864f5c2500c38523f97992355e2352bf8732`. The code revision is pinned in
+`external/COMMITS.lock`; the separately downloaded dataset revision remains unverified.
 
 ## Findings
 
@@ -26,10 +26,10 @@ therefore not verified.
   remains `None` at record level but contributes no correct match in the official
   numerator. Metrics now report `official_accuracy`, `all_sample_accuracy`,
   `valid_only_accuracy`, `parse_coverage`, and the unparseable count separately.
-- The observed `71/600 = 11.83%` is the old local all-sample result. It is not verified
-  as official until the 600 raw outputs are reparsed with the official parser. If the
-  observed counts remain 71 correct and 109 parseable after official reparse, then
-  coverage is `109/600 = 18.17%` and valid-only accuracy is `71/109 = 65.14%`.
+- The Gadi reparse of all 600 existing Base outputs with the compatibility parser found
+  71 correct and 529 incorrect, yielding official accuracy `71/600 = 11.83%` and parser
+  coverage `600/600`. The old local parser rejected 491 of those outputs; this was
+  parser disagreement, not 491 runtime failures.
 - AB/BA ground-truth semantics are preserved; no label inversion was found in the
   loader. Tests cover all four correct/incorrect combinations through direct equality.
 

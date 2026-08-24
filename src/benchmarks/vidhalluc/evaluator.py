@@ -59,6 +59,10 @@ def _sth_metric(records: list[PredictionRecord]) -> dict:
     mcc = _binary_mcc(ground_truth, predictions) if items else None
     classification = ((mcc + 1.0) / 2.0) ** 2 if mcc is not None else None
     binary_correct = sum(value is not None and (value == ("yes" if gt else "no")) for value, gt in zip(parsed, ground_truth))
+    description_parseable = sum(
+        value == "yes" and bool(locations)
+        for value, (_, locations) in zip(parsed, parsed_with_locations)
+    )
     return {
         "accuracy": None,
         "official_accuracy": None,
@@ -67,11 +71,15 @@ def _sth_metric(records: list[PredictionRecord]) -> dict:
         "reason": "Official STH requires SimCSE location-description scoring; it was not executed.",
         "n": len(items),
         "n_parser_error": sum(value is None for value in parsed),
+        "classification_unknown_count": sum(value is None for value in parsed),
+        "description_parse_coverage": description_parseable / len(items) if items else None,
         "binary_accuracy_diagnostic": binary_correct / len(items) if items else None,
         "mcc": mcc,
         "classification_score": classification,
         "description_accuracy": None,
         "overall_score": None,
+        "simcse_model": "princeton-nlp/sup-simcse-roberta-large",
+        "similarity_threshold_low": 0.5,
         "invalid_prediction_policy_for_mcc": "upstream-compatible: values other than yes are treated as no",
         "formula": "0.6 * classification_score + 0.4 * description_accuracy",
     }
@@ -97,6 +105,11 @@ def _tsh_metric(records: list[PredictionRecord]) -> dict:
         )
         for item in items
     )
+    parsed_counts = {
+        answer: sum(parse.value == answer for parse in parses)
+        for answer in ("AB", "BA", "A", "B")
+    }
+    empty_outputs = sum(not item.raw_output.strip() for item in items)
     return {
         "accuracy": correct_count / total if total else None,
         "official_accuracy": correct_count / total if total else None,
@@ -105,6 +118,13 @@ def _tsh_metric(records: list[PredictionRecord]) -> dict:
         "parse_coverage": valid_count / total if total else None,
         "n": total,
         "correct": correct_count,
+        "incorrect": total - correct_count,
+        "parsed_AB": parsed_counts["AB"],
+        "parsed_BA": parsed_counts["BA"],
+        "parsed_A": parsed_counts["A"],
+        "parsed_B": parsed_counts["B"],
+        "empty_output_count": empty_outputs,
+        "missing_prediction_count": runtime_failures,
         "valid_count": valid_count,
         "valid_incorrect": valid_count - correct_count,
         "unparseable_count": total - valid_count,
