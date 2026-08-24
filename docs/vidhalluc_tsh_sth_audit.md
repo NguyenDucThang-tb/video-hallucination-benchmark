@@ -61,16 +61,12 @@ Upstream reference: <https://github.com/CyL97/VidHalluc>. The vendored files und
 
 - Public VidHalluc first samples approximately one frame per second using rounded FPS,
   then uniformly caps the sequence at 32 frames. It does not pad short videos to 32.
-- The previous local protocol used exactly 8 uniform frames over the whole video.
-  This is a `FRAME PROTOCOL MISMATCH` for TSH/STH.
-- TSH/STH now use the public strategy through task-specific configuration. The actual
-  indices are preserved in every prediction record and manifest.
-- The local decoder remains a robust full OpenCV decode, while upstream combines
-  Decord metadata with an OpenCV frame count. The selection rule is matched, but reader
-  equivalence is only partially verified and must be checked from Gadi manifests.
-- Local SEASON currently requires exactly eight frames. It is therefore incompatible
-  with the official 32-frame VidHalluc protocol until SEASON is adapted and validated;
-  the runner will fail explicitly rather than silently switch protocols.
+- The selected local protocol uses exactly 8 uniform frames over the whole video for
+  Base, TCD, DINO-HEAL and SEASON comparisons. This matches the controlled SEASON
+  experiment setting but is a `FRAME PROTOCOL MISMATCH` with public VidHalluc inference.
+- The actual indices are preserved in every prediction record and manifest. Results
+  must be labelled `SEASON Table 1 controlled 8-frame setting`, not public VidHalluc
+  32-frame reproduction.
 
 ### Model input and generation
 

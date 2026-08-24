@@ -1,5 +1,8 @@
+from pathlib import Path
+
 from src.benchmarks.vidhalluc.loader import build_sth_prompt, build_tsh_prompt
 from src.data.sampler import frame_indices, vidhalluc_frame_indices
+from src.utils.config import load_yaml
 
 
 def test_public_tsh_prompt_is_preserved_verbatim():
@@ -28,3 +31,11 @@ def test_vidhalluc_frame_order_is_chronological_and_capped():
 def test_season_eight_frame_protocol_is_distinct_from_public_vidhalluc():
     assert len(frame_indices(100, 8)) == 8
     assert len(vidhalluc_frame_indices(100, 25.0, 32)) == 4
+
+
+def test_vidhalluc_tsh_sth_use_controlled_eight_frame_protocol():
+    project = Path(__file__).resolve().parents[1]
+    benchmark = load_yaml(project / "configs/benchmarks.yaml")["benchmarks"]["vidhalluc"]
+    for task in ("tsh", "sth"):
+        assert benchmark["task_sampling"][task]["num_frames"] == 8
+        assert benchmark["task_sampling"][task]["strategy"] == "uniform"

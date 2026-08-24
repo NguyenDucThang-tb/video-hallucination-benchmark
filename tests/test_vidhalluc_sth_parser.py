@@ -1,6 +1,8 @@
 import pytest
 
 from scripts.compare_vidhalluc_evaluators import upstream_sth_parse
+from src.benchmarks.base import BenchmarkSample
+from src.evaluation.normalize import normalize_prediction
 from src.evaluation.parsers import parse_vidhalluc_sth
 
 
@@ -24,3 +26,18 @@ def test_upstream_sth_non_yes_behavior_is_explicit():
     local, _ = parse_vidhalluc_sth("I am not sure")
     assert official == "I am not sure"
     assert local.value is None
+
+
+def test_sth_record_normalization_uses_scene_change_field(tmp_path):
+    sample = BenchmarkSample(
+        sample_id="sth:one",
+        benchmark="vidhalluc",
+        task="sth",
+        video_path=tmp_path / "one.mp4",
+        prompt="question",
+        ground_truth="no",
+        answer_type="text",
+    )
+    parsed = normalize_prediction(sample, "Scene change: No, Locations: None.")
+    assert parsed.value == "no"
+    assert parsed.status == "valid"

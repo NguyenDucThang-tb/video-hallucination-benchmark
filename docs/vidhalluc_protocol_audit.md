@@ -15,8 +15,8 @@ implementation was not copied directly. Selected upstream files are retained und
 | Video ID mapping | Released concatenated videos | Not redefined | Exact `{video}.mp4` search | Exact filename/stem; 44 unresolved/ambiguous mappings remain | PARTIAL | Loader and verifier |
 | TSH prompt | Action-order task | Uses benchmark protocol | Appends sorting instruction | Same string and action order | MATCH | Protocol test |
 | STH prompt | Scene-change plus locations | Uses benchmark protocol | Fixed instruction | Same string | MATCH | Protocol test |
-| Frame count | Public inference caps at 32 after about 1 FPS | Controlled 8-frame comparisons | `for_get_frames_num=32` | TSH/STH use 32-frame policy; SEASON remains a separate 8-frame protocol | PARTIAL | Config and sampler tests |
-| Frame sampling | Chronological, about 1 FPS, uniform cap | Common frames per comparison | Decord/OpenCV hybrid | Robust OpenCV decode, same selection rule, indices recorded | PARTIAL | Sampler and manifests |
+| Frame count | Public inference caps at 32 after about 1 FPS | Controlled 8-frame comparisons | `for_get_frames_num=32` | TSH/STH use exactly 8 frames for the SEASON comparison protocol | MISMATCH | Config and protocol test |
+| Frame sampling | Chronological, about 1 FPS, uniform cap | Common frames per comparison | Decord/OpenCV hybrid | Eight chronological rounded-linspace frames, indices recorded | MISMATCH | Sampler and manifests |
 | Chat template | Backbone-specific LLaVA stack | Same settings per group | `modalities="video"` | Hugging Face LLaVA-OV/Qwen templates | MISMATCH | Adapter diagnostics |
 | Temperature | 0 | 0 | Greedy, one beam, `top_p=0.1` | Greedy, one beam, max 128 tokens | PARTIAL | Resolved config |
 | Sampling | Deterministic | Deterministic | `do_sample=False` | `do_sample=False` | MATCH | `GenerationConfig` |

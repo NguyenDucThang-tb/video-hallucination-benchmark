@@ -11,9 +11,10 @@ implemented method exists. SEASON is listed as SEASON, not as our method.
 
 ## Deterministic input
 
-Every video is decoded once through `src.data.sampler.sample_video`. The default
-controlled method protocol uses eight rounded-linspace frames. VidHalluc TSH/STH
-instead use the public approximately one-frame-per-second policy capped at 32.
+Every video is decoded once through `src.data.sampler.sample_video`. The controlled
+SEASON Table 1 protocol uses eight rounded-linspace frames, including VidHalluc
+TSH/STH. This intentionally differs from the public VidHalluc inference script,
+which samples approximately one frame per second and caps the sequence at 32.
 The manifest records path, indices, actual frame count, FPS, duration, and policy.
 Methods receive the already sampled array; they cannot resample the source video.
 
