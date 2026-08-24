@@ -88,7 +88,15 @@ def _tsh_metric(records: list[PredictionRecord]) -> dict:
     total = len(items)
     valid_count = sum(valid)
     correct_count = sum(correct)
-    runtime_failures = sum(bool(item.error) for item in items)
+    runtime_failures = sum(
+        bool(item.metadata.get("failure_stage"))
+        or (
+            item.parser_status == "missing"
+            and bool(item.error)
+            and not item.raw_output.strip()
+        )
+        for item in items
+    )
     return {
         "accuracy": correct_count / total if total else None,
         "official_accuracy": correct_count / total if total else None,

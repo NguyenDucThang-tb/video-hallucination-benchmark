@@ -41,6 +41,22 @@ def test_tsh_ab_ba_correctness_truth_table():
         assert metric["official_accuracy"] == expected
 
 
+def test_tsh_parser_error_is_not_reported_as_runtime_failure():
+    item = record("1", "tsh", "AB.", "AB", None, error="no standalone AB/BA answer")
+    result = evaluate_classification([item])["tsh"]
+    assert result["runtime_failure_count"] == 0
+
+
+def test_tsh_generation_failure_is_reported_as_runtime_failure():
+    item = record(
+        "1", "tsh", "", "AB", None, error="generation: RuntimeError('failed')",
+        failure_stage="generation",
+    )
+    item.parser_status = "missing"
+    result = evaluate_classification([item])["tsh"]
+    assert result["runtime_failure_count"] == 1
+
+
 def test_sth_without_simcse_is_na_and_avg_stays_na():
     result = evaluate_classification([
         record("1", "sth", "Scene change: Yes, Locations: from room to road.", "yes", True,

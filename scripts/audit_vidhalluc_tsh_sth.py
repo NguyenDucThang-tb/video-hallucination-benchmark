@@ -135,6 +135,12 @@ def tsh_reparse_rows(records) -> list[dict]:
         official = parse_vidhalluc_tsh_official(record.raw_output)
         diagnostic = parse_ab_ba(record.raw_output)
         correct = None if official.value is None else official.value == str(record.ground_truth).upper()
+        failure_stage = record.metadata.get("failure_stage")
+        is_runtime_failure = bool(failure_stage) or (
+            record.parser_status == "missing"
+            and bool(record.error)
+            and not record.raw_output.strip()
+        )
         rows.append({
             "sample_id": record.sample_id,
             "model": record.model,
@@ -145,9 +151,12 @@ def tsh_reparse_rows(records) -> list[dict]:
             "official_prediction": official.value,
             "diagnostic_prediction": diagnostic.value,
             "parse_status": official.status,
+            "original_parser_status": record.parser_status,
             "correct_status": correct,
             "parser_difference": record.normalized_output != official.value,
-            "runtime_error": record.error,
+            "original_parser_error": record.error,
+            "failure_stage": failure_stage,
+            "runtime_error": record.error if is_runtime_failure else None,
         })
     return rows
 
@@ -287,7 +296,8 @@ def main():
     write_csv(output_dir / "vidhalluc_tsh_reparse.csv", reparse, [
         "sample_id", "model", "method", "ground_truth", "raw_model_output",
         "local_prediction", "official_prediction", "diagnostic_prediction",
-        "parse_status", "correct_status", "parser_difference", "runtime_error",
+        "parse_status", "original_parser_status", "correct_status", "parser_difference",
+        "original_parser_error", "failure_stage", "runtime_error",
     ])
     with (output_dir / "tsh_rendered_prompts.jsonl").open("w", encoding="utf-8") as handle:
         for row in rendered_prompt_rows(records):
