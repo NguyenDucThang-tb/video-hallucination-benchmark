@@ -102,11 +102,20 @@ def build_bqa_prompt(question: str) -> str:
     )
 
 
-def build_tsh_prompt(question: str) -> str:
-    return question + (
+def build_tsh_prompt(question: str, output_protocol: str = "official") -> str:
+    prompt = question + (
         "Sort these two actions in the order they occur in the video, and return which action "
         "happen before which one. If you only detect one action, return that action."
     )
+    if output_protocol == "official":
+        return prompt
+    if output_protocol == "parser_compatible":
+        return prompt + (
+            " Respond with exactly one of: 'AB' if Action A happens before Action B; "
+            "'BA' if Action B happens before Action A; 'A' if only Action A is visible; "
+            "or 'B' if only Action B is visible. Do not include any other text."
+        )
+    raise ValueError(f"Unsupported VidHalluc TSH prompt protocol: {output_protocol!r}")
 
 
 def build_sth_prompt() -> str:
@@ -119,10 +128,16 @@ def build_sth_prompt() -> str:
 
 
 class VidHallucLoader(BenchmarkLoader):
-    def __init__(self, data_root: str | Path, tasks: list[str] | None = None):
+    def __init__(
+        self,
+        data_root: str | Path,
+        tasks: list[str] | None = None,
+        tsh_prompt_protocol: str = "official",
+    ):
         self.video_root = Path(data_root)
         self.annotation_root = self._resolve_annotation_root(self.video_root)
         self.tasks = [task.lower() for task in (tasks or ["bqa", "mcq", "sth", "tsh"])]
+        self.tsh_prompt_protocol = tsh_prompt_protocol
         self.video_index = build_video_index(self.video_root)
 
     def _resolve_annotation_root(self, video_root: Path) -> Path:
@@ -194,7 +209,10 @@ class VidHallucLoader(BenchmarkLoader):
                 benchmark="vidhalluc",
                 task="tsh",
                 video_path=video_path,
-                prompt=build_tsh_prompt(str(item["Question"])),
+                prompt=build_tsh_prompt(
+                    str(item["Question"]),
+                    output_protocol=self.tsh_prompt_protocol,
+                ),
                 ground_truth=gt,
                 answer_type="ab_ba",
                 metadata={
@@ -202,6 +220,7 @@ class VidHallucLoader(BenchmarkLoader):
                     "annotation_id": str(sample_id),
                     "video_name": item.get("video"),
                     "video_resolved": video_resolved,
+                    "tsh_prompt_protocol": self.tsh_prompt_protocol,
                 },
             )
 

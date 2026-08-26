@@ -192,10 +192,15 @@ def instantiate_method(name: str, model):
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 
-def instantiate_loader(name: str):
+def instantiate_loader(name: str, experiment_config: dict | None = None):
     config = load_benchmark_configs()[name]
+    experiment_config = experiment_config or {}
     if name == "vidhalluc":
-        return VidHallucLoader(config["data_root"], config.get("tasks"))
+        return VidHallucLoader(
+            config["data_root"],
+            config.get("tasks"),
+            tsh_prompt_protocol=experiment_config.get("tsh_prompt_protocol", "official"),
+        )
     if name == "videohallucer":
         return VideoHallucerLoader(config["data_root"], config.get("tasks"))
     if name == "eventhallusion":
@@ -669,7 +674,10 @@ def main():
             benchmark = benchmark_entry["name"]
             tasks_override = benchmark_entry.get("tasks")
         benchmark_task_overrides[benchmark] = tasks_override
-        loader = instantiate_loader(benchmark)
+        loader = instantiate_loader(
+            benchmark,
+            benchmark_entry if isinstance(benchmark_entry, dict) else None,
+        )
         grouped_samples[benchmark] = group_samples_by_task(loader)
 
     for benchmark_entry in config["benchmarks"]:

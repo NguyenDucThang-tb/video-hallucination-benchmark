@@ -13,6 +13,15 @@ def test_public_tsh_prompt_is_preserved_verbatim():
     )
 
 
+def test_parser_compatible_tsh_prompt_requires_an_exact_official_token():
+    question = "Action A. open\nAction B. close\n"
+    prompt = build_tsh_prompt(question, output_protocol="parser_compatible")
+    assert prompt.startswith(build_tsh_prompt(question))
+    assert "Respond with exactly one of" in prompt
+    assert "'AB' if Action A happens before Action B" in prompt
+    assert "Do not include any other text." in prompt
+
+
 def test_public_sth_prompt_is_preserved_verbatim():
     assert build_sth_prompt() == (
         "Watch the given video and determine if a scene change occurs. "
