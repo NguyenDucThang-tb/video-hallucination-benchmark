@@ -350,6 +350,7 @@ class LlavaVideoAdapter(ModelAdapter):
         handle = vision_model.register_forward_hook(projector_hook)
         try:
             inputs = self._build_inputs(video_frames, prompt)
+            diagnostics.update(self._last_input_audit)
             self._generation_diagnostics = [dict(self._last_input_audit)]
             with self.torch.inference_mode():
                 output_ids = self.model.generate(
