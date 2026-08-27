@@ -1,5 +1,8 @@
+from contextlib import nullcontext
+
 import numpy as np
 
+from src.models.base import GenerationConfig
 from src.models.llava_video import LlavaVideoAdapter
 
 
@@ -50,3 +53,41 @@ def test_llava_video_rejects_invalid_frame_shape_before_model_call():
         assert "[frames, height, width, 3]" in str(exc)
     else:
         raise AssertionError("invalid frame shape was accepted")
+
+
+def test_llava_video_generate_uses_upstream_inputs_keyword():
+    class _Model:
+        def __init__(self):
+            self.kwargs = None
+
+        def generate(self, **kwargs):
+            self.kwargs = kwargs
+            return np.array([[7, 8]])
+
+    class _Tokenizer:
+        def batch_decode(self, output_ids, skip_special_tokens):
+            assert output_ids.tolist() == [[7, 8]]
+            assert skip_special_tokens is True
+            return ["answer"]
+
+    adapter = object.__new__(LlavaVideoAdapter)
+    adapter.model = _Model()
+    adapter.tokenizer = _Tokenizer()
+    adapter.torch = type("_Torch", (), {"inference_mode": staticmethod(nullcontext)})
+    adapter._last_input_audit = {}
+    adapter._build_inputs = lambda frames, prompt: {
+        "inputs": np.array([[1, 2, 3]]),
+        "attention_mask": np.array([[1, 1, 1]]),
+        "images": [np.zeros((8, 3, 4, 4))],
+        "modalities": ["video"],
+    }
+
+    answer = adapter.generate(
+        np.zeros((8, 4, 4, 3), dtype=np.uint8),
+        "question",
+        GenerationConfig(),
+    )
+
+    assert answer == "answer"
+    assert "inputs" in adapter.model.kwargs
+    assert "input_ids" not in adapter.model.kwargs

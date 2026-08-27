@@ -88,7 +88,7 @@ class LlavaVideoAdapter(ModelAdapter):
         conversation.append_message(conversation.roles[1], None)
         return conversation.get_prompt()
 
-    def _build_inputs(self, video_frames: np.ndarray, prompt: str) -> tuple[dict, int]:
+    def _build_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
         video = np.asarray(video_frames, dtype=np.uint8)
         if video.ndim != 4 or video.shape[-1] != 3 or len(video) == 0:
             raise ValueError("video_frames must have shape [frames, height, width, 3]")
@@ -112,7 +112,7 @@ class LlavaVideoAdapter(ModelAdapter):
                 "LLAVA_VIDEO_ATTN_IMPLEMENTATION", "sdpa"
             ),
             "rendered_prompt": rendered_prompt,
-            "model_input_keys": ["input_ids", "attention_mask", "images", "modalities"],
+            "model_input_keys": ["inputs", "attention_mask", "images", "modalities"],
             "model_input_shapes": {"input_ids": list(input_ids.shape), "video": list(processed.shape)},
             "vision_tensor_supplied": True,
             "video_modality_supplied": True,
@@ -120,14 +120,16 @@ class LlavaVideoAdapter(ModelAdapter):
             "video_frame_count": int(len(video)),
         }
         return {
-            "input_ids": input_ids,
+            # LlavaQwenForCausalLM.generate names its token argument `inputs`,
+            # unlike the standard Transformers `input_ids` keyword.
+            "inputs": input_ids,
             "attention_mask": attention_mask,
             "images": [processed],
             "modalities": ["video"],
-        }, int(input_ids.shape[1])
+        }
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
-        inputs, prompt_length = self._build_inputs(video_frames, prompt)
+        inputs = self._build_inputs(video_frames, prompt)
         self._generation_diagnostics = [dict(self._last_input_audit)]
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -138,8 +140,7 @@ class LlavaVideoAdapter(ModelAdapter):
                 num_beams=1,
                 use_cache=True,
             )
-        generated_ids = output_ids[:, prompt_length:]
-        answer = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+        answer = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0]
         return answer.strip()
 
     def consume_generation_diagnostics(self, expected_count: int) -> list[dict]:
