@@ -49,6 +49,11 @@ class LlavaVideoAdapter(ModelAdapter):
         if "llava" not in str(model_name).lower() or "qwen" not in str(model_name).lower():
             model_name = "llava_qwen"
         self.model_name = model_name
+        # LLaVA-NeXT's builder defaults to FlashAttention2, which is not
+        # available in many managed CUDA environments. SDPA is the portable
+        # PyTorch fallback; override with LLAVA_VIDEO_ATTN_IMPLEMENTATION if
+        # a site-provided flash-attn build is available.
+        attn_implementation = os.environ.get("LLAVA_VIDEO_ATTN_IMPLEMENTATION", "sdpa")
         self.tokenizer, self.model, self.image_processor, self.max_length = load_pretrained_model(
             self.model_path,
             None,
@@ -57,6 +62,7 @@ class LlavaVideoAdapter(ModelAdapter):
             # BFloat16 is the documented LLaVA-Video inference dtype.
             torch_dtype="bfloat16",
             device_map="auto",
+            attn_implementation=attn_implementation,
         )
         self.model.eval()
         self.device = next(self.model.parameters()).device
@@ -102,6 +108,9 @@ class LlavaVideoAdapter(ModelAdapter):
             "llava_video_resolved_model_path": self.model_path,
             "llava_video_loader_stack": self.loader_stack,
             "llava_video_model_name": self.model_name,
+            "llava_video_attention_implementation": os.environ.get(
+                "LLAVA_VIDEO_ATTN_IMPLEMENTATION", "sdpa"
+            ),
             "rendered_prompt": rendered_prompt,
             "model_input_keys": ["input_ids", "attention_mask", "images", "modalities"],
             "model_input_shapes": {"input_ids": list(input_ids.shape), "video": list(processed.shape)},
