@@ -26,7 +26,7 @@ from src.methods.base import BaseMethod
 from src.methods.dino_heal.dino_heal_method import DINOHealMethod
 from src.methods.season.season_method import SeasonMethod
 from src.methods.tcd import TCDMethod
-from src.models import GenerationConfig, LlavaOVAdapter, Qwen25VLAdapter
+from src.models import GenerationConfig, LlavaOVAdapter, LlavaVideoAdapter, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
 from src.utils.config import load_yaml
 
@@ -177,6 +177,13 @@ def instantiate_model(name: str):
                 "please check configs/models.yaml before running qwen25_vl jobs."
             )
         return Qwen25VLAdapter(config["checkpoint"], config.get("local_path"))
+    if config["adapter"] == "llava_video":
+        checkpoint = str(config["checkpoint"])
+        if "llava-video" not in checkpoint.lower() or "qwen2" not in checkpoint.lower():
+            raise RuntimeError(
+                f"Model config for {name} is not the expected LLaVA-Video Qwen2 checkpoint ({checkpoint})."
+            )
+        return LlavaVideoAdapter(config["checkpoint"], config.get("local_path"))
     raise RuntimeError(f"Model adapter not implemented yet for {name}")
 
 
