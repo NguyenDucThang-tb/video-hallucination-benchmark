@@ -97,5 +97,11 @@ def test_llava_video_exposes_tcd_step_logits_contract():
     adapter = object.__new__(LlavaVideoAdapter)
 
     assert adapter.supports_step_logits is True
-    assert adapter.supports_frame_attention is False
-    assert adapter.supports_vision_layer_hooks is False
+
+
+def test_llava_video_exposes_season_contract():
+    adapter = object.__new__(LlavaVideoAdapter)
+
+    assert adapter.supports_step_logits is True
+    assert adapter.supports_frame_attention is True
+    assert adapter.supports_vision_layer_hooks is True

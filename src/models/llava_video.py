@@ -2,12 +2,20 @@ from __future__ import annotations
 
 import os
 import time
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 
 import numpy as np
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
+from src.methods.season.attention_diagnosis import frame_attention
+from src.methods.season.vision_homogenization import (
+    blend_temporal_hidden,
+    frame_mean_context,
+    replace_hidden_states,
+    unwrap_hidden_states,
+)
 
 
 class LlavaVideoAdapter(ModelAdapter):
@@ -376,4 +384,201 @@ class LlavaVideoAdapter(ModelAdapter):
 
     @property
     def supports_step_logits(self) -> bool:
+        return True
+
+    def enable_season_attention(self, attention_layers: tuple[int, ...]) -> None:
+        self._season_attention_layers = tuple(attention_layers)
+
+    def _attention_configs(self):
+        configs = []
+        for value in (
+            getattr(self.model, "config", None),
+            getattr(getattr(self.model, "model", None), "config", None),
+        ):
+            if value is not None and id(value) not in {id(item) for item in configs}:
+                configs.append(value)
+        return configs
+
+    @contextmanager
+    def _temporary_attention_implementation(self, implementation: str):
+        configs = self._attention_configs()
+        originals = [getattr(config, "_attn_implementation", None) for config in configs]
+        setter = getattr(self.model, "set_attn_implementation", None)
+        restore = next((value for value in originals if value), "sdpa")
+        try:
+            if callable(setter):
+                setter(implementation)
+            for config in configs:
+                setattr(config, "_attn_implementation", implementation)
+            yield
+        finally:
+            if callable(setter):
+                setter(restore)
+            for config, original in zip(configs, originals):
+                setattr(config, "_attn_implementation", original or restore)
+
+    def _vision_layers(self):
+        roots = []
+        getter = getattr(self.model, "get_vision_tower", None)
+        if callable(getter):
+            roots.append(getter())
+        roots.extend((
+            getattr(self.model, "vision_tower", None),
+            getattr(getattr(self.model, "model", None), "vision_tower", None),
+        ))
+        for root in roots:
+            if root is None:
+                continue
+            for path in (("vision_tower", "vision_model", "encoder", "layers"),
+                         ("vision_model", "encoder", "layers"),
+                         ("encoder", "layers")):
+                value = root
+                for name in path:
+                    value = getattr(value, name, None)
+                    if value is None:
+                        break
+                if value is not None and hasattr(value, "__len__"):
+                    return value
+        raise RuntimeError("LLaVA-Video vision encoder layers could not be located")
+
+    @contextmanager
+    def _season_vision_hooks(self, state):
+        branch = state["branch"]
+        if branch not in {"original", "temporal_homogenized"}:
+            yield
+            return
+        handles = []
+        layers = self._vision_layers()
+        for index, layer in enumerate(layers):
+            if branch == "original":
+                def capture(module, module_inputs, module_output, layer_index=index):
+                    hidden = unwrap_hidden_states(module_output)
+                    state["vision_layer_contexts"][layer_index] = frame_mean_context(
+                        hidden, state["frame_count"]
+                    ).detach().to("cpu")
+                    state["diagnostics"]["vision_hook_calls"] += 1
+                    return module_output
+                handles.append(layer.register_forward_hook(capture))
+            else:
+                def homogenize(module, module_inputs, module_output, layer_index=index):
+                    reference = state.get("reference_state")
+                    context = reference["vision_layer_contexts"].get(layer_index)
+                    if context is None:
+                        raise RuntimeError(f"Missing original vision context for layer {layer_index}")
+                    hidden = unwrap_hidden_states(module_output)
+                    blended = blend_temporal_hidden(
+                        hidden, context, state["homogenization_beta"]
+                    )
+                    state["diagnostics"]["vision_hook_calls"] += 1
+                    return replace_hidden_states(module_output, blended)
+                handles.append(layer.register_forward_hook(homogenize))
+        try:
+            yield
+        finally:
+            for handle in handles:
+                handle.remove()
+
+    def _visual_token_spans(self, state, key_length: int):
+        input_ids = state["model_inputs"]["input_ids"][0]
+        image_positions = (input_ids == int(self.IMAGE_TOKEN_INDEX)).nonzero(
+            as_tuple=False
+        ).flatten().tolist()
+        if not image_positions:
+            raise RuntimeError("LLaVA-Video prompt contains no image token")
+        image_position = image_positions[0]
+        text_after = int(input_ids.shape[0]) - image_position - 1
+        visual_count = key_length - text_after - image_position
+        if visual_count <= 0:
+            raise RuntimeError("Unable to determine LLaVA-Video visual token count")
+        boundaries = np.rint(
+            np.linspace(0, visual_count, state["frame_count"] + 1)
+        ).astype(int)
+        return [
+            (image_position + int(boundaries[i]), image_position + int(boundaries[i + 1]))
+            for i in range(state["frame_count"])
+        ]
+
+    def _extract_frame_attention(self, state, attentions):
+        if attentions is None:
+            raise RuntimeError("LLaVA-Video returned no decoder attentions for SEASON")
+        key_length = int(attentions[0].shape[-1])
+        spans = self._visual_token_spans(state, key_length)
+        selected = []
+        for layer_index in state["attention_layers"]:
+            layer = attentions[layer_index]
+            query = layer[0, :, -1, :].float()
+            selected.append(np.asarray([
+                query[:, start:end].sum(dim=-1).detach().cpu().numpy()
+                for start, end in spans
+            ]).T[:, :, None])
+        state["diagnostics"]["attention_layers_used"] = list(state["attention_layers"])
+        state["diagnostics"]["visual_token_spans"] = [list(span) for span in spans]
+        return frame_attention(np.stack(selected, axis=0))
+
+    def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
+        supported = {"original", "spatial_negative", "temporal_homogenized"}
+        if branch not in supported:
+            raise NotImplementedError(f"LLaVA-Video SEASON does not support branch {branch}")
+        generated_inputs = self._build_inputs(video_frames, prompt)
+        return {
+            "branch": branch,
+            "model_inputs": {
+                "input_ids": generated_inputs["inputs"],
+                "attention_mask": generated_inputs["attention_mask"],
+                "images": generated_inputs["images"],
+                "modalities": generated_inputs["modalities"],
+            },
+            "past_key_values": None,
+            "generated_count": 0,
+            "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "frame_count": int(len(video_frames)),
+            "attention_layers": tuple(kwargs.get("attention_layers", self._season_attention_layers)),
+            "homogenization_beta": float(kwargs.get("beta", 0.0)),
+            "reference_state": kwargs.get("reference_state"),
+            "vision_layer_contexts": {},
+            "diagnostics": {
+                "branch": branch,
+                "frame_count": int(len(video_frames)),
+                "decode_call_count": 0,
+                "cache_hit_steps": 0,
+                "vision_inputs_supplied_steps": 0,
+                "vision_hook_calls": 0,
+                **dict(getattr(self, "_last_input_audit", {})),
+            },
+        }
+
+    def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
+        self._sync_branch_tokens(state, token_ids)
+        inputs = state["model_inputs"]
+        first_step = state["past_key_values"] is None
+        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
+        kwargs = {
+            "input_ids": input_ids,
+            "attention_mask": inputs["attention_mask"],
+            "past_key_values": state["past_key_values"],
+            "images": inputs["images"] if first_step else None,
+            "modalities": inputs["modalities"],
+            "use_cache": True,
+            "return_dict": True,
+            "output_attentions": output_attentions,
+        }
+        attention_context = self._temporary_attention_implementation("eager") if output_attentions else nullcontext()
+        with attention_context, self._season_vision_hooks(state), self.torch.inference_mode():
+            outputs = self.model(**kwargs)
+        state["past_key_values"] = outputs.past_key_values
+        state["diagnostics"]["decode_call_count"] += 1
+        state["diagnostics"]["cache_hit_steps"] += int(not first_step)
+        state["diagnostics"]["vision_inputs_supplied_steps"] += int(first_step)
+        logits = outputs.logits[0, -1].float().detach()
+        if not state["preserve_logits_on_device"]:
+            logits = logits.cpu().numpy()
+        attention = self._extract_frame_attention(state, outputs.attentions) if output_attentions else None
+        return StepOutput(logits=logits, frame_attention=attention)
+
+    @property
+    def supports_frame_attention(self) -> bool:
+        return True
+
+    @property
+    def supports_vision_layer_hooks(self) -> bool:
         return True
