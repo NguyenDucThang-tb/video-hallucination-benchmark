@@ -22,6 +22,13 @@ def test_parser_compatible_tsh_prompt_requires_an_exact_official_token():
     assert "Do not include any other text." in prompt
 
 
+def test_binary_order_tsh_prompt_allows_only_ab_or_ba():
+    question = "Action A. open\nAction B. close\n"
+    prompt = build_tsh_prompt(question, output_protocol="binary_order")
+    assert "Respond with exactly one token: AB or BA." in prompt
+    assert "Do not answer A or B alone" in prompt
+
+
 def test_public_sth_prompt_is_preserved_verbatim():
     assert build_sth_prompt() == (
         "Watch the given video and determine if a scene change occurs. "

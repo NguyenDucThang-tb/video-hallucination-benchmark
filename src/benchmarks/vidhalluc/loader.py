@@ -115,6 +115,12 @@ def build_tsh_prompt(question: str, output_protocol: str = "official") -> str:
             "'BA' if Action B happens before Action A; 'A' if only Action A is visible; "
             "or 'B' if only Action B is visible. Do not include any other text."
         )
+    if output_protocol == "binary_order":
+        return prompt + (
+            " Respond with exactly one token: AB or BA. Return AB if Action A happens before "
+            "Action B. Return BA if Action B happens before Action A. Do not answer A or B "
+            "alone, and do not include any explanation or other text."
+        )
     raise ValueError(f"Unsupported VidHalluc TSH prompt protocol: {output_protocol!r}")
 
 

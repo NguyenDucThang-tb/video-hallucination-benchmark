@@ -54,6 +54,25 @@ def test_tsh_loader_records_parser_compatible_prompt_protocol(tmp_path):
     assert sample.metadata["tsh_prompt_protocol"] == "parser_compatible"
 
 
+def test_tsh_loader_supports_binary_order_protocol(tmp_path):
+    root = tmp_path / "vidhalluc"
+    data = root / "data"
+    data.mkdir(parents=True)
+    (data / "ab.mp4").write_bytes(b"")
+    (root / "tsh.json").write_text(json.dumps({
+        "one": {"video": "ab", "Question": "Action A. x\nAction B. y\n", "Correct Answer": "AB"},
+    }))
+
+    sample = next(iter(VidHallucLoader(
+        data,
+        ["tsh"],
+        tsh_prompt_protocol="binary_order",
+    ).iter_samples()))
+
+    assert "Respond with exactly one token: AB or BA." in sample.prompt
+    assert sample.metadata["tsh_prompt_protocol"] == "binary_order"
+
+
 class VisionProbeAdapter(ModelAdapter):
     name = "probe"
     checkpoint = "probe"
