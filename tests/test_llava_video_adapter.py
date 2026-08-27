@@ -105,3 +105,62 @@ def test_llava_video_exposes_season_contract():
     assert adapter.supports_step_logits is True
     assert adapter.supports_frame_attention is True
     assert adapter.supports_vision_layer_hooks is True
+
+
+def test_llava_video_branch_preparation_keeps_tcd_and_season_contracts():
+    adapter = object.__new__(LlavaVideoAdapter)
+    adapter._last_input_audit = {}
+    adapter._build_inputs = lambda frames, prompt: {
+        "inputs": np.array([[1, -200, 2]]),
+        "attention_mask": np.ones((1, 3), dtype=np.int64),
+        "images": [np.zeros((len(frames), 3, 4, 4))],
+        "modalities": ["video"],
+    }
+    frames = np.zeros((8, 4, 4, 3), dtype=np.uint8)
+
+    tcd = adapter.prepare_branch(frames, "question", "tcd_negative")
+    season = adapter.prepare_branch(
+        frames, "question", "original", attention_layers=(1, 2)
+    )
+
+    assert tcd["season_enabled"] is False
+    assert season["season_enabled"] is True
+    assert season["attention_layers"] == (1, 2)
+
+
+def test_llava_video_multimodal_prefill_replaces_text_only_attention_mask():
+    class _Model:
+        def __init__(self):
+            self.arguments = None
+
+        def prepare_inputs_labels_for_multimodal(self, *args):
+            self.arguments = args
+            return (
+                None,
+                None,
+                np.ones((1, 10), dtype=np.int64),
+                None,
+                np.zeros((1, 10, 4), dtype=np.float32),
+                None,
+            )
+
+    adapter = object.__new__(LlavaVideoAdapter)
+    adapter.model = _Model()
+    state = {
+        "model_inputs": {
+            "input_ids": np.array([[1, -200, 2, 3]]),
+            "attention_mask": np.ones((1, 4), dtype=np.int64),
+            "images": [np.zeros((8, 3, 4, 4), dtype=np.float32)],
+            "modalities": ["video"],
+        },
+        "diagnostics": {},
+    }
+
+    inputs_embeds, position_ids = adapter._prepare_multimodal_prefill(state)
+
+    assert position_ids is None
+    assert inputs_embeds.shape == (1, 10, 4)
+    assert state["model_inputs"]["attention_mask"].shape == (1, 10)
+    assert state["diagnostics"]["text_prompt_token_count"] == 4
+    assert state["diagnostics"]["multimodal_prefill_token_count"] == 10
+    assert adapter.model.arguments[6] == ["video"]

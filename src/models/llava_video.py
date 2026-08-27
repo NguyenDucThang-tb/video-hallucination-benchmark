@@ -158,37 +158,6 @@ class LlavaVideoAdapter(ModelAdapter):
         self._generation_diagnostics = self._generation_diagnostics[expected_count:]
         return diagnostics + [{} for _ in range(expected_count - len(diagnostics))]
 
-    def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
-        if branch not in {"original", "tcd_negative"}:
-            raise NotImplementedError(f"LLaVA-Video adapter does not support branch {branch}")
-
-        started = time.perf_counter()
-        generated_inputs = self._build_inputs(video_frames, prompt)
-        # The custom LLaVA Qwen forward path uses `input_ids`; only its
-        # generate() convenience wrapper calls that argument `inputs`.
-        model_inputs = {
-            "input_ids": generated_inputs["inputs"],
-            "attention_mask": generated_inputs["attention_mask"],
-            "images": generated_inputs["images"],
-            "modalities": generated_inputs["modalities"],
-        }
-        return {
-            "branch": branch,
-            "model_inputs": model_inputs,
-            "past_key_values": None,
-            "generated_count": 0,
-            "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
-            "diagnostics": {
-                "branch": branch,
-                "frame_count": int(len(video_frames)),
-                "preprocessing_seconds": time.perf_counter() - started,
-                "decode_call_count": 0,
-                "cache_hit_steps": 0,
-                "vision_inputs_supplied_steps": 0,
-                **dict(getattr(self, "_last_input_audit", {})),
-            },
-        }
-
     def _sync_branch_tokens(self, state, token_ids: list[int]) -> None:
         if len(token_ids) <= state["generated_count"]:
             return
@@ -207,35 +176,6 @@ class LlavaVideoAdapter(ModelAdapter):
             [inputs["attention_mask"], extra_mask], dim=1
         )
         state["generated_count"] = len(token_ids)
-
-    def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
-        if output_attentions:
-            raise NotImplementedError("LLaVA-Video TCD does not expose decoder attention diagnostics")
-
-        self._sync_branch_tokens(state, token_ids)
-        inputs = state["model_inputs"]
-        first_step = state["past_key_values"] is None
-        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
-        model_kwargs = {
-            "input_ids": input_ids,
-            "attention_mask": inputs["attention_mask"],
-            "past_key_values": state["past_key_values"],
-            "use_cache": True,
-            "return_dict": True,
-            "images": inputs["images"] if first_step else None,
-            "modalities": inputs["modalities"],
-        }
-        with self.torch.inference_mode():
-            outputs = self.model(**model_kwargs)
-
-        state["past_key_values"] = outputs.past_key_values
-        state["diagnostics"]["decode_call_count"] += 1
-        state["diagnostics"]["cache_hit_steps"] += int(not first_step)
-        state["diagnostics"]["vision_inputs_supplied_steps"] += int(first_step)
-        logits = outputs.logits[0, -1].float().detach()
-        if not state["preserve_logits_on_device"]:
-            logits = logits.cpu().numpy()
-        return StepOutput(logits=logits)
 
     def token_id_to_text(self, token_id: int) -> str:
         return self.tokenizer.decode([token_id], skip_special_tokens=True)
@@ -443,6 +383,9 @@ class LlavaVideoAdapter(ModelAdapter):
 
     @contextmanager
     def _season_vision_hooks(self, state):
+        if not state.get("season_enabled", False):
+            yield
+            return
         branch = state["branch"]
         if branch not in {"original", "temporal_homogenized"}:
             yield
@@ -516,10 +459,17 @@ class LlavaVideoAdapter(ModelAdapter):
         return frame_attention(np.stack(selected, axis=0))
 
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
-        supported = {"original", "spatial_negative", "temporal_homogenized"}
+        supported = {
+            "original",
+            "tcd_negative",
+            "spatial_negative",
+            "temporal_homogenized",
+        }
         if branch not in supported:
-            raise NotImplementedError(f"LLaVA-Video SEASON does not support branch {branch}")
+            raise NotImplementedError(f"LLaVA-Video adapter does not support branch {branch}")
+        started = time.perf_counter()
         generated_inputs = self._build_inputs(video_frames, prompt)
+        season_enabled = "attention_layers" in kwargs
         return {
             "branch": branch,
             "model_inputs": {
@@ -531,14 +481,18 @@ class LlavaVideoAdapter(ModelAdapter):
             "past_key_values": None,
             "generated_count": 0,
             "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "season_enabled": season_enabled,
             "frame_count": int(len(video_frames)),
-            "attention_layers": tuple(kwargs.get("attention_layers", self._season_attention_layers)),
+            "attention_layers": tuple(
+                kwargs.get("attention_layers", getattr(self, "_season_attention_layers", ()))
+            ),
             "homogenization_beta": float(kwargs.get("beta", 0.0)),
             "reference_state": kwargs.get("reference_state"),
             "vision_layer_contexts": {},
             "diagnostics": {
                 "branch": branch,
                 "frame_count": int(len(video_frames)),
+                "preprocessing_seconds": time.perf_counter() - started,
                 "decode_call_count": 0,
                 "cache_hit_steps": 0,
                 "vision_inputs_supplied_steps": 0,
@@ -547,23 +501,81 @@ class LlavaVideoAdapter(ModelAdapter):
             },
         }
 
+    def _prepare_multimodal_prefill(self, state):
+        inputs = state["model_inputs"]
+        prepared = self.model.prepare_inputs_labels_for_multimodal(
+            inputs["input_ids"],
+            None,
+            inputs["attention_mask"],
+            None,
+            None,
+            inputs["images"],
+            inputs["modalities"],
+            None,
+        )
+        if not isinstance(prepared, (tuple, list)) or len(prepared) != 6:
+            raise RuntimeError(
+                "LLaVA-Video multimodal prefill returned an unexpected result"
+            )
+        _, position_ids, attention_mask, _, inputs_embeds, _ = prepared
+        if inputs_embeds is None:
+            raise RuntimeError("LLaVA-Video multimodal prefill returned no inputs_embeds")
+        if attention_mask is None:
+            attention_mask = self.torch.ones(
+                inputs_embeds.shape[:2],
+                device=inputs_embeds.device,
+                dtype=inputs["attention_mask"].dtype,
+            )
+        if int(attention_mask.shape[1]) != int(inputs_embeds.shape[1]):
+            raise RuntimeError(
+                "LLaVA-Video multimodal prefill produced mismatched attention mask "
+                f"({attention_mask.shape[1]}) and embeddings ({inputs_embeds.shape[1]})"
+            )
+        inputs["attention_mask"] = attention_mask
+        state["diagnostics"]["text_prompt_token_count"] = int(
+            inputs["input_ids"].shape[1]
+        )
+        state["diagnostics"]["multimodal_prefill_token_count"] = int(
+            inputs_embeds.shape[1]
+        )
+        state["diagnostics"]["multimodal_attention_mask_count"] = int(
+            attention_mask.shape[1]
+        )
+        return inputs_embeds, position_ids
+
     def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
         self._sync_branch_tokens(state, token_ids)
         inputs = state["model_inputs"]
         first_step = state["past_key_values"] is None
-        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
-        kwargs = {
-            "input_ids": input_ids,
-            "attention_mask": inputs["attention_mask"],
-            "past_key_values": state["past_key_values"],
-            "images": inputs["images"] if first_step else None,
-            "modalities": inputs["modalities"],
-            "use_cache": True,
-            "return_dict": True,
-            "output_attentions": output_attentions,
-        }
-        attention_context = self._temporary_attention_implementation("eager") if output_attentions else nullcontext()
+        attention_context = (
+            self._temporary_attention_implementation("eager")
+            if output_attentions
+            else nullcontext()
+        )
         with attention_context, self._season_vision_hooks(state), self.torch.inference_mode():
+            if first_step:
+                inputs_embeds, position_ids = self._prepare_multimodal_prefill(state)
+                kwargs = {
+                    "input_ids": None,
+                    "inputs_embeds": inputs_embeds,
+                    "position_ids": position_ids,
+                    "attention_mask": inputs["attention_mask"],
+                    "past_key_values": None,
+                    "use_cache": True,
+                    "return_dict": True,
+                    "output_attentions": output_attentions,
+                }
+            else:
+                kwargs = {
+                    "input_ids": select_decode_input_ids(
+                        inputs["input_ids"], state["past_key_values"]
+                    ),
+                    "attention_mask": inputs["attention_mask"],
+                    "past_key_values": state["past_key_values"],
+                    "use_cache": True,
+                    "return_dict": True,
+                    "output_attentions": output_attentions,
+                }
             outputs = self.model(**kwargs)
         state["past_key_values"] = outputs.past_key_values
         state["diagnostics"]["decode_call_count"] += 1
