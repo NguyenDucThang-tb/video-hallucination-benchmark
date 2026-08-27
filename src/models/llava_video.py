@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import os
+import time
 from pathlib import Path
 
 import numpy as np
 
-from .base import GenerationConfig, ModelAdapter
+from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 
 
 class LlavaVideoAdapter(ModelAdapter):
@@ -147,3 +148,95 @@ class LlavaVideoAdapter(ModelAdapter):
         diagnostics = self._generation_diagnostics[:expected_count]
         self._generation_diagnostics = self._generation_diagnostics[expected_count:]
         return diagnostics + [{} for _ in range(expected_count - len(diagnostics))]
+
+    def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
+        if branch not in {"original", "tcd_negative"}:
+            raise NotImplementedError(f"LLaVA-Video adapter does not support branch {branch}")
+
+        started = time.perf_counter()
+        generated_inputs = self._build_inputs(video_frames, prompt)
+        # The custom LLaVA Qwen forward path uses `input_ids`; only its
+        # generate() convenience wrapper calls that argument `inputs`.
+        model_inputs = {
+            "input_ids": generated_inputs["inputs"],
+            "attention_mask": generated_inputs["attention_mask"],
+            "images": generated_inputs["images"],
+            "modalities": generated_inputs["modalities"],
+        }
+        return {
+            "branch": branch,
+            "model_inputs": model_inputs,
+            "past_key_values": None,
+            "generated_count": 0,
+            "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "diagnostics": {
+                "branch": branch,
+                "frame_count": int(len(video_frames)),
+                "preprocessing_seconds": time.perf_counter() - started,
+                "decode_call_count": 0,
+                "cache_hit_steps": 0,
+                "vision_inputs_supplied_steps": 0,
+                **dict(getattr(self, "_last_input_audit", {})),
+            },
+        }
+
+    def _sync_branch_tokens(self, state, token_ids: list[int]) -> None:
+        if len(token_ids) <= state["generated_count"]:
+            return
+        new_token_ids = token_ids[state["generated_count"] :]
+        inputs = state["model_inputs"]
+        token_tensor = self.torch.tensor(
+            [new_token_ids], device=self.device, dtype=inputs["input_ids"].dtype
+        )
+        inputs["input_ids"] = self.torch.cat([inputs["input_ids"], token_tensor], dim=1)
+        extra_mask = self.torch.ones(
+            (1, len(new_token_ids)),
+            device=self.device,
+            dtype=inputs["attention_mask"].dtype,
+        )
+        inputs["attention_mask"] = self.torch.cat(
+            [inputs["attention_mask"], extra_mask], dim=1
+        )
+        state["generated_count"] = len(token_ids)
+
+    def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
+        if output_attentions:
+            raise NotImplementedError("LLaVA-Video TCD does not expose decoder attention diagnostics")
+
+        self._sync_branch_tokens(state, token_ids)
+        inputs = state["model_inputs"]
+        first_step = state["past_key_values"] is None
+        input_ids = select_decode_input_ids(inputs["input_ids"], state["past_key_values"])
+        model_kwargs = {
+            "input_ids": input_ids,
+            "attention_mask": inputs["attention_mask"],
+            "past_key_values": state["past_key_values"],
+            "use_cache": True,
+            "return_dict": True,
+            "images": inputs["images"] if first_step else None,
+            "modalities": inputs["modalities"],
+        }
+        with self.torch.inference_mode():
+            outputs = self.model(**model_kwargs)
+
+        state["past_key_values"] = outputs.past_key_values
+        state["diagnostics"]["decode_call_count"] += 1
+        state["diagnostics"]["cache_hit_steps"] += int(not first_step)
+        state["diagnostics"]["vision_inputs_supplied_steps"] += int(first_step)
+        logits = outputs.logits[0, -1].float().detach()
+        if not state["preserve_logits_on_device"]:
+            logits = logits.cpu().numpy()
+        return StepOutput(logits=logits)
+
+    def token_id_to_text(self, token_id: int) -> str:
+        return self.tokenizer.decode([token_id], skip_special_tokens=True)
+
+    def decode_token_ids(self, token_ids: list[int]) -> str:
+        return self.tokenizer.decode(token_ids, skip_special_tokens=True).strip()
+
+    def is_eos(self, token_id: int) -> bool:
+        return token_id == getattr(self.tokenizer, "eos_token_id", None)
+
+    @property
+    def supports_step_logits(self) -> bool:
+        return True

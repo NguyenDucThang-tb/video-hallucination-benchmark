@@ -91,3 +91,11 @@ def test_llava_video_generate_uses_upstream_inputs_keyword():
     assert answer == "answer"
     assert "inputs" in adapter.model.kwargs
     assert "input_ids" not in adapter.model.kwargs
+
+
+def test_llava_video_exposes_tcd_step_logits_contract():
+    adapter = object.__new__(LlavaVideoAdapter)
+
+    assert adapter.supports_step_logits is True
+    assert adapter.supports_frame_attention is False
+    assert adapter.supports_vision_layer_hooks is False
