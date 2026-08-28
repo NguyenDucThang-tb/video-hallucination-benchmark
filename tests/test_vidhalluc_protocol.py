@@ -7,10 +7,7 @@ from src.utils.config import load_yaml
 
 def test_public_tsh_prompt_is_preserved_verbatim():
     question = "Action A. open\nAction B. close\n"
-    assert build_tsh_prompt(question) == question + (
-        "Sort these two actions in the order they occur in the video, and return which action "
-        "happen before which one. If you only detect one action, return that action."
-    )
+    assert build_tsh_prompt(question) == question
 
 
 def test_parser_compatible_tsh_prompt_requires_an_exact_official_token():

@@ -103,12 +103,16 @@ def build_bqa_prompt(question: str) -> str:
 
 
 def build_tsh_prompt(question: str, output_protocol: str = "official") -> str:
+    # The upstream TSH inference script passes the dataset question verbatim.
+    # Keep answer-format constraints opt-in so reproduction runs do not alter
+    # the task with an additional instruction.
+    if output_protocol == "official":
+        return question
+
     prompt = question + (
         "Sort these two actions in the order they occur in the video, and return which action "
         "happen before which one. If you only detect one action, return that action."
     )
-    if output_protocol == "official":
-        return prompt
     if output_protocol == "parser_compatible":
         return prompt + (
             " Respond with exactly one of: 'AB' if Action A happens before Action B; "
