@@ -109,9 +109,9 @@ def parse_vidhalluc_tsh_official(text: str) -> ParseResult:
         positions.sort()
         return ParseResult("".join(action for _, action in positions), "valid")
     if has_action_a:
-        return ParseResult("A", "valid")
+        return ParseResult("AB", "valid")
     if has_action_b:
-        return ParseResult("B", "valid")
+        return ParseResult("BA", "valid")
     return ParseResult(None, "unparseable", "official parser returned None")
 
 
