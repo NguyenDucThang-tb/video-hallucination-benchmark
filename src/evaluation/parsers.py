@@ -58,14 +58,22 @@ def parse_ab_ba(text: str) -> ParseResult:
 def parse_vidhalluc_tsh_official(text: str) -> ParseResult:
     """Port of VidHalluc ``eval/evaluation/eval_tsh.py``.
 
+    For the benchmark's single-action convention, ``A`` means action A is
+    first (``AB``), while ``B`` means action B is first (``BA``). Normalize
+    those outputs before correctness and metric accounting.
+
     The upstream parser intentionally does not strip punctuation or surrounding
     whitespace before its exact AB/BA checks. Keep that behavior here so the
     reproduction metric remains distinguishable from the more permissive local
     diagnostic parser above.
     """
     answer = text.lower()
-    if answer in {"ab", "ba", "a", "b"}:
+    if answer in {"ab", "ba"}:
         return ParseResult(answer.upper(), "valid")
+    if answer == "a":
+        return ParseResult("AB", "valid")
+    if answer == "b":
+        return ParseResult("BA", "valid")
     if "not clear" in answer or "no clear" in answer:
         return ParseResult(None, "unparseable", "official parser returned None")
 

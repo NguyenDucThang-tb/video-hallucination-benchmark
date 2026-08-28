@@ -4,7 +4,7 @@ from src.evaluation.parsers import parse_ab_ba, parse_vidhalluc_sth, parse_vidha
 
 
 @pytest.mark.parametrize(("text", "expected"), [
-    ("AB", "AB"), ("BA", "BA"), ("A", "A"), ("B", "B"),
+    ("AB", "AB"), ("BA", "BA"), ("A", "AB"), ("B", "BA"),
     ("Action A happens before Action B", "AB"),
     ("Action B happens before Action A", "BA"),
     ("Action B happens after Action A", "BA"),
@@ -30,4 +30,3 @@ def test_sth_parser_preserves_scene_and_location_fields():
 def test_sth_unparseable_output_stays_none():
     parsed, _ = parse_vidhalluc_sth("There may be a transition.")
     assert parsed.value is None
-
