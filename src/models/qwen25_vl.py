@@ -11,6 +11,7 @@ import numpy as np
 
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
 from src.methods.season.attention_diagnosis import frame_attention
+from src.methods.season.positive_features import FeatureEnhancementConfig, enhance_visual_features
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 
@@ -519,6 +520,70 @@ class Qwen25VLAdapter(ModelAdapter):
             return tuple(output_list), replaced
         return tensor, True
 
+    def _apply_positive_feature_enhancement_to_output(
+        self,
+        output,
+        frame_saliency: np.ndarray,
+        config: FeatureEnhancementConfig,
+    ):
+        """Enhance equally-sized frame-token groups in a vision hook output.
+
+        DINO saliency is currently available per frame in this adapter, so it is
+        broadcast over each frame's visual tokens. The temporal component still
+        uses the actual visual-token differences across consecutive frames.
+        """
+        tensor = self._coerce_feature_tensor(output)
+        if tensor is None or tensor.ndim not in {2, 3}:
+            return output, False, {}
+
+        token_count = int(tensor.shape[0] if tensor.ndim == 2 else tensor.shape[-2])
+        n_frames = int(len(frame_saliency))
+        if token_count < n_frames or n_frames < 2:
+            return output, False, {}
+
+        _, spans = self._build_token_scaling(token_count, frame_saliency)
+        token_counts = [end - begin for begin, end in spans]
+        tokens_per_frame = min(token_counts, default=0)
+        if tokens_per_frame <= 0:
+            return output, False, {}
+
+        if tensor.ndim == 2:
+            feature_slices = [
+                tensor[begin : begin + tokens_per_frame].detach().float().cpu().numpy()
+                for begin, _ in spans
+            ]
+        else:
+            if int(tensor.shape[0]) != 1:
+                return output, False, {}
+            feature_slices = [
+                tensor[0, begin : begin + tokens_per_frame].detach().float().cpu().numpy()
+                for begin, _ in spans
+            ]
+
+        features = np.stack(feature_slices, axis=0)
+        foreground = np.broadcast_to(
+            np.asarray(frame_saliency, dtype=np.float32)[:, None],
+            (n_frames, tokens_per_frame),
+        )
+        enhanced = enhance_visual_features(features, foreground, config)
+        enhanced_tensor = self.torch.from_numpy(enhanced.features).to(device=tensor.device, dtype=tensor.dtype)
+        for index, (begin, _) in enumerate(spans):
+            if tensor.ndim == 2:
+                tensor[begin : begin + tokens_per_frame] = enhanced_tensor[index]
+            else:
+                tensor[0, begin : begin + tokens_per_frame] = enhanced_tensor[index]
+
+        if hasattr(output, "last_hidden_state"):
+            output.last_hidden_state = tensor
+            return output, True, enhanced.diagnostics
+        if isinstance(output, tuple):
+            output_list = list(output)
+            for index, item in enumerate(output_list):
+                if self._coerce_feature_tensor(item) is not None:
+                    output_list[index] = tensor
+                    return tuple(output_list), True, enhanced.diagnostics
+        return tensor, True, enhanced.diagnostics
+
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
         if branch not in {"original", "tcd_negative", "spatial_negative", "temporal_homogenized"}:
             raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
@@ -809,6 +874,69 @@ class Qwen25VLAdapter(ModelAdapter):
         answer = self.processor.batch_decode(output_ids[:, prompt_length:], skip_special_tokens=True)[0].strip()
         return answer, diagnostics
 
+    def generate_positive_feature(self, video_frames, prompt: str, generation_config: GenerationConfig, config: dict):
+        checkpoint = config.get("dino_checkpoint", "facebook/dinov2-large")
+        dino_device = str(config.get("dino_device", "cpu"))
+        feature_config = FeatureEnhancementConfig(
+            alpha=float(config.get("alpha", 0.4)),
+            alpha_spatial=float(config.get("alpha_spatial", 0.4)),
+            beta_temporal=float(config.get("beta_temporal", 0.4)),
+            epsilon=float(config.get("epsilon", 1e-6)),
+        )
+        diagnostics = {
+            "dino_loaded": False,
+            "dino_checkpoint": checkpoint,
+            "dino_device": dino_device,
+            "positive_feature_mode": "frame_saliency_token_hook",
+            "positive_feature_hook_applied": False,
+        }
+        frame_saliency, dino_diag = self._compute_dino_saliency(video_frames, checkpoint, device=dino_device)
+        diagnostics.update(dino_diag)
+        inputs = self._prepare_inputs(video_frames, prompt)
+        if inputs.get("pixel_values_videos") is None:
+            raise RuntimeError("Qwen inputs are missing pixel_values_videos for positive_feature")
+
+        holder = {"applied": False, "diagnostics": {}}
+
+        def vision_hook(module, module_inputs, module_output):
+            enhanced_output, applied, enhancement_diagnostics = self._apply_positive_feature_enhancement_to_output(
+                module_output, frame_saliency, feature_config
+            )
+            holder["applied"] = holder["applied"] or applied
+            if enhancement_diagnostics:
+                holder["diagnostics"] = enhancement_diagnostics
+            return enhanced_output
+
+        vision_module = (
+            getattr(self.model, "visual", None)
+            or getattr(self.model, "vision_tower", None)
+            or getattr(getattr(self.model, "model", None), "visual", None)
+            or getattr(getattr(self.model, "model", None), "vision_tower", None)
+        )
+        if vision_module is None:
+            raise RuntimeError("Qwen vision module not found for positive_feature hook")
+        handle = vision_module.register_forward_hook(vision_hook)
+        try:
+            prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
+            with self.torch.inference_mode():
+                output_ids = self.model.generate(
+                    **inputs,
+                    max_new_tokens=generation_config.max_new_tokens,
+                    do_sample=False,
+                    temperature=None,
+                    num_beams=1,
+                    use_cache=True,
+                )
+        finally:
+            handle.remove()
+
+        diagnostics["positive_feature_hook_applied"] = holder["applied"]
+        diagnostics.update(holder["diagnostics"])
+        if not holder["applied"]:
+            raise RuntimeError("Qwen positive_feature hook did not modify any vision output")
+        answer = self.processor.batch_decode(output_ids[:, prompt_length:], skip_special_tokens=True)[0].strip()
+        return answer, diagnostics
+
     def token_id_to_text(self, token_id: int) -> str:
         return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)
 
@@ -832,4 +960,4 @@ class Qwen25VLAdapter(ModelAdapter):
 
     @property
     def supports_positive_feature_hooks(self) -> bool:
-        return False
+        return True

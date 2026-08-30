@@ -78,3 +78,7 @@ class ModelAdapter(ABC):
     @property
     def supports_vision_layer_hooks(self) -> bool:
         return False
+
+    @property
+    def supports_positive_feature_hooks(self) -> bool:
+        return False

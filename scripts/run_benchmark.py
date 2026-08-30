@@ -24,6 +24,7 @@ from src.data.schema import PredictionRecord
 from src.evaluation.normalize import normalize_prediction
 from src.methods.base import BaseMethod
 from src.methods.dino_heal.dino_heal_method import DINOHealMethod
+from src.methods.positive_feature import PositiveFeatureMethod
 from src.methods.season.season_method import SeasonMethod
 from src.methods.tcd import TCDMethod
 from src.models import GenerationConfig, LlavaOVAdapter, LlavaVideoAdapter, Qwen25VLAdapter
@@ -196,6 +197,8 @@ def instantiate_method(name: str, model):
         return DINOHealMethod(model, resolve_method_config(name))
     if name == "season":
         return SeasonMethod(model, resolve_method_config(name))
+    if name == "positive_feature":
+        return PositiveFeatureMethod(model, resolve_method_config(name))
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 
