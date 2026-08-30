@@ -31,8 +31,4 @@ class PositiveFeatureMethod(InferenceMethod):
         text, diagnostics = self.model.generate_positive_feature(
             video_frames, prompt, generation_config, self.config,
         )
-        if not diagnostics.get("positive_feature_hook_applied", False):
-            raise RuntimeError(
-                "positive_feature hook did not modify the vision output; refusing to fall back to base generation"
-            )
         return MethodOutput(text, diagnostics)

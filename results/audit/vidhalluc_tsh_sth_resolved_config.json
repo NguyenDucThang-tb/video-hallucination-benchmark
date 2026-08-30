@@ -1,21 +1,114 @@
 {
-  "status": "NOT EXECUTED IN LOCAL WORKSPACE",
-  "reason": "The resolved runtime artifact is written by scripts/run_benchmark.py on Gadi.",
-  "repository_head_before_patch": "352aa15efee5a3386fe62df150d56ed8f5cc9eb2",
-  "dataset_root": "/scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data",
-  "task_sampling": {
-    "sth": {"num_frames": 32, "strategy": "vidhalluc_official", "video_reader": "opencv_robust_full_decode"},
-    "tsh": {"num_frames": 32, "strategy": "vidhalluc_official", "video_reader": "opencv_robust_full_decode"}
+  "cli_overrides": {
+    "allow_unvalidated": true,
+    "debug_errors": true,
+    "limit": null
   },
-  "unresolved_fields": [
-    "model_revision",
-    "processor_revision",
-    "resolved_checkpoint_path",
-    "device",
-    "dtype",
-    "quantization",
-    "batch_size",
-    "limit",
-    "resume_records"
-  ]
+  "dataset": {
+    "data_root": "/scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data",
+    "task_sampling": {
+      "sth": {
+        "num_frames": 8,
+        "strategy": "uniform",
+        "video_reader": "opencv_robust_full_decode"
+      },
+      "tsh": {
+        "num_frames": 8,
+        "strategy": "uniform",
+        "video_reader": "opencv_robust_full_decode"
+      }
+    },
+    "tasks": [
+      "bqa",
+      "mcq",
+      "sth",
+      "tsh"
+    ]
+  },
+  "experiment": {
+    "benchmarks": [
+      {
+        "name": "vidhalluc",
+        "tasks": [
+          "sth"
+        ]
+      }
+    ],
+    "generation": {
+      "do_sample": false,
+      "max_new_tokens": 128,
+      "num_beams": 1,
+      "temperature": 0.0
+    },
+    "manifest_dir": "manifests",
+    "methods": [
+      "positive_feature"
+    ],
+    "models": [
+      "qwen2.5-vl-7b"
+    ],
+    "name": "qwen_positive_vidhalluc_sth_v1",
+    "output_dir": "results/raw",
+    "resume": true,
+    "seed": 42
+  },
+  "generation": {
+    "do_sample": false,
+    "eos_token_id": null,
+    "max_new_tokens": 128,
+    "num_beams": 1,
+    "pad_token_id": null,
+    "temperature": 0.0,
+    "top_p": null
+  },
+  "jobs": [
+    {
+      "benchmark": "vidhalluc",
+      "method": "positive_feature",
+      "model": "qwen2.5-vl-7b",
+      "note": "NOT VALIDATED: Qwen positive-feature hook uses frame-level DINO saliency; run with --allow-unvalidated",
+      "status": "ready",
+      "task": "sth",
+      "validation_override": true
+    }
+  ],
+  "models": {
+    "qwen2.5-vl-7b": {
+      "adapter": "qwen25_vl",
+      "checkpoint": "Qwen/Qwen2.5-VL-7B-Instruct",
+      "local_path": null,
+      "model_revision": null,
+      "processor_revision": null,
+      "quantization": null,
+      "resolved_checkpoint_path": "/scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5"
+    }
+  },
+  "repository_head": "7180bf650443e9b19549f9640c90a21b3ec07e48",
+  "resume": true,
+  "runtime": {
+    "batch_size": 1,
+    "device": "cuda:0",
+    "dtype": "torch.bfloat16",
+    "method": "positive_feature",
+    "model": "qwen2.5-vl-7b",
+    "task": "sth"
+  },
+  "sampling": {
+    "sth": {
+      "num_frames": 8,
+      "record_manifest": true,
+      "short_video_policy": "repeat_nearest_linspace",
+      "strategy": "uniform",
+      "video_reader": "opencv_robust_full_decode"
+    },
+    "tsh": {
+      "num_frames": 8,
+      "record_manifest": true,
+      "short_video_policy": "repeat_nearest_linspace",
+      "strategy": "uniform",
+      "video_reader": "opencv_robust_full_decode"
+    }
+  },
+  "seed": 42,
+  "status": "resolved_before_or_during_execution"
 }

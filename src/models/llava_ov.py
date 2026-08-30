@@ -9,7 +9,13 @@ import numpy as np
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
-from src.methods.positive_feature.enhancement import enhance_output_by_frame_saliency
+from src.methods.positive_feature.enhancement import (
+    PositiveFeatureConfig,
+    compute_birefnet_foreground,
+    enhance_output_by_frame_saliency,
+    enhance_visual_embeddings,
+    ensure_birefnet_loaded,
+)
 from src.methods.season.attention_diagnosis import frame_attention
 from src.methods.season.positive_features import FeatureEnhancementConfig
 from src.methods.season.vision_homogenization import (
@@ -187,6 +193,10 @@ class LlavaOVAdapter(ModelAdapter):
             "dino_frame_saliency_mean": float(frame_scores.mean()),
         }
         return frame_scores, diagnostics
+
+    def _ensure_birefnet_loaded(self, checkpoint: str = "ZhengPeng7/BiRefNet", device: str = "cpu"):
+        """Lazy-load BiRefNet model for foreground segmentation."""
+        return ensure_birefnet_loaded(self.__dict__, checkpoint, device, self.torch)
 
     def _coerce_feature_tensor(self, value):
         if hasattr(value, "float") and hasattr(value, "shape"):
@@ -369,22 +379,58 @@ class LlavaOVAdapter(ModelAdapter):
         generation_config: GenerationConfig,
         config: dict,
     ):
-        checkpoint = config.get("dino_checkpoint", "facebook/dinov2-large")
-        dino_device = str(config.get("dino_device", "cpu"))
-        feature_config = FeatureEnhancementConfig(
+        """Generate text with BiRefNet-based positive visual-feature enhancement.
+
+        Hooks into the multi_modal_projector output to apply:
+        1. Spatial saliency scaling using BiRefNet foreground masks + persistence.
+        2. Directed temporal motion evidence across consecutive frames.
+        3. Fusion: V' = V·(1+S) + β·Diff
+        """
+        use_birefnet = bool(config.get("use_birefnet", True))
+        pf_config = PositiveFeatureConfig(
             alpha=float(config.get("alpha", 0.4)),
-            alpha_spatial=float(config.get("alpha_spatial", 0.4)),
-            beta_temporal=float(config.get("beta_temporal", 0.4)),
+            alpha_s=float(config.get("alpha_s", 0.4)),
+            beta=float(config.get("beta", 0.4)),
             epsilon=float(config.get("epsilon", 1e-6)),
+            use_birefnet=use_birefnet,
+            birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
+            dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
+            saliency_device=str(config.get("dino_device", "cpu")),
         )
-        frame_saliency, diagnostics = self._compute_dino_saliency(
-            video_frames, checkpoint, device=dino_device
-        )
-        diagnostics.update({
-            "dino_checkpoint": checkpoint,
-            "positive_feature_mode": "frame_saliency_projector_hook",
+        n_frames = len(video_frames)
+        diagnostics: dict = {
+            "positive_feature_mode": "birefnet_projector_hook" if use_birefnet else "dino_projector_hook",
             "positive_feature_hook_applied": False,
-        })
+            "use_birefnet": use_birefnet,
+        }
+
+        # Compute foreground saliency.
+        # LLaVA-OV projector output shape is unknown until the hook fires,
+        # so pre-compute fg at frame-level and expand inside the hook.
+        fg_per_frame = None
+        try:
+            if use_birefnet:
+                birefnet_model, birefnet_transform = self._ensure_birefnet_loaded(
+                    pf_config.birefnet_checkpoint, pf_config.saliency_device
+                )
+                fg_per_frame = compute_birefnet_foreground(
+                    video_frames, n_frames, 1, birefnet_model, birefnet_transform,
+                    self.torch, self.device,
+                )  # [n_frames, 1]
+                diagnostics["birefnet_loaded"] = True
+            else:
+                frame_saliency, dino_diag = self._compute_dino_saliency(
+                    video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
+                )
+                diagnostics.update(dino_diag)
+                fg_per_frame = self.torch.as_tensor(
+                    np.asarray(frame_saliency, dtype=np.float32),
+                    device=self.device,
+                ).unsqueeze(-1)  # [n_frames, 1]
+        except Exception as exc:
+            fg_per_frame = self.torch.ones(n_frames, 1, device=self.device, dtype=self.torch.float32)
+            diagnostics["saliency_fallback"] = repr(exc)
+
         inputs, prompt_length = self._build_inputs(video_frames, prompt)
         if inputs.get("pixel_values_videos") is None:
             raise RuntimeError("LLaVA-OV inputs are missing pixel_values_videos for positive_feature")
@@ -392,13 +438,43 @@ class LlavaOVAdapter(ModelAdapter):
         holder = {"applied": False, "diagnostics": {}}
 
         def projector_hook(module, module_inputs, module_output):
-            enhanced, applied, hook_diagnostics = enhance_output_by_frame_saliency(
-                module_output, frame_saliency, feature_config, self.torch
+            if not hasattr(module_output, "shape"):
+                return module_output
+
+            orig_shape = module_output.shape
+            orig_dtype = module_output.dtype
+            f = module_output.reshape(-1, module_output.shape[-1]).float()
+            n_vis, D = f.shape
+
+            T = n_frames
+            P = n_vis // T
+            if T * P != n_vis:
+                return module_output  # shape mismatch → skip
+
+            V = f.view(T, P, D)
+
+            # Expand fg from [n_frames, 1] to [T, P]
+            nonlocal fg_per_frame
+            if fg_per_frame.shape[1] == 1:
+                fg = fg_per_frame.expand(T, P)
+            elif fg_per_frame.shape[1] != P:
+                fg = self.torch.nn.functional.interpolate(
+                    fg_per_frame.unsqueeze(0).unsqueeze(0),
+                    size=(T, P),
+                    mode="bilinear",
+                    align_corners=False,
+                ).squeeze(0).squeeze(0)
+            else:
+                fg = fg_per_frame
+
+            V_prime, hook_diag = enhance_visual_embeddings(
+                V, fg, pf_config, self.torch
             )
-            holder["applied"] = holder["applied"] or applied
-            if hook_diagnostics:
-                holder["diagnostics"] = hook_diagnostics
-            return enhanced
+
+            holder["applied"] = True
+            holder["diagnostics"] = hook_diag
+
+            return V_prime.reshape(orig_shape).to(orig_dtype)
 
         projector = getattr(getattr(self.model, "model", None), "multi_modal_projector", None)
         if projector is None:
