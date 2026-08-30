@@ -9,7 +9,9 @@ import numpy as np
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
+from src.methods.positive_feature.enhancement import enhance_output_by_frame_saliency
 from src.methods.season.attention_diagnosis import frame_attention
+from src.methods.season.positive_features import FeatureEnhancementConfig
 from src.methods.season.vision_homogenization import (
     blend_temporal_hidden,
     frame_mean_context,
@@ -356,6 +358,72 @@ class LlavaOVAdapter(ModelAdapter):
         diagnostics["dino_hook_applied"] = holder["applied"]
         diagnostics["dino_scale_mean"] = float(fused_scale.mean())
         diagnostics["dino_scale_max"] = float(fused_scale.max())
+        generated_ids = output_ids[:, prompt_length:]
+        answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
+        return answer, diagnostics
+
+    def generate_positive_feature(
+        self,
+        video_frames,
+        prompt: str,
+        generation_config: GenerationConfig,
+        config: dict,
+    ):
+        checkpoint = config.get("dino_checkpoint", "facebook/dinov2-large")
+        dino_device = str(config.get("dino_device", "cpu"))
+        feature_config = FeatureEnhancementConfig(
+            alpha=float(config.get("alpha", 0.4)),
+            alpha_spatial=float(config.get("alpha_spatial", 0.4)),
+            beta_temporal=float(config.get("beta_temporal", 0.4)),
+            epsilon=float(config.get("epsilon", 1e-6)),
+        )
+        frame_saliency, diagnostics = self._compute_dino_saliency(
+            video_frames, checkpoint, device=dino_device
+        )
+        diagnostics.update({
+            "dino_checkpoint": checkpoint,
+            "positive_feature_mode": "frame_saliency_projector_hook",
+            "positive_feature_hook_applied": False,
+        })
+        inputs, prompt_length = self._build_inputs(video_frames, prompt)
+        if inputs.get("pixel_values_videos") is None:
+            raise RuntimeError("LLaVA-OV inputs are missing pixel_values_videos for positive_feature")
+
+        holder = {"applied": False, "diagnostics": {}}
+
+        def projector_hook(module, module_inputs, module_output):
+            enhanced, applied, hook_diagnostics = enhance_output_by_frame_saliency(
+                module_output, frame_saliency, feature_config, self.torch
+            )
+            holder["applied"] = holder["applied"] or applied
+            if hook_diagnostics:
+                holder["diagnostics"] = hook_diagnostics
+            return enhanced
+
+        projector = getattr(getattr(self.model, "model", None), "multi_modal_projector", None)
+        if projector is None:
+            projector = getattr(self.model, "multi_modal_projector", None)
+        if projector is None:
+            raise RuntimeError("LLaVA-OV multi-modal projector not found for positive_feature hook")
+
+        handle = projector.register_forward_hook(projector_hook)
+        try:
+            with self.torch.inference_mode():
+                output_ids = self.model.generate(
+                    **inputs,
+                    max_new_tokens=generation_config.max_new_tokens,
+                    do_sample=False,
+                    temperature=None,
+                    num_beams=1,
+                    use_cache=True,
+                )
+        finally:
+            handle.remove()
+
+        diagnostics["positive_feature_hook_applied"] = holder["applied"]
+        diagnostics.update(holder["diagnostics"])
+        if not holder["applied"]:
+            raise RuntimeError("LLaVA-OV positive_feature hook did not modify projector output")
         generated_ids = output_ids[:, prompt_length:]
         answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         return answer, diagnostics
@@ -839,4 +907,8 @@ class LlavaOVAdapter(ModelAdapter):
 
     @property
     def supports_vision_layer_hooks(self) -> bool:
+        return True
+
+    @property
+    def supports_positive_feature_hooks(self) -> bool:
         return True

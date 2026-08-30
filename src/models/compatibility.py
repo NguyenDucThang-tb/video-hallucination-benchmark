@@ -6,7 +6,7 @@ COMPATIBILITY = {
         "tcd": (False, "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked"),
         "dino_heal": (False, "PARTIAL APPROXIMATION: frame-level fusion is not paper-faithful patch-level DINO-HEAL"),
         "season": (False, "NOT VALIDATED: Base gate and end-to-end GPU validation are pending"),
-        "positive_feature": (False, "NOT IMPLEMENTED: positive-feature vision hook is currently available only for Qwen2.5-VL"),
+        "positive_feature": (False, "NOT VALIDATED: LLaVA-OV positive-feature projector hook requires an end-to-end GPU smoke test"),
     },
     "qwen2.5-vl-7b": {
         "base": (True, "Qwen2.5-VL base adapter enabled for local real-video benchmark runs"),
@@ -20,7 +20,7 @@ COMPATIBILITY = {
         "tcd": (False, "Token-level dual-branch adapter not GPU-validated"),
         "dino_heal": (False, "Conditional CLIP contract has not been GPU-validated"),
         "season": (False, "Vision homogenization and decoder attention adapter not GPU-validated"),
-        "positive_feature": (False, "NOT IMPLEMENTED: positive-feature vision hook is currently available only for Qwen2.5-VL"),
+        "positive_feature": (False, "NOT VALIDATED: LLaVA-Video positive-feature projector hook requires an end-to-end GPU smoke test"),
     },
 }
 

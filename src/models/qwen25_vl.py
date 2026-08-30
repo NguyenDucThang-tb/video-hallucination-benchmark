@@ -10,8 +10,9 @@ from pathlib import Path
 import numpy as np
 
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
+from src.methods.positive_feature.enhancement import enhance_output_by_frame_saliency
 from src.methods.season.attention_diagnosis import frame_attention
-from src.methods.season.positive_features import FeatureEnhancementConfig, enhance_visual_features
+from src.methods.season.positive_features import FeatureEnhancementConfig
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 
@@ -526,63 +527,12 @@ class Qwen25VLAdapter(ModelAdapter):
         frame_saliency: np.ndarray,
         config: FeatureEnhancementConfig,
     ):
-        """Enhance equally-sized frame-token groups in a vision hook output.
-
-        DINO saliency is currently available per frame in this adapter, so it is
-        broadcast over each frame's visual tokens. The temporal component still
-        uses the actual visual-token differences across consecutive frames.
-        """
-        tensor = self._coerce_feature_tensor(output)
-        if tensor is None or tensor.ndim not in {2, 3}:
-            return output, False, {}
-
-        token_count = int(tensor.shape[0] if tensor.ndim == 2 else tensor.shape[-2])
-        n_frames = int(len(frame_saliency))
-        if token_count < n_frames or n_frames < 2:
-            return output, False, {}
-
-        _, spans = self._build_token_scaling(token_count, frame_saliency)
-        token_counts = [end - begin for begin, end in spans]
-        tokens_per_frame = min(token_counts, default=0)
-        if tokens_per_frame <= 0:
-            return output, False, {}
-
-        if tensor.ndim == 2:
-            feature_slices = [
-                tensor[begin : begin + tokens_per_frame].detach().float().cpu().numpy()
-                for begin, _ in spans
-            ]
-        else:
-            if int(tensor.shape[0]) != 1:
-                return output, False, {}
-            feature_slices = [
-                tensor[0, begin : begin + tokens_per_frame].detach().float().cpu().numpy()
-                for begin, _ in spans
-            ]
-
-        features = np.stack(feature_slices, axis=0)
-        foreground = np.broadcast_to(
-            np.asarray(frame_saliency, dtype=np.float32)[:, None],
-            (n_frames, tokens_per_frame),
+        return enhance_output_by_frame_saliency(
+            output,
+            frame_saliency,
+            config,
+            self.torch,
         )
-        enhanced = enhance_visual_features(features, foreground, config)
-        enhanced_tensor = self.torch.from_numpy(enhanced.features).to(device=tensor.device, dtype=tensor.dtype)
-        for index, (begin, _) in enumerate(spans):
-            if tensor.ndim == 2:
-                tensor[begin : begin + tokens_per_frame] = enhanced_tensor[index]
-            else:
-                tensor[0, begin : begin + tokens_per_frame] = enhanced_tensor[index]
-
-        if hasattr(output, "last_hidden_state"):
-            output.last_hidden_state = tensor
-            return output, True, enhanced.diagnostics
-        if isinstance(output, tuple):
-            output_list = list(output)
-            for index, item in enumerate(output_list):
-                if self._coerce_feature_tensor(item) is not None:
-                    output_list[index] = tensor
-                    return tuple(output_list), True, enhanced.diagnostics
-        return tensor, True, enhanced.diagnostics
 
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
         if branch not in {"original", "tcd_negative", "spatial_negative", "temporal_homogenized"}:
