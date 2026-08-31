@@ -3,6 +3,7 @@ from __future__ import annotations
 import inspect
 import os
 import time
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -15,6 +16,7 @@ from src.methods.positive_feature.enhancement import (
     enhance_visual_embeddings,
     ensure_birefnet_loaded,
 )
+from src.methods.season.attention_diagnosis import frame_attention
 
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 
@@ -107,6 +109,36 @@ class Qwen25VLAdapter(ModelAdapter):
                 return self.torch.bfloat16
             return self.torch.float16
         return self.torch.float32
+
+    def _attention_configs(self):
+        configs = []
+        for candidate in (
+            getattr(self.model, "config", None),
+            getattr(getattr(self.model, "model", None), "config", None),
+            getattr(getattr(self.model, "language_model", None), "config", None),
+        ):
+            if candidate is not None and candidate not in configs:
+                configs.append(candidate)
+        return configs
+
+    @contextmanager
+    def _temporary_attention_implementation(self, implementation: str):
+        configs = self._attention_configs()
+        originals = [getattr(config, "_attn_implementation", None) for config in configs]
+        setter = getattr(self.model, "set_attn_implementation", None)
+        try:
+            if callable(setter):
+                setter(implementation)
+            else:
+                for config in configs:
+                    setattr(config, "_attn_implementation", implementation)
+            yield
+        finally:
+            if callable(setter):
+                setter(originals[0] or "sdpa")
+            else:
+                for config, original in zip(configs, originals):
+                    setattr(config, "_attn_implementation", original or "sdpa")
 
     def _frames_to_messages(self, video_frames: np.ndarray, prompt: str) -> tuple[list[dict], np.ndarray]:
         video = np.asarray(video_frames, dtype=np.uint8)
@@ -599,7 +631,12 @@ class Qwen25VLAdapter(ModelAdapter):
             use_cache=True,
             is_first_iteration=is_first_iteration,
         )
-        with self.torch.inference_mode():
+        attention_context = (
+            self._temporary_attention_implementation("eager")
+            if output_attentions
+            else nullcontext()
+        )
+        with attention_context, self.torch.inference_mode():
             outputs = self.model(
                 **prepared,
                 output_attentions=output_attentions,
@@ -614,37 +651,44 @@ class Qwen25VLAdapter(ModelAdapter):
         state["diagnostics"]["vision_inputs_supplied_steps"] += int(
             any(prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos"))
         )
-        frame_attention = None
-        if output_attentions and getattr(outputs, "attentions", None) is not None:
-            frame_attention = self._summarize_frame_attention(outputs.attentions, inputs)
-        return StepOutput(logits=logits, frame_attention=frame_attention)
+        frame_scores = None
+        if output_attentions:
+            decoder_attentions = getattr(outputs, "attentions", None)
+            if decoder_attentions is None:
+                language_output = getattr(outputs, "language_model_output", None)
+                decoder_attentions = getattr(language_output, "attentions", None)
+            if decoder_attentions is not None:
+                frame_scores = self._summarize_frame_attention(
+                    decoder_attentions,
+                    int(state["diagnostics"]["frame_count"]),
+                )
+        return StepOutput(logits=logits, frame_attention=frame_scores)
 
-    def _summarize_frame_attention(self, attentions, inputs) -> np.ndarray | None:
+    def _summarize_frame_attention(self, attentions, frame_count: int) -> np.ndarray | None:
         if attentions is None:
             return None
         try:
             attn_layers = []
-            pixel_values = inputs.get("pixel_values")
-            if pixel_values is None:
+            if frame_count <= 0:
                 return None
-            n_frames = int(pixel_values.shape[0]) if hasattr(pixel_values, "shape") else 1
             for layer in attentions:
+                if layer is None:
+                    continue
                 layer = layer.detach().float().cpu().numpy()
                 if layer.ndim != 4:
                     continue
                 per_frame = layer.mean(axis=(0, 1, 3))
                 if per_frame.size == 0:
                     continue
-                if per_frame.size == n_frames:
+                if per_frame.size == frame_count:
                     attn_layers.append(per_frame)
                 else:
-                    buckets = np.array_split(per_frame, n_frames)
+                    buckets = np.array_split(per_frame, frame_count)
                     attn_layers.append(np.asarray([bucket.mean() if bucket.size else 0.0 for bucket in buckets], dtype=np.float32))
             if not attn_layers:
                 return None
             stacked = np.stack(attn_layers, axis=0).astype(np.float32)
-            heads = np.ones((stacked.shape[0], 1), dtype=np.float32)
-            return stacked[:, None, :, :]
+            return frame_attention(stacked[:, None, :, None]).astype(np.float32)
         except Exception:
             return None
 
