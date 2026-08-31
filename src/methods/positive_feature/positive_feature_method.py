@@ -32,8 +32,9 @@ class PositiveFeatureMethod(InferenceMethod):
             video_frames, prompt, generation_config, self.config,
         )
         if not diagnostics.get("positive_feature_hook_applied", False):
+            reason = diagnostics.get("positive_feature_hook_skip_reason", "unknown reason")
             raise RuntimeError(
                 "positive_feature hook did not modify the vision output; "
-                "refusing to fall back to base generation"
+                f"refusing to fall back to base generation ({reason})"
             )
         return MethodOutput(text, diagnostics)

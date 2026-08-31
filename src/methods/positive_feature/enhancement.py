@@ -299,6 +299,43 @@ def enhance_output_by_frame_saliency(
     return modified_output, True, diagnostics
 
 
+def enhance_tensor_by_frame_saliency(
+    tensor,
+    frame_saliency: np.ndarray,
+    config,
+    torch_module,
+) -> tuple[Any, bool, dict]:
+    """Compatibility wrapper for adapters that pass a feature tensor directly."""
+    result, applied, diagnostics = enhance_output_by_frame_saliency(
+        tensor,
+        frame_saliency,
+        config,
+        torch_module,
+    )
+    if not applied:
+        return result, applied, diagnostics
+
+    n_frames = int(np.asarray(frame_saliency).size)
+    token_count = int(tensor.numel() // tensor.shape[-1])
+    tokens_per_frame = token_count // max(n_frames, 1)
+    frame_major = (
+        tensor.ndim == 3 and int(tensor.shape[0]) == n_frames
+    ) or (
+        tensor.ndim == 4
+        and int(tensor.shape[0]) == 1
+        and int(tensor.shape[1]) == n_frames
+    )
+    diagnostics = {
+        **diagnostics,
+        "positive_feature_frame_count": n_frames,
+        "positive_feature_token_count": token_count,
+        "positive_feature_tokens_per_frame": tokens_per_frame,
+        "positive_feature_unaligned_token_count": token_count - tokens_per_frame * n_frames,
+        "positive_feature_tensor_layout": "frame_major" if frame_major else "flattened_tokens",
+    }
+    return result, True, diagnostics
+
+
 def _coerce_feature_tensor(value):
     """Extract the main feature tensor from a vision encoder output."""
     if value is None:

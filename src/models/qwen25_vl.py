@@ -956,7 +956,12 @@ class Qwen25VLAdapter(ModelAdapter):
                     "Both BiRefNet and DINO foreground extraction failed"
                 ) from dino_exc
 
-        holder: dict = {"applied": False}
+        holder: dict = {
+            "applied": False,
+            "diagnostics": {
+                "positive_feature_expected_token_count": T * P,
+            },
+        }
 
         # ── vision hook ──
         def feat_hook(mod, inp, out):
@@ -969,17 +974,41 @@ class Qwen25VLAdapter(ModelAdapter):
             else:
                 Fv = out
 
+            if not hasattr(Fv, "shape") or len(Fv.shape) < 2:
+                holder["diagnostics"]["positive_feature_hook_skip_reason"] = (
+                    "vision output does not expose a feature tensor"
+                )
+                return out
+
             orig_shape, orig_dtype = Fv.shape, Fv.dtype
             f = Fv.reshape(-1, Fv.shape[-1]).float()
             n_vis, D = f.shape
-            if n_vis != T * P:
-                return out  # shape mismatch → skip
+            holder["diagnostics"]["positive_feature_observed_token_count"] = n_vis
+            if T <= 0 or n_vis % T != 0:
+                holder["diagnostics"]["positive_feature_hook_skip_reason"] = (
+                    f"observed token count {n_vis} is not divisible by temporal grid {T}"
+                )
+                return out
 
-            V = f.view(T, P, D)
-            V_prime, hook_diag = enhance_visual_embeddings(V, fg, pf_config, self.torch)
+            actual_P = n_vis // T
+            hook_fg = fg
+            if actual_P != P:
+                hook_fg = self.torch.nn.functional.interpolate(
+                    fg.float().unsqueeze(1),
+                    size=actual_P,
+                    mode="linear",
+                    align_corners=False,
+                ).squeeze(1)
+
+            V = f.view(T, actual_P, D)
+            V_prime, hook_diag = enhance_visual_embeddings(V, hook_fg, pf_config, self.torch)
 
             holder["applied"] = True
-            holder["diagnostics"] = hook_diag
+            holder["diagnostics"].update({
+                **hook_diag,
+                "positive_feature_actual_tokens_per_temporal_position": actual_P,
+                "positive_feature_mask_resampled": actual_P != P,
+            })
 
             result = V_prime.reshape(orig_shape).to(orig_dtype)
             if hasattr(out, "last_hidden_state"):
