@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import inspect
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -14,7 +16,28 @@ from src.methods.positive_feature.enhancement import (
     ensure_birefnet_loaded,
 )
 
-from .base import GenerationConfig, ModelAdapter, StepOutput
+from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
+
+
+def cached_mrope_position_ids(attention_mask, rope_deltas):
+    """Build one-token Qwen mRoPE positions without expanding the full prefix."""
+    if hasattr(attention_mask, "long"):
+        text_position = attention_mask.long().cumsum(dim=-1)[:, -1:] - 1
+        text_position = text_position.masked_fill(attention_mask[:, -1:] == 0, 0)
+        position_ids = text_position.unsqueeze(0).expand(3, -1, -1)
+        deltas = rope_deltas.to(device=position_ids.device, dtype=position_ids.dtype)
+        if deltas.ndim == 1:
+            deltas = deltas.unsqueeze(-1)
+        return position_ids + deltas
+
+    mask = np.asarray(attention_mask)
+    text_position = np.cumsum(mask, axis=-1)[:, -1:] - 1
+    text_position = np.where(mask[:, -1:] == 0, 0, text_position)
+    position_ids = np.repeat(text_position[None, ...], 3, axis=0)
+    deltas = np.asarray(rope_deltas)
+    if deltas.ndim == 1:
+        deltas = deltas[:, None]
+    return position_ids + deltas
 
 
 @dataclass(frozen=True)
@@ -255,6 +278,57 @@ class Qwen25VLAdapter(ModelAdapter):
         self._record_input_audit(prepared, text, len(video_frames))
         return prepared
 
+    def _clone_input_value(self, value):
+        if hasattr(value, "clone"):
+            return value.clone()
+        if isinstance(value, np.ndarray):
+            return value.copy()
+        return value
+
+    def _gaussian_noise_like(self, value, std: float, seed: int):
+        if std <= 0:
+            return value
+        rng = np.random.default_rng(seed)
+        if hasattr(value, "detach") and hasattr(value, "dtype"):
+            noise = self.torch.from_numpy(
+                rng.normal(0.0, std, size=tuple(value.shape)).astype(np.float32)
+            ).to(device=value.device, dtype=value.dtype)
+            return value + noise
+        if isinstance(value, np.ndarray):
+            noise = rng.normal(0.0, std, size=value.shape).astype(np.float32)
+            return value + noise.astype(value.dtype, copy=False)
+        return value
+
+    def _temporal_homogenize_value(self, value, beta: float):
+        if beta <= 0 or not hasattr(value, "ndim") or value.ndim < 4:
+            return value
+        if value.ndim == 4:
+            context = value.mean(dim=0, keepdim=True) if hasattr(value, "detach") else value.mean(axis=0, keepdims=True)
+        else:
+            context = value.mean(dim=1, keepdim=True) if hasattr(value, "detach") else value.mean(axis=1, keepdims=True)
+        return (1.0 - beta) * value + beta * context
+
+    def _apply_branch_transform(self, inputs: dict, branch: str, **kwargs) -> dict:
+        branch_inputs = {key: self._clone_input_value(value) for key, value in inputs.items()}
+        if branch in {"original", "tcd_negative"}:
+            # TCDMethod already passes the chronological frame subset. Applying
+            # another transform here would invalidate native-video grid metadata.
+            return branch_inputs
+        if branch == "spatial_negative":
+            noise_std = float(kwargs.get("noise_std", 0.1))
+            seed = int(kwargs.get("seed", 0))
+            for key in ("pixel_values", "pixel_values_videos"):
+                if branch_inputs.get(key) is not None:
+                    branch_inputs[key] = self._gaussian_noise_like(branch_inputs[key], noise_std, seed)
+            return branch_inputs
+        if branch == "temporal_homogenized":
+            beta = float(kwargs.get("beta", 0.33))
+            for key in ("pixel_values", "pixel_values_videos"):
+                if branch_inputs.get(key) is not None:
+                    branch_inputs[key] = self._temporal_homogenize_value(branch_inputs[key], beta)
+            return branch_inputs
+        raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
+
     def _ensure_dino_loaded(self, checkpoint: str, device: str = "cpu"):
         if self._dino_model is not None and self._dino_processor is not None:
             return self._dino_processor, self._dino_model
@@ -404,14 +478,31 @@ class Qwen25VLAdapter(ModelAdapter):
     def prepare_branch(self, video_frames: np.ndarray, prompt: str, branch: str, **kwargs):
         if branch not in {"original", "tcd_negative", "spatial_negative", "temporal_homogenized"}:
             raise NotImplementedError(f"Qwen adapter does not support branch {branch}")
+        started = time.perf_counter()
         inputs = self._prepare_inputs(video_frames, prompt)
+        inputs = self._apply_branch_transform(inputs, branch, **kwargs)
         return {
             "branch": branch,
             "model_inputs": inputs,
             "past_key_values": None,
+            "rope_deltas": None,
             "generated_count": 0,
             "vision_attn": None,
+            "profile": bool(kwargs.get("profile", False)),
+            "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "diagnostics": {
+                **getattr(self, "_last_input_audit", {}),
+                "frame_count": int(len(video_frames)),
+                "preprocessing_seconds": time.perf_counter() - started,
+                "decode_call_count": 0,
+                "cache_hit_steps": 0,
+                "vision_inputs_supplied_steps": 0,
+            },
         }
+
+    def _profile_sync(self, state) -> None:
+        if state.get("profile") and self.torch.cuda.is_available():
+            self.torch.cuda.synchronize()
 
     def prepare_positive_branch(self, video_frames: np.ndarray, prompt: str, foreground, **kwargs):
         return self.prepare_branch(video_frames, prompt, branch="original", **kwargs)
@@ -443,22 +534,70 @@ class Qwen25VLAdapter(ModelAdapter):
 
         state["generated_count"] = len(token_ids)
 
+    def _branch_position_ids(self, state, is_first_iteration: bool):
+        inputs = state["model_inputs"]
+        if not is_first_iteration:
+            if state["rope_deltas"] is None:
+                raise RuntimeError("Qwen cached decoding is missing branch-specific rope_deltas")
+            return cached_mrope_position_ids(inputs["attention_mask"], state["rope_deltas"])
+
+        rope_model = getattr(self.model, "model", None)
+        rope_function = getattr(rope_model, "get_rope_index", None)
+        if rope_function is None:
+            rope_function = getattr(rope_model, "compute_3d_position_ids", None)
+        if rope_function is None:
+            raise RuntimeError("Qwen model does not expose an mRoPE helper for manual cached decoding")
+
+        rope_kwargs = {
+            "input_ids": inputs["input_ids"],
+            "mm_token_type_ids": inputs.get("mm_token_type_ids"),
+            "image_grid_thw": inputs.get("image_grid_thw"),
+            "video_grid_thw": inputs.get("video_grid_thw"),
+            "second_per_grid_ts": inputs.get("second_per_grid_ts"),
+            "attention_mask": inputs.get("attention_mask"),
+        }
+        parameters = inspect.signature(rope_function).parameters
+        accepts_kwargs = any(
+            parameter.kind == inspect.Parameter.VAR_KEYWORD
+            for parameter in parameters.values()
+        )
+        if not accepts_kwargs:
+            rope_kwargs = {key: value for key, value in rope_kwargs.items() if key in parameters}
+
+        rope_result = rope_function(**rope_kwargs)
+        if isinstance(rope_result, tuple) and len(rope_result) == 2:
+            position_ids, rope_deltas = rope_result
+        else:
+            position_ids = rope_result
+            rope_deltas = getattr(rope_model, "rope_deltas", None)
+        if rope_deltas is None:
+            raise RuntimeError("Qwen mRoPE helper did not return or store rope_deltas")
+        state["rope_deltas"] = rope_deltas.detach().clone()
+        return position_ids
+
     def decode_step(self, state, token_ids: list[int], output_attentions: bool = False) -> StepOutput:
         self._sync_generated_tokens(state, token_ids)
         inputs = state["model_inputs"]
+        is_first_iteration = state["past_key_values"] is None
+        position_ids = self._branch_position_ids(state, is_first_iteration)
+        mm_token_type_ids = inputs.get("mm_token_type_ids")
+        if mm_token_type_ids is not None:
+            mm_token_type_ids = select_decode_input_ids(mm_token_type_ids, state["past_key_values"])
         prepared = self.model.prepare_inputs_for_generation(
             input_ids=inputs["input_ids"],
+            next_sequence_length=None if is_first_iteration else 1,
             past_key_values=state["past_key_values"],
             attention_mask=inputs.get("attention_mask"),
+            position_ids=position_ids,
             inputs_embeds=inputs.get("inputs_embeds"),
-            pixel_values=inputs.get("pixel_values"),
-            pixel_values_videos=inputs.get("pixel_values_videos"),
-            image_grid_thw=inputs.get("image_grid_thw"),
-            video_grid_thw=inputs.get("video_grid_thw"),
-            second_per_grid_ts=inputs.get("second_per_grid_ts"),
-            mm_token_type_ids=inputs.get("mm_token_type_ids"),
+            pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
+            pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,
+            image_grid_thw=inputs.get("image_grid_thw") if is_first_iteration else None,
+            video_grid_thw=inputs.get("video_grid_thw") if is_first_iteration else None,
+            second_per_grid_ts=inputs.get("second_per_grid_ts") if is_first_iteration else None,
+            mm_token_type_ids=mm_token_type_ids,
             use_cache=True,
-            is_first_iteration=state["past_key_values"] is None,
+            is_first_iteration=is_first_iteration,
         )
         with self.torch.inference_mode():
             outputs = self.model(
@@ -467,7 +606,14 @@ class Qwen25VLAdapter(ModelAdapter):
                 return_dict=True,
             )
         state["past_key_values"] = outputs.past_key_values
-        logits = outputs.logits[0, -1].float().detach().cpu().numpy()
+        logits = outputs.logits[0, -1].float().detach()
+        if not state["preserve_logits_on_device"]:
+            logits = logits.cpu().numpy()
+        state["diagnostics"]["decode_call_count"] += 1
+        state["diagnostics"]["cache_hit_steps"] += int(not is_first_iteration)
+        state["diagnostics"]["vision_inputs_supplied_steps"] += int(
+            any(prepared.get(key) is not None for key in ("pixel_values", "pixel_values_videos"))
+        )
         frame_attention = None
         if output_attentions and getattr(outputs, "attentions", None) is not None:
             frame_attention = self._summarize_frame_attention(outputs.attentions, inputs)
@@ -902,6 +1048,9 @@ class Qwen25VLAdapter(ModelAdapter):
 
     def token_id_to_text(self, token_id: int) -> str:
         return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)
+
+    def decode_token_ids(self, token_ids: list[int]) -> str:
+        return self.processor.tokenizer.decode(token_ids, skip_special_tokens=True).strip()
 
     def is_eos(self, token_id: int) -> bool:
         return token_id == getattr(self.processor.tokenizer, "eos_token_id", None)
