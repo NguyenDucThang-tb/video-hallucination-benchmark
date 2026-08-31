@@ -48,6 +48,7 @@ class Qwen25VLAdapter(ModelAdapter):
         self.device = next(self.model.parameters()).device
         self._dino_processor = None
         self._dino_model = None
+        self._generation_diagnostics: list[dict] = []
 
     def _configure_padding(self) -> None:
         tokenizer = getattr(self.processor, "tokenizer", None)
@@ -84,27 +85,49 @@ class Qwen25VLAdapter(ModelAdapter):
             return self.torch.float16
         return self.torch.float32
 
-    def _frames_to_messages(self, video_frames: np.ndarray, prompt: str) -> list[dict]:
-        from PIL import Image
+    def _frames_to_messages(self, video_frames: np.ndarray, prompt: str) -> tuple[list[dict], np.ndarray]:
+        video = np.asarray(video_frames, dtype=np.uint8)
+        if video.ndim != 4 or video.shape[-1] != 3 or len(video) == 0:
+            raise ValueError("video_frames must have shape [frames, height, width, 3]")
+        messages = [{
+            "role": "user",
+            "content": [
+                {"type": "video"},
+                {"type": "text", "text": prompt},
+            ],
+        }]
+        return messages, video
 
-        content = []
-        for frame in video_frames:
-            content.append({"type": "image", "image": Image.fromarray(np.asarray(frame, dtype=np.uint8))})
-        content.append({"type": "text", "text": prompt})
-        return [{"role": "user", "content": content}]
+    def _record_input_audit(self, inputs: dict, text: str, frame_count: int) -> dict:
+        audit = {
+            "rendered_prompt": text,
+            "model_input_keys": sorted(inputs),
+            "model_input_shapes": {
+                key: list(value.shape)
+                for key, value in inputs.items()
+                if hasattr(value, "shape")
+            },
+            "vision_tensor_supplied": any(
+                inputs.get(key) is not None for key in ("pixel_values", "pixel_values_videos")
+            ),
+            "video_grid_supplied": inputs.get("video_grid_thw") is not None,
+            "video_modality_supplied": inputs.get("pixel_values_videos") is not None,
+            "video_frame_count": int(frame_count),
+        }
+        self._last_input_audit = audit
+        return audit
 
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
-        messages = self._frames_to_messages(video_frames, prompt)
+        messages, video = self._frames_to_messages(video_frames, prompt)
         text = self.processor.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=True,
         )
 
-        images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
         inputs = self.processor(
             text=[text],
-            images=images,
+            videos=[video],
             return_tensors="pt",
             padding=True,
         )
@@ -113,6 +136,9 @@ class Qwen25VLAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
+        self._generation_diagnostics = [
+            self._record_input_audit(inputs, text, len(video_frames))
+        ]
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -139,7 +165,12 @@ class Qwen25VLAdapter(ModelAdapter):
         if not batch_video_frames:
             return []
 
-        batch_messages = [self._frames_to_messages(video_frames, prompt) for video_frames, prompt in zip(batch_video_frames, prompts)]
+        message_video_pairs = [
+            self._frames_to_messages(video_frames, prompt)
+            for video_frames, prompt in zip(batch_video_frames, prompts)
+        ]
+        batch_messages = [messages for messages, _ in message_video_pairs]
+        videos = [video for _, video in message_video_pairs]
         texts = [
             self.processor.apply_chat_template(
                 messages,
@@ -148,13 +179,9 @@ class Qwen25VLAdapter(ModelAdapter):
             )
             for messages in batch_messages
         ]
-        images = [
-            [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
-            for messages in batch_messages
-        ]
         inputs = self.processor(
             text=texts,
-            images=images,
+            videos=videos,
             return_tensors="pt",
             padding=True,
         )
@@ -163,6 +190,25 @@ class Qwen25VLAdapter(ModelAdapter):
             for key, value in inputs.items()
         }
         prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
+        self._generation_diagnostics = [
+            {
+                "rendered_prompt": text,
+                "model_input_keys": sorted(inputs),
+                "model_input_shapes": {
+                    key: list(value.shape)
+                    for key, value in inputs.items()
+                    if hasattr(value, "shape")
+                },
+                "vision_tensor_supplied": any(
+                    inputs.get(key) is not None
+                    for key in ("pixel_values", "pixel_values_videos")
+                ),
+                "video_grid_supplied": inputs.get("video_grid_thw") is not None,
+                "video_modality_supplied": inputs.get("pixel_values_videos") is not None,
+                "video_frame_count": int(len(frames)),
+            }
+            for text, frames in zip(texts, batch_video_frames)
+        ]
 
         with self.torch.inference_mode():
             output_ids = self.model.generate(
@@ -184,24 +230,30 @@ class Qwen25VLAdapter(ModelAdapter):
             answers.append(answer.strip())
         return answers
 
+    def consume_generation_diagnostics(self, expected_count: int) -> list[dict]:
+        values = self._generation_diagnostics
+        self._generation_diagnostics = []
+        return values if len(values) == expected_count else [{} for _ in range(expected_count)]
+
     def _prepare_inputs(self, video_frames: np.ndarray, prompt: str) -> dict:
-        messages = self._frames_to_messages(video_frames, prompt)
+        messages, video = self._frames_to_messages(video_frames, prompt)
         text = self.processor.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=True,
         )
-        images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
         inputs = self.processor(
             text=[text],
-            images=images,
+            videos=[video],
             return_tensors="pt",
             padding=True,
         )
-        return {
+        prepared = {
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
+        self._record_input_audit(prepared, text, len(video_frames))
+        return prepared
 
     def _ensure_dino_loaded(self, checkpoint: str, device: str = "cpu"):
         if self._dino_model is not None and self._dino_processor is not None:
@@ -468,9 +520,10 @@ class Qwen25VLAdapter(ModelAdapter):
         diagnostics.update(dino_diag)
 
         inputs = self._prepare_inputs(video_frames, prompt)
-        pixel_values = inputs.get("pixel_values")
+        diagnostics.update(getattr(self, "_last_input_audit", {}))
+        pixel_values = inputs.get("pixel_values_videos")
         if pixel_values is None:
-            raise RuntimeError("Qwen inputs are missing pixel_values for DINO-HEAL")
+            raise RuntimeError("Qwen inputs are missing pixel_values_videos for DINO-HEAL")
 
         total_tokens = int(pixel_values.shape[0]) if hasattr(pixel_values, "shape") else len(video_frames)
         n_frames = len(video_frames)
@@ -652,23 +705,23 @@ class Qwen25VLAdapter(ModelAdapter):
         )
 
         # ── prepare inputs ──
-        messages = self._frames_to_messages(video_frames, prompt)
-        text = self.processor.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True,
-        )
-        images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
-        inputs = self.processor(text=[text], images=images, return_tensors="pt", padding=True)
-        inputs = {k: v.to(self.device) if hasattr(v, "to") else v for k, v in inputs.items()}
+        inputs = self._prepare_inputs(video_frames, prompt)
         prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
 
         # ── determine vision grid ──
-        grid_thw = inputs.get("image_grid_thw")
+        grid_thw = inputs.get("video_grid_thw")
         if grid_thw is None:
-            raise RuntimeError("Cannot determine vision grid from Qwen processor output")
+            raise RuntimeError("Cannot determine video grid from Qwen processor output")
         T = int(grid_thw[:, 0].sum().item())
         Ht = int(grid_thw[0, 1].item())
         Wt = int(grid_thw[0, 2].item())
-        P = Ht * Wt
+        merge_size = int(getattr(getattr(self.processor, "image_processor", None), "merge_size", 1))
+        spatial_tokens = Ht * Wt
+        if spatial_tokens % (merge_size * merge_size) != 0:
+            raise RuntimeError(
+                "Qwen video grid is incompatible with the configured spatial merge size"
+            )
+        P = spatial_tokens // (merge_size * merge_size)
 
         # ── compute foreground saliency ──
         diagnostics: dict = {
@@ -677,6 +730,7 @@ class Qwen25VLAdapter(ModelAdapter):
             "use_birefnet": use_birefnet,
             "birefnet_loaded": False,
             "dino_loaded": False,
+            **dict(getattr(self, "_last_input_audit", {})),
         }
 
         fg = None
@@ -757,6 +811,8 @@ class Qwen25VLAdapter(ModelAdapter):
         diagnostics.update(holder.get("diagnostics", {}))
         diagnostics.update({
             "grid_T": T, "grid_Ht": Ht, "grid_Wt": Wt,
+            "grid_P_after_merge": P,
+            "spatial_merge_size": merge_size,
             "alpha": pf_config.alpha, "alpha_s": pf_config.alpha_s, "beta": pf_config.beta,
         })
         return answer, diagnostics
@@ -829,18 +885,7 @@ class Qwen25VLAdapter(ModelAdapter):
                 return result
 
         try:
-            messages = self._frames_to_messages(video_frames, prompt)
-            text = self.processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True,
-            )
-            images = [item["image"] for item in messages[0]["content"] if item["type"] == "image"]
-            inputs = self.processor(
-                text=[text], images=images, return_tensors="pt", padding=True,
-            )
-            inputs = {
-                key: value.to(self.device) if hasattr(value, "to") else value
-                for key, value in inputs.items()
-            }
+            inputs = self._prepare_inputs(video_frames, prompt)
 
             if use_evidence:
                 vision_module = self._get_vision_module()
