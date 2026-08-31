@@ -21,5 +21,4 @@ SPEC.loader.exec_module(MODULE)
 def test_local_tsh_compatibility_parser_matches_vendored_upstream(text):
     upstream = MODULE.model_answer_to_correct_answer(text)
     local = parse_vidhalluc_tsh_official(text).value
-    expected = {"A": "AB", "B": "BA"}.get(upstream, upstream)
-    assert local == (None if expected == "None" else expected)
+    assert local == (None if upstream == "None" else upstream)

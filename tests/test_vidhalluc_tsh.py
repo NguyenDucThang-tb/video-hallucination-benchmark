@@ -8,10 +8,11 @@ from src.models.base import GenerationConfig, ModelAdapter
 from scripts.run_benchmark import build_plan
 
 
-def test_tsh_official_prompt_preserves_dataset_question_verbatim():
+def test_tsh_official_prompt_preserves_actions_and_appends_instruction():
     question = "Action A. open the door\nAction B. sit down\n"
     prompt = build_tsh_prompt(question)
-    assert prompt == question
+    assert prompt.startswith(question)
+    assert "Sort these two actions in the order they occur in the video" in prompt
     assert prompt.index("Action A") < prompt.index("Action B")
 
 

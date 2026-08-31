@@ -4,9 +4,9 @@ from src.evaluation.parsers import parse_ab_ba, parse_vidhalluc_sth, parse_vidha
 
 
 @pytest.mark.parametrize(("text", "expected"), [
-    ("AB", "AB"), ("BA", "BA"), ("A", "AB"), ("B", "BA"),
-    ("Action A. cleaning the sink", "AB"),
-    ("Action B. washing dishes", "BA"),
+    ("AB", "AB"), ("BA", "BA"), ("A", "A"), ("B", "B"),
+    ("Action A. cleaning the sink", "A"),
+    ("Action B. washing dishes", "B"),
     ("Action A happens before Action B", "AB"),
     ("Action B happens before Action A", "BA"),
     ("Action B happens after Action A", "BA"),

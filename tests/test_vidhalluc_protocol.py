@@ -5,9 +5,12 @@ from src.data.sampler import frame_indices, vidhalluc_frame_indices
 from src.utils.config import load_yaml
 
 
-def test_public_tsh_prompt_is_preserved_verbatim():
+def test_public_tsh_prompt_appends_official_sorting_instruction():
     question = "Action A. open\nAction B. close\n"
-    assert build_tsh_prompt(question) == question
+    assert build_tsh_prompt(question) == question + (
+        "Sort these two actions in the order they occur in the video, and return which action "
+        "happen before which one. If you only detect one action, return that action."
+    )
 
 
 def test_parser_compatible_tsh_prompt_requires_an_exact_official_token():

@@ -45,16 +45,16 @@ def test_tsh_ab_ba_correctness_truth_table():
         assert metric["official_accuracy"] == expected
 
 
-def test_tsh_single_action_outputs_are_normalized_to_order():
+def test_tsh_single_action_outputs_remain_incorrect_against_order_labels():
     result = evaluate_classification([
         record("a", "tsh", "A", "AB"),
         record("b", "tsh", "B", "BA"),
     ])['tsh']
-    assert result["official_accuracy"] == 1.0
-    assert result["parsed_AB"] == 1
-    assert result["parsed_BA"] == 1
-    assert result["parsed_A"] == 0
-    assert result["parsed_B"] == 0
+    assert result["official_accuracy"] == 0.0
+    assert result["parsed_AB"] == 0
+    assert result["parsed_BA"] == 0
+    assert result["parsed_A"] == 1
+    assert result["parsed_B"] == 1
 
 
 def test_tsh_parser_error_is_not_reported_as_runtime_failure():
