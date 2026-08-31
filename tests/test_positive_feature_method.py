@@ -3,7 +3,10 @@ import pytest
 
 from scripts.run_benchmark import instantiate_method
 from src.methods.positive_feature import PositiveFeatureMethod
-from src.methods.positive_feature.enhancement import enhance_tensor_by_frame_saliency
+from src.methods.positive_feature.enhancement import (
+    compute_birefnet_foreground,
+    enhance_tensor_by_frame_saliency,
+)
 from src.methods.season.positive_features import FeatureEnhancementConfig
 from src.models.base import GenerationConfig
 from src.models.llava_ov import LlavaOVAdapter
@@ -90,3 +93,33 @@ def test_shared_enhancement_supports_frame_major_projector_output():
     assert enhanced.shape == tensor.shape
     assert not torch.allclose(enhanced, tensor)
     assert diagnostics["positive_feature_tensor_layout"] == "frame_major"
+
+
+def test_birefnet_inputs_match_half_precision_model_dtype():
+    torch = pytest.importorskip("torch")
+
+    class FakeBiRefNet:
+        def __init__(self):
+            self.parameter = torch.zeros(1, dtype=torch.float16)
+            self.input_dtype = None
+
+        def parameters(self):
+            yield self.parameter
+
+        def __call__(self, inputs):
+            self.input_dtype = inputs.dtype
+            return [inputs[:, :1]]
+
+    model = FakeBiRefNet()
+    foreground = compute_birefnet_foreground(
+        np.zeros((2, 4, 4, 3), dtype=np.uint8),
+        T=2,
+        P=4,
+        birefnet_model=model,
+        birefnet_transform=lambda _image: torch.ones(3, 4, 4),
+        torch_module=torch,
+        target_device=torch.device("cpu"),
+    )
+
+    assert model.input_dtype == torch.float16
+    assert foreground.shape == (2, 4)

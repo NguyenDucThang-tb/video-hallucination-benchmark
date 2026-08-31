@@ -78,6 +78,8 @@ def ensure_birefnet_loaded(holder: dict, checkpoint: str, device: str, torch_mod
         checkpoint,
         trust_remote_code=True,
     ).to(device).eval()
+    if str(device).startswith("cpu"):
+        model = model.float()
 
     transform = transforms.Compose([
         transforms.Resize((1024, 1024)),
@@ -116,10 +118,15 @@ def compute_birefnet_foreground(
     from PIL import Image
 
     n_frames = len(video_frames)
-    birefnet_device = next(birefnet_model.parameters()).device
+    birefnet_parameter = next(birefnet_model.parameters())
+    birefnet_device = birefnet_parameter.device
+    birefnet_dtype = birefnet_parameter.dtype
 
     images = [Image.fromarray(np.asarray(f, dtype=np.uint8)) for f in video_frames]
-    inputs = torch_module.stack([birefnet_transform(img) for img in images]).to(birefnet_device)
+    inputs = torch_module.stack([birefnet_transform(img) for img in images]).to(
+        device=birefnet_device,
+        dtype=birefnet_dtype,
+    )
 
     with torch_module.inference_mode():
         outputs = birefnet_model(inputs)

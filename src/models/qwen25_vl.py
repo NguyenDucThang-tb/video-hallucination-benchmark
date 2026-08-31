@@ -391,6 +391,8 @@ class Qwen25VLAdapter(ModelAdapter):
             checkpoint,
             trust_remote_code=True,
         ).to(device).eval()
+        if str(device).startswith("cpu"):
+            self._birefnet_model = self._birefnet_model.float()
 
         self._birefnet_transform = transforms.Compose([
             transforms.Resize((1024, 1024)),
@@ -940,8 +942,19 @@ class Qwen25VLAdapter(ModelAdapter):
                 )
                 diagnostics["dino_loaded"] = True
         except Exception as exc:
-            fg = self.torch.ones(T, P, device=self.device, dtype=self.torch.float32)
             diagnostics["saliency_fallback"] = repr(exc)
+            if not use_birefnet:
+                raise RuntimeError("DINO foreground extraction failed") from exc
+            try:
+                fg = self._compute_dino_patch_saliency(
+                    video_frames, T, P, pf_config.dino_checkpoint, pf_config.saliency_device
+                )
+                diagnostics["dino_loaded"] = True
+                diagnostics["positive_feature_mode"] = "dino_vision_hook_fallback"
+            except Exception as dino_exc:
+                raise RuntimeError(
+                    "Both BiRefNet and DINO foreground extraction failed"
+                ) from dino_exc
 
         holder: dict = {"applied": False}
 
