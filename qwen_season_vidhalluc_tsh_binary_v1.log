@@ -1,0 +1,37 @@
+{
+  "config": "/tmp/qwen_season_vidhalluc_tsh_binary_v1.yaml",
+  "jobs": [
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    }
+  ]
+}
+[2026-08-27 17:08:36] ERROR qwen2.5-vl-7b / season / vidhalluc / tsh | ValueError("Unrecognized processing class in /scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct. Can't instantiate a processor, a tokenizer, an image processor, a video processor or a feature extractor for this model. Make sure the repository contains the files of at least one of those processing classes.")
+[2026-08-27 17:08:36] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/qwen_season_vidhalluc_tsh_binary_v1.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_season_vidhalluc_tsh_binary_v1.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "error": "ValueError(\"Unrecognized processing class in /scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct. Can't instantiate a processor, a tokenizer, an image processor, a video processor or a feature extractor for this model. Make sure the repository contains the files of at least one of those processing classes.\")"
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/qwen_season_vidhalluc_tsh_binary_v1.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_season_vidhalluc_tsh_binary_v1.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_season_vidhalluc_tsh_binary_v1.results.md"
+  }
+}

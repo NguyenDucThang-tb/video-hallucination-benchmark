@@ -1,0 +1,694 @@
+========================================
+JOB ID   : 177696807.gadi-pbs
+HOST     : gadi-gpu-h200-0017.gadi.nci.org.au
+START    : Fri Aug 28 21:07:40 AEST 2026
+========================================
+Fri Aug 28 21:07:40 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.173.02             Driver Version: 580.173.02     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H200                    On  |   00000000:E6:00.0 Off |                    0 |
+| N/A   34C    P0             77W /  600W |       0MiB / 143771MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Log: results/gadi/positive_feature_177696807.gadi-pbs.log
+{
+  "config": "/scratch/jp09/dd9648/video-hallucination-benchmark/configs/experiment_positive_feature.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "bqa",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "bqa",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "bqa",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "orh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "orh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "orh",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "tph",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "tph",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "tph",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "sdh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "sdh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "sdh",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "efh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "efh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "efh",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "enfh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "enfh",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "enfh",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "entire",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "entire",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "entire",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "misleading",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "misleading",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "misleading",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "mix",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+      "validation_override": false
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "mix",
+      "status": "ready",
+      "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+      "validation_override": false
+    },
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "eventhallusion",
+      "task": "mix",
+      "status": "N/A",
+      "note": "LLaVA Video adapter not implemented",
+      "validation_override": false
+    }
+  ]
+}
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / vidhalluc / bqa | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / vidhalluc / bqa | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / vidhalluc / mcq | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / vidhalluc / mcq | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / vidhalluc / sth | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / vidhalluc / sth | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / vidhalluc / tsh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / vidhalluc / tsh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / videohallucer / orh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / videohallucer / orh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / videohallucer / tph | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / videohallucer / tph | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / videohallucer / sdh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / videohallucer / sdh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / videohallucer / efh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / videohallucer / efh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / videohallucer / enfh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / videohallucer / enfh | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / eventhallusion / entire | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / eventhallusion / entire | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR llava-ov-7b / positive_feature / eventhallusion / misleading | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:26] ERROR qwen2.5-vl-7b / positive_feature / eventhallusion / misleading | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:27] ERROR llava-ov-7b / positive_feature / eventhallusion / mix | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:27] ERROR qwen2.5-vl-7b / positive_feature / eventhallusion / mix | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-28 21:08:27] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/hallucination_benchmark_positive_feature.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_positive_feature.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "bqa",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "bqa",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "mcq",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "mcq",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "sth",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "sth",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "orh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "orh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "tph",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "tph",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "sdh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "sdh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "efh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "efh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "enfh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "enfh",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "eventhallusion",
+        "task": "entire",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "eventhallusion",
+        "task": "entire",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "eventhallusion",
+        "task": "misleading",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "eventhallusion",
+        "task": "misleading",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "eventhallusion",
+        "task": "mix",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for LLaVA-OV via projector hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "eventhallusion",
+        "task": "mix",
+        "status": "ready",
+        "note": "Positive visual-feature enhancement enabled for Qwen via vision encoder hook",
+        "validation_override": false
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/hallucination_benchmark_positive_feature.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_positive_feature.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_positive_feature.results.md"
+  }
+}
+========================================
+END      : Fri Aug 28 21:08:28 AEST 2026
+========================================
+
+======================================================================================
+                  Resource Usage on 2026-08-28 21:08:32:
+   Job Id:             177696807.gadi-pbs
+   Project:            hn98
+   Exit Status:        0
+   Service Units:      1.27
+   NCPUs Requested:    12                  CPU Time Used: 00:00:28        
+   Memory Requested:   64.0GB                Memory Used: 1.45GB          
+   NGPUs Requested:    1                 GPU Utilisation: 0%              
+                                         GPU Memory Used: 0B              
+   Walltime Requested: 03:00:00            Walltime Used: 00:00:51        
+   JobFS Requested:    100.0GB                JobFS Used: 0B              
+======================================================================================

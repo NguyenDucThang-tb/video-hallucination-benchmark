@@ -1,0 +1,56 @@
+========================================
+JOB ID   : 177668499.gadi-pbs
+HOST     : gadi-gpu-h200-0001.gadi.nci.org.au
+START    : Fri Aug 28 13:19:03 AEST 2026
+========================================
+Fri Aug 28 13:19:03 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.173.02             Driver Version: 580.173.02     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H200                    On  |   00000000:55:00.0 Off |                    0 |
+| N/A   35C    P0             74W /  600W |       0MiB / 143771MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Log: results/gadi/positive_feature_177668499.gadi-pbs.log
+Traceback (most recent call last):
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/scripts/run_benchmark.py", line 721, in <module>
+    main()
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/scripts/run_benchmark.py", line 659, in main
+    config = load_yaml(config_path)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/utils/config.py", line 12, in load_yaml
+    with Path(path).open(encoding="utf-8") as handle:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/scratch/jp09/dd9648/video-hallucination-benchmark/configs/experiment1_positive_feature.yaml'
+========================================
+END      : Fri Aug 28 13:19:10 AEST 2026
+========================================
+
+======================================================================================
+                  Resource Usage on 2026-08-28 13:19:14:
+   Job Id:             177668499.gadi-pbs
+   Project:            hn98
+   Exit Status:        0
+   Service Units:      0.20
+   NCPUs Requested:    12                  CPU Time Used: 00:00:02        
+   Memory Requested:   64.0GB                Memory Used: 53.19MB         
+   NGPUs Requested:    1                 GPU Utilisation: 0%              
+                                         GPU Memory Used: 0B              
+   Walltime Requested: 03:00:00            Walltime Used: 00:00:08        
+   JobFS Requested:    100.0GB                JobFS Used: 0B              
+======================================================================================

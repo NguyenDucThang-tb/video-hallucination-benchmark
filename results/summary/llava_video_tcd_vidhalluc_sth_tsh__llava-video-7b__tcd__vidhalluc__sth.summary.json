@@ -1,0 +1,61 @@
+{
+  "bqa": {
+    "accuracy": null,
+    "n": 0,
+    "correct": 0,
+    "n_incomplete_questions": 0,
+    "unit": "question_all_clips_correct"
+  },
+  "mcq": {
+    "accuracy": null,
+    "n": 0,
+    "correct": 0
+  },
+  "sth": {
+    "accuracy": null,
+    "official_accuracy": null,
+    "official_status": "SIMCSE_NOT_AVAILABLE",
+    "status": "N/A",
+    "reason": "Official STH requires SimCSE location-description scoring; it was not executed.",
+    "n": 445,
+    "n_parser_error": 0,
+    "classification_unknown_count": 0,
+    "description_parse_coverage": 0.8719101123595505,
+    "binary_accuracy_diagnostic": 0.7123595505617978,
+    "mcc": 0.4543833141246692,
+    "classification_score": 0.528807706101064,
+    "description_accuracy": null,
+    "overall_score": null,
+    "simcse_model": "princeton-nlp/sup-simcse-roberta-large",
+    "similarity_threshold_low": 0.5,
+    "invalid_prediction_policy_for_mcc": "upstream-compatible: values other than yes are treated as no",
+    "formula": "0.6 * classification_score + 0.4 * description_accuracy"
+  },
+  "tsh": {
+    "accuracy": null,
+    "official_accuracy": null,
+    "all_sample_accuracy": null,
+    "valid_only_accuracy": null,
+    "parse_coverage": null,
+    "n": 0,
+    "correct": 0,
+    "incorrect": 0,
+    "parsed_AB": 0,
+    "parsed_BA": 0,
+    "parsed_A": 0,
+    "parsed_B": 0,
+    "empty_output_count": 0,
+    "missing_prediction_count": 0,
+    "valid_count": 0,
+    "valid_incorrect": 0,
+    "unparseable_count": 0,
+    "runtime_failure_count": 0,
+    "denominator_policy": "official VidHalluc: every annotation is in the denominator",
+    "parser": "CyL97/VidHalluc eval/evaluation/eval_tsh.py"
+  },
+  "avg": {
+    "accuracy": null,
+    "formula": "macro average of BQA, MCQ, official STH, and TSH; N/A if any task is unavailable"
+  },
+  "n_duplicate_records_ignored": 0
+}

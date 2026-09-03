@@ -1,0 +1,37 @@
+{
+  "config": "/tmp/qwen_positive_vidhalluc_mcq_v1.yaml",
+  "jobs": [
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "positive_feature",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "ready",
+      "note": "NOT VALIDATED: Qwen positive-feature hook uses frame-level DINO saliency; run with --allow-unvalidated",
+      "validation_override": true
+    }
+  ]
+}
+[2026-08-30 20:52:11] ERROR qwen2.5-vl-7b / positive_feature / vidhalluc / mcq | OSError("We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.")
+[2026-08-30 20:52:11] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/qwen_positive_vidhalluc_mcq_v1.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_positive_vidhalluc_mcq_v1.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "mcq",
+        "status": "ready",
+        "note": "NOT VALIDATED: Qwen positive-feature hook uses frame-level DINO saliency; run with --allow-unvalidated",
+        "validation_override": true
+      },
+      "error": "OSError(\"We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.\\nCheck your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.\")"
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/qwen_positive_vidhalluc_mcq_v1.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_positive_vidhalluc_mcq_v1.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_positive_vidhalluc_mcq_v1.results.md"
+  }
+}

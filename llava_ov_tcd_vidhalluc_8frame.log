@@ -1,0 +1,506 @@
+{
+  "config": "/scratch/jp09/dd9648/run-configs/experiment_llava_ov_tcd_vidhalluc_8frame.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "bqa",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:02<14:59,  1.18s/it]Loading weights:   0%|          | 3/765 [00:21<1:52:02,  8.82s/it]Loading weights:   5%|▌         | 41/765 [00:28<06:26,  1.87it/s] Loading weights:   5%|▌         | 42/765 [00:28<06:25,  1.88it/s]Loading weights:   6%|▌         | 43/765 [00:28<06:13,  1.93it/s]Loading weights:   7%|▋         | 53/765 [00:32<05:15,  2.26it/s]Loading weights:   7%|▋         | 54/765 [00:35<07:05,  1.67it/s]Loading weights:   7%|▋         | 55/765 [00:35<06:51,  1.72it/s]Loading weights:   8%|▊         | 65/765 [00:38<05:00,  2.33it/s]Loading weights:   9%|▊         | 66/765 [00:39<05:14,  2.23it/s]Loading weights:   9%|▉         | 67/765 [00:41<06:37,  1.76it/s]Loading weights:  10%|█         | 78/765 [00:41<02:50,  4.04it/s]Loading weights:  12%|█▏        | 90/765 [00:43<02:27,  4.58it/s]Loading weights:  12%|█▏        | 92/765 [00:43<02:20,  4.81it/s]Loading weights:  13%|█▎        | 102/765 [00:48<03:19,  3.32it/s]Loading weights:  14%|█▎        | 104/765 [00:48<03:23,  3.25it/s]Loading weights:  16%|█▌        | 121/765 [00:49<01:35,  6.73it/s]Loading weights:  16%|█▋        | 126/765 [00:55<03:41,  2.88it/s]Loading weights:  18%|█▊        | 137/765 [00:55<02:24,  4.34it/s]Loading weights:  18%|█▊        | 139/765 [00:55<02:17,  4.57it/s]Loading weights:  19%|█▉        | 149/765 [00:57<01:55,  5.33it/s]Loading weights:  20%|█▉        | 151/765 [01:01<03:56,  2.60it/s]Loading weights:  21%|██        | 161/765 [01:01<02:24,  4.17it/s]Loading weights:  21%|██▏       | 163/765 [01:03<02:43,  3.68it/s]Loading weights:  23%|██▎       | 173/765 [01:04<02:13,  4.43it/s]Loading weights:  23%|██▎       | 174/765 [01:06<03:08,  3.13it/s]Loading weights:  24%|██▍       | 185/765 [01:07<02:09,  4.49it/s]Loading weights:  24%|██▍       | 186/765 [01:10<03:29,  2.76it/s]Loading weights:  26%|██▌       | 199/765 [01:11<02:00,  4.69it/s]Loading weights:  28%|██▊       | 211/765 [01:11<01:12,  7.64it/s]Loading weights:  29%|██▉       | 221/765 [01:14<01:38,  5.55it/s]Loading weights:  29%|██▉       | 224/765 [01:16<02:22,  3.79it/s]Loading weights:  30%|███       | 233/765 [01:22<03:18,  2.68it/s]Loading weights:  31%|███       | 235/765 [01:22<03:10,  2.78it/s]Loading weights:  32%|███▏      | 245/765 [01:27<03:42,  2.34it/s]Loading weights:  32%|███▏      | 246/765 [01:29<04:28,  1.93it/s]Loading weights:  34%|███▎      | 257/765 [01:33<03:37,  2.33it/s]Loading weights:  34%|███▎      | 258/765 [01:35<04:08,  2.04it/s]Loading weights:  34%|███▍      | 259/765 [01:37<05:28,  1.54it/s]Loading weights:  35%|███▌      | 269/765 [01:41<04:02,  2.04it/s]Loading weights:  35%|███▌      | 271/765 [01:42<04:22,  1.88it/s]Loading weights:  37%|███▋      | 281/765 [01:48<04:28,  1.80it/s]Loading weights:  37%|███▋      | 282/765 [01:48<04:21,  1.85it/s]Loading weights:  38%|███▊      | 293/765 [01:51<03:12,  2.45it/s]Loading weights:  38%|███▊      | 294/765 [01:56<05:07,  1.53it/s]Loading weights:  42%|████▏     | 318/765 [01:58<01:59,  3.73it/s]Loading weights:  42%|████▏     | 319/765 [01:59<02:20,  3.18it/s]Loading weights:  43%|████▎     | 330/765 [02:01<01:46,  4.09it/s]Loading weights:  84%|████████▍ | 641/765 [02:01<00:02, 60.97it/s]Loading weights:  87%|████████▋ | 662/765 [02:02<00:01, 60.68it/s]Loading weights:  91%|█████████ | 697/765 [02:02<00:00, 70.16it/s]Loading weights:  94%|█████████▍| 719/765 [02:02<00:00, 65.98it/s]Loading weights:  96%|█████████▌| 736/765 [02:02<00:00, 62.75it/s]Loading weights:  98%|█████████▊| 749/765 [02:03<00:00, 55.18it/s]Loading weights:  99%|█████████▉| 759/765 [02:03<00:00, 50.24it/s]Loading weights: 100%|██████████| 765/765 [02:03<00:00,  6.18it/s]
+[2026-08-25 06:29:22] START llava-ov-7b / tcd / vidhalluc / bqa | total=8550 | resume_valid=0 | limit=full
+[2026-08-25 06:29:32] DONE  vidhalluc 1/8550 | new=1 | sample=bqa:1:0:OBb4013eIc8_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:29:43] DONE  vidhalluc 2/8550 | new=2 | sample=bqa:1:0:OBb4013eIc8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:29:51] DONE  vidhalluc 3/8550 | new=3 | sample=bqa:1:1:OBb4013eIc8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:30:03] DONE  vidhalluc 4/8550 | new=4 | sample=bqa:1:1:OBb4013eIc8_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:30:10] DONE  vidhalluc 5/8550 | new=5 | sample=bqa:2:0:OBb4013eIc8_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:30:19] DONE  vidhalluc 6/8550 | new=6 | sample=bqa:2:0:OBb4013eIc8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:30:26] DONE  vidhalluc 7/8550 | new=7 | sample=bqa:2:1:OBb4013eIc8_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:30:36] DONE  vidhalluc 8/8550 | new=8 | sample=bqa:2:1:OBb4013eIc8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:31:05] DONE  vidhalluc 9/8550 | new=9 | sample=bqa:3:0:JxbmHo84AC4_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:31:18] DONE  vidhalluc 10/8550 | new=10 | sample=bqa:3:0:JxbmHo84AC4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:31:41] DONE  vidhalluc 11/8550 | new=11 | sample=bqa:3:1:JxbmHo84AC4_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:31:53] DONE  vidhalluc 12/8550 | new=12 | sample=bqa:3:1:JxbmHo84AC4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:00] DONE  vidhalluc 13/8550 | new=13 | sample=bqa:4:0:JoQywfQ6B-8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:32:07] DONE  vidhalluc 14/8550 | new=14 | sample=bqa:4:0:JoQywfQ6B-8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:14] DONE  vidhalluc 15/8550 | new=15 | sample=bqa:4:1:JoQywfQ6B-8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:32:21] DONE  vidhalluc 16/8550 | new=16 | sample=bqa:4:1:JoQywfQ6B-8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:27] DONE  vidhalluc 17/8550 | new=17 | sample=bqa:5:0:JoQywfQ6B-8_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:33] DONE  vidhalluc 18/8550 | new=18 | sample=bqa:5:0:JoQywfQ6B-8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:39] DONE  vidhalluc 19/8550 | new=19 | sample=bqa:5:1:JoQywfQ6B-8_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:45] DONE  vidhalluc 20/8550 | new=20 | sample=bqa:5:1:JoQywfQ6B-8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:32:51] DONE  vidhalluc 21/8550 | new=21 | sample=bqa:6:0:JoQywfQ6B-8_clip_8 | parse=valid | correct=False | batch=1
+[2026-08-25 06:32:58] DONE  vidhalluc 22/8550 | new=22 | sample=bqa:6:0:JoQywfQ6B-8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:32:59] DONE  vidhalluc 23/8550 | new=23 | sample=bqa:7:0:woUdHiRWKMg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:00] DONE  vidhalluc 24/8550 | new=24 | sample=bqa:7:0:woUdHiRWKMg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:01] DONE  vidhalluc 25/8550 | new=25 | sample=bqa:7:1:woUdHiRWKMg_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:33:02] DONE  vidhalluc 26/8550 | new=26 | sample=bqa:7:1:woUdHiRWKMg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:03] DONE  vidhalluc 27/8550 | new=27 | sample=bqa:8:0:woUdHiRWKMg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:04] DONE  vidhalluc 28/8550 | new=28 | sample=bqa:8:0:woUdHiRWKMg_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:05] DONE  vidhalluc 29/8550 | new=29 | sample=bqa:8:1:woUdHiRWKMg_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:33:06] DONE  vidhalluc 30/8550 | new=30 | sample=bqa:8:1:woUdHiRWKMg_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:11] DONE  vidhalluc 31/8550 | new=31 | sample=bqa:9:0:656VWQU5dgE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:16] DONE  vidhalluc 32/8550 | new=32 | sample=bqa:9:0:656VWQU5dgE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:21] DONE  vidhalluc 33/8550 | new=33 | sample=bqa:9:1:656VWQU5dgE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:26] DONE  vidhalluc 34/8550 | new=34 | sample=bqa:9:1:656VWQU5dgE_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:33:32] DONE  vidhalluc 35/8550 | new=35 | sample=bqa:10:0:656VWQU5dgE_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:37] DONE  vidhalluc 36/8550 | new=36 | sample=bqa:10:0:656VWQU5dgE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:42] DONE  vidhalluc 37/8550 | new=37 | sample=bqa:10:1:656VWQU5dgE_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:33:47] DONE  vidhalluc 38/8550 | new=38 | sample=bqa:10:1:656VWQU5dgE_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:33:53] DONE  vidhalluc 39/8550 | new=39 | sample=bqa:11:0:pc5_pexVob8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:34:03] DONE  vidhalluc 40/8550 | new=40 | sample=bqa:11:0:pc5_pexVob8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:34:09] DONE  vidhalluc 41/8550 | new=41 | sample=bqa:11:1:pc5_pexVob8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:34:18] DONE  vidhalluc 42/8550 | new=42 | sample=bqa:11:1:pc5_pexVob8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:34:24] DONE  vidhalluc 43/8550 | new=43 | sample=bqa:12:0:6UPfqdssD6g_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:34:30] DONE  vidhalluc 44/8550 | new=44 | sample=bqa:12:0:6UPfqdssD6g_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:34:36] DONE  vidhalluc 45/8550 | new=45 | sample=bqa:12:1:6UPfqdssD6g_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:34:42] DONE  vidhalluc 46/8550 | new=46 | sample=bqa:12:1:6UPfqdssD6g_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:34:49] DONE  vidhalluc 47/8550 | new=47 | sample=bqa:13:0:hiYPv3MrrUw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:34:56] DONE  vidhalluc 48/8550 | new=48 | sample=bqa:13:0:hiYPv3MrrUw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:02] DONE  vidhalluc 49/8550 | new=49 | sample=bqa:13:1:hiYPv3MrrUw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:09] DONE  vidhalluc 50/8550 | new=50 | sample=bqa:13:1:hiYPv3MrrUw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:14] DONE  vidhalluc 51/8550 | new=51 | sample=bqa:14:0:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:21] DONE  vidhalluc 52/8550 | new=52 | sample=bqa:14:0:C0MIMsY6okw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:26] DONE  vidhalluc 53/8550 | new=53 | sample=bqa:14:1:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:32] DONE  vidhalluc 54/8550 | new=54 | sample=bqa:14:1:C0MIMsY6okw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:39] DONE  vidhalluc 55/8550 | new=55 | sample=bqa:15:0:C0MIMsY6okw_clip_9 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:44] DONE  vidhalluc 56/8550 | new=56 | sample=bqa:15:0:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:50] DONE  vidhalluc 57/8550 | new=57 | sample=bqa:15:1:C0MIMsY6okw_clip_9 | parse=valid | correct=False | batch=1
+[2026-08-25 06:35:55] DONE  vidhalluc 58/8550 | new=58 | sample=bqa:15:1:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:57] DONE  vidhalluc 59/8550 | new=59 | sample=bqa:16:0:s69uPXLvzIg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:35:58] DONE  vidhalluc 60/8550 | new=60 | sample=bqa:16:0:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:00] DONE  vidhalluc 61/8550 | new=61 | sample=bqa:16:1:s69uPXLvzIg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:01] DONE  vidhalluc 62/8550 | new=62 | sample=bqa:16:1:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:03] DONE  vidhalluc 63/8550 | new=63 | sample=bqa:17:0:s69uPXLvzIg_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:05] DONE  vidhalluc 64/8550 | new=64 | sample=bqa:17:0:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:07] DONE  vidhalluc 65/8550 | new=65 | sample=bqa:17:1:s69uPXLvzIg_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:08] DONE  vidhalluc 66/8550 | new=66 | sample=bqa:17:1:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:22] DONE  vidhalluc 67/8550 | new=67 | sample=bqa:18:0:eXMF6Skt2To_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:28] DONE  vidhalluc 68/8550 | new=68 | sample=bqa:18:0:eXMF6Skt2To_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:36:42] DONE  vidhalluc 69/8550 | new=69 | sample=bqa:18:1:eXMF6Skt2To_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:36:47] DONE  vidhalluc 70/8550 | new=70 | sample=bqa:18:1:eXMF6Skt2To_clip_3 | parse=valid | correct=True | batch=1
+[h264 @ 0x10e3c200] mmco: unref short failure
+[h264 @ 0x10e3c200] mmco: unref short failure
+[2026-08-25 06:36:58] DONE  vidhalluc 71/8550 | new=71 | sample=bqa:19:0:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:37:08] DONE  vidhalluc 72/8550 | new=72 | sample=bqa:19:0:cUdIbmXb2yI_clip_2 | parse=valid | correct=True | batch=1
+[h264 @ 0x14b75e3558c0] mmco: unref short failure
+[h264 @ 0x14b75e3558c0] mmco: unref short failure
+[2026-08-25 06:37:18] DONE  vidhalluc 73/8550 | new=73 | sample=bqa:19:1:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:37:30] DONE  vidhalluc 74/8550 | new=74 | sample=bqa:19:1:cUdIbmXb2yI_clip_2 | parse=valid | correct=True | batch=1
+[h264 @ 0x11011c40] mmco: unref short failure
+[h264 @ 0x11011c40] mmco: unref short failure
+[2026-08-25 06:37:40] DONE  vidhalluc 75/8550 | new=75 | sample=bqa:20:0:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:37:49] DONE  vidhalluc 76/8550 | new=76 | sample=bqa:20:0:cUdIbmXb2yI_clip_1 | parse=valid | correct=True | batch=1
+[h264 @ 0x14b830beba40] mmco: unref short failure
+[h264 @ 0x14b830beba40] mmco: unref short failure
+[2026-08-25 06:37:59] DONE  vidhalluc 77/8550 | new=77 | sample=bqa:20:1:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:08] DONE  vidhalluc 78/8550 | new=78 | sample=bqa:20:1:cUdIbmXb2yI_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:10] DONE  vidhalluc 79/8550 | new=79 | sample=bqa:21:0:biyf6Q-xF0M_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:12] DONE  vidhalluc 80/8550 | new=80 | sample=bqa:21:0:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:14] DONE  vidhalluc 81/8550 | new=81 | sample=bqa:21:1:biyf6Q-xF0M_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:15] DONE  vidhalluc 82/8550 | new=82 | sample=bqa:21:1:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:17] DONE  vidhalluc 83/8550 | new=83 | sample=bqa:22:0:biyf6Q-xF0M_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:19] DONE  vidhalluc 84/8550 | new=84 | sample=bqa:22:0:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:21] DONE  vidhalluc 85/8550 | new=85 | sample=bqa:22:1:biyf6Q-xF0M_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:22] DONE  vidhalluc 86/8550 | new=86 | sample=bqa:22:1:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:23] DONE  vidhalluc 87/8550 | new=87 | sample=bqa:23:0:UWTpfygMUQw_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:38:25] DONE  vidhalluc 88/8550 | new=88 | sample=bqa:23:0:UWTpfygMUQw_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:38:26] DONE  vidhalluc 89/8550 | new=89 | sample=bqa:23:1:UWTpfygMUQw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:28] DONE  vidhalluc 90/8550 | new=90 | sample=bqa:23:1:UWTpfygMUQw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:29] DONE  vidhalluc 91/8550 | new=91 | sample=bqa:24:0:UWTpfygMUQw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:31] DONE  vidhalluc 92/8550 | new=92 | sample=bqa:24:0:UWTpfygMUQw_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:38:32] DONE  vidhalluc 93/8550 | new=93 | sample=bqa:24:1:UWTpfygMUQw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:35] DONE  vidhalluc 94/8550 | new=94 | sample=bqa:24:1:UWTpfygMUQw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:40] DONE  vidhalluc 95/8550 | new=95 | sample=bqa:25:0:Xt86M-mRxi8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:46] DONE  vidhalluc 96/8550 | new=96 | sample=bqa:25:0:Xt86M-mRxi8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:51] DONE  vidhalluc 97/8550 | new=97 | sample=bqa:25:1:Xt86M-mRxi8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:38:56] DONE  vidhalluc 98/8550 | new=98 | sample=bqa:25:1:Xt86M-mRxi8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:39:02] DONE  vidhalluc 99/8550 | new=99 | sample=bqa:26:0:QKEFacWrn_8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:39:09] DONE  vidhalluc 100/8550 | new=100 | sample=bqa:26:0:QKEFacWrn_8_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:39:14] DONE  vidhalluc 101/8550 | new=101 | sample=bqa:26:1:QKEFacWrn_8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:39:21] DONE  vidhalluc 102/8550 | new=102 | sample=bqa:26:1:QKEFacWrn_8_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:39:26] DONE  vidhalluc 103/8550 | new=103 | sample=bqa:27:0:elgmPvU19K8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:39:32] DONE  vidhalluc 104/8550 | new=104 | sample=bqa:27:0:elgmPvU19K8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:39:37] DONE  vidhalluc 105/8550 | new=105 | sample=bqa:27:1:elgmPvU19K8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:39:43] DONE  vidhalluc 106/8550 | new=106 | sample=bqa:27:1:elgmPvU19K8_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:39:53] DONE  vidhalluc 107/8550 | new=107 | sample=bqa:28:0:PllZQ09sBuI_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:40:05] DONE  vidhalluc 108/8550 | new=108 | sample=bqa:28:0:PllZQ09sBuI_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:40:15] DONE  vidhalluc 109/8550 | new=109 | sample=bqa:28:1:PllZQ09sBuI_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:40:26] DONE  vidhalluc 110/8550 | new=110 | sample=bqa:28:1:PllZQ09sBuI_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:40:36] DONE  vidhalluc 111/8550 | new=111 | sample=bqa:29:0:PllZQ09sBuI_clip_1 | parse=valid | correct=True | batch=1
+[h264 @ 0x14b8bc5cac00] mmco: unref short failure
+[2026-08-25 06:41:00] DONE  vidhalluc 112/8550 | new=112 | sample=bqa:29:0:PllZQ09sBuI_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:41:10] DONE  vidhalluc 113/8550 | new=113 | sample=bqa:29:1:PllZQ09sBuI_clip_1 | parse=valid | correct=True | batch=1
+[h264 @ 0x14b846507940] mmco: unref short failure
+[2026-08-25 06:41:32] DONE  vidhalluc 114/8550 | new=114 | sample=bqa:29:1:PllZQ09sBuI_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:41:35] DONE  vidhalluc 115/8550 | new=115 | sample=bqa:30:0:8zq6C0SRyDQ_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:41:36] DONE  vidhalluc 116/8550 | new=116 | sample=bqa:30:0:8zq6C0SRyDQ_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:41:39] DONE  vidhalluc 117/8550 | new=117 | sample=bqa:30:1:8zq6C0SRyDQ_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:41:40] DONE  vidhalluc 118/8550 | new=118 | sample=bqa:30:1:8zq6C0SRyDQ_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:41:47] DONE  vidhalluc 119/8550 | new=119 | sample=bqa:31:0:yPA6klGWEsc_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:41:53] DONE  vidhalluc 120/8550 | new=120 | sample=bqa:31:0:yPA6klGWEsc_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:41:59] DONE  vidhalluc 121/8550 | new=121 | sample=bqa:31:1:yPA6klGWEsc_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:42:06] DONE  vidhalluc 122/8550 | new=122 | sample=bqa:31:1:yPA6klGWEsc_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:07] DONE  vidhalluc 123/8550 | new=123 | sample=bqa:32:0:WPM0vuERyfc_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:08] DONE  vidhalluc 124/8550 | new=124 | sample=bqa:32:0:WPM0vuERyfc_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:42:10] DONE  vidhalluc 125/8550 | new=125 | sample=bqa:32:1:WPM0vuERyfc_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:11] DONE  vidhalluc 126/8550 | new=126 | sample=bqa:32:1:WPM0vuERyfc_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:42:12] DONE  vidhalluc 127/8550 | new=127 | sample=bqa:33:0:WPM0vuERyfc_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:42:13] DONE  vidhalluc 128/8550 | new=128 | sample=bqa:33:0:WPM0vuERyfc_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:15] DONE  vidhalluc 129/8550 | new=129 | sample=bqa:33:1:WPM0vuERyfc_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:16] DONE  vidhalluc 130/8550 | new=130 | sample=bqa:33:1:WPM0vuERyfc_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:18] DONE  vidhalluc 131/8550 | new=131 | sample=bqa:34:0:ywFa_D5QZ-k_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:20] DONE  vidhalluc 132/8550 | new=132 | sample=bqa:34:0:ywFa_D5QZ-k_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:22] DONE  vidhalluc 133/8550 | new=133 | sample=bqa:34:1:ywFa_D5QZ-k_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:42:23] DONE  vidhalluc 134/8550 | new=134 | sample=bqa:34:1:ywFa_D5QZ-k_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:30] DONE  vidhalluc 135/8550 | new=135 | sample=bqa:35:0:t97xM9sY2yg_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:42:36] DONE  vidhalluc 136/8550 | new=136 | sample=bqa:35:0:t97xM9sY2yg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:43] DONE  vidhalluc 137/8550 | new=137 | sample=bqa:35:1:t97xM9sY2yg_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:48] DONE  vidhalluc 138/8550 | new=138 | sample=bqa:35:1:t97xM9sY2yg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:50] DONE  vidhalluc 139/8550 | new=139 | sample=bqa:36:0:0PmrImNqA2w_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:52] DONE  vidhalluc 140/8550 | new=140 | sample=bqa:36:0:0PmrImNqA2w_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:53] DONE  vidhalluc 141/8550 | new=141 | sample=bqa:36:1:0PmrImNqA2w_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:55] DONE  vidhalluc 142/8550 | new=142 | sample=bqa:36:1:0PmrImNqA2w_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:56] DONE  vidhalluc 143/8550 | new=143 | sample=bqa:37:0:0PmrImNqA2w_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:58] DONE  vidhalluc 144/8550 | new=144 | sample=bqa:37:0:0PmrImNqA2w_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:42:59] DONE  vidhalluc 145/8550 | new=145 | sample=bqa:37:1:0PmrImNqA2w_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:01] DONE  vidhalluc 146/8550 | new=146 | sample=bqa:37:1:0PmrImNqA2w_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:03] DONE  vidhalluc 147/8550 | new=147 | sample=bqa:38:0:gEYutYXODs4_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:04] DONE  vidhalluc 148/8550 | new=148 | sample=bqa:38:0:gEYutYXODs4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:07] DONE  vidhalluc 149/8550 | new=149 | sample=bqa:38:1:gEYutYXODs4_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:08] DONE  vidhalluc 150/8550 | new=150 | sample=bqa:38:1:gEYutYXODs4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:09] DONE  vidhalluc 151/8550 | new=151 | sample=bqa:39:0:gEYutYXODs4_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:11] DONE  vidhalluc 152/8550 | new=152 | sample=bqa:39:0:gEYutYXODs4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:12] DONE  vidhalluc 153/8550 | new=153 | sample=bqa:39:1:gEYutYXODs4_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:13] DONE  vidhalluc 154/8550 | new=154 | sample=bqa:39:1:gEYutYXODs4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:14] DONE  vidhalluc 155/8550 | new=155 | sample=bqa:40:0:xXj-oQm-NbE_clip_2 | parse=valid | correct=True | batch=1
+[h264 @ 0x14b75e355ac0] mmco: unref short failure
+[h264 @ 0x14b75e355ac0] mmco: unref short failure
+[2026-08-25 06:43:16] DONE  vidhalluc 156/8550 | new=156 | sample=bqa:40:0:xXj-oQm-NbE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:17] DONE  vidhalluc 157/8550 | new=157 | sample=bqa:40:1:xXj-oQm-NbE_clip_2 | parse=valid | correct=True | batch=1
+[h264 @ 0x14b8bc78f780] mmco: unref short failure
+[h264 @ 0x14b8bc78f780] mmco: unref short failure
+[2026-08-25 06:43:18] DONE  vidhalluc 158/8550 | new=158 | sample=bqa:40:1:xXj-oQm-NbE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:19] DONE  vidhalluc 159/8550 | new=159 | sample=bqa:41:0:ANeDHelwzK0_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:20] DONE  vidhalluc 160/8550 | new=160 | sample=bqa:41:0:ANeDHelwzK0_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:21] DONE  vidhalluc 161/8550 | new=161 | sample=bqa:41:1:ANeDHelwzK0_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:21] DONE  vidhalluc 162/8550 | new=162 | sample=bqa:41:1:ANeDHelwzK0_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:27] DONE  vidhalluc 163/8550 | new=163 | sample=bqa:42:0:Pv6oIFroaCQ_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:33] DONE  vidhalluc 164/8550 | new=164 | sample=bqa:42:0:Pv6oIFroaCQ_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:39] DONE  vidhalluc 165/8550 | new=165 | sample=bqa:42:1:Pv6oIFroaCQ_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:45] DONE  vidhalluc 166/8550 | new=166 | sample=bqa:42:1:Pv6oIFroaCQ_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:50] DONE  vidhalluc 167/8550 | new=167 | sample=bqa:43:0:Pv6oIFroaCQ_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:43:56] DONE  vidhalluc 168/8550 | new=168 | sample=bqa:43:0:Pv6oIFroaCQ_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:01] DONE  vidhalluc 169/8550 | new=169 | sample=bqa:43:1:Pv6oIFroaCQ_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:06] DONE  vidhalluc 170/8550 | new=170 | sample=bqa:43:1:Pv6oIFroaCQ_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:08] DONE  vidhalluc 171/8550 | new=171 | sample=bqa:44:0:J8B2dX3FLTo_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:10] DONE  vidhalluc 172/8550 | new=172 | sample=bqa:44:0:J8B2dX3FLTo_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:12] DONE  vidhalluc 173/8550 | new=173 | sample=bqa:44:1:J8B2dX3FLTo_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:13] DONE  vidhalluc 174/8550 | new=174 | sample=bqa:44:1:J8B2dX3FLTo_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:15] DONE  vidhalluc 175/8550 | new=175 | sample=bqa:45:0:J8B2dX3FLTo_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:17] DONE  vidhalluc 176/8550 | new=176 | sample=bqa:45:0:J8B2dX3FLTo_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:19] DONE  vidhalluc 177/8550 | new=177 | sample=bqa:45:1:J8B2dX3FLTo_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:20] DONE  vidhalluc 178/8550 | new=178 | sample=bqa:45:1:J8B2dX3FLTo_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:26] DONE  vidhalluc 179/8550 | new=179 | sample=bqa:46:0:UadYaZOC6B8_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:44:33] DONE  vidhalluc 180/8550 | new=180 | sample=bqa:46:0:UadYaZOC6B8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:38] DONE  vidhalluc 181/8550 | new=181 | sample=bqa:46:1:UadYaZOC6B8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:45] DONE  vidhalluc 182/8550 | new=182 | sample=bqa:46:1:UadYaZOC6B8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:52] DONE  vidhalluc 183/8550 | new=183 | sample=bqa:47:0:UadYaZOC6B8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:44:57] DONE  vidhalluc 184/8550 | new=184 | sample=bqa:47:0:UadYaZOC6B8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:03] DONE  vidhalluc 185/8550 | new=185 | sample=bqa:47:1:UadYaZOC6B8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:09] DONE  vidhalluc 186/8550 | new=186 | sample=bqa:47:1:UadYaZOC6B8_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:45:14] DONE  vidhalluc 187/8550 | new=187 | sample=bqa:48:0:gIf0VWXI_DY_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:45:18] DONE  vidhalluc 188/8550 | new=188 | sample=bqa:48:0:gIf0VWXI_DY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:23] DONE  vidhalluc 189/8550 | new=189 | sample=bqa:48:1:gIf0VWXI_DY_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:45:28] DONE  vidhalluc 190/8550 | new=190 | sample=bqa:48:1:gIf0VWXI_DY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:32] DONE  vidhalluc 191/8550 | new=191 | sample=bqa:49:0:gIf0VWXI_DY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:36] DONE  vidhalluc 192/8550 | new=192 | sample=bqa:49:0:gIf0VWXI_DY_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:45:41] DONE  vidhalluc 193/8550 | new=193 | sample=bqa:49:1:gIf0VWXI_DY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:45] DONE  vidhalluc 194/8550 | new=194 | sample=bqa:49:1:gIf0VWXI_DY_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:51] DONE  vidhalluc 195/8550 | new=195 | sample=bqa:50:0:Ez7s36AwgLk_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:45:57] DONE  vidhalluc 196/8550 | new=196 | sample=bqa:50:0:Ez7s36AwgLk_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:46:03] DONE  vidhalluc 197/8550 | new=197 | sample=bqa:50:1:Ez7s36AwgLk_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:46:09] DONE  vidhalluc 198/8550 | new=198 | sample=bqa:50:1:Ez7s36AwgLk_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:16] DONE  vidhalluc 199/8550 | new=199 | sample=bqa:51:0:Ez7s36AwgLk_clip_9 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:22] DONE  vidhalluc 200/8550 | new=200 | sample=bqa:51:0:Ez7s36AwgLk_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:29] DONE  vidhalluc 201/8550 | new=201 | sample=bqa:51:1:Ez7s36AwgLk_clip_9 | parse=valid | correct=False | batch=1
+[2026-08-25 06:46:35] DONE  vidhalluc 202/8550 | new=202 | sample=bqa:51:1:Ez7s36AwgLk_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:36] DONE  vidhalluc 203/8550 | new=203 | sample=bqa:52:0:vGcH8N8sJlM_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:38] DONE  vidhalluc 204/8550 | new=204 | sample=bqa:52:0:vGcH8N8sJlM_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:39] DONE  vidhalluc 205/8550 | new=205 | sample=bqa:52:1:vGcH8N8sJlM_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:41] DONE  vidhalluc 206/8550 | new=206 | sample=bqa:52:1:vGcH8N8sJlM_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:46:50] DONE  vidhalluc 207/8550 | new=207 | sample=bqa:53:0:WFL8DhccHr0_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:04] DONE  vidhalluc 208/8550 | new=208 | sample=bqa:53:0:WFL8DhccHr0_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:47:12] DONE  vidhalluc 209/8550 | new=209 | sample=bqa:53:1:WFL8DhccHr0_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:25] DONE  vidhalluc 210/8550 | new=210 | sample=bqa:53:1:WFL8DhccHr0_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:47:31] DONE  vidhalluc 211/8550 | new=211 | sample=bqa:54:0:-M-Dr6HqDhU_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:36] DONE  vidhalluc 212/8550 | new=212 | sample=bqa:54:0:-M-Dr6HqDhU_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:47:42] DONE  vidhalluc 213/8550 | new=213 | sample=bqa:54:1:-M-Dr6HqDhU_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:48] DONE  vidhalluc 214/8550 | new=214 | sample=bqa:54:1:-M-Dr6HqDhU_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:50] DONE  vidhalluc 215/8550 | new=215 | sample=bqa:55:0:gvr1dpCpvhw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:51] DONE  vidhalluc 216/8550 | new=216 | sample=bqa:55:0:gvr1dpCpvhw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:53] DONE  vidhalluc 217/8550 | new=217 | sample=bqa:55:1:gvr1dpCpvhw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:54] DONE  vidhalluc 218/8550 | new=218 | sample=bqa:55:1:gvr1dpCpvhw_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:47:56] DONE  vidhalluc 219/8550 | new=219 | sample=bqa:56:0:gvr1dpCpvhw_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:47:57] DONE  vidhalluc 220/8550 | new=220 | sample=bqa:56:0:gvr1dpCpvhw_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:47:59] DONE  vidhalluc 221/8550 | new=221 | sample=bqa:56:1:gvr1dpCpvhw_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:00] DONE  vidhalluc 222/8550 | new=222 | sample=bqa:56:1:gvr1dpCpvhw_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:48:10] DONE  vidhalluc 223/8550 | new=223 | sample=bqa:57:0:9GYLUAFgCXE_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:16] DONE  vidhalluc 224/8550 | new=224 | sample=bqa:57:0:9GYLUAFgCXE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:25] DONE  vidhalluc 225/8550 | new=225 | sample=bqa:57:1:9GYLUAFgCXE_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:32] DONE  vidhalluc 226/8550 | new=226 | sample=bqa:57:1:9GYLUAFgCXE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:33] DONE  vidhalluc 227/8550 | new=227 | sample=bqa:58:0:zrnxRV3yLR8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:35] DONE  vidhalluc 228/8550 | new=228 | sample=bqa:58:0:zrnxRV3yLR8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:36] DONE  vidhalluc 229/8550 | new=229 | sample=bqa:58:1:zrnxRV3yLR8_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:48:38] DONE  vidhalluc 230/8550 | new=230 | sample=bqa:58:1:zrnxRV3yLR8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:41] DONE  vidhalluc 231/8550 | new=231 | sample=bqa:59:0:BKdKbFPerGo_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:45] DONE  vidhalluc 232/8550 | new=232 | sample=bqa:59:0:BKdKbFPerGo_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:48:49] DONE  vidhalluc 233/8550 | new=233 | sample=bqa:59:1:BKdKbFPerGo_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:53] DONE  vidhalluc 234/8550 | new=234 | sample=bqa:59:1:BKdKbFPerGo_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:55] DONE  vidhalluc 235/8550 | new=235 | sample=bqa:60:0:ss6XN-JP_x8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:56] DONE  vidhalluc 236/8550 | new=236 | sample=bqa:60:0:ss6XN-JP_x8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:48:57] DONE  vidhalluc 237/8550 | new=237 | sample=bqa:60:1:ss6XN-JP_x8_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:48:59] DONE  vidhalluc 238/8550 | new=238 | sample=bqa:60:1:ss6XN-JP_x8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:00] DONE  vidhalluc 239/8550 | new=239 | sample=bqa:61:0:ss6XN-JP_x8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:02] DONE  vidhalluc 240/8550 | new=240 | sample=bqa:61:0:ss6XN-JP_x8_clip_9 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:03] DONE  vidhalluc 241/8550 | new=241 | sample=bqa:61:1:ss6XN-JP_x8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:05] DONE  vidhalluc 242/8550 | new=242 | sample=bqa:61:1:ss6XN-JP_x8_clip_9 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:13] DONE  vidhalluc 243/8550 | new=243 | sample=bqa:62:0:ReKUs0km4X8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:18] DONE  vidhalluc 244/8550 | new=244 | sample=bqa:62:0:ReKUs0km4X8_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:49:26] DONE  vidhalluc 245/8550 | new=245 | sample=bqa:62:1:ReKUs0km4X8_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:49:31] DONE  vidhalluc 246/8550 | new=246 | sample=bqa:62:1:ReKUs0km4X8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:33] DONE  vidhalluc 247/8550 | new=247 | sample=bqa:63:0:LNLsmdVMCmY_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:34] DONE  vidhalluc 248/8550 | new=248 | sample=bqa:63:0:LNLsmdVMCmY_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:36] DONE  vidhalluc 249/8550 | new=249 | sample=bqa:63:1:LNLsmdVMCmY_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:49:37] DONE  vidhalluc 250/8550 | new=250 | sample=bqa:63:1:LNLsmdVMCmY_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:46] DONE  vidhalluc 251/8550 | new=251 | sample=bqa:64:0:KRGiJIHSd9E_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:49:54] DONE  vidhalluc 252/8550 | new=252 | sample=bqa:64:0:KRGiJIHSd9E_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:03] DONE  vidhalluc 253/8550 | new=253 | sample=bqa:64:1:KRGiJIHSd9E_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:11] DONE  vidhalluc 254/8550 | new=254 | sample=bqa:64:1:KRGiJIHSd9E_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:16] DONE  vidhalluc 255/8550 | new=255 | sample=bqa:65:0:tOVv0cAyjcg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:22] DONE  vidhalluc 256/8550 | new=256 | sample=bqa:65:0:tOVv0cAyjcg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:27] DONE  vidhalluc 257/8550 | new=257 | sample=bqa:65:1:tOVv0cAyjcg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:32] DONE  vidhalluc 258/8550 | new=258 | sample=bqa:65:1:tOVv0cAyjcg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:37] DONE  vidhalluc 259/8550 | new=259 | sample=bqa:66:0:tOVv0cAyjcg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:45] DONE  vidhalluc 260/8550 | new=260 | sample=bqa:66:0:tOVv0cAyjcg_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 06:50:50] DONE  vidhalluc 261/8550 | new=261 | sample=bqa:66:1:tOVv0cAyjcg_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:50:57] DONE  vidhalluc 262/8550 | new=262 | sample=bqa:66:1:tOVv0cAyjcg_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 06:51:16] DONE  vidhalluc 263/8550 | new=263 | sample=bqa:67:0:YjxjsP6A5H8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:51:22] DONE  vidhalluc 264/8550 | new=264 | sample=bqa:67:0:YjxjsP6A5H8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:51:41] DONE  vidhalluc 265/8550 | new=265 | sample=bqa:67:1:YjxjsP6A5H8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:51:47] DONE  vidhalluc 266/8550 | new=266 | sample=bqa:67:1:YjxjsP6A5H8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:51:53] DONE  vidhalluc 267/8550 | new=267 | sample=bqa:68:0:YjxjsP6A5H8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:52:09] DONE  vidhalluc 268/8550 | new=268 | sample=bqa:68:0:YjxjsP6A5H8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:52:16] DONE  vidhalluc 269/8550 | new=269 | sample=bqa:68:1:YjxjsP6A5H8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:52:31] DONE  vidhalluc 270/8550 | new=270 | sample=bqa:68:1:YjxjsP6A5H8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:52:40] DONE  vidhalluc 271/8550 | new=271 | sample=bqa:69:0:34KalqGygZ0_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:52:45] DONE  vidhalluc 272/8550 | new=272 | sample=bqa:69:0:34KalqGygZ0_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:52:54] DONE  vidhalluc 273/8550 | new=273 | sample=bqa:69:1:34KalqGygZ0_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:52:59] DONE  vidhalluc 274/8550 | new=274 | sample=bqa:69:1:34KalqGygZ0_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:05] DONE  vidhalluc 275/8550 | new=275 | sample=bqa:70:0:34KalqGygZ0_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:11] DONE  vidhalluc 276/8550 | new=276 | sample=bqa:70:0:34KalqGygZ0_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:53:17] DONE  vidhalluc 277/8550 | new=277 | sample=bqa:70:1:34KalqGygZ0_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:22] DONE  vidhalluc 278/8550 | new=278 | sample=bqa:70:1:34KalqGygZ0_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:41] DONE  vidhalluc 279/8550 | new=279 | sample=bqa:71:0:R4oYA0Zu-m0_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:54] DONE  vidhalluc 280/8550 | new=280 | sample=bqa:71:0:R4oYA0Zu-m0_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:54:10] DONE  vidhalluc 281/8550 | new=281 | sample=bqa:71:1:R4oYA0Zu-m0_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 06:54:22] DONE  vidhalluc 282/8550 | new=282 | sample=bqa:71:1:R4oYA0Zu-m0_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:54:38] DONE  vidhalluc 283/8550 | new=283 | sample=bqa:72:0:R4oYA0Zu-m0_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:54:48] DONE  vidhalluc 284/8550 | new=284 | sample=bqa:72:0:R4oYA0Zu-m0_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:05] DONE  vidhalluc 285/8550 | new=285 | sample=bqa:72:1:R4oYA0Zu-m0_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:15] DONE  vidhalluc 286/8550 | new=286 | sample=bqa:72:1:R4oYA0Zu-m0_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:17] DONE  vidhalluc 287/8550 | new=287 | sample=bqa:73:0:LUDZ7e0RdEE_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:19] DONE  vidhalluc 288/8550 | new=288 | sample=bqa:73:0:LUDZ7e0RdEE_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:21] DONE  vidhalluc 289/8550 | new=289 | sample=bqa:73:1:LUDZ7e0RdEE_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:22] DONE  vidhalluc 290/8550 | new=290 | sample=bqa:73:1:LUDZ7e0RdEE_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:24] DONE  vidhalluc 291/8550 | new=291 | sample=bqa:74:0:WU4ISFy651Y_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:26] DONE  vidhalluc 292/8550 | new=292 | sample=bqa:74:0:WU4ISFy651Y_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:55:27] DONE  vidhalluc 293/8550 | new=293 | sample=bqa:74:1:WU4ISFy651Y_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:55:29] DONE  vidhalluc 294/8550 | new=294 | sample=bqa:74:1:WU4ISFy651Y_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:31] DONE  vidhalluc 295/8550 | new=295 | sample=bqa:75:0:WU4ISFy651Y_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:32] DONE  vidhalluc 296/8550 | new=296 | sample=bqa:75:0:WU4ISFy651Y_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:55:34] DONE  vidhalluc 297/8550 | new=297 | sample=bqa:75:1:WU4ISFy651Y_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:36] DONE  vidhalluc 298/8550 | new=298 | sample=bqa:75:1:WU4ISFy651Y_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:39] DONE  vidhalluc 299/8550 | new=299 | sample=bqa:76:0:0fvL6IHKYF0_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:41] DONE  vidhalluc 300/8550 | new=300 | sample=bqa:76:0:0fvL6IHKYF0_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:44] DONE  vidhalluc 301/8550 | new=301 | sample=bqa:76:1:0fvL6IHKYF0_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:47] DONE  vidhalluc 302/8550 | new=302 | sample=bqa:76:1:0fvL6IHKYF0_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:48] DONE  vidhalluc 303/8550 | new=303 | sample=bqa:77:0:z-iuSgXKUcw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:49] DONE  vidhalluc 304/8550 | new=304 | sample=bqa:77:0:z-iuSgXKUcw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:51] DONE  vidhalluc 305/8550 | new=305 | sample=bqa:77:1:z-iuSgXKUcw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:52] DONE  vidhalluc 306/8550 | new=306 | sample=bqa:77:1:z-iuSgXKUcw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:54] DONE  vidhalluc 307/8550 | new=307 | sample=bqa:78:0:z-iuSgXKUcw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:56] DONE  vidhalluc 308/8550 | new=308 | sample=bqa:78:0:z-iuSgXKUcw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:57] DONE  vidhalluc 309/8550 | new=309 | sample=bqa:78:1:z-iuSgXKUcw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:55:59] DONE  vidhalluc 310/8550 | new=310 | sample=bqa:78:1:z-iuSgXKUcw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:04] DONE  vidhalluc 311/8550 | new=311 | sample=bqa:79:0:2SKZB0bfqF8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:09] DONE  vidhalluc 312/8550 | new=312 | sample=bqa:79:0:2SKZB0bfqF8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:14] DONE  vidhalluc 313/8550 | new=313 | sample=bqa:79:1:2SKZB0bfqF8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:20] DONE  vidhalluc 314/8550 | new=314 | sample=bqa:79:1:2SKZB0bfqF8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:25] DONE  vidhalluc 315/8550 | new=315 | sample=bqa:80:0:2SKZB0bfqF8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:31] DONE  vidhalluc 316/8550 | new=316 | sample=bqa:80:0:2SKZB0bfqF8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:36] DONE  vidhalluc 317/8550 | new=317 | sample=bqa:80:1:2SKZB0bfqF8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:43] DONE  vidhalluc 318/8550 | new=318 | sample=bqa:80:1:2SKZB0bfqF8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:48] DONE  vidhalluc 319/8550 | new=319 | sample=bqa:81:0:GV_BDNmUiLY_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:54] DONE  vidhalluc 320/8550 | new=320 | sample=bqa:81:0:GV_BDNmUiLY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:56:59] DONE  vidhalluc 321/8550 | new=321 | sample=bqa:81:1:GV_BDNmUiLY_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:05] DONE  vidhalluc 322/8550 | new=322 | sample=bqa:81:1:GV_BDNmUiLY_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:57:10] DONE  vidhalluc 323/8550 | new=323 | sample=bqa:82:0:GV_BDNmUiLY_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:16] DONE  vidhalluc 324/8550 | new=324 | sample=bqa:82:0:GV_BDNmUiLY_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:21] DONE  vidhalluc 325/8550 | new=325 | sample=bqa:82:1:GV_BDNmUiLY_clip_7 | parse=valid | correct=False | batch=1
+[2026-08-25 06:57:27] DONE  vidhalluc 326/8550 | new=326 | sample=bqa:82:1:GV_BDNmUiLY_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:34] DONE  vidhalluc 327/8550 | new=327 | sample=bqa:83:0:HPNZi_WsUeY_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 06:57:41] DONE  vidhalluc 328/8550 | new=328 | sample=bqa:83:0:HPNZi_WsUeY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:49] DONE  vidhalluc 329/8550 | new=329 | sample=bqa:83:1:HPNZi_WsUeY_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:56] DONE  vidhalluc 330/8550 | new=330 | sample=bqa:83:1:HPNZi_WsUeY_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:57:59] DONE  vidhalluc 331/8550 | new=331 | sample=bqa:84:0:dbMPw8PfXHo_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:00] DONE  vidhalluc 332/8550 | new=332 | sample=bqa:84:0:dbMPw8PfXHo_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:03] DONE  vidhalluc 333/8550 | new=333 | sample=bqa:84:1:dbMPw8PfXHo_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:04] DONE  vidhalluc 334/8550 | new=334 | sample=bqa:84:1:dbMPw8PfXHo_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:10] DONE  vidhalluc 335/8550 | new=335 | sample=bqa:85:0:Wzg4d-3ym1E_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:16] DONE  vidhalluc 336/8550 | new=336 | sample=bqa:85:0:Wzg4d-3ym1E_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:58:22] DONE  vidhalluc 337/8550 | new=337 | sample=bqa:85:1:Wzg4d-3ym1E_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 06:58:28] DONE  vidhalluc 338/8550 | new=338 | sample=bqa:85:1:Wzg4d-3ym1E_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:35] DONE  vidhalluc 339/8550 | new=339 | sample=bqa:86:0:Wzg4d-3ym1E_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:41] DONE  vidhalluc 340/8550 | new=340 | sample=bqa:86:0:Wzg4d-3ym1E_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:49] DONE  vidhalluc 341/8550 | new=341 | sample=bqa:86:1:Wzg4d-3ym1E_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:55] DONE  vidhalluc 342/8550 | new=342 | sample=bqa:86:1:Wzg4d-3ym1E_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:05] DONE  vidhalluc 343/8550 | new=343 | sample=bqa:87:0:CArYinl5tFo_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:10] DONE  vidhalluc 344/8550 | new=344 | sample=bqa:87:0:CArYinl5tFo_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:20] DONE  vidhalluc 345/8550 | new=345 | sample=bqa:87:1:CArYinl5tFo_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:25] DONE  vidhalluc 346/8550 | new=346 | sample=bqa:87:1:CArYinl5tFo_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:31] DONE  vidhalluc 347/8550 | new=347 | sample=bqa:88:0:y9kk0ptXevk_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:36] DONE  vidhalluc 348/8550 | new=348 | sample=bqa:88:0:y9kk0ptXevk_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:41] DONE  vidhalluc 349/8550 | new=349 | sample=bqa:88:1:y9kk0ptXevk_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:46] DONE  vidhalluc 350/8550 | new=350 | sample=bqa:88:1:y9kk0ptXevk_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:00:06] DONE  vidhalluc 351/8550 | new=351 | sample=bqa:89:0:VwmYoF9Rh_8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:00:15] DONE  vidhalluc 352/8550 | new=352 | sample=bqa:89:0:VwmYoF9Rh_8_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 07:00:34] DONE  vidhalluc 353/8550 | new=353 | sample=bqa:89:1:VwmYoF9Rh_8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:00:43] DONE  vidhalluc 354/8550 | new=354 | sample=bqa:89:1:VwmYoF9Rh_8_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 07:00:57] DONE  vidhalluc 355/8550 | new=355 | sample=bqa:90:0:wTBJ4PRnU4k_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:03] DONE  vidhalluc 356/8550 | new=356 | sample=bqa:90:0:wTBJ4PRnU4k_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:01:16] DONE  vidhalluc 357/8550 | new=357 | sample=bqa:90:1:wTBJ4PRnU4k_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 07:01:22] DONE  vidhalluc 358/8550 | new=358 | sample=bqa:90:1:wTBJ4PRnU4k_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:31] DONE  vidhalluc 359/8550 | new=359 | sample=bqa:91:0:MubE2kOK6z0_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:40] DONE  vidhalluc 360/8550 | new=360 | sample=bqa:91:0:MubE2kOK6z0_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:48] DONE  vidhalluc 361/8550 | new=361 | sample=bqa:91:1:MubE2kOK6z0_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:57] DONE  vidhalluc 362/8550 | new=362 | sample=bqa:91:1:MubE2kOK6z0_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:58] DONE  vidhalluc 363/8550 | new=363 | sample=bqa:92:0:R3HC-IAZVZg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:00] DONE  vidhalluc 364/8550 | new=364 | sample=bqa:92:0:R3HC-IAZVZg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:02] DONE  vidhalluc 365/8550 | new=365 | sample=bqa:92:1:R3HC-IAZVZg_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:03] DONE  vidhalluc 366/8550 | new=366 | sample=bqa:92:1:R3HC-IAZVZg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:05] DONE  vidhalluc 367/8550 | new=367 | sample=bqa:93:0:7hvq4VqEGCE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:07] DONE  vidhalluc 368/8550 | new=368 | sample=bqa:93:0:7hvq4VqEGCE_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:09] DONE  vidhalluc 369/8550 | new=369 | sample=bqa:93:1:7hvq4VqEGCE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:11] DONE  vidhalluc 370/8550 | new=370 | sample=bqa:93:1:7hvq4VqEGCE_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:12] DONE  vidhalluc 371/8550 | new=371 | sample=bqa:94:0:CKjHXMoXye4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:13] DONE  vidhalluc 372/8550 | new=372 | sample=bqa:94:0:CKjHXMoXye4_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:15] DONE  vidhalluc 373/8550 | new=373 | sample=bqa:94:1:CKjHXMoXye4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:16] DONE  vidhalluc 374/8550 | new=374 | sample=bqa:94:1:CKjHXMoXye4_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:20] DONE  vidhalluc 375/8550 | new=375 | sample=bqa:95:0:xsdrqauYhJs_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:25] DONE  vidhalluc 376/8550 | new=376 | sample=bqa:95:0:xsdrqauYhJs_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:29] DONE  vidhalluc 377/8550 | new=377 | sample=bqa:95:1:xsdrqauYhJs_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:34] DONE  vidhalluc 378/8550 | new=378 | sample=bqa:95:1:xsdrqauYhJs_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:38] DONE  vidhalluc 379/8550 | new=379 | sample=bqa:96:0:xsdrqauYhJs_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:42] DONE  vidhalluc 380/8550 | new=380 | sample=bqa:96:0:xsdrqauYhJs_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:46] DONE  vidhalluc 381/8550 | new=381 | sample=bqa:96:1:xsdrqauYhJs_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:50] DONE  vidhalluc 382/8550 | new=382 | sample=bqa:96:1:xsdrqauYhJs_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:56] DONE  vidhalluc 383/8550 | new=383 | sample=bqa:97:0:U0d68z5HTwE_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:02] DONE  vidhalluc 384/8550 | new=384 | sample=bqa:97:0:U0d68z5HTwE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:08] DONE  vidhalluc 385/8550 | new=385 | sample=bqa:97:1:U0d68z5HTwE_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:13] DONE  vidhalluc 386/8550 | new=386 | sample=bqa:97:1:U0d68z5HTwE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:19] DONE  vidhalluc 387/8550 | new=387 | sample=bqa:98:0:U0d68z5HTwE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:26] DONE  vidhalluc 388/8550 | new=388 | sample=bqa:98:0:U0d68z5HTwE_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:31] DONE  vidhalluc 389/8550 | new=389 | sample=bqa:98:1:U0d68z5HTwE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:38] DONE  vidhalluc 390/8550 | new=390 | sample=bqa:98:1:U0d68z5HTwE_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:44] DONE  vidhalluc 391/8550 | new=391 | sample=bqa:99:0:k3oPZS_Id3M_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:03:50] DONE  vidhalluc 392/8550 | new=392 | sample=bqa:99:0:k3oPZS_Id3M_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:57] DONE  vidhalluc 393/8550 | new=393 | sample=bqa:99:1:k3oPZS_Id3M_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:03] DONE  vidhalluc 394/8550 | new=394 | sample=bqa:99:1:k3oPZS_Id3M_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:11] DONE  vidhalluc 395/8550 | new=395 | sample=bqa:100:0:k3oPZS_Id3M_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:17] DONE  vidhalluc 396/8550 | new=396 | sample=bqa:100:0:k3oPZS_Id3M_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:25] DONE  vidhalluc 397/8550 | new=397 | sample=bqa:100:1:k3oPZS_Id3M_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:31] DONE  vidhalluc 398/8550 | new=398 | sample=bqa:100:1:k3oPZS_Id3M_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:33] DONE  vidhalluc 399/8550 | new=399 | sample=bqa:101:0:-OH1BDqao9w_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:35] DONE  vidhalluc 400/8550 | new=400 | sample=bqa:101:0:-OH1BDqao9w_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:37] DONE  vidhalluc 401/8550 | new=401 | sample=bqa:101:1:-OH1BDqao9w_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 07:04:39] DONE  vidhalluc 402/8550 | new=402 | sample=bqa:101:1:-OH1BDqao9w_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:40] DONE  vidhalluc 403/8550 | new=403 | sample=bqa:102:0:-OH1BDqao9w_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:42] DONE  vidhalluc 404/8550 | new=404 | sample=bqa:102:0:-OH1BDqao9w_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:44] DONE  vidhalluc 405/8550 | new=405 | sample=bqa:102:1:-OH1BDqao9w_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 07:04:46] DONE  vidhalluc 406/8550 | new=406 | sample=bqa:102:1:-OH1BDqao9w_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:52] DONE  vidhalluc 407/8550 | new=407 | sample=bqa:103:0:-2VzSMAdzl4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:57] DONE  vidhalluc 408/8550 | new=408 | sample=bqa:103:0:-2VzSMAdzl4_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:03] DONE  vidhalluc 409/8550 | new=409 | sample=bqa:103:1:-2VzSMAdzl4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:09] DONE  vidhalluc 410/8550 | new=410 | sample=bqa:103:1:-2VzSMAdzl4_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:14] DONE  vidhalluc 411/8550 | new=411 | sample=bqa:104:0:-2VzSMAdzl4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:21] DONE  vidhalluc 412/8550 | new=412 | sample=bqa:104:0:-2VzSMAdzl4_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:26] DONE  vidhalluc 413/8550 | new=413 | sample=bqa:104:1:-2VzSMAdzl4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:32] DONE  vidhalluc 414/8550 | new=414 | sample=bqa:104:1:-2VzSMAdzl4_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:39] DONE  vidhalluc 415/8550 | new=415 | sample=bqa:105:0:cT4EquMmRiw_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:48] DONE  vidhalluc 416/8550 | new=416 | sample=bqa:105:0:cT4EquMmRiw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:55] DONE  vidhalluc 417/8550 | new=417 | sample=bqa:105:1:cT4EquMmRiw_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:03] DONE  vidhalluc 418/8550 | new=418 | sample=bqa:105:1:cT4EquMmRiw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:10] DONE  vidhalluc 419/8550 | new=419 | sample=bqa:106:0:cT4EquMmRiw_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:16] DONE  vidhalluc 420/8550 | new=420 | sample=bqa:106:0:cT4EquMmRiw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:22] DONE  vidhalluc 421/8550 | new=421 | sample=bqa:106:1:cT4EquMmRiw_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:28] DONE  vidhalluc 422/8550 | new=422 | sample=bqa:106:1:cT4EquMmRiw_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:30] DONE  vidhalluc 423/8550 | new=423 | sample=bqa:107:0:DFAodsf1dWk_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:32] DONE  vidhalluc 424/8550 | new=424 | sample=bqa:107:0:DFAodsf1dWk_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:34] DONE  vidhalluc 425/8550 | new=425 | sample=bqa:107:1:DFAodsf1dWk_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 07:06:36] DONE  vidhalluc 426/8550 | new=426 | sample=bqa:107:1:DFAodsf1dWk_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:41] DONE  vidhalluc 427/8550 | new=427 | sample=bqa:108:0:od9EdcDcByA_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:47] DONE  vidhalluc 428/8550 | new=428 | sample=bqa:108:0:od9EdcDcByA_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:52] DONE  vidhalluc 429/8550 | new=429 | sample=bqa:108:1:od9EdcDcByA_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:57] DONE  vidhalluc 430/8550 | new=430 | sample=bqa:108:1:od9EdcDcByA_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:15] DONE  vidhalluc 431/8550 | new=431 | sample=bqa:109:0:od9EdcDcByA_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:21] DONE  vidhalluc 432/8550 | new=432 | sample=bqa:109:0:od9EdcDcByA_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 07:07:38] DONE  vidhalluc 433/8550 | new=433 | sample=bqa:109:1:od9EdcDcByA_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:44] DONE  vidhalluc 434/8550 | new=434 | sample=bqa:109:1:od9EdcDcByA_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:51] DONE  vidhalluc 435/8550 | new=435 | sample=bqa:110:0:FX4inHmWQtE_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 07:07:57] DONE  vidhalluc 436/8550 | new=436 | sample=bqa:110:0:FX4inHmWQtE_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:04] DONE  vidhalluc 437/8550 | new=437 | sample=bqa:110:1:FX4inHmWQtE_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:10] DONE  vidhalluc 438/8550 | new=438 | sample=bqa:110:1:FX4inHmWQtE_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:16] DONE  vidhalluc 439/8550 | new=439 | sample=bqa:111:0:FX4inHmWQtE_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:29] DONE  vidhalluc 440/8550 | new=440 | sample=bqa:111:0:FX4inHmWQtE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:36] DONE  vidhalluc 441/8550 | new=441 | sample=bqa:111:1:FX4inHmWQtE_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:49] DONE  vidhalluc 442/8550 | new=442 | sample=bqa:111:1:FX4inHmWQtE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:51] DONE  vidhalluc 443/8550 | new=443 | sample=bqa:112:0:Sd08rsPTroE_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 07:08:52] DONE  vidhalluc 444/8550 | new=444 | sample=bqa:112:0:Sd08rsPTroE_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:08:55] DONE  vidhalluc 445/8550 | new=445 | sample=bqa:112:1:Sd08rsPTroE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:56] DONE  vidhalluc 446/8550 | new=446 | sample=bqa:112:1:Sd08rsPTroE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:58] DONE  vidhalluc 447/8550 | new=447 | sample=bqa:113:0:Sd08rsPTroE_clip_7 | parse=valid | correct=False | batch=1
+[2026-08-25 07:08:59] DONE  vidhalluc 448/8550 | new=448 | sample=bqa:113:0:Sd08rsPTroE_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:09:01] DONE  vidhalluc 449/8550 | new=449 | sample=bqa:113:1:Sd08rsPTroE_clip_7 | parse=valid | correct=False | batch=1

@@ -1,0 +1,44 @@
+/scratch/jp09/dd9648/.venv-llava-video/lib64/python3.12/site-packages/transformers/utils/hub.py:124: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+/scratch/jp09/dd9648/.venv-llava-video/lib64/python3.12/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+{
+  "config": "/tmp/llava_video_positive_videohallucer_orh_v1.yaml",
+  "jobs": [
+    {
+      "model": "llava-video-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "orh",
+      "status": "ready",
+      "note": "NOT VALIDATED: LLaVA-Video positive-feature projector hook requires an end-to-end GPU smoke test",
+      "validation_override": true
+    }
+  ]
+}
+Please install pyav to use video processing functions.
+Loaded LLaVA model: /scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+[2026-08-31 00:51:38] ERROR llava-video-7b / positive_feature / videohallucer / orh | ImportError('Using `low_cpu_mem_usage=True` or a `device_map` requires Accelerate: `pip install accelerate`')
+[2026-08-31 00:51:38] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_video_positive_videohallucer_orh_v1.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_video_positive_videohallucer_orh_v1.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "llava-video-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "orh",
+        "status": "ready",
+        "note": "NOT VALIDATED: LLaVA-Video positive-feature projector hook requires an end-to-end GPU smoke test",
+        "validation_override": true
+      },
+      "error": "ImportError('Using `low_cpu_mem_usage=True` or a `device_map` requires Accelerate: `pip install accelerate`')"
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_video_positive_videohallucer_orh_v1.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_video_positive_videohallucer_orh_v1.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_video_positive_videohallucer_orh_v1.results.md"
+  }
+}

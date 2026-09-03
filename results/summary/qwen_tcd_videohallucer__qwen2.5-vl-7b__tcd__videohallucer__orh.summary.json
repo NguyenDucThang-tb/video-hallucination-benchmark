@@ -1,0 +1,47 @@
+{
+  "orh": {
+    "n_pairs": 200,
+    "n_complete_pairs": 200,
+    "n_missing_pairs": 0,
+    "correct_pairs": 120,
+    "n_parser_error_records": 0,
+    "accuracy": 0.6
+  },
+  "tph": {
+    "n_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "accuracy": null
+  },
+  "sdh": {
+    "n_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "accuracy": null
+  },
+  "efh": {
+    "n_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "accuracy": null
+  },
+  "enfh": {
+    "n_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "accuracy": null
+  },
+  "avg": {
+    "accuracy": null
+  },
+  "metric": "strict_pair_accuracy",
+  "n_duplicate_records_ignored": 0
+}

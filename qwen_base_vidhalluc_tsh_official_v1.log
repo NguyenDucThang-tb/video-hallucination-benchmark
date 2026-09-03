@@ -1,0 +1,249 @@
+{
+  "config": "/scratch/jp09/dd9648/experiment_qwen_base_vidhalluc_tsh_official_v1.yaml",
+  "jobs": [
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "base",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "Qwen2.5-VL base adapter enabled for local real-video benchmark runs",
+      "validation_override": false
+    }
+  ]
+}
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<20:10,  1.66s/it]Loading weights:   0%|          | 2/729 [00:02<17:29,  1.44s/it]Loading weights:   1%|          | 4/729 [00:03<07:16,  1.66it/s]Loading weights:   1%|          | 5/729 [00:03<05:33,  2.17it/s]Loading weights:   1%|          | 6/729 [00:03<04:38,  2.60it/s]Loading weights:   2%|▏         | 11/729 [00:03<01:39,  7.20it/s]Loading weights:   2%|▏         | 15/729 [00:03<01:10, 10.13it/s]Loading weights:   2%|▏         | 17/729 [00:04<01:10, 10.05it/s]Loading weights:   3%|▎         | 19/729 [00:04<01:15,  9.45it/s]Loading weights:   3%|▎         | 24/729 [00:04<00:49, 14.36it/s]Loading weights:   4%|▍         | 28/729 [00:04<00:42, 16.43it/s]Loading weights:   4%|▍         | 31/729 [00:05<01:00, 11.47it/s]Loading weights:   5%|▍         | 36/729 [00:05<00:43, 15.81it/s]Loading weights:   5%|▌         | 40/729 [00:05<00:52, 13.05it/s]Loading weights:   6%|▌         | 42/729 [00:06<01:10,  9.76it/s]Loading weights:   7%|▋         | 48/729 [00:06<00:44, 15.18it/s]Loading weights:   7%|▋         | 52/729 [00:06<00:43, 15.56it/s]Loading weights:   8%|▊         | 55/729 [00:06<00:55, 12.21it/s]Loading weights:   8%|▊         | 60/729 [00:06<00:40, 16.50it/s]Loading weights:   9%|▉         | 64/729 [00:07<00:39, 16.80it/s]Loading weights:   9%|▉         | 67/729 [00:07<00:50, 13.12it/s]Loading weights:  10%|▉         | 71/729 [00:07<00:41, 15.92it/s]Loading weights:  10%|█         | 76/729 [00:07<00:37, 17.36it/s]Loading weights:  11%|█         | 79/729 [00:08<00:44, 14.57it/s]Loading weights:  12%|█▏        | 84/729 [00:08<00:33, 19.33it/s]Loading weights:  12%|█▏        | 88/729 [00:08<00:31, 20.25it/s]Loading weights:  12%|█▏        | 91/729 [00:08<00:40, 15.72it/s]Loading weights:  13%|█▎        | 94/729 [00:08<00:36, 17.57it/s]Loading weights:  14%|█▎        | 100/729 [00:09<00:33, 18.57it/s]Loading weights:  14%|█▍        | 103/729 [00:09<00:51, 12.22it/s]Loading weights:  15%|█▍        | 108/729 [00:09<00:39, 15.87it/s]Loading weights:  15%|█▌        | 112/729 [00:10<00:38, 16.22it/s]Loading weights:  16%|█▌        | 115/729 [00:10<00:48, 12.70it/s]Loading weights:  16%|█▋        | 119/729 [00:10<00:41, 14.73it/s]Loading weights:  17%|█▋        | 124/729 [00:11<00:41, 14.52it/s]Loading weights:  17%|█▋        | 126/729 [00:11<00:58, 10.25it/s]Loading weights:  18%|█▊        | 131/729 [00:11<00:43, 13.88it/s]Loading weights:  19%|█▊        | 135/729 [00:12<00:45, 13.16it/s]Loading weights:  19%|█▉        | 137/729 [00:12<00:47, 12.58it/s]Loading weights:  19%|█▉        | 139/729 [00:12<00:46, 12.68it/s]Loading weights:  20%|██        | 146/729 [00:12<00:27, 21.04it/s]Loading weights:  20%|██        | 149/729 [00:12<00:40, 14.38it/s]Loading weights:  21%|██        | 152/729 [00:13<00:43, 13.29it/s]Loading weights:  21%|██▏       | 156/729 [00:13<00:34, 16.38it/s]Loading weights:  22%|██▏       | 160/729 [00:13<00:35, 15.94it/s]Loading weights:  22%|██▏       | 163/729 [00:14<00:51, 10.94it/s]Loading weights:  23%|██▎       | 168/729 [00:14<00:37, 15.08it/s]Loading weights:  24%|██▎       | 172/729 [00:14<00:46, 11.98it/s]Loading weights:  24%|██▍       | 174/729 [00:14<00:48, 11.54it/s]Loading weights:  24%|██▍       | 178/729 [00:15<00:36, 14.93it/s]Loading weights:  25%|██▌       | 183/729 [00:15<00:27, 20.22it/s]Loading weights:  26%|██▌       | 187/729 [00:15<00:41, 13.19it/s]Loading weights:  26%|██▋       | 192/729 [00:15<00:32, 16.75it/s]Loading weights:  27%|██▋       | 196/729 [00:16<00:32, 16.51it/s]Loading weights:  27%|██▋       | 199/729 [00:16<00:38, 13.89it/s]Loading weights:  28%|██▊       | 204/729 [00:16<00:29, 18.09it/s]Loading weights:  29%|██▊       | 208/729 [00:16<00:27, 18.78it/s]Loading weights:  29%|██▉       | 211/729 [00:17<00:35, 14.39it/s]Loading weights:  30%|██▉       | 216/729 [00:17<00:27, 18.98it/s]Loading weights:  30%|███       | 220/729 [00:17<00:25, 19.90it/s]Loading weights:  31%|███       | 223/729 [00:17<00:38, 13.05it/s]Loading weights:  31%|███▏      | 228/729 [00:18<00:28, 17.35it/s]Loading weights:  32%|███▏      | 232/729 [00:18<00:39, 12.65it/s]Loading weights:  32%|███▏      | 235/729 [00:19<00:57,  8.55it/s]Loading weights:  33%|███▎      | 238/729 [00:19<00:47, 10.34it/s]Loading weights:  33%|███▎      | 242/729 [00:19<00:36, 13.51it/s]Loading weights:  34%|███▎      | 245/729 [00:19<00:38, 12.46it/s]Loading weights:  34%|███▍      | 248/729 [00:19<00:34, 13.87it/s]Loading weights:  35%|███▍      | 253/729 [00:20<00:25, 18.44it/s]Loading weights:  35%|███▌      | 256/729 [00:20<00:25, 18.58it/s]Loading weights:  36%|███▌      | 259/729 [00:20<00:39, 11.85it/s]Loading weights:  36%|███▌      | 264/729 [00:20<00:28, 16.25it/s]Loading weights:  37%|███▋      | 268/729 [00:21<00:27, 16.96it/s]Loading weights:  37%|███▋      | 271/729 [00:21<00:36, 12.38it/s]Loading weights:  38%|███▊      | 275/729 [00:21<00:29, 15.56it/s]Loading weights:  38%|███▊      | 280/729 [00:21<00:25, 17.74it/s]Loading weights:  39%|███▉      | 283/729 [00:22<00:30, 14.45it/s]Loading weights:  40%|███▉      | 288/729 [00:22<00:24, 18.08it/s]Loading weights:  40%|████      | 292/729 [00:23<00:38, 11.38it/s]Loading weights:  41%|████      | 300/729 [00:23<00:23, 17.97it/s]Loading weights:  42%|████▏     | 304/729 [00:23<00:22, 18.51it/s]Loading weights:  42%|████▏     | 307/729 [00:23<00:29, 14.24it/s]Loading weights:  43%|████▎     | 312/729 [00:23<00:23, 17.79it/s]Loading weights:  43%|████▎     | 316/729 [00:24<00:21, 19.05it/s]Loading weights:  44%|████▍     | 319/729 [00:24<00:30, 13.67it/s]Loading weights:  44%|████▍     | 324/729 [00:24<00:22, 18.20it/s]Loading weights:  45%|████▍     | 328/729 [00:24<00:21, 18.86it/s]Loading weights:  45%|████▌     | 331/729 [00:25<00:31, 12.53it/s]Loading weights:  46%|████▌     | 335/729 [00:25<00:26, 14.91it/s]Loading weights:  48%|████▊     | 347/729 [00:25<00:13, 29.27it/s]Loading weights:  49%|████▉     | 359/729 [00:25<00:08, 43.77it/s]Loading weights:  50%|█████     | 366/729 [00:25<00:08, 40.50it/s]Loading weights:  51%|█████     | 372/729 [00:26<00:08, 41.37it/s]Loading weights:  52%|█████▏    | 378/729 [00:26<00:09, 37.92it/s]Loading weights:  53%|█████▎    | 386/729 [00:26<00:07, 45.45it/s]Loading weights:  54%|█████▍    | 392/729 [00:26<00:07, 46.29it/s]Loading weights:  55%|█████▌    | 403/729 [00:26<00:05, 57.28it/s]Loading weights:  57%|█████▋    | 415/729 [00:26<00:04, 68.29it/s]Loading weights:  59%|█████▊    | 427/729 [00:26<00:03, 78.72it/s]Loading weights:  60%|██████    | 438/729 [00:26<00:03, 84.55it/s]Loading weights:  62%|██████▏   | 451/729 [00:27<00:02, 94.06it/s]Loading weights:  64%|██████▎   | 463/729 [00:27<00:02, 99.25it/s]Loading weights:  65%|██████▌   | 475/729 [00:27<00:02, 100.03it/s]Loading weights:  67%|██████▋   | 487/729 [00:27<00:02, 102.07it/s]Loading weights:  68%|██████▊   | 499/729 [00:27<00:02, 101.25it/s]Loading weights:  70%|███████   | 511/729 [00:27<00:02, 100.31it/s]Loading weights:  72%|███████▏  | 522/729 [00:27<00:02, 93.94it/s] Loading weights:  73%|███████▎  | 535/729 [00:27<00:01, 99.39it/s]Loading weights:  75%|███████▌  | 549/729 [00:27<00:01, 103.73it/s]Loading weights:  77%|███████▋  | 561/729 [00:28<00:01, 102.89it/s]Loading weights:  79%|███████▊  | 573/729 [00:28<00:01, 106.61it/s]Loading weights:  80%|████████  | 585/729 [00:28<00:01, 105.18it/s]Loading weights:  82%|████████▏ | 597/729 [00:28<00:01, 108.07it/s]Loading weights:  84%|████████▎ | 609/729 [00:28<00:01, 107.93it/s]Loading weights:  85%|████████▌ | 621/729 [00:28<00:01, 107.33it/s]Loading weights:  87%|████████▋ | 633/729 [00:28<00:00, 109.18it/s]Loading weights:  88%|████████▊ | 644/729 [00:28<00:00, 106.47it/s]Loading weights:  90%|████████▉ | 655/729 [00:28<00:00, 102.86it/s]Loading weights:  91%|█████████▏| 666/729 [00:29<00:00, 86.18it/s] Loading weights:  94%|█████████▍| 685/729 [00:29<00:00, 108.44it/s]Loading weights:  96%|█████████▌| 701/729 [00:29<00:00, 116.79it/s]Loading weights:  98%|█████████▊| 714/729 [00:29<00:00, 112.01it/s]Loading weights: 100%|█████████▉| 726/729 [00:29<00:00, 100.12it/s]Loading weights: 100%|██████████| 729/729 [00:29<00:00, 24.49it/s] 
+[2026-08-28 19:42:15] START qwen2.5-vl-7b / base / vidhalluc / tsh | total=600 | resume_valid=0 | limit=full
+[2026-08-28 19:42:27] DONE  vidhalluc 1/600 | new=1 | sample=tsh:1 | parse=valid | correct=False | batch=1
+[2026-08-28 19:42:28] DONE  vidhalluc 2/600 | new=2 | sample=tsh:2 | parse=valid | correct=False | batch=1
+[2026-08-28 19:42:30] DONE  vidhalluc 3/600 | new=3 | sample=tsh:3 | parse=valid | correct=True | batch=1
+[2026-08-28 19:42:34] DONE  vidhalluc 4/600 | new=4 | sample=tsh:4 | parse=valid | correct=True | batch=1
+[2026-08-28 19:42:40] DONE  vidhalluc 5/600 | new=5 | sample=tsh:5 | parse=valid | correct=False | batch=1
+[2026-08-28 19:42:57] DONE  vidhalluc 6/600 | new=6 | sample=tsh:6 | parse=valid | correct=True | batch=1
+[2026-08-28 19:43:08] DONE  vidhalluc 7/600 | new=7 | sample=tsh:7 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:09] DONE  vidhalluc 8/600 | new=8 | sample=tsh:8 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:10] DONE  vidhalluc 9/600 | new=9 | sample=tsh:9 | parse=valid | correct=True | batch=1
+[2026-08-28 19:43:16] DONE  vidhalluc 10/600 | new=10 | sample=tsh:10 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:20] DONE  vidhalluc 11/600 | new=11 | sample=tsh:11 | parse=valid | correct=True | batch=1
+[2026-08-28 19:43:23] DONE  vidhalluc 12/600 | new=12 | sample=tsh:12 | parse=valid | correct=True | batch=1
+[2026-08-28 19:43:26] DONE  vidhalluc 13/600 | new=13 | sample=tsh:13 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:28] DONE  vidhalluc 14/600 | new=14 | sample=tsh:14 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:29] DONE  vidhalluc 15/600 | new=15 | sample=tsh:15 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:33] DONE  vidhalluc 16/600 | new=16 | sample=tsh:16 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:43:46] DONE  vidhalluc 17/600 | new=17 | sample=tsh:17 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:50] DONE  vidhalluc 18/600 | new=18 | sample=tsh:18 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:54] DONE  vidhalluc 19/600 | new=19 | sample=tsh:19 | parse=valid | correct=True | batch=1
+[2026-08-28 19:43:55] DONE  vidhalluc 20/600 | new=20 | sample=tsh:20 | parse=valid | correct=False | batch=1
+[2026-08-28 19:43:58] DONE  vidhalluc 21/600 | new=21 | sample=tsh:21 | parse=valid | correct=True | batch=1
+[2026-08-28 19:44:04] DONE  vidhalluc 22/600 | new=22 | sample=tsh:22 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:05] DONE  vidhalluc 23/600 | new=23 | sample=tsh:23 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:10] DONE  vidhalluc 24/600 | new=24 | sample=tsh:24 | parse=valid | correct=True | batch=1
+[2026-08-28 19:44:32] DONE  vidhalluc 25/600 | new=25 | sample=tsh:25 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:37] DONE  vidhalluc 26/600 | new=26 | sample=tsh:26 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:39] DONE  vidhalluc 27/600 | new=27 | sample=tsh:27 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:41] DONE  vidhalluc 28/600 | new=28 | sample=tsh:28 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:49] DONE  vidhalluc 29/600 | new=29 | sample=tsh:29 | parse=valid | correct=True | batch=1
+[2026-08-28 19:44:52] DONE  vidhalluc 30/600 | new=30 | sample=tsh:30 | parse=valid | correct=False | batch=1
+[2026-08-28 19:44:59] DONE  vidhalluc 31/600 | new=31 | sample=tsh:31 | parse=valid | correct=True | batch=1
+[2026-08-28 19:45:00] DONE  vidhalluc 32/600 | new=32 | sample=tsh:32 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:05] DONE  vidhalluc 33/600 | new=33 | sample=tsh:33 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:07] DONE  vidhalluc 34/600 | new=34 | sample=tsh:34 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:09] DONE  vidhalluc 35/600 | new=35 | sample=tsh:35 | parse=valid | correct=True | batch=1
+[2026-08-28 19:45:13] DONE  vidhalluc 36/600 | new=36 | sample=tsh:36 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:14] DONE  vidhalluc 37/600 | new=37 | sample=tsh:37 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:24] DONE  vidhalluc 38/600 | new=38 | sample=tsh:38 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:27] DONE  vidhalluc 39/600 | new=39 | sample=tsh:39 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:32] DONE  vidhalluc 40/600 | new=40 | sample=tsh:40 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:33] DONE  vidhalluc 41/600 | new=41 | sample=tsh:41 | parse=valid | correct=True | batch=1
+[2026-08-28 19:45:34] DONE  vidhalluc 42/600 | new=42 | sample=tsh:42 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:44] DONE  vidhalluc 43/600 | new=43 | sample=tsh:43 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:46] DONE  vidhalluc 44/600 | new=44 | sample=tsh:44 | parse=valid | correct=True | batch=1
+[2026-08-28 19:45:49] DONE  vidhalluc 45/600 | new=45 | sample=tsh:45 | parse=valid | correct=False | batch=1
+[2026-08-28 19:45:53] DONE  vidhalluc 46/600 | new=46 | sample=tsh:46 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:00] DONE  vidhalluc 47/600 | new=47 | sample=tsh:47 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:01] DONE  vidhalluc 48/600 | new=48 | sample=tsh:48 | parse=valid | correct=True | batch=1
+[2026-08-28 19:46:12] DONE  vidhalluc 49/600 | new=49 | sample=tsh:49 | parse=valid | correct=True | batch=1
+[2026-08-28 19:46:13] DONE  vidhalluc 50/600 | new=50 | sample=tsh:50 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:13] DONE  vidhalluc 51/600 | new=51 | sample=tsh:51 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:16] DONE  vidhalluc 52/600 | new=52 | sample=tsh:52 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:18] DONE  vidhalluc 53/600 | new=53 | sample=tsh:53 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:22] DONE  vidhalluc 54/600 | new=54 | sample=tsh:54 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:28] DONE  vidhalluc 55/600 | new=55 | sample=tsh:55 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:33] DONE  vidhalluc 56/600 | new=56 | sample=tsh:56 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:39] DONE  vidhalluc 57/600 | new=57 | sample=tsh:57 | parse=valid | correct=True | batch=1
+[2026-08-28 19:46:41] DONE  vidhalluc 58/600 | new=58 | sample=tsh:58 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:42] DONE  vidhalluc 59/600 | new=59 | sample=tsh:59 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:56] DONE  vidhalluc 60/600 | new=60 | sample=tsh:60 | parse=valid | correct=False | batch=1
+[2026-08-28 19:46:59] DONE  vidhalluc 61/600 | new=61 | sample=tsh:61 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:01] DONE  vidhalluc 62/600 | new=62 | sample=tsh:62 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:05] DONE  vidhalluc 63/600 | new=63 | sample=tsh:63 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:07] DONE  vidhalluc 64/600 | new=64 | sample=tsh:64 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:47:08] DONE  vidhalluc 65/600 | new=65 | sample=tsh:65 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:10] DONE  vidhalluc 66/600 | new=66 | sample=tsh:66 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:12] DONE  vidhalluc 67/600 | new=67 | sample=tsh:67 | parse=valid | correct=True | batch=1
+[2026-08-28 19:47:13] DONE  vidhalluc 68/600 | new=68 | sample=tsh:68 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:14] DONE  vidhalluc 69/600 | new=69 | sample=tsh:69 | parse=valid | correct=True | batch=1
+[2026-08-28 19:47:28] DONE  vidhalluc 70/600 | new=70 | sample=tsh:70 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:34] DONE  vidhalluc 71/600 | new=71 | sample=tsh:71 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:39] DONE  vidhalluc 72/600 | new=72 | sample=tsh:72 | parse=valid | correct=True | batch=1
+[2026-08-28 19:47:43] DONE  vidhalluc 73/600 | new=73 | sample=tsh:73 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:44] DONE  vidhalluc 74/600 | new=74 | sample=tsh:74 | parse=valid | correct=True | batch=1
+[2026-08-28 19:47:51] DONE  vidhalluc 75/600 | new=75 | sample=tsh:75 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:54] DONE  vidhalluc 76/600 | new=76 | sample=tsh:76 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:56] DONE  vidhalluc 77/600 | new=77 | sample=tsh:77 | parse=valid | correct=False | batch=1
+[2026-08-28 19:47:59] DONE  vidhalluc 78/600 | new=78 | sample=tsh:78 | parse=valid | correct=True | batch=1
+[2026-08-28 19:48:01] DONE  vidhalluc 79/600 | new=79 | sample=tsh:79 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:02] DONE  vidhalluc 80/600 | new=80 | sample=tsh:80 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:04] DONE  vidhalluc 81/600 | new=81 | sample=tsh:81 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:08] DONE  vidhalluc 82/600 | new=82 | sample=tsh:82 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:09] DONE  vidhalluc 83/600 | new=83 | sample=tsh:83 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:11] DONE  vidhalluc 84/600 | new=84 | sample=tsh:84 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:15] DONE  vidhalluc 85/600 | new=85 | sample=tsh:85 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:48:17] DONE  vidhalluc 86/600 | new=86 | sample=tsh:86 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:20] DONE  vidhalluc 87/600 | new=87 | sample=tsh:87 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:21] DONE  vidhalluc 88/600 | new=88 | sample=tsh:88 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:23] DONE  vidhalluc 89/600 | new=89 | sample=tsh:89 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:25] DONE  vidhalluc 90/600 | new=90 | sample=tsh:90 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:28] DONE  vidhalluc 91/600 | new=91 | sample=tsh:91 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:31] DONE  vidhalluc 92/600 | new=92 | sample=tsh:92 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:39] DONE  vidhalluc 93/600 | new=93 | sample=tsh:93 | parse=valid | correct=True | batch=1
+[2026-08-28 19:48:42] DONE  vidhalluc 94/600 | new=94 | sample=tsh:94 | parse=valid | correct=True | batch=1
+[2026-08-28 19:48:51] DONE  vidhalluc 95/600 | new=95 | sample=tsh:95 | parse=valid | correct=False | batch=1
+[2026-08-28 19:48:54] DONE  vidhalluc 96/600 | new=96 | sample=tsh:96 | parse=valid | correct=True | batch=1
+[2026-08-28 19:48:56] DONE  vidhalluc 97/600 | new=97 | sample=tsh:97 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:11] DONE  vidhalluc 98/600 | new=98 | sample=tsh:98 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:16] DONE  vidhalluc 99/600 | new=99 | sample=tsh:99 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:20] DONE  vidhalluc 100/600 | new=100 | sample=tsh:100 | parse=valid | correct=True | batch=1
+[2026-08-28 19:49:22] DONE  vidhalluc 101/600 | new=101 | sample=tsh:101 | parse=valid | correct=True | batch=1
+[2026-08-28 19:49:23] DONE  vidhalluc 102/600 | new=102 | sample=tsh:102 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:25] DONE  vidhalluc 103/600 | new=103 | sample=tsh:103 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:27] DONE  vidhalluc 104/600 | new=104 | sample=tsh:104 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:29] DONE  vidhalluc 105/600 | new=105 | sample=tsh:105 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:38] DONE  vidhalluc 106/600 | new=106 | sample=tsh:106 | parse=valid | correct=True | batch=1
+[2026-08-28 19:49:47] DONE  vidhalluc 107/600 | new=107 | sample=tsh:107 | parse=valid | correct=False | batch=1
+[2026-08-28 19:49:53] DONE  vidhalluc 108/600 | new=108 | sample=tsh:108 | parse=valid | correct=True | batch=1
+[2026-08-28 19:49:59] DONE  vidhalluc 109/600 | new=109 | sample=tsh:109 | parse=valid | correct=True | batch=1
+[2026-08-28 19:50:03] DONE  vidhalluc 110/600 | new=110 | sample=tsh:110 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:06] DONE  vidhalluc 111/600 | new=111 | sample=tsh:111 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:50:08] DONE  vidhalluc 112/600 | new=112 | sample=tsh:112 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:11] DONE  vidhalluc 113/600 | new=113 | sample=tsh:113 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:12] DONE  vidhalluc 114/600 | new=114 | sample=tsh:114 | parse=valid | correct=True | batch=1
+[2026-08-28 19:50:15] DONE  vidhalluc 115/600 | new=115 | sample=tsh:115 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:24] DONE  vidhalluc 116/600 | new=116 | sample=tsh:116 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:31] DONE  vidhalluc 117/600 | new=117 | sample=tsh:117 | parse=valid | correct=True | batch=1
+[2026-08-28 19:50:36] DONE  vidhalluc 118/600 | new=118 | sample=tsh:118 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:48] DONE  vidhalluc 119/600 | new=119 | sample=tsh:119 | parse=valid | correct=False | batch=1
+[2026-08-28 19:50:52] DONE  vidhalluc 120/600 | new=120 | sample=tsh:120 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:00] DONE  vidhalluc 121/600 | new=121 | sample=tsh:121 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:07] DONE  vidhalluc 122/600 | new=122 | sample=tsh:122 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:15] DONE  vidhalluc 123/600 | new=123 | sample=tsh:123 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:19] DONE  vidhalluc 124/600 | new=124 | sample=tsh:124 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:24] DONE  vidhalluc 125/600 | new=125 | sample=tsh:125 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:25] DONE  vidhalluc 126/600 | new=126 | sample=tsh:126 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:27] DONE  vidhalluc 127/600 | new=127 | sample=tsh:127 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:30] DONE  vidhalluc 128/600 | new=128 | sample=tsh:128 | parse=valid | correct=True | batch=1
+[2026-08-28 19:51:31] DONE  vidhalluc 129/600 | new=129 | sample=tsh:129 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:36] DONE  vidhalluc 130/600 | new=130 | sample=tsh:130 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:37] DONE  vidhalluc 131/600 | new=131 | sample=tsh:131 | parse=valid | correct=True | batch=1
+[2026-08-28 19:51:40] DONE  vidhalluc 132/600 | new=132 | sample=tsh:132 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:45] DONE  vidhalluc 133/600 | new=133 | sample=tsh:133 | parse=valid | correct=False | batch=1
+[2026-08-28 19:51:52] DONE  vidhalluc 134/600 | new=134 | sample=tsh:134 | parse=valid | correct=True | batch=1
+[2026-08-28 19:51:56] DONE  vidhalluc 135/600 | new=135 | sample=tsh:135 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:00] DONE  vidhalluc 136/600 | new=136 | sample=tsh:136 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:03] DONE  vidhalluc 137/600 | new=137 | sample=tsh:137 | parse=valid | correct=True | batch=1
+[2026-08-28 19:52:04] DONE  vidhalluc 138/600 | new=138 | sample=tsh:138 | parse=valid | correct=True | batch=1
+[2026-08-28 19:52:21] DONE  vidhalluc 139/600 | new=139 | sample=tsh:139 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:26] DONE  vidhalluc 140/600 | new=140 | sample=tsh:140 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:27] DONE  vidhalluc 141/600 | new=141 | sample=tsh:141 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:28] DONE  vidhalluc 142/600 | new=142 | sample=tsh:142 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:52:30] DONE  vidhalluc 143/600 | new=143 | sample=tsh:143 | parse=valid | correct=True | batch=1
+[2026-08-28 19:52:31] DONE  vidhalluc 144/600 | new=144 | sample=tsh:144 | parse=valid | correct=True | batch=1
+[2026-08-28 19:52:37] DONE  vidhalluc 145/600 | new=145 | sample=tsh:145 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:38] DONE  vidhalluc 146/600 | new=146 | sample=tsh:146 | parse=valid | correct=True | batch=1
+[2026-08-28 19:52:41] DONE  vidhalluc 147/600 | new=147 | sample=tsh:147 | parse=valid | correct=True | batch=1
+[2026-08-28 19:52:44] DONE  vidhalluc 148/600 | new=148 | sample=tsh:148 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:46] DONE  vidhalluc 149/600 | new=149 | sample=tsh:149 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:48] DONE  vidhalluc 150/600 | new=150 | sample=tsh:150 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:51] DONE  vidhalluc 151/600 | new=151 | sample=tsh:151 | parse=valid | correct=False | batch=1
+[2026-08-28 19:52:58] DONE  vidhalluc 152/600 | new=152 | sample=tsh:152 | parse=valid | correct=True | batch=1
+[2026-08-28 19:53:01] DONE  vidhalluc 153/600 | new=153 | sample=tsh:153 | parse=valid | correct=True | batch=1
+[2026-08-28 19:53:07] DONE  vidhalluc 154/600 | new=154 | sample=tsh:154 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:10] DONE  vidhalluc 155/600 | new=155 | sample=tsh:155 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:13] DONE  vidhalluc 156/600 | new=156 | sample=tsh:156 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:15] DONE  vidhalluc 157/600 | new=157 | sample=tsh:157 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:17] DONE  vidhalluc 158/600 | new=158 | sample=tsh:158 | parse=valid | correct=True | batch=1
+[2026-08-28 19:53:23] DONE  vidhalluc 159/600 | new=159 | sample=tsh:159 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:26] DONE  vidhalluc 160/600 | new=160 | sample=tsh:160 | parse=valid | correct=True | batch=1
+[2026-08-28 19:53:33] DONE  vidhalluc 161/600 | new=161 | sample=tsh:161 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:38] DONE  vidhalluc 162/600 | new=162 | sample=tsh:162 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:39] DONE  vidhalluc 163/600 | new=163 | sample=tsh:163 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:42] DONE  vidhalluc 164/600 | new=164 | sample=tsh:164 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:43] DONE  vidhalluc 165/600 | new=165 | sample=tsh:165 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:45] DONE  vidhalluc 166/600 | new=166 | sample=tsh:166 | parse=valid | correct=True | batch=1
+[2026-08-28 19:53:51] DONE  vidhalluc 167/600 | new=167 | sample=tsh:167 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:52] DONE  vidhalluc 168/600 | new=168 | sample=tsh:168 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:53] DONE  vidhalluc 169/600 | new=169 | sample=tsh:169 | parse=valid | correct=False | batch=1
+[2026-08-28 19:53:56] DONE  vidhalluc 170/600 | new=170 | sample=tsh:170 | parse=valid | correct=True | batch=1
+[2026-08-28 19:54:02] DONE  vidhalluc 171/600 | new=171 | sample=tsh:171 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:06] DONE  vidhalluc 172/600 | new=172 | sample=tsh:172 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:07] DONE  vidhalluc 173/600 | new=173 | sample=tsh:173 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:12] DONE  vidhalluc 174/600 | new=174 | sample=tsh:174 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:13] DONE  vidhalluc 175/600 | new=175 | sample=tsh:175 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:14] DONE  vidhalluc 176/600 | new=176 | sample=tsh:176 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:17] DONE  vidhalluc 177/600 | new=177 | sample=tsh:177 | parse=valid | correct=True | batch=1
+[2026-08-28 19:54:19] DONE  vidhalluc 178/600 | new=178 | sample=tsh:178 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:21] DONE  vidhalluc 179/600 | new=179 | sample=tsh:179 | parse=valid | correct=True | batch=1
+[2026-08-28 19:54:26] DONE  vidhalluc 180/600 | new=180 | sample=tsh:180 | parse=valid | correct=True | batch=1
+[2026-08-28 19:54:27] DONE  vidhalluc 181/600 | new=181 | sample=tsh:181 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:34] DONE  vidhalluc 182/600 | new=182 | sample=tsh:182 | parse=valid | correct=True | batch=1
+[2026-08-28 19:54:36] DONE  vidhalluc 183/600 | new=183 | sample=tsh:183 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:54:47] DONE  vidhalluc 184/600 | new=184 | sample=tsh:184 | parse=valid | correct=False | batch=1
+[2026-08-28 19:54:57] DONE  vidhalluc 185/600 | new=185 | sample=tsh:185 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:00] DONE  vidhalluc 186/600 | new=186 | sample=tsh:186 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:08] DONE  vidhalluc 187/600 | new=187 | sample=tsh:187 | parse=valid | correct=True | batch=1
+[2026-08-28 19:55:17] DONE  vidhalluc 188/600 | new=188 | sample=tsh:188 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:27] DONE  vidhalluc 189/600 | new=189 | sample=tsh:189 | parse=valid | correct=True | batch=1
+[2026-08-28 19:55:30] DONE  vidhalluc 190/600 | new=190 | sample=tsh:190 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:33] DONE  vidhalluc 191/600 | new=191 | sample=tsh:191 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:35] DONE  vidhalluc 192/600 | new=192 | sample=tsh:192 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:38] DONE  vidhalluc 193/600 | new=193 | sample=tsh:193 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:41] DONE  vidhalluc 194/600 | new=194 | sample=tsh:194 | parse=valid | correct=True | batch=1
+[2026-08-28 19:55:51] DONE  vidhalluc 195/600 | new=195 | sample=tsh:195 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:53] DONE  vidhalluc 196/600 | new=196 | sample=tsh:196 | parse=valid | correct=False | batch=1
+[2026-08-28 19:55:56] DONE  vidhalluc 197/600 | new=197 | sample=tsh:197 | parse=valid | correct=True | batch=1
+[2026-08-28 19:55:57] DONE  vidhalluc 198/600 | new=198 | sample=tsh:198 | parse=valid | correct=True | batch=1
+[2026-08-28 19:55:58] DONE  vidhalluc 199/600 | new=199 | sample=tsh:199 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:02] DONE  vidhalluc 200/600 | new=200 | sample=tsh:200 | parse=valid | correct=True | batch=1
+[2026-08-28 19:56:06] DONE  vidhalluc 201/600 | new=201 | sample=tsh:201 | parse=valid | correct=True | batch=1
+[2026-08-28 19:56:09] DONE  vidhalluc 202/600 | new=202 | sample=tsh:202 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:22] DONE  vidhalluc 203/600 | new=203 | sample=tsh:203 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:37] DONE  vidhalluc 204/600 | new=204 | sample=tsh:204 | parse=valid | correct=True | batch=1
+[2026-08-28 19:56:42] DONE  vidhalluc 205/600 | new=205 | sample=tsh:205 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:43] DONE  vidhalluc 206/600 | new=206 | sample=tsh:206 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:46] DONE  vidhalluc 207/600 | new=207 | sample=tsh:207 | parse=valid | correct=True | batch=1
+[2026-08-28 19:56:48] DONE  vidhalluc 208/600 | new=208 | sample=tsh:208 | parse=valid | correct=True | batch=1
+[2026-08-28 19:56:48] DONE  vidhalluc 209/600 | new=209 | sample=tsh:209 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:49] DONE  vidhalluc 210/600 | new=210 | sample=tsh:210 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:56:51] DONE  vidhalluc 211/600 | new=211 | sample=tsh:211 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:52] DONE  vidhalluc 212/600 | new=212 | sample=tsh:212 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:55] DONE  vidhalluc 213/600 | new=213 | sample=tsh:213 | parse=valid | correct=False | batch=1
+[2026-08-28 19:56:59] DONE  vidhalluc 214/600 | new=214 | sample=tsh:214 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:02] DONE  vidhalluc 215/600 | new=215 | sample=tsh:215 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:07] DONE  vidhalluc 216/600 | new=216 | sample=tsh:216 | parse=valid | correct=True | batch=1
+[2026-08-28 19:57:07] DONE  vidhalluc 217/600 | new=217 | sample=tsh:217 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:12] DONE  vidhalluc 218/600 | new=218 | sample=tsh:218 | parse=valid | correct=True | batch=1
+[2026-08-28 19:57:13] DONE  vidhalluc 219/600 | new=219 | sample=tsh:219 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:16] DONE  vidhalluc 220/600 | new=220 | sample=tsh:220 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:17] DONE  vidhalluc 221/600 | new=221 | sample=tsh:221 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:17] DONE  vidhalluc 222/600 | new=222 | sample=tsh:222 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:19] DONE  vidhalluc 223/600 | new=223 | sample=tsh:223 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:22] DONE  vidhalluc 224/600 | new=224 | sample=tsh:224 | parse=unparseable | correct=None | batch=1
+[2026-08-28 19:57:28] DONE  vidhalluc 225/600 | new=225 | sample=tsh:225 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:31] DONE  vidhalluc 226/600 | new=226 | sample=tsh:226 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:35] DONE  vidhalluc 227/600 | new=227 | sample=tsh:227 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:41] DONE  vidhalluc 228/600 | new=228 | sample=tsh:228 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:44] DONE  vidhalluc 229/600 | new=229 | sample=tsh:229 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:47] DONE  vidhalluc 230/600 | new=230 | sample=tsh:230 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:50] DONE  vidhalluc 231/600 | new=231 | sample=tsh:231 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:53] DONE  vidhalluc 232/600 | new=232 | sample=tsh:232 | parse=valid | correct=False | batch=1
+[2026-08-28 19:57:54] DONE  vidhalluc 233/600 | new=233 | sample=tsh:233 | parse=valid | correct=False | batch=1

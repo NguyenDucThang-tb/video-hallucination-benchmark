@@ -1,0 +1,108 @@
+{
+  "config": "/tmp/experiment_qwen_season_eventhallusion.yaml",
+  "jobs": [
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "eventhallusion",
+      "task": "entire",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "eventhallusion",
+      "task": "misleading",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "eventhallusion",
+      "task": "mix",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<08:20,  1.45it/s]Loading weights:   1%|          | 4/729 [00:00<01:54,  6.36it/s]Loading weights:   1%|          | 6/729 [00:00<01:35,  7.53it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:31, 22.94it/s]Loading weights:   3%|▎         | 20/729 [00:01<00:32, 21.91it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:23, 30.23it/s]Loading weights:   4%|▍         | 32/729 [00:01<00:26, 26.46it/s]Loading weights:   5%|▌         | 40/729 [00:01<00:20, 33.62it/s]Loading weights:   6%|▌         | 44/729 [00:02<00:23, 28.93it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:19, 35.50it/s]Loading weights:   8%|▊         | 56/729 [00:02<00:22, 30.18it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:18, 36.40it/s]Loading weights:   9%|▉         | 68/729 [00:02<00:21, 30.89it/s]Loading weights:  10%|█         | 76/729 [00:02<00:17, 36.93it/s]Loading weights:  11%|█         | 80/729 [00:03<00:20, 30.91it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:20, 31.34it/s]Loading weights:  13%|█▎        | 92/729 [00:03<00:19, 32.67it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:16, 38.64it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:18, 33.57it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:16, 37.36it/s]Loading weights:  16%|█▌        | 116/729 [00:04<00:19, 31.44it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:19, 31.55it/s]Loading weights:  18%|█▊        | 128/729 [00:04<00:18, 32.76it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:15, 38.57it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:17, 33.60it/s]Loading weights:  20%|██        | 148/729 [00:05<00:15, 37.39it/s]Loading weights:  21%|██        | 152/729 [00:05<00:18, 31.42it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:15, 37.40it/s]Loading weights:  22%|██▏       | 164/729 [00:05<00:18, 31.11it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:15, 37.09it/s]Loading weights:  24%|██▍       | 176/729 [00:05<00:17, 31.19it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:17, 31.32it/s]Loading weights:  26%|██▌       | 188/729 [00:06<00:16, 32.68it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:16, 32.15it/s]Loading weights:  27%|██▋       | 200/729 [00:06<00:15, 33.36it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:13, 39.05it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:15, 33.69it/s]Loading weights:  30%|███       | 220/729 [00:07<00:13, 36.83it/s]Loading weights:  31%|███       | 224/729 [00:07<00:16, 31.07it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:13, 37.20it/s]Loading weights:  32%|███▏      | 236/729 [00:07<00:15, 31.33it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:15, 31.40it/s]Loading weights:  34%|███▍      | 248/729 [00:08<00:14, 32.72it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:12, 38.80it/s]Loading weights:  36%|███▌      | 261/729 [00:08<00:13, 33.61it/s]Loading weights:  37%|███▋      | 268/729 [00:08<00:12, 37.36it/s]Loading weights:  37%|███▋      | 272/729 [00:08<00:14, 31.39it/s]Loading weights:  38%|███▊      | 279/729 [00:08<00:12, 35.73it/s]Loading weights:  39%|███▉      | 283/729 [00:09<00:14, 30.14it/s]Loading weights:  40%|████      | 292/729 [00:09<00:13, 32.24it/s]Loading weights:  41%|████      | 296/729 [00:09<00:12, 33.37it/s]Loading weights:  42%|████▏     | 304/729 [00:09<00:10, 39.16it/s]Loading weights:  42%|████▏     | 309/729 [00:09<00:12, 33.84it/s]Loading weights:  43%|████▎     | 316/729 [00:09<00:10, 37.74it/s]Loading weights:  44%|████▍     | 320/729 [00:10<00:13, 31.45it/s]Loading weights:  45%|████▍     | 328/729 [00:10<00:10, 37.67it/s]Loading weights:  46%|████▌     | 333/729 [00:10<00:11, 33.16it/s]Loading weights:  49%|████▊     | 355/729 [00:10<00:05, 69.21it/s]Loading weights:  53%|█████▎    | 385/729 [00:10<00:02, 117.22it/s]Loading weights:  57%|█████▋    | 417/729 [00:10<00:01, 163.19it/s]Loading weights:  61%|██████▏   | 448/729 [00:10<00:01, 198.71it/s]Loading weights:  65%|██████▌   | 476/729 [00:11<00:01, 219.53it/s]Loading weights:  70%|██████▉   | 509/729 [00:11<00:00, 248.43it/s]Loading weights:  74%|███████▎  | 537/729 [00:11<00:00, 254.63it/s]Loading weights:  78%|███████▊  | 566/729 [00:11<00:00, 264.17it/s]Loading weights:  82%|████████▏ | 597/729 [00:11<00:00, 274.14it/s]Loading weights:  86%|████████▌ | 627/729 [00:11<00:00, 281.48it/s]Loading weights:  90%|█████████ | 657/729 [00:11<00:00, 283.64it/s]Loading weights:  94%|█████████▍| 686/729 [00:11<00:00, 285.45it/s]Loading weights:  98%|█████████▊| 717/729 [00:11<00:00, 288.65it/s]Loading weights: 100%|██████████| 729/729 [00:11<00:00, 61.04it/s] 
+[2026-08-24 05:06:24] START qwen2.5-vl-7b / season / eventhallusion / entire | total=114 | resume_valid=0 | limit=3
+[2026-08-24 05:07:01] DONE  eventhallusion 1/114 | new=1 | sample=entire:entire_001:0 | parse=valid | correct=False | batch=1
+[2026-08-24 05:07:38] DONE  eventhallusion 2/114 | new=2 | sample=entire:entire_002:0 | parse=valid | correct=True | batch=1
+[2026-08-24 05:08:15] DONE  eventhallusion 3/114 | new=3 | sample=entire:entire_003:0 | parse=valid | correct=True | batch=1
+[2026-08-24 05:08:15] END   qwen2.5-vl-7b / season / eventhallusion / entire | wrote=10 total records
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<04:46,  2.54it/s]Loading weights:   0%|          | 2/729 [00:00<05:52,  2.06it/s]Loading weights:   0%|          | 3/729 [00:01<03:44,  3.23it/s]Loading weights:   1%|          | 5/729 [00:01<02:19,  5.20it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:38, 18.29it/s]Loading weights:   2%|▏         | 18/729 [00:01<00:38, 18.54it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:27, 25.82it/s]Loading weights:   4%|▍         | 31/729 [00:01<00:26, 26.42it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:23, 29.32it/s]Loading weights:   6%|▌         | 43/729 [00:02<00:23, 29.35it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:18, 37.10it/s]Loading weights:   8%|▊         | 56/729 [00:02<00:21, 31.09it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:17, 37.21it/s]Loading weights:   9%|▉         | 68/729 [00:03<00:21, 31.26it/s]Loading weights:  10%|█         | 76/729 [00:03<00:17, 37.32it/s]Loading weights:  11%|█         | 80/729 [00:03<00:20, 31.39it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:17, 37.44it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:19, 32.97it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:16, 37.02it/s]Loading weights:  14%|█▍        | 104/729 [00:04<00:20, 31.15it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:16, 37.26it/s]Loading weights:  16%|█▌        | 116/729 [00:04<00:19, 31.31it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:16, 37.34it/s]Loading weights:  18%|█▊        | 129/729 [00:04<00:18, 32.87it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:16, 36.91it/s]Loading weights:  19%|█▉        | 140/729 [00:05<00:18, 31.11it/s]Loading weights:  20%|██        | 148/729 [00:05<00:18, 31.30it/s]Loading weights:  21%|██        | 152/729 [00:05<00:17, 32.58it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:17, 32.04it/s]Loading weights:  22%|██▏       | 164/729 [00:05<00:16, 33.26it/s]Loading weights:  24%|██▎       | 172/729 [00:06<00:14, 38.98it/s]Loading weights:  24%|██▍       | 177/729 [00:06<00:16, 33.78it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:14, 37.66it/s]Loading weights:  26%|██▌       | 188/729 [00:06<00:17, 31.54it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:14, 37.58it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:15, 33.10it/s]Loading weights:  29%|██▊       | 208/729 [00:07<00:14, 37.09it/s]Loading weights:  29%|██▉       | 212/729 [00:07<00:16, 31.22it/s]Loading weights:  30%|███       | 220/729 [00:07<00:13, 37.27it/s]Loading weights:  31%|███       | 224/729 [00:07<00:16, 31.35it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:13, 37.39it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:14, 32.92it/s]Loading weights:  33%|███▎      | 244/729 [00:08<00:13, 36.95it/s]Loading weights:  34%|███▍      | 248/729 [00:08<00:15, 31.16it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:12, 37.11it/s]Loading weights:  36%|███▌      | 260/729 [00:08<00:14, 31.32it/s]Loading weights:  37%|███▋      | 268/729 [00:08<00:14, 31.40it/s]Loading weights:  37%|███▋      | 272/729 [00:09<00:13, 32.72it/s]Loading weights:  38%|███▊      | 280/729 [00:09<00:11, 38.48it/s]Loading weights:  39%|███▉      | 285/729 [00:09<00:13, 33.55it/s]Loading weights:  40%|███▉      | 291/729 [00:09<00:12, 35.24it/s]Loading weights:  40%|████      | 295/729 [00:09<00:14, 29.90it/s]Loading weights:  42%|████▏     | 304/729 [00:09<00:11, 38.61it/s]Loading weights:  42%|████▏     | 309/729 [00:10<00:12, 33.64it/s]Loading weights:  43%|████▎     | 316/729 [00:10<00:11, 37.49it/s]Loading weights:  44%|████▍     | 321/729 [00:10<00:12, 32.95it/s]Loading weights:  45%|████▍     | 328/729 [00:10<00:10, 36.94it/s]Loading weights:  46%|████▌     | 332/729 [00:10<00:12, 31.14it/s]Loading weights:  49%|████▉     | 357/729 [00:10<00:05, 72.76it/s]Loading weights:  53%|█████▎    | 386/729 [00:10<00:02, 119.31it/s]Loading weights:  57%|█████▋    | 417/729 [00:11<00:01, 162.36it/s]Loading weights:  62%|██████▏   | 449/729 [00:11<00:01, 199.69it/s]Loading weights:  66%|██████▌   | 478/729 [00:11<00:01, 223.21it/s]Loading weights:  69%|██████▉   | 506/729 [00:11<00:00, 238.30it/s]Loading weights:  74%|███████▎  | 537/729 [00:11<00:00, 255.51it/s]Loading weights:  78%|███████▊  | 565/729 [00:11<00:00, 261.84it/s]Loading weights:  82%|████████▏ | 597/729 [00:11<00:00, 275.22it/s]Loading weights:  86%|████████▌ | 626/729 [00:11<00:00, 278.92it/s]Loading weights:  90%|█████████ | 657/729 [00:11<00:00, 285.52it/s]Loading weights:  94%|█████████▍| 686/729 [00:11<00:00, 286.28it/s]Loading weights:  98%|█████████▊| 717/729 [00:12<00:00, 289.46it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 59.75it/s] 
+[2026-08-24 05:08:28] START qwen2.5-vl-7b / season / eventhallusion / misleading | total=102 | resume_valid=0 | limit=3
+[2026-08-24 05:09:05] DONE  eventhallusion 1/102 | new=1 | sample=misleading:misleading_001:0 | parse=valid | correct=True | batch=1
+[2026-08-24 05:09:42] DONE  eventhallusion 2/102 | new=2 | sample=misleading:misleading_002:0 | parse=valid | correct=True | batch=1
+[2026-08-24 05:10:19] DONE  eventhallusion 3/102 | new=3 | sample=misleading:misleading_003:0 | parse=valid | correct=True | batch=1
+[2026-08-24 05:10:19] END   qwen2.5-vl-7b / season / eventhallusion / misleading | wrote=3 total records
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:02,  3.98it/s]Loading weights:   0%|          | 2/729 [00:00<04:19,  2.80it/s]Loading weights:   1%|          | 4/729 [00:00<01:59,  6.07it/s]Loading weights:   1%|          | 6/729 [00:00<01:37,  7.39it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:35, 20.09it/s]Loading weights:   3%|▎         | 19/729 [00:01<00:32, 21.73it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:21, 32.17it/s]Loading weights:   4%|▍         | 32/729 [00:01<00:25, 26.95it/s]Loading weights:   5%|▌         | 40/729 [00:01<00:18, 37.09it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:21, 32.55it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:18, 36.42it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:20, 32.09it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:18, 35.66it/s]Loading weights:   9%|▉         | 68/729 [00:02<00:21, 30.34it/s]Loading weights:  10%|█         | 76/729 [00:02<00:17, 36.64it/s]Loading weights:  11%|█         | 80/729 [00:03<00:21, 30.87it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:17, 36.38it/s]Loading weights:  13%|█▎        | 92/729 [00:03<00:21, 29.98it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:19, 31.90it/s]Loading weights:  14%|█▍        | 104/729 [00:03<00:18, 33.09it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:16, 38.43it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:18, 33.37it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:16, 37.23it/s]Loading weights:  18%|█▊        | 128/729 [00:04<00:19, 31.31it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:21, 27.16it/s]Loading weights:  20%|██        | 147/729 [00:05<00:18, 32.22it/s]Loading weights:  21%|██        | 151/729 [00:05<00:17, 33.33it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:16, 33.99it/s]Loading weights:  22%|██▏       | 164/729 [00:05<00:16, 34.82it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:14, 38.67it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:16, 33.66it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:14, 36.41it/s]Loading weights:  26%|██▌       | 188/729 [00:06<00:17, 30.81it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:14, 36.62it/s]Loading weights:  27%|██▋       | 200/729 [00:06<00:17, 31.06it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:14, 36.04it/s]Loading weights:  29%|██▉       | 212/729 [00:07<00:16, 30.49it/s]Loading weights:  30%|███       | 220/729 [00:07<00:14, 35.89it/s]Loading weights:  31%|███       | 224/729 [00:07<00:17, 29.66it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:15, 31.61it/s]Loading weights:  32%|███▏      | 236/729 [00:07<00:15, 32.86it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:12, 38.28it/s]Loading weights:  34%|███▍      | 249/729 [00:08<00:14, 33.31it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:15, 31.18it/s]Loading weights:  36%|███▌      | 260/729 [00:08<00:14, 32.54it/s]Loading weights:  37%|███▋      | 268/729 [00:08<00:12, 38.28it/s]Loading weights:  37%|███▋      | 273/729 [00:08<00:13, 33.37it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:12, 36.93it/s]Loading weights:  39%|███▉      | 284/729 [00:09<00:14, 30.93it/s]Loading weights:  40%|████      | 292/729 [00:09<00:14, 31.18it/s]Loading weights:  41%|████      | 296/729 [00:09<00:13, 32.48it/s]Loading weights:  42%|████▏     | 304/729 [00:09<00:11, 38.28it/s]Loading weights:  42%|████▏     | 309/729 [00:09<00:12, 33.48it/s]Loading weights:  43%|████▎     | 316/729 [00:10<00:11, 37.43it/s]Loading weights:  44%|████▍     | 320/729 [00:10<00:13, 31.40it/s]Loading weights:  45%|████▍     | 328/729 [00:10<00:10, 37.36it/s]Loading weights:  46%|████▌     | 332/729 [00:10<00:12, 31.46it/s]Loading weights:  49%|████▊     | 355/729 [00:10<00:05, 69.43it/s]Loading weights:  53%|█████▎    | 385/729 [00:10<00:02, 117.10it/s]Loading weights:  57%|█████▋    | 417/729 [00:10<00:01, 161.95it/s]Loading weights:  61%|██████    | 446/729 [00:10<00:01, 193.35it/s]Loading weights:  65%|██████▌   | 477/729 [00:11<00:01, 221.76it/s]Loading weights:  70%|██████▉   | 508/729 [00:11<00:00, 245.51it/s]Loading weights:  74%|███████▎  | 537/729 [00:11<00:00, 255.99it/s]Loading weights:  78%|███████▊  | 565/729 [00:11<00:00, 262.42it/s]Loading weights:  82%|████████▏ | 597/729 [00:11<00:00, 275.17it/s]Loading weights:  86%|████████▌ | 626/729 [00:11<00:00, 279.02it/s]Loading weights:  90%|█████████ | 657/729 [00:11<00:00, 285.52it/s]Loading weights:  94%|█████████▍| 687/729 [00:11<00:00, 289.66it/s]Loading weights:  98%|█████████▊| 717/729 [00:11<00:00, 289.96it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 60.69it/s] 
+[2026-08-24 05:10:32] START qwen2.5-vl-7b / season / eventhallusion / mix | total=193 | resume_valid=0 | limit=3
+[2026-08-24 05:10:32] FAIL  eventhallusion 1/193 | new=1 | sample=mix:mix_001:0 | stage=video_sampling
+[2026-08-24 05:10:32] FAIL  eventhallusion 2/193 | new=2 | sample=mix:mix_002:0 | stage=video_sampling
+[2026-08-24 05:10:32] FAIL  eventhallusion 3/193 | new=3 | sample=mix:mix_003:0 | stage=video_sampling
+[2026-08-24 05:10:32] END   qwen2.5-vl-7b / season / eventhallusion / mix | wrote=3 total records
+[2026-08-24 05:10:32] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/hallucination_benchmark_qwen_season_eventhallusion.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_qwen_season_eventhallusion.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "eventhallusion",
+        "task": "entire",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__entire.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__entire.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__entire.manifest.jsonl",
+      "n_new_records": 3,
+      "n_total_samples": 114
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "eventhallusion",
+        "task": "misleading",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__misleading.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__misleading.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__misleading.manifest.jsonl",
+      "n_new_records": 3,
+      "n_total_samples": 102
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "eventhallusion",
+        "task": "mix",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__mix.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__mix.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__mix.manifest.jsonl",
+      "n_new_records": 3,
+      "n_total_samples": 193
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/hallucination_benchmark_qwen_season_eventhallusion.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_qwen_season_eventhallusion.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_qwen_season_eventhallusion.results.md"
+  }
+}

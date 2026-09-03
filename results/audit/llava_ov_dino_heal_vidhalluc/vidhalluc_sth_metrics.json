@@ -1,0 +1,26 @@
+{
+  "diagnostic_metrics_by_model_method": {
+    "llava-ov-7b/dino_heal": {
+      "accuracy": null,
+      "binary_accuracy_diagnostic": 0.7348314606741573,
+      "classification_score": 0.5618292867188378,
+      "classification_unknown_count": 0,
+      "description_accuracy": null,
+      "description_parse_coverage": 0.849438202247191,
+      "formula": "0.6 * classification_score + 0.4 * description_accuracy",
+      "invalid_prediction_policy_for_mcc": "upstream-compatible: values other than yes are treated as no",
+      "mcc": 0.4991054488845509,
+      "n": 445,
+      "n_parser_error": 0,
+      "official_accuracy": null,
+      "official_status": "SIMCSE_NOT_AVAILABLE",
+      "overall_score": null,
+      "reason": "Official STH requires SimCSE location-description scoring; it was not executed.",
+      "simcse_model": "princeton-nlp/sup-simcse-roberta-large",
+      "similarity_threshold_low": 0.5,
+      "status": "N/A"
+    }
+  },
+  "official_status": "SIMCSE_NOT_AVAILABLE",
+  "reason": "Pass --simcse-model with the official checkpoint to execute description scoring."
+}

@@ -1,0 +1,154 @@
+{
+  "config": "/tmp/experiment_llava_ov_dino_heal_vidhalluc_video_v2.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "dino_heal",
+      "benchmark": "vidhalluc",
+      "task": "bqa",
+      "status": "ready",
+      "note": "PARTIAL APPROXIMATION: frame-level fusion is not paper-faithful patch-level DINO-HEAL",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "dino_heal",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "ready",
+      "note": "PARTIAL APPROXIMATION: frame-level fusion is not paper-faithful patch-level DINO-HEAL",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "dino_heal",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "ready",
+      "note": "PARTIAL APPROXIMATION: frame-level fusion is not paper-faithful patch-level DINO-HEAL",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "dino_heal",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "PARTIAL APPROXIMATION: frame-level fusion is not paper-faithful patch-level DINO-HEAL",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:01<09:27,  1.34it/s]Loading weights:   0%|          | 3/765 [00:40<3:34:16, 16.87s/it]Loading weights:  13%|█▎        | 102/765 [00:41<03:13,  3.43it/s]Loading weights:  14%|█▍        | 108/765 [00:45<03:25,  3.20it/s]Loading weights:  15%|█▍        | 113/765 [00:47<03:27,  3.15it/s]Loading weights:  15%|█▌        | 116/765 [00:47<03:18,  3.27it/s]Loading weights:  16%|█▋        | 125/765 [00:52<03:56,  2.70it/s]Loading weights:  17%|█▋        | 127/765 [00:53<03:46,  2.82it/s]Loading weights:  18%|█▊        | 137/765 [00:55<03:21,  3.12it/s]Loading weights:  18%|█▊        | 138/765 [00:58<04:28,  2.33it/s]Loading weights:  18%|█▊        | 139/765 [00:58<04:24,  2.37it/s]Loading weights:  19%|█▉        | 149/765 [01:01<03:29,  2.94it/s]Loading weights:  20%|█▉        | 151/765 [01:04<04:46,  2.14it/s]Loading weights:  21%|██        | 161/765 [01:06<03:49,  2.64it/s]Loading weights:  23%|██▎       | 173/765 [01:12<04:00,  2.46it/s]Loading weights:  23%|██▎       | 174/765 [01:12<03:58,  2.47it/s]Loading weights:  24%|██▍       | 185/765 [01:14<03:08,  3.08it/s]Loading weights:  24%|██▍       | 186/765 [01:17<04:24,  2.19it/s]Loading weights:  24%|██▍       | 187/765 [01:18<04:23,  2.20it/s]Loading weights:  26%|██▌       | 197/765 [01:20<03:16,  2.88it/s]Loading weights:  26%|██▌       | 199/765 [01:20<03:00,  3.13it/s]Loading weights:  27%|██▋       | 209/765 [01:26<04:17,  2.16it/s]Loading weights:  28%|██▊       | 211/765 [01:27<04:08,  2.23it/s]Loading weights:  29%|██▉       | 221/765 [01:28<02:25,  3.75it/s]Loading weights:  29%|██▉       | 222/765 [01:28<02:20,  3.86it/s]Loading weights:  29%|██▉       | 223/765 [01:34<06:32,  1.38it/s]Loading weights:  30%|███       | 233/765 [01:36<03:46,  2.35it/s]Loading weights:  31%|███       | 234/765 [01:36<03:45,  2.35it/s]Loading weights:  31%|███       | 235/765 [01:36<03:44,  2.36it/s]Loading weights:  32%|███▏      | 241/765 [01:37<02:22,  3.69it/s]Loading weights:  32%|███▏      | 245/765 [01:43<05:38,  1.54it/s]Loading weights:  32%|███▏      | 246/765 [01:43<05:22,  1.61it/s]Loading weights:  32%|███▏      | 247/765 [01:44<05:04,  1.70it/s]Loading weights:  34%|███▎      | 257/765 [01:47<03:47,  2.23it/s]Loading weights:  34%|███▎      | 258/765 [01:50<05:34,  1.52it/s]Loading weights:  34%|███▍      | 259/765 [01:51<05:21,  1.57it/s]Loading weights:  37%|███▋      | 281/765 [01:56<02:45,  2.93it/s]Loading weights:  37%|███▋      | 282/765 [01:57<02:42,  2.98it/s]Loading weights:  37%|███▋      | 283/765 [01:58<03:06,  2.58it/s]Loading weights:  38%|███▊      | 293/765 [02:02<03:04,  2.56it/s]Loading weights:  38%|███▊      | 294/765 [02:04<03:58,  1.98it/s]Loading weights:  39%|███▊      | 295/765 [02:04<03:46,  2.08it/s]Loading weights:  40%|███▉      | 305/765 [02:09<03:30,  2.18it/s]Loading weights:  40%|████      | 306/765 [02:09<03:41,  2.07it/s]Loading weights:  40%|████      | 307/765 [02:11<04:49,  1.58it/s]Loading weights:  41%|████▏     | 317/765 [02:15<03:34,  2.09it/s]Loading weights:  42%|████▏     | 318/765 [02:16<03:56,  1.89it/s]Loading weights:  43%|████▎     | 330/765 [02:17<02:01,  3.59it/s]Loading weights:  58%|█████▊    | 441/765 [02:17<00:11, 29.42it/s]Loading weights:  61%|██████    | 467/765 [02:18<00:10, 29.31it/s]Loading weights:  64%|██████▎   | 486/765 [02:19<00:08, 31.50it/s]Loading weights:  65%|██████▌   | 501/765 [02:19<00:07, 34.27it/s]Loading weights:  70%|███████   | 539/765 [02:19<00:04, 52.62it/s]Loading weights:  73%|███████▎  | 557/765 [02:19<00:03, 52.93it/s]Loading weights:  75%|███████▍  | 572/765 [02:20<00:03, 51.38it/s]Loading weights:  76%|███████▋  | 584/765 [02:20<00:03, 48.12it/s]Loading weights:  78%|███████▊  | 593/765 [02:20<00:03, 45.12it/s]Loading weights:  80%|███████▉  | 609/765 [02:21<00:03, 44.67it/s]Loading weights:  82%|████████▏ | 625/765 [02:21<00:02, 48.38it/s]Loading weights:  84%|████████▍ | 641/765 [02:21<00:02, 46.43it/s]Loading weights:  86%|████████▌ | 657/765 [02:22<00:02, 50.51it/s]Loading weights:  90%|█████████ | 691/765 [02:22<00:00, 80.68it/s]Loading weights:  92%|█████████▏| 703/765 [02:22<00:00, 84.13it/s]Loading weights:  93%|█████████▎| 714/765 [02:22<00:00, 63.89it/s]Loading weights:  95%|█████████▍| 723/765 [02:22<00:00, 52.26it/s]Loading weights:  96%|█████████▋| 737/765 [02:23<00:00, 51.02it/s]Loading weights:  98%|█████████▊| 753/765 [02:23<00:00, 53.69it/s]Loading weights: 100%|██████████| 765/765 [02:23<00:00,  5.33it/s]
+[2026-08-25 06:58:15] START llava-ov-7b / dino_heal / vidhalluc / bqa | total=8550 | resume_valid=0 | limit=full
+Loading weights:   0%|          | 0/439 [00:00<?, ?it/s]Loading weights: 100%|██████████| 439/439 [00:00<00:00, 5629.20it/s]
+[2026-08-25 06:58:28] DONE  vidhalluc 1/8550 | new=1 | sample=bqa:1:0:OBb4013eIc8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:42] DONE  vidhalluc 2/8550 | new=2 | sample=bqa:1:0:OBb4013eIc8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 06:58:51] DONE  vidhalluc 3/8550 | new=3 | sample=bqa:1:1:OBb4013eIc8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:05] DONE  vidhalluc 4/8550 | new=4 | sample=bqa:1:1:OBb4013eIc8_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 06:59:12] DONE  vidhalluc 5/8550 | new=5 | sample=bqa:2:0:OBb4013eIc8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:24] DONE  vidhalluc 6/8550 | new=6 | sample=bqa:2:0:OBb4013eIc8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:59:32] DONE  vidhalluc 7/8550 | new=7 | sample=bqa:2:1:OBb4013eIc8_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:59:43] DONE  vidhalluc 8/8550 | new=8 | sample=bqa:2:1:OBb4013eIc8_clip_7 | parse=valid | correct=True | batch=1
+[2026-08-25 07:00:16] DONE  vidhalluc 9/8550 | new=9 | sample=bqa:3:0:JxbmHo84AC4_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:00:29] DONE  vidhalluc 10/8550 | new=10 | sample=bqa:3:0:JxbmHo84AC4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:00:54] DONE  vidhalluc 11/8550 | new=11 | sample=bqa:3:1:JxbmHo84AC4_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:07] DONE  vidhalluc 12/8550 | new=12 | sample=bqa:3:1:JxbmHo84AC4_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:16] DONE  vidhalluc 13/8550 | new=13 | sample=bqa:4:0:JoQywfQ6B-8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:01:25] DONE  vidhalluc 14/8550 | new=14 | sample=bqa:4:0:JoQywfQ6B-8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:34] DONE  vidhalluc 15/8550 | new=15 | sample=bqa:4:1:JoQywfQ6B-8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:01:44] DONE  vidhalluc 16/8550 | new=16 | sample=bqa:4:1:JoQywfQ6B-8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:01:51] DONE  vidhalluc 17/8550 | new=17 | sample=bqa:5:0:JoQywfQ6B-8_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:00] DONE  vidhalluc 18/8550 | new=18 | sample=bqa:5:0:JoQywfQ6B-8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:07] DONE  vidhalluc 19/8550 | new=19 | sample=bqa:5:1:JoQywfQ6B-8_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:15] DONE  vidhalluc 20/8550 | new=20 | sample=bqa:5:1:JoQywfQ6B-8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:22] DONE  vidhalluc 21/8550 | new=21 | sample=bqa:6:0:JoQywfQ6B-8_clip_8 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:32] DONE  vidhalluc 22/8550 | new=22 | sample=bqa:6:0:JoQywfQ6B-8_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:39] DONE  vidhalluc 23/8550 | new=23 | sample=bqa:7:0:woUdHiRWKMg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:45] DONE  vidhalluc 24/8550 | new=24 | sample=bqa:7:0:woUdHiRWKMg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:02:52] DONE  vidhalluc 25/8550 | new=25 | sample=bqa:7:1:woUdHiRWKMg_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 07:02:58] DONE  vidhalluc 26/8550 | new=26 | sample=bqa:7:1:woUdHiRWKMg_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:05] DONE  vidhalluc 27/8550 | new=27 | sample=bqa:8:0:woUdHiRWKMg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:12] DONE  vidhalluc 28/8550 | new=28 | sample=bqa:8:0:woUdHiRWKMg_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:18] DONE  vidhalluc 29/8550 | new=29 | sample=bqa:8:1:woUdHiRWKMg_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 07:03:25] DONE  vidhalluc 30/8550 | new=30 | sample=bqa:8:1:woUdHiRWKMg_clip_6 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:32] DONE  vidhalluc 31/8550 | new=31 | sample=bqa:9:0:656VWQU5dgE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:39] DONE  vidhalluc 32/8550 | new=32 | sample=bqa:9:0:656VWQU5dgE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:45] DONE  vidhalluc 33/8550 | new=33 | sample=bqa:9:1:656VWQU5dgE_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:03:52] DONE  vidhalluc 34/8550 | new=34 | sample=bqa:9:1:656VWQU5dgE_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 07:03:59] DONE  vidhalluc 35/8550 | new=35 | sample=bqa:10:0:656VWQU5dgE_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:06] DONE  vidhalluc 36/8550 | new=36 | sample=bqa:10:0:656VWQU5dgE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:13] DONE  vidhalluc 37/8550 | new=37 | sample=bqa:10:1:656VWQU5dgE_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:20] DONE  vidhalluc 38/8550 | new=38 | sample=bqa:10:1:656VWQU5dgE_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:28] DONE  vidhalluc 39/8550 | new=39 | sample=bqa:11:0:pc5_pexVob8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:40] DONE  vidhalluc 40/8550 | new=40 | sample=bqa:11:0:pc5_pexVob8_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:04:48] DONE  vidhalluc 41/8550 | new=41 | sample=bqa:11:1:pc5_pexVob8_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:00] DONE  vidhalluc 42/8550 | new=42 | sample=bqa:11:1:pc5_pexVob8_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:05:08] DONE  vidhalluc 43/8550 | new=43 | sample=bqa:12:0:6UPfqdssD6g_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:16] DONE  vidhalluc 44/8550 | new=44 | sample=bqa:12:0:6UPfqdssD6g_clip_4 | parse=valid | correct=False | batch=1
+[2026-08-25 07:05:24] DONE  vidhalluc 45/8550 | new=45 | sample=bqa:12:1:6UPfqdssD6g_clip_5 | parse=valid | correct=False | batch=1
+[2026-08-25 07:05:31] DONE  vidhalluc 46/8550 | new=46 | sample=bqa:12:1:6UPfqdssD6g_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:40] DONE  vidhalluc 47/8550 | new=47 | sample=bqa:13:0:hiYPv3MrrUw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:49] DONE  vidhalluc 48/8550 | new=48 | sample=bqa:13:0:hiYPv3MrrUw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:05:57] DONE  vidhalluc 49/8550 | new=49 | sample=bqa:13:1:hiYPv3MrrUw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:06] DONE  vidhalluc 50/8550 | new=50 | sample=bqa:13:1:hiYPv3MrrUw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:13] DONE  vidhalluc 51/8550 | new=51 | sample=bqa:14:0:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:22] DONE  vidhalluc 52/8550 | new=52 | sample=bqa:14:0:C0MIMsY6okw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:28] DONE  vidhalluc 53/8550 | new=53 | sample=bqa:14:1:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:37] DONE  vidhalluc 54/8550 | new=54 | sample=bqa:14:1:C0MIMsY6okw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:46] DONE  vidhalluc 55/8550 | new=55 | sample=bqa:15:0:C0MIMsY6okw_clip_9 | parse=valid | correct=True | batch=1
+[2026-08-25 07:06:53] DONE  vidhalluc 56/8550 | new=56 | sample=bqa:15:0:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:01] DONE  vidhalluc 57/8550 | new=57 | sample=bqa:15:1:C0MIMsY6okw_clip_9 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:08] DONE  vidhalluc 58/8550 | new=58 | sample=bqa:15:1:C0MIMsY6okw_clip_10 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:15] DONE  vidhalluc 59/8550 | new=59 | sample=bqa:16:0:s69uPXLvzIg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:22] DONE  vidhalluc 60/8550 | new=60 | sample=bqa:16:0:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:29] DONE  vidhalluc 61/8550 | new=61 | sample=bqa:16:1:s69uPXLvzIg_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:35] DONE  vidhalluc 62/8550 | new=62 | sample=bqa:16:1:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:43] DONE  vidhalluc 63/8550 | new=63 | sample=bqa:17:0:s69uPXLvzIg_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:50] DONE  vidhalluc 64/8550 | new=64 | sample=bqa:17:0:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:07:57] DONE  vidhalluc 65/8550 | new=65 | sample=bqa:17:1:s69uPXLvzIg_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:04] DONE  vidhalluc 66/8550 | new=66 | sample=bqa:17:1:s69uPXLvzIg_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:22] DONE  vidhalluc 67/8550 | new=67 | sample=bqa:18:0:eXMF6Skt2To_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:29] DONE  vidhalluc 68/8550 | new=68 | sample=bqa:18:0:eXMF6Skt2To_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:46] DONE  vidhalluc 69/8550 | new=69 | sample=bqa:18:1:eXMF6Skt2To_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:08:53] DONE  vidhalluc 70/8550 | new=70 | sample=bqa:18:1:eXMF6Skt2To_clip_3 | parse=valid | correct=True | batch=1
+[h264 @ 0x22aca900] mmco: unref short failure
+[h264 @ 0x22aca900] mmco: unref short failure
+[2026-08-25 07:09:04] DONE  vidhalluc 71/8550 | new=71 | sample=bqa:19:0:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:09:16] DONE  vidhalluc 72/8550 | new=72 | sample=bqa:19:0:cUdIbmXb2yI_clip_2 | parse=valid | correct=True | batch=1
+[h264 @ 0x22ae55c0] mmco: unref short failure
+[h264 @ 0x22ae55c0] mmco: unref short failure
+[2026-08-25 07:09:26] DONE  vidhalluc 73/8550 | new=73 | sample=bqa:19:1:cUdIbmXb2yI_clip_3 | parse=valid | correct=False | batch=1
+[2026-08-25 07:09:38] DONE  vidhalluc 74/8550 | new=74 | sample=bqa:19:1:cUdIbmXb2yI_clip_2 | parse=valid | correct=True | batch=1
+[h264 @ 0x22b39840] mmco: unref short failure
+[h264 @ 0x22b39840] mmco: unref short failure
+[2026-08-25 07:09:49] DONE  vidhalluc 75/8550 | new=75 | sample=bqa:20:0:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:09:59] DONE  vidhalluc 76/8550 | new=76 | sample=bqa:20:0:cUdIbmXb2yI_clip_1 | parse=valid | correct=True | batch=1
+[h264 @ 0x22b56b80] mmco: unref short failure
+[h264 @ 0x22b56b80] mmco: unref short failure
+[2026-08-25 07:10:09] DONE  vidhalluc 77/8550 | new=77 | sample=bqa:20:1:cUdIbmXb2yI_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:10:19] DONE  vidhalluc 78/8550 | new=78 | sample=bqa:20:1:cUdIbmXb2yI_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:10:26] DONE  vidhalluc 79/8550 | new=79 | sample=bqa:21:0:biyf6Q-xF0M_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:10:33] DONE  vidhalluc 80/8550 | new=80 | sample=bqa:21:0:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:10:40] DONE  vidhalluc 81/8550 | new=81 | sample=bqa:21:1:biyf6Q-xF0M_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:10:46] DONE  vidhalluc 82/8550 | new=82 | sample=bqa:21:1:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:10:54] DONE  vidhalluc 83/8550 | new=83 | sample=bqa:22:0:biyf6Q-xF0M_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:00] DONE  vidhalluc 84/8550 | new=84 | sample=bqa:22:0:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:07] DONE  vidhalluc 85/8550 | new=85 | sample=bqa:22:1:biyf6Q-xF0M_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:14] DONE  vidhalluc 86/8550 | new=86 | sample=bqa:22:1:biyf6Q-xF0M_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:21] DONE  vidhalluc 87/8550 | new=87 | sample=bqa:23:0:UWTpfygMUQw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:28] DONE  vidhalluc 88/8550 | new=88 | sample=bqa:23:0:UWTpfygMUQw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:34] DONE  vidhalluc 89/8550 | new=89 | sample=bqa:23:1:UWTpfygMUQw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:41] DONE  vidhalluc 90/8550 | new=90 | sample=bqa:23:1:UWTpfygMUQw_clip_3 | parse=valid | correct=True | batch=1
+[2026-08-25 07:11:48] DONE  vidhalluc 91/8550 | new=91 | sample=bqa:24:0:UWTpfygMUQw_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 07:11:56] DONE  vidhalluc 92/8550 | new=92 | sample=bqa:24:0:UWTpfygMUQw_clip_2 | parse=valid | correct=False | batch=1
+[2026-08-25 07:12:02] DONE  vidhalluc 93/8550 | new=93 | sample=bqa:24:1:UWTpfygMUQw_clip_1 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:10] DONE  vidhalluc 94/8550 | new=94 | sample=bqa:24:1:UWTpfygMUQw_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:17] DONE  vidhalluc 95/8550 | new=95 | sample=bqa:25:0:Xt86M-mRxi8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:25] DONE  vidhalluc 96/8550 | new=96 | sample=bqa:25:0:Xt86M-mRxi8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:32] DONE  vidhalluc 97/8550 | new=97 | sample=bqa:25:1:Xt86M-mRxi8_clip_4 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:39] DONE  vidhalluc 98/8550 | new=98 | sample=bqa:25:1:Xt86M-mRxi8_clip_5 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:47] DONE  vidhalluc 99/8550 | new=99 | sample=bqa:26:0:QKEFacWrn_8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:12:56] DONE  vidhalluc 100/8550 | new=100 | sample=bqa:26:0:QKEFacWrn_8_clip_1 | parse=valid | correct=False | batch=1
+[2026-08-25 07:13:04] DONE  vidhalluc 101/8550 | new=101 | sample=bqa:26:1:QKEFacWrn_8_clip_2 | parse=valid | correct=True | batch=1
+[2026-08-25 07:13:12] DONE  vidhalluc 102/8550 | new=102 | sample=bqa:26:1:QKEFacWrn_8_clip_1 | parse=valid | correct=False | batch=1

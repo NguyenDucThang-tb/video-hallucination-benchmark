@@ -1,0 +1,3122 @@
+sample_id,model,method,ground_truth,raw_model_output,local_prediction,official_prediction,diagnostic_prediction,parse_status,original_parser_status,correct_status,parser_difference,original_parser_error,failure_stage,runtime_error
+tsh:1,qwen2.5-vl-7b,base,BA,The action that happens first is Action A: cleaning the sinks.,A,A,,valid,valid,False,False,,,
+tsh:2,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: powdering hands
+2. Action B: holding the barbell
+
+The weightlifter first powders his hands with chalk to improve his grip on the barbell, then he holds the barbell.",AB,AB,AB,valid,valid,True,False,,,
+tsh:3,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: fencing
+2. Action B: playing table tennis
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:4,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. Action B: washing dishes
+2. Action A: placing clean dishes on the dish rack
+
+The person is first seen washing dishes, and then placing them on the dish rack.",BA,BA,BA,valid,valid,True,False,,,
+tsh:5,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: skateboarding on the road
+2. Action B: windsurfing
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:6,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting the pita bread into small slices
+2. Action A: frying the bread
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:7,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. sailing on a yacht
+2. Action A. drawing on a map
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:8,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting a paper
+2. Action B: presenting a gold bowl
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:9,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: holding a gift
+2. Action A: blowing sequins",BA,BA,BA,valid,valid,True,False,,,
+tsh:10,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: playing croquet
+2. Action B: playing with a cat
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:11,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: playing croquet
+2. Action B: playing with a cat
+
+The person is first seen playing croquet on a wooden platform, then the scene transitions to the person playing with a cat on the grass.",AB,AB,AB,valid,valid,True,False,,,
+tsh:12,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: applying paint to a sponge
+2. Action B: applying glitter nail polish
+
+The first action (applying paint to a sponge) happens before the second action (applying glitter nail polish).",AB,AB,AB,valid,valid,True,False,,,
+tsh:13,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: drawing on tape and cutting it out
+2. Action B: applying a top coat
+
+The sequence of events is as follows:
+- First, the person draws on the tape and cuts out half of a heart.
+- Then, the person applies a top coat to the nail.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:14,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: flying a helicopter over a river
+2. Action A: rafting into a tunnel
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:15,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting dough into rounds
+2. Action A: cooking meat",BA,BA,BA,valid,valid,True,False,,,
+tsh:16,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: eating together
+2. Action B: practicing martial arts
+
+The first scene shows two individuals eating together at a table, while the second scene depicts a person practicing martial arts outdoors.",AB,AB,AB,valid,valid,True,False,,,
+tsh:17,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. **Dancing (Action B)**: The woman is seen dancing with children on a pier.
+2. **Playing Music (Action A)**: The scene transitions to a group of people playing music on a stage.
+
+So, **dancing** happens before **playing music**.",BA,BA,BA,valid,valid,True,False,,,
+tsh:18,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Stirring cabbage with oil
+2. Action B: Boiling the broccoli
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:19,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing various spices and olive oil
+2. Action B: cooking sausages on a grill pan",AB,AB,AB,valid,valid,True,False,,,
+tsh:20,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: carving pumpkins
+2. Action B: walking down the road
+
+The video starts with a scene of people carving pumpkins, followed by a scene of a person walking down the road.",AB,AB,AB,valid,valid,False,False,,,
+tsh:21,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: displaying welding equipment
+2. Action B: cleaning a welded area",AB,AB,AB,valid,valid,True,False,,,
+tsh:22,qwen2.5-vl-7b,base,BA,"The sequence of events in the video is as follows:
+
+1. **Action B. playing polo** - This action occurs first, as it shows people riding horses and participating in a polo match.
+2. **Action A. an award ceremony** - This action occurs second, as it shows individuals holding up a trophy and celebrating, which suggests an award ceremony following the polo match.
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:23,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cleaning the seats of a car
+2. Action A: carpet cleaning
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:24,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Putting on labels
+2. Action B: Ironing a label on a fabric
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:25,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients in a bowl
+2. Action A: making a sandwich",BA,BA,BA,valid,valid,True,False,,,
+tsh:26,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B. throwing a bowling ball
+2. Action A. talking to the camera",BA,BA,BA,valid,valid,False,False,,,
+tsh:27,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: rollerskating across a crosswalk
+2. Action A: talking
+
+The person is first seen rollerskating across a crosswalk, and then later talking to the camera.",BA.,BA.,BA,valid,valid,False,False,,,
+tsh:28,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: displaying a sand dunes
+2. Action B: leading and riding camels
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:29,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: washing a car
+2. Action B: showing the inside of a car
+
+The video starts with a person washing a car, then transitions to showing the inside of the car.",AB,AB,AB,valid,valid,True,False,,,
+tsh:30,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. Action A: flying a drone
+2. Action B: jumping into the water
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:31,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Exiting a building with a snowboard
+2. Action B: Snowboarding on a street
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:32,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: walking up stairs
+2. Action A: trimming hedges
+
+The woman is first seen walking up stairs, and then she is shown trimming hedges.",BA,BA,BA,valid,valid,True,False,,,
+tsh:33,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: whisking eggs and steaming them
+2. Action B: serving scrambled eggs on toast",AB,AB,AB,valid,valid,False,False,,,
+tsh:34,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: attending a bullfight
+2. Action A: matadors walking in the ring
+
+The video starts with a crowd of people watching a bullfight, indicating that they are attending the event. Then, it transitions to show matadors walking in the ring, which is part of the bullfighting spectacle.",BA,BA,BA,valid,valid,True,False,,,
+tsh:35,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: preparing to jump
+2. Action B: zip lining
+
+The video first shows people preparing to jump, followed by them zip lining.",AB,AB,AB,valid,valid,True,False,,,
+tsh:36,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: playing the guitar
+2. Action A: playing the flute",BA,BA,BA,valid,valid,True,False,,,
+tsh:37,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: preparing for a dive on a diving board
+2. Action A: jumping into a pool
+
+The person is first seen preparing to dive from the diving board, and then the scene transitions to show someone jumping into the pool.",BA,BA,BA,valid,valid,True,False,,,
+tsh:38,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients in a bowl
+2. Action B: making a sandwich
+
+The video first shows a close-up of a red bowl with various ingredients being mixed together, indicating the mixing of ingredients. This is followed by a scene where a sandwich is being made, showing a hand spreading butter on a slice of bread.",AB,AB,AB,valid,valid,True,False,,,
+tsh:39,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Submerging basil leaves in salt water and removing excess water.
+2. Action B: Turning the swordfish over.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:40,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: assembling a bike
+2. Action B: putting tools in the box
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:41,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Putting something in the trunk of a car
+2. Action A: Walking on a slackline
+
+The first action is putting something in the trunk of a car, and the second action is walking on a slackline.",BA,BA,BA,valid,valid,True,False,,,
+tsh:42,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Pedaling a bike (Action A)
+2. Arm-wrestling (Action B)
+
+The sequence of events is as follows: first, the person is seen pedaling a bike, and then the scene transitions to two people arm-wrestling. Therefore, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:43,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients
+2. Action A: baking cookies",BA,BA,BA,valid,valid,True,False,,,
+tsh:44,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Opening a door
+2. Action B: Cutting hair
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:45,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: women talking
+2. Action A: getting tattoos done
+
+The video starts with the women talking, and then it transitions to showing a person getting a tattoo.",BA,BA,BA,valid,valid,True,False,,,
+tsh:46,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: a man's face moving
+2. Action B: shining a shoe
+
+The video starts with a close-up of a man's face, showing him moving his head slightly. Then, the camera shifts to show a black leather shoe being shined.",AB,AB,AB,valid,valid,True,False,,,
+tsh:47,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: coating the squid rings with flour
+2. Action B: frying the squid rings
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:48,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing hands
+2. Action A: lighting a candle",BA,BA,BA,valid,valid,True,False,,,
+tsh:49,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Cleaning a bathtub (Action B)
+2. Cleaning a toilet (Action A)
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:50,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: giving a high five
+2. Action A: playing rock paper scissors
+
+The video first shows a person giving a high five to another person, followed by a scene where people are playing rock paper scissors.",BA,BA,BA,valid,valid,False,False,,,
+tsh:51,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: reaching for the last beer
+2. Action B: giving a high five
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:52,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Scrolling text
+2. Action A: Running water from a faucet",BA,BA,BA,valid,valid,True,False,,,
+tsh:53,qwen2.5-vl-7b,base,AB,"The first action in the video is Action B. throwing a javelin. The second action is not present in the provided frames, so it cannot be determined.",B,B,,valid,valid,False,False,,,
+tsh:54,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing water and vinegar in a bowl
+2. Action A: flipping pasta
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:55,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: crushing the ingredients
+2. Action B: cooking pasta",AB,AB,AB,valid,valid,True,False,,,
+tsh:56,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. mixing water and vinegar in a bowl
+2. Action A. cooking pasta",BA,BA,BA,valid,valid,True,False,,,
+tsh:57,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action A: throwing a hammer
+2. Action B: celebrating a medal
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:58,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. walking toward the door of a house
+2. Action A. entering a workshop",BA,BA,BA,valid,valid,True,False,,,
+tsh:59,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Shoveling snow
+2. Action A: Entering a workshop",BA,BA,BA,valid,valid,True,False,,,
+tsh:60,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: blending ingredients in a food processor
+2. Action B: mixing various ingredients in a bowl
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:61,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: registering for the event
+2. Action B: skateboarding
+
+The video first shows a person registering for an event, followed by scenes of people skateboarding at a skate park.",AB,AB,AB,valid,valid,True,False,,,
+tsh:62,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. chilling against a fence
+2. Action A. rollerblading tricks",BA,BA,BA,valid,valid,True,False,,,
+tsh:63,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. chilling against a fence
+2. Action A. roller skating on ramps
+
+The video starts with a person standing behind a fence, then transitions to a scene of people roller skating on ramps.",BA,BA,BA,valid,valid,True,False,,,
+tsh:64,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: play fighting with croquet mallets
+2. Action B: hitting a ball
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:65,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: holding a piece of bark and talking to the camera
+2. Action B: adding wood to the fire
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:66,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: using a hammer to remove debris
+2. Action A: using a flat equipment to move the dumbbell-shaped steels
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:67,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: driving a car
+2. Action B: skating on the railing
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:68,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: smoothing wallpaper
+2. Action B: walking around a ladder
+
+The person is first seen smoothing the wallpaper, and then the video cuts to the person walking around the ladder.",AB,AB,AB,valid,valid,False,False,,,
+tsh:69,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking around a ladder
+2. Action B: measuring wallpaper
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:70,qwen2.5-vl-7b,base,BA,"The two actions in the video are:
+
+1. Action B. mixing cake ingredients
+2. Action A. frosting a cake
+
+The video starts with the mixing of cake ingredients, followed by the frosting of a cake.",BA,BA,BA,valid,valid,True,False,,,
+tsh:71,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: opening a can
+2. Action B: wiping the boot with a towel",AB,AB,AB,valid,valid,False,False,,,
+tsh:72,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: topping the tortillas with various ingredients
+2. Action A: mashing the mixture in a bowl",BA,BA,BA,valid,valid,False,False,,,
+tsh:73,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. B. knitting
+2. A. Slapping the pillow",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:74,qwen2.5-vl-7b,base,AB,The action that happens first is Action B: slicing a loaf of bread.,B,B,,valid,valid,False,False,,,
+tsh:75,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: bungee jumping from a bridge
+2. Action B: swimming
+
+The video first shows a person bungee jumping from a bridge, followed by scenes of people swimming in the water.",AB,AB,AB,valid,valid,True,False,,,
+tsh:76,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: riding bikes
+2. Action A: giving a hug
+
+The video starts with people riding bikes on a sandy beach under a bright sun. Later, two individuals are seen giving each other a hug.",BA,BA,BA,valid,valid,True,False,,,
+tsh:77,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Roasting a pepper on a stove
+2. Action B: Juicing a lemon
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:78,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Adding oil to the dough in the mixer.
+2. Action B: Rolling a piece of dough into a ball.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:79,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: skateboarding
+2. Action A: doing skateboard tricks down stairs
+
+The video starts with people skateboarding on a street, then transitions to a scene where a person is doing skateboard tricks down stairs.",BA,BA,BA,valid,valid,True,False,,,
+tsh:80,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: applying wallpaper
+2. Action B: smoothing wallpaper with a spatula
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:81,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: tying shoes and getting up from the couch
+2. Action B: a person walking to the door
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:82,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Walking on a dock
+2. Action B: Wakeboarding tricks
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:83,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: washing hands
+2. Action B: working in an office
+
+The video first shows a person washing their hands at a sink, followed by a scene of a keyboard with text indicating ""Keyboard 1.295 per square inch."" This suggests that the keyboard is being used in an office setting. Therefore, the action of washing hands happens before the action of working in an office.",AB,AB,AB,valid,valid,False,False,,,
+tsh:84,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: washing hands
+2. Action A: working in an office
+
+The first action is washing hands, and it happens before the second action, which is working in an office.",BA,BA,BA,valid,valid,False,False,,,
+tsh:85,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: adding mashed potatoes and chutney, then mixing
+2. Action A: heating a pan
+
+The video starts with the addition of mashed potatoes and chutney to the pan, followed by the heating of the pan.",BA,BA,BA,valid,valid,True,False,,,
+tsh:86,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting and squeezing lemons
+2. Action B: making lemonade
+
+The video first shows a person cutting and squeezing lemons, followed by the preparation of lemonade.",AB,AB,AB,valid,valid,True,False,,,
+tsh:87,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Slicing the onion
+2. Action B: Coating the onion rings in batter
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:88,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing milk with vinegar
+2. Action A: mixing ingredients in a bowl",BA,BA,BA,valid,valid,True,False,,,
+tsh:89,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: peeling transfer paper off the client's back
+2. Action A: sticking things on paper
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:90,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Melting butter and adding garlic.
+2. Action B: Adding potatoes to boiling water and cooking them.",AB,AB,AB,valid,valid,False,False,,,
+tsh:91,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing a car
+2. Action A: cleaning the interior of a car",BA,BA,BA,valid,valid,True,False,,,
+tsh:92,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: examining paint brushes
+2. Action B: mixing paint with a paint brush",AB,AB,AB,valid,valid,True,False,,,
+tsh:93,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. talking to the camera
+2. Action A. preparing ingredients",BA,BA,BA,valid,valid,True,False,,,
+tsh:94,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: scuba diving
+2. Action B: taking photos on a boat
+
+The video starts with an underwater scene showing fish swimming around, which suggests scuba diving. The scene then transitions to a view of a boat on the water, indicating that the person is now taking photos from the boat.",AB,AB,AB,valid,valid,True,False,,,
+tsh:95,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients together in a bowl
+2. Action B: making a sandwich",AB,AB,AB,valid,valid,True,False,,,
+tsh:96,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting vegetables
+2. Action A: crushing the ingredients in a food processor",BA,BA,BA,valid,valid,True,False,,,
+tsh:97,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Cars driving by the road
+2. Action B: A bus parked outside the building
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:98,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: presenting ingredients
+2. Action A: making a sandwich",BA,BA,BA,valid,valid,True,False,,,
+tsh:99,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: performing a belly button piercing
+2. Action B: looking in the mirror
+
+The first action is the belly button piercing, and the second action is looking in the mirror.",AB,AB,AB,valid,valid,True,False,,,
+tsh:100,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action B: performing a frisbee routine with dogs
+2. Action A: swinging a dog on a red plate
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:101,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding herbs to the soup
+2. Action B: adding ingredients to the soup
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:102,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: playing clarinets
+2. Action B: leading the band
+
+The video starts with a close-up of a person playing a clarinet, indicating that the action of playing clarinets happens first. Then, the scene transitions to show another person leading the band, indicating that the action of leading the band happens after.",AB,AB,AB,valid,valid,False,False,,,
+tsh:103,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Putting a cake in a display case
+2. Action B: Mixing chocolate and rice crispies
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:104,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: grooming a dog
+2. Action B: trimming dog nails
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:105,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: grooming a dog
+2. Action A: trimming dog nails",BA,BA,BA,valid,valid,True,False,,,
+tsh:106,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: riding camels
+2. Action A: guiding a tour in a desert
+
+The video first shows people riding camels, followed by a scene of a man standing next to a vehicle with ""Cabo Adventures"" written on it, indicating he is likely guiding a tour in a desert.",BA,BA,BA,valid,valid,False,False,,,
+tsh:107,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Getting a tattoo
+2. Action B: Talking to the camera
+
+The video starts with a person getting a tattoo, followed by the same person talking to the camera.",AB.,AB.,AB,valid,valid,False,False,,,
+tsh:108,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: exercising in a gym
+2. Action B: driving
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:109,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking around a kayak
+2. Action B: exercising in a gym
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:110,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: dancing on pointe
+2. Action B: speaking to the camera
+
+The video starts with a woman dancing on pointe, then transitions to her speaking to the camera.",AB.,AB.,AB,valid,valid,False,False,,,
+tsh:111,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: seasoning the chicken
+2. Action A: tearing apart the chicken
+
+The person first seasons the chicken with salt and pepper, then tears it apart using a fork and spoon.",BA,BA,BA,valid,valid,True,False,,,
+tsh:112,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: preparing steamed rice using a rice cooker
+2. Action B: preparing spinach and seasoning it
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:113,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Getting a spare tire out
+2. Action B: Lowering a car
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:114,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. Action A: Removing a tire
+2. Action B: Getting a spare tire out
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:115,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: riding a motor boat
+2. Action A: wearing sunblock
+
+The video first shows people riding a motor boat on the water, followed by a scene where a person is wearing sunblock.",BA,BA,BA,valid,valid,True,False,,,
+tsh:116,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: applying fake nails
+2. Action B: applying lipstick",AB,AB,AB,valid,valid,True,False,,,
+tsh:117,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: blending ingredients into a paste
+2. Action B: adding oil to the pan and frying the seeds with onion paste
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:118,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: screwing the tools in place of the holes
+2. Action A: running a sharp object along the paper
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:119,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: mixing ingredients
+2. Action B: rolling out dough and adding sugar on it
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:120,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Rolling a flatten dough
+2. Action A: Slicing a cake and placing slices on a cooking sheet
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:121,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients
+2. Action A: slicing a cake and placing slices on a cooking sheet",BA,BA,BA,valid,valid,True,False,,,
+tsh:122,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: rolling out dough and adding sugar on it
+2. Action B: slicing a cake and placing slices on a cooking sheet
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:123,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients
+2. Action B: rolling a flatten dough
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:124,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. Action A: trying to get something in the eye
+2. Action B: a child crying
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:125,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: working out on spin bikes
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:126,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: observing a temple
+2. Action A: receiving a white box",BA,BA,BA,valid,valid,True,False,,,
+tsh:127,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Observing a temple
+2. Action A: An arrow hitting a board",BA,BA,BA,valid,valid,True,False,,,
+tsh:128,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting hair
+2. Action B: walking down a street
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:129,qwen2.5-vl-7b,base,AB,The action that happens first is Action B. opening the door.,B,B,,valid,valid,False,False,,,
+tsh:130,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: walking across a suspension bridge
+2. Action A: rafting down a river
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:131,qwen2.5-vl-7b,base,AB,"The video shows a cricket match, not a baseball game. Therefore, there is no action of playing baseball in the video. The action that occurs in the video is:
+
+Action A. playing baseball (This does not happen in the video.)",A,A,,valid,valid,False,False,,,
+tsh:132,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: playing ping pong
+2. Action A: a person walking towards someone",BA,BA,BA,valid,valid,True,False,,,
+tsh:133,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: rolling the garment in a towel
+2. Action A: washing clothes
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:134,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: making dough
+2. Action B: baking cookies
+
+The video first shows the process of making dough, followed by the baking of cookies.",AB,AB,AB,valid,valid,True,False,,,
+tsh:135,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting and taking out small patties of potato
+2. Action B: frying the patties
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:136,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: grabbing a surfboard
+2. Action A: surfing
+
+The person is first seen grabbing a surfboard from the back of a car, and then they are shown surfing on a wave.",BA,BA,BA,valid,valid,True,False,,,
+tsh:137,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: grabbing a surfboard
+2. Action A: surfing
+
+The person is first seen grabbing a surfboard from the back of a car, then they are shown surfing.",BA,BA,BA,valid,valid,True,False,,,
+tsh:138,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding the mixture to the kale pot and mixing it
+2. Action B: serving it with fried sausage and egg",AB,AB,AB,valid,valid,True,False,,,
+tsh:139,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Putting on a sock
+2. Action A: Tying shoelaces
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:140,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: jumping on hopscotch squares
+2. Action B: unfolding a note
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:141,qwen2.5-vl-7b,base,BA,The action that happens first is Action B: playing a bagpipe.,B,B,,valid,valid,False,False,,,
+tsh:142,qwen2.5-vl-7b,base,AB,"The actions in the video are:
+
+1. Action A: playing a piano
+2. Action B: playing a bagpipe
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:143,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. **Action A: Vacuuming the car interior**
+2. **Action B: Washing a car**",AB,AB,AB,valid,valid,True,False,,,
+tsh:144,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: preparing scuba diving
+2. Action A: scuba diving in the sea",BA,BA,BA,valid,valid,True,False,,,
+tsh:145,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is:
+
+1. Action B: removing contact lenses
+2. Action A: placing contact lenses into a case",BA,BA,BA,valid,valid,False,False,,,
+tsh:146,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Washing hands
+2. Action A: Throwing a paper towel in the waste bin",BA,BA,BA,valid,valid,True,False,,,
+tsh:147,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Pouring water into a pan.
+2. Action B: Grating carrots.",AB,AB,AB,valid,valid,True,False,,,
+tsh:148,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Chopping kale up on a cutting block
+2. Action B: Pouring water into a pan
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:149,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: drinking coffee
+2. Action A: chilling on a lakeside
+
+The first scene shows two people drinking coffee indoors, while the second scene shows four people standing by a lakeside, enjoying the view.",BA,BA,BA,valid,valid,True,False,,,
+tsh:150,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: drinking beer
+2. Action A: two men turning and looking at each other
+
+The first action is drinking beer, followed by the second action of two men turning and looking at each other.",BA,BA,BA,valid,valid,False,False,,,
+tsh:151,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Five men walking on the street.
+2. Action B: Drinking beer.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:152,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. making cuts into the shrimp
+2. Action A. mixing various ingredients",BA,BA,BA,valid,valid,True,False,,,
+tsh:153,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Extracting oil from a car engine
+2. Action B: Lighting a woodfire
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:154,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: drying a dog
+2. Action B: talking to the camera
+
+The woman is seen talking to the camera while the dog is being dried.",AB,AB,AB,valid,valid,False,False,,,
+tsh:155,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: applying makeup to hair
+2. Action B: talking to the camera
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:156,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: talking to the camera
+2. Action B: applying makeup to hair",AB,AB,AB,valid,valid,True,False,,,
+tsh:157,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: pouring dressing on the lettuce
+2. Action B: blending all the ingredients together",AB,AB,AB,valid,valid,False,False,,,
+tsh:158,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Two men sitting and talking
+2. Action B: Arguing with croquet balls
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:159,qwen2.5-vl-7b,base,BA,The action that happens first is Action B. opening a door. The action that happens after is Action A. swinging on a swing.,BA,BA,AB,valid,valid,True,False,,,
+tsh:160,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Opening a door
+2. Action B: A child going down the slide
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:161,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: swinging on a swing
+2. Action A: walking
+
+The child is first seen swinging on a swing, and then the scene transitions to the child walking.",BA,BA,BA,valid,valid,True,False,,,
+tsh:162,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: a child going down the slide
+2. Action B: walking
+
+The child is seen going down the slide first, followed by an adult walking nearby.",AB,AB,AB,valid,valid,False,False,,,
+tsh:163,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Bringing a pot of salted water to a boil
+2. Action B: Cooking pasta
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:164,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing clothes
+2. Action A: hanging laundry on a clothesline",BA,BA,BA,valid,valid,True,False,,,
+tsh:165,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking through a door
+2. Action B: displaying an amplifier
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:166,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: bikers flying through the sky
+2. Action A: opening the coconut using a knife
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:167,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. walking down stairs
+2. Action A. working out with a rowing machine
+
+The person is first seen walking down the stairs, and then the scene transitions to the person working out on a rowing machine.",BA,BA,BA,valid,valid,True,False,,,
+tsh:168,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing the surface of a car
+2. Action A: cleaning car tires",BA,BA,BA,valid,valid,True,False,,,
+tsh:169,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Cleaning car tires
+2. Action B: Steam cleaning the car's engine",AB,AB,AB,valid,valid,True,False,,,
+tsh:170,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: playing water polo
+2. Action A: celebrating on the podium",BA,BA,BA,valid,valid,True,False,,,
+tsh:171,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Scuba diving through a cave
+2. Action B: Grazing
+
+The scuba diving through a cave happens first, followed by the grazing scene.",AB,AB,AB,valid,valid,True,False,,,
+tsh:172,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Adding the spring rolls to hot oil
+2. Action A: Plating the spring rolls with sauce
+
+The video first shows the spring rolls being added to hot oil, followed by the plating of the spring rolls with sauce.",BA,BA,BA,valid,valid,True,False,,,
+tsh:173,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Putting noodles in boiling water and separating them.
+2. Action B: Adding ingredients and mixing them.",AB,AB,AB,valid,valid,False,False,,,
+tsh:174,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: bullfighting
+2. Action B: fighting in armor
+
+The video first shows a scene of bullfighting, followed by a scene with people in armor, which is labeled as ""fighting in armor.""",AB,AB,AB,valid,valid,True,False,,,
+tsh:175,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Putting on safety harnesses
+2. Action A: Climbing up the stairs
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:176,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: jumping and walking on the stilts
+2. Action B: jumping over a bench
+
+The video first shows a person jumping and walking on stilts, followed by the person jumping over a bench.",AB,AB,AB,valid,valid,True,False,,,
+tsh:177,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. performing skateboard tricks
+2. Action A. celebrating awards
+
+The video starts with a skateboarder performing a trick on a ramp, followed by a scene where three individuals are holding up awards, indicating they have won a competition.",BA,BA,BA,valid,valid,True,False,,,
+tsh:178,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: performing skateboarding tricks
+2. Action B: celebrating awards
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:179,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. traveling on bus
+2. Action A. floating on inner tubes in the water
+
+The video starts with people traveling on a bus, and then transitions to a scene of people floating on inner tubes in the water.",BA,BA,BA,valid,valid,True,False,,,
+tsh:180,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: flying in a plane
+2. Action B: skiing down a snowy slope
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:181,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: filling a basket
+2. Action B: drawing on a sweet potato
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:182,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Making cuts into the chicken leg.
+2. Action B: Adding various spices to the pan.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:183,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: flowing water
+2. Action A: holding a kayak paddle",BA,BA,BA,valid,valid,True,False,,,
+tsh:184,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients
+2. Action A: mixing candied fruits with liquor",BA,BA,BA,valid,valid,False,False,,,
+tsh:185,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing candied fruits with liquor
+2. Action B: smoothing the batter
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:186,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients together
+2. Action A: baking cookies",BA,BA,BA,valid,valid,True,False,,,
+tsh:187,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: playing table tennis with unusual objects
+2. Action B: collecting ping pong balls
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:188,qwen2.5-vl-7b,base,BA,"The two actions in the video are:
+
+1. Action B: playing table tennis with unusual objects
+2. Action A: collecting ping pong balls
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:189,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Taking a bike out of a case
+2. Action B: Assembling a bicycle
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:190,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: holding a makeup brush
+2. Action A: brushing nails",BA,BA,BA,valid,valid,True,False,,,
+tsh:191,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: holding a makeup brush
+2. Action A: painting nails",BA,BA,BA,valid,valid,True,False,,,
+tsh:192,qwen2.5-vl-7b,base,AB,The action that happens first is Action A: cooking rhubarb on the stove.,A,A,,valid,valid,False,False,,,
+tsh:193,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients
+2. Action A: eating ice cream",BA,BA,BA,valid,valid,True,False,,,
+tsh:194,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pouring the eggs and stirring them
+2. Action B: plating the eggs and seasoning them",AB,AB,AB,valid,valid,True,False,,,
+tsh:195,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Running in the field
+2. Action B: Rafting in the river
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:196,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: a drumming performance
+2. Action A: walking in a crowd
+
+The drumming performance is shown first, followed by people walking in a crowd.",BA,BA,BA,valid,valid,True,False,,,
+tsh:197,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Skateboarding down a hill
+2. Action A: Setting the board upright
+
+The first scene shows a person skateboarding down a hill, while the second scene shows a person setting their skateboard upright on a bench.",BA,BA,BA,valid,valid,True,False,,,
+tsh:198,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: driving a convertible
+2. Action B: riding down an escalator
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:199,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. riding down an escalator
+2. Action A. playing cards
+
+The video first shows people riding down an escalator, followed by a scene of people playing cards at a table.",BA,BA,BA,valid,valid,True,False,,,
+tsh:200,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: seasoning the goose liver
+2. Action B: removing an ingredient and adding another
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:201,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients
+2. Action A: baking cookies",BA,BA,BA,valid,valid,True,False,,,
+tsh:202,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients
+2. Action B: taking cookies out of the oven
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:203,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: adding ingredients to a salad
+2. Action A: preparing a salad",BA,BA,BA,valid,valid,True,False,,,
+tsh:204,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: preparing ingredients
+2. Action B: adding ingredients to a salad",AB,AB,AB,valid,valid,True,False,,,
+tsh:205,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: ice cream production
+2. Action B: eating ice cream",AB,AB,AB,valid,valid,False,False,,,
+tsh:206,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: applying sunscreen
+2. Action B: about packing up stuff in box
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:207,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: adding garlic to hot oil in a pan
+2. Action A: cooking chicken and pasta",BA,BA,BA,valid,valid,True,False,,,
+tsh:208,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: traveling on a bus
+2. Action B: celebrating with a trophy
+
+The video starts with people traveling on a bus, and then transitions to a scene of people celebrating with a trophy.",AB,AB,AB,valid,valid,True,False,,,
+tsh:209,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action A: decorating a Christmas tree
+2. Action B: putting a skirt over a rod
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:210,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: assembling a stand
+2. Action B: decorating a Christmas tree
+
+The woman first assembles the stand for the Christmas tree, then decorates the tree.",AB,AB,AB,valid,valid,True,False,,,
+tsh:211,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: the end credits
+2. Action B: gardening activities
+
+The end credits appear at the beginning of the video, followed by scenes of gardening activities.",AB,AB,AB,valid,valid,False,False,,,
+tsh:212,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: gardening activities
+2. Action B: talking
+
+The video starts with a scene of a garden with a tree surrounded by mulch and flowers, which is an example of gardening activities. This is followed by a scene where a person is talking, likely providing information or instructions related to gardening.",AB,AB,AB,valid,valid,True,False,,,
+tsh:213,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: frying the onion rings
+2. Action A: mixing mayonnaise, hot sauce, and milk
+
+The video first shows the onion rings being fried, followed by the preparation of the dipping sauce.",BA,BA,BA,valid,valid,True,False,,,
+tsh:214,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: The globe is turning.
+2. Action B: Throwing a bowling ball down a slide.",AB,AB,AB,valid,valid,True,False,,,
+tsh:215,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: diving into the ocean
+2. Action A: exploring a submerged cockpit
+
+The video starts with divers preparing to dive into the ocean, followed by scenes of them exploring a submerged cockpit underwater.",BA,BA,BA,valid,valid,True,False,,,
+tsh:216,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: heating oil in a pan and cooking the pork
+2. Action B: breaking eggs into a bowl and adding an extra yolk
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:217,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: eating ice cream
+2. Action B: children playing
+
+The children are seen eating ice cream at the beginning of the video, and then they appear to be playing with each other towards the end of the video.",AB,AB,AB,valid,valid,True,False,,,
+tsh:218,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action B: making a drawstring bag
+2. Action A: tying a double knot
+
+The first action (making a drawstring bag) happens before the second action (tying a double knot).",BA,BA,BA,valid,valid,True,False,,,
+tsh:219,qwen2.5-vl-7b,base,AB,"The first action that occurs in the video is:
+
+Action A. a person falling on a bowling lane
+
+This happens before:
+
+Action B. shooting a bowling ball from a cannon",AB,AB,AB,valid,valid,True,False,,,
+tsh:220,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: boiling and draining udon noodles
+2. Action A: boiling chicken broth
+
+The person is first seen boiling and draining udon noodles, and then the video transitions to showing the boiling of chicken broth.",BA,BA,BA,valid,valid,True,False,,,
+tsh:221,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Shoveling snow
+2. Action B: Putting on clothes
+
+The person is first seen shoveling snow, and then later putting on clothes.",AB,AB,AB,valid,valid,False,False,,,
+tsh:222,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: reading on a sofa
+2. Action B: shoveling snow
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:223,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Preparing ingredients for cooking
+2. Action B: Boiling water
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:224,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action A: climbing stairs on a bridge
+2. Action B: skydiving
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:225,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: making syrup
+2. Action A: decorating straws
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:226,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: talking to the camera
+2. Action A: playing polo
+
+The first part of the video shows a man talking to the camera, followed by scenes of people playing polo on a field.",BA,BA,BA,valid,valid,True,False,,,
+tsh:227,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: playing polo
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:228,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: talking outside
+2. Action A: moving dirt next to a tree",BA,BA,BA,valid,valid,True,False,,,
+tsh:229,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: placing the lamb and potatoes in a bowl
+2. Action A: mashing the potatoes
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:230,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: a doctor reviewing the injured leg
+2. Action A: washing hand and using hand sanitizes",BA,BA,BA,valid,valid,True,False,,,
+tsh:231,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: washing hands and using hand sanitizer
+2. Action B: making a call
+
+The video first shows a person washing their hands and using hand sanitizer, followed by a scene of a telephone being used to make a call.",AB,AB,AB,valid,valid,False,False,,,
+tsh:232,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: a doctor reviewing the injured leg
+2. Action B: making a call
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:233,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. Action A: Applying mixture to a wall
+2. Action B: The prominent action showing sand cement plaster
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:234,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: preparing a vaccine
+2. Action B: performing an MRI scan
+
+The video first shows a person preparing a vaccine in a laboratory setting, followed by a scene of a person performing an MRI scan on a patient.",AB,AB,AB,valid,valid,True,False,,,
+tsh:235,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: preparing a vaccine
+2. Action A: pouring coffee into a mug
+
+The video first shows a person preparing a vaccine in a laboratory setting, followed by a scene of coffee being poured into a mug.",BA,BA,BA,valid,valid,True,False,,,
+tsh:236,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: kayaking in rapids
+2. Action B: standing on the shore
+
+The kayaker is seen navigating through rapids at the beginning of the video, and then the scene transitions to a person standing on the shore.",AB,AB,AB,valid,valid,True,False,,,
+tsh:237,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pouring paint into a sprayer
+2. Action B: spraying the fence",AB,AB,AB,valid,valid,True,False,,,
+tsh:238,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: hanging newspaper on a fence
+2. Action A: spraying the fence",BA,BA,BA,valid,valid,True,False,,,
+tsh:239,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: throwing a weighted ball
+2. Action A: throwing motions on weighted cable machines
+
+The first action is the person throwing a weighted ball, followed by the second action of throwing motions on weighted cable machines.",BA,BA,BA,valid,valid,True,False,,,
+tsh:240,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Running scissor through a braid
+2. Action B: Walking
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:241,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Waxing skis
+2. Action B: Adjusting ski bindings
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:242,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: skiing
+2. Action B: ironing wax on the ski",AB,AB,AB,valid,valid,True,False,,,
+tsh:243,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: arm wrestling
+2. Action B: shaking hands
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:244,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pouring a drink into a glass
+2. Action B: could be about mixing drinks
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:245,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Getting a foot tattooed
+2. Action B: Showing a foot tattoo
+
+The first part of the video shows someone getting a foot tattooed, and the second part shows the same person displaying their newly tattooed foot.",AB,AB,AB,valid,valid,True,False,,,
+tsh:246,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: riding a horse
+2. Action A: a running cow",BA,BA,BA,valid,valid,True,False,,,
+tsh:247,qwen2.5-vl-7b,base,AB,Action B. adding various ingredients to the chicken stock happens before Action A. mixing various ingredients.,BA,BA,BA,valid,valid,False,False,,,
+tsh:248,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. **Action B. performing capoeira** - This is the first action shown in the video, where individuals are seen performing capoeira movements.
+2. **Action A. playing instruments** - This follows the capoeira performance, with people playing instruments like drums.
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:249,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: sticking paper to the wall
+2. Action A: rolling up paper and dipping it in water
+
+The first action (B) is shown at the beginning of the video where the person is applying the paper to the wall. The second action (A) is not directly shown in the provided frames but can be inferred as part of the preparation process for applying the wallpaper.",BA)),BA)),BA,valid,valid,False,False,,,
+tsh:250,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: inhaling the hookah and puffing out some smoke
+2. Action B: kissing
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:251,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. **Action B: assembling a hookah** - This occurs first, where a hand wearing a yellow glove is seen attaching parts to the hookah.
+2. **Action A: smoking a hookah** - This happens after the hookah is assembled, as indicated by the person wearing a mask and holding the hose, preparing to smoke.
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:252,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: playing water polo in a pool
+2. Action A: updating scores on a board",BA,BA,BA,valid,valid,False,False,,,
+tsh:253,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing and blending ingredients to make a smooth sauce
+2. Action A: adding various ingredients to a bowl and mixing them well",BA,BA,BA,valid,valid,True,False,,,
+tsh:254,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Dusting with flour and shaking off the excess.
+2. Action B: Frying the calamari.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:255,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: driving into a car wash bay
+2. Action B: viewing vending machines
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:256,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action B: Wrapping thread around a pencil
+2. Action A: Tattooing a design on a leg
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:257,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: speaking to the camera
+2. Action A: cutting hair
+
+The first frame shows a person speaking to the camera, while the second frame shows a person cutting hair.",BA,BA,BA,valid,valid,True,False,,,
+tsh:258,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B. pouring crushed red peppers and garlic into the skillet
+2. Action A. blending tomatoes",BA,BA,BA,valid,valid,False,False,,,
+tsh:259,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. blending tomatoes
+2. Action A. cooking sauce",BA,BA,BA,valid,valid,True,False,,,
+tsh:260,qwen2.5-vl-7b,base,AB,"The sequence of events in the video is as follows:
+
+1. Action A: a swimming competition
+2. Action B: a Judo match
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:261,qwen2.5-vl-7b,base,AB,The first action in the video is Action A: a triple jump. The second action is Action B: a swimming competition.,AB,AB,AB,valid,valid,True,False,,,
+tsh:262,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: showing a minivan
+2. Action A: inserting and twisting a rod
+
+The man is first shown standing next to the minivan, then he gets into the driver's seat and starts interacting with the vehicle, which includes inserting and twisting a rod.",BA,BA,BA,valid,valid,True,False,,,
+tsh:263,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: Installing the new tire
+2. Action A: Inserting and twisting a rod
+
+The man is first seen installing the new tire on the car, followed by him inserting and twisting a rod inside the vehicle.",BA,BA,BA,valid,valid,False,False,,,
+tsh:264,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: adding grated cauliflower to a bowl and mixing it with lemon juice
+2. Action B: chopping tomatoes, parsley, and cilantro
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:265,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: flipping through pages
+2. Action A: carving a pumpkin",BA,BA,BA,valid,valid,True,False,,,
+tsh:266,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: a lady talking
+2. Action B: grooming a dog",AB,AB,AB,valid,valid,True,False,,,
+tsh:267,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: printing paper
+2. Action B: installing wallpaper
+
+The video starts with a scene of a large printer labeled ""ValueJet"" printing on a roll of paper. This is followed by a scene showing a person installing wallpaper on a wall. Therefore, the printing action happens before the wallpaper installation action.",AB,AB,AB,valid,valid,True,False,,,
+tsh:268,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mowing the lawn
+2. Action A: playing in the dirt",BA,BA,BA,valid,valid,True,False,,,
+tsh:269,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: performing a headstand with a bowling ball
+2. Action A: people celebrating
+
+The person is seen performing a headstand with a bowling ball at the beginning of the video, followed by people celebrating.",BA,BA,BA,valid,valid,True,False,,,
+tsh:270,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B. walking around a memorial
+2. Action A. running",BA,BA,BA,valid,valid,False,False,,,
+tsh:271,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: adding butter and salt to a heating pot
+2. Action A: toasting bread on one side",BA,BA,BA,valid,valid,False,False,,,
+tsh:272,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: mixing eggs and sugar
+2. Action B: eating a chocolate cake
+
+The video first shows the process of mixing eggs and sugar, followed by a scene where someone is eating a chocolate cake.",AB,AB,AB,valid,valid,False,False,,,
+tsh:273,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. walking on the snow
+2. Action A. cooking fish on a wood fire",BA,BA,BA,valid,valid,True,False,,,
+tsh:274,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: vacuuming around windows
+2. Action A: inserting a tool into the vacuum",BA,BA,BA,valid,valid,False,False,,,
+tsh:275,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: jumping a ramp
+2. Action B: standing and discussing in the parking lot
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:276,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: stirring cookie dough
+2. Action A: rolling the baking sheet up",BA,BA,BA,valid,valid,True,False,,,
+tsh:277,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Baking cookies
+2. Washing the baking sheet
+
+So, Action B (baking cookies) happens before Action A (washing the baking sheet).",BA,BA,BA,valid,valid,True,False,,,
+tsh:278,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Putting cookies on a cooling rack
+2. Action B: Washing the baking sheet
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:279,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Swimming to a boat
+2. Action B: Diving underwater
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:280,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: swimming to a boat
+2. Action B: swimming underwater
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:281,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: toasting English muffins and seasoning them with butter, salt, and pepper
+2. Action B: heating ham in the microwave",AB,AB,AB,valid,valid,True,False,,,
+tsh:282,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. cooking sausage and onions
+2. Action A. mixing pasta with cheese and parsley",BA,BA,BA,valid,valid,True,False,,,
+tsh:283,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. walking up the stairs
+2. Action A. cutting hair to a short length",BA,BA,BA,valid,valid,True,False,,,
+tsh:284,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: stirring shoe shine materials
+2. Action B: shining shoes
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:285,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: wakeboarding
+2. Action A: driving a car
+
+The video starts with a person wakeboarding on a lake, then transitions to a scene of a man driving a car.",BA,BA,BA,valid,valid,False,False,,,
+tsh:286,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: driving on a road
+2. Action A: loading a snowboard onto a car",BA,BA,BA,valid,valid,True,False,,,
+tsh:287,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: placing the chicken pieces into hot oil
+2. Action B: adding oil to the chicken
+
+However, based on the provided images, it appears that the chicken is already placed into the hot oil, so the correct sequence is:
+
+1. Action A: placing the chicken pieces into hot oil
+2. Action B: not applicable (the oil is already present)",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:288,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: playing dodgeball
+2. Action B: interviewing the kids
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:289,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: playing dodgeball
+2. Action B: interviewing the kids
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:290,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. Action B: playing blackjack
+2. Action A: promoting a casino
+
+The video first shows a scene of someone playing blackjack, followed by a transition to a screen displaying the logo for ""Creek Nation Casino.""",BA,BA,BA,valid,valid,True,False,,,
+tsh:291,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Adding flour and stirring the dough
+2. Action B: Adding toppings to the dish",AB,AB,AB,valid,valid,True,False,,,
+tsh:292,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: discussing the building
+2. Action A: inspecting the wall
+
+The video first shows two men standing in front of a building under construction, engaged in a discussion. Then, it transitions to a close-up of a hand pointing at a wall, indicating an inspection of the wall's condition.",BA,BA,BA,valid,valid,True,False,,,
+tsh:293,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: rafting
+2. Action B: having lunch under an outdoor pavilion
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:294,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Putting on helmets and equipment
+2. Action A: Having lunch under an outdoor pavilion
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:295,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Opening a box
+2. Action B: Attaching both pedals onto the bicycle
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:296,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: speaking to the camera
+2. Action A: jumping rope",BA,BA,BA,valid,valid,True,False,,,
+tsh:297,qwen2.5-vl-7b,base,AB,"The action that occurs first is:
+
+Action B. paddling on a kayak
+
+This is followed by:
+
+Action A. jumping a ramp
+
+However, there is no ramp visible in the provided image, so it's not possible to confirm if the ramp action happens after the kayaking action based solely on this image. The image shows a person paddling a kayak on a body of water.",BAB,BAB,BA,valid,valid,False,False,,,
+tsh:298,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Grinding coffee beans
+2. Action B: Pouring coffee into a cup
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:299,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: Applying a towel to a wound
+2. Action A: Covering the ears with the hands
+
+The person is first seen applying a towel to a wound on their arm, and then they cover their ears with their hands.",BA,BA,BA,valid,valid,False,False,,,
+tsh:300,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: throwing darts
+2. Action B: grabbing the darts
+
+The person throws the dart first, then grabs it after missing the target.",AB,AB,AB,valid,valid,False,False,,,
+tsh:301,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: playing on swings
+2. Action B: throwing a ball
+
+The first frame shows children playing on swings, so Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:302,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Knocking over a cup
+2. Action B: Reaching for a ball
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:303,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: river tubing
+2. Action B: emerging from water
+
+The video starts with people floating on tubes in a river, which is an example of river tubing. Later, there is a scene where a person is seen emerging from the water, which is the second action.",AB,AB,AB,valid,valid,False,False,,,
+tsh:304,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: to crush the bananas
+2. Action B: breaking food in half
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:305,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: displaying a jackpot
+2. Action A: the dealer turning over the cards",BA,BA,BA,valid,valid,True,False,,,
+tsh:306,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: displaying a jackpot
+2. Action B: checking cards at a casino table
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:307,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: adding mussels to the mixture
+2. Action B: seasoning the mixture",AB,AB,AB,valid,valid,False,False,,,
+tsh:308,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding ingredients to a bowl
+2. Action B: baking cookies
+
+The video first shows a close-up of a green bowl with flour being mixed, indicating the addition of ingredients to a bowl. This is followed by the scene of cookies being baked on a cooling rack, indicating the baking process.",AB,AB,AB,valid,valid,True,False,,,
+tsh:309,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: bowling
+2. Action A: talking to the camera",BA,BA,BA,valid,valid,False,False,,,
+tsh:310,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Skateboarding in a skate park
+2. Action A: Running across the road
+
+The first part of the video shows a person skateboarding in a skate park at night, while the second part shows a person running across a road during the day.",BA,BA,BA,valid,valid,True,False,,,
+tsh:311,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: teaching pool techniques
+2. Action A: talking into the microphone",BA,BA,BA,valid,valid,True,False,,,
+tsh:312,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking with surfboards to a boat
+2. Action B: surfing on waves
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:313,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking with surfboards to a boat
+2. Action B: showing wakeboarding tricks
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:314,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting scallions into pieces
+2. Action A: adding sliced carrots",BA,BA,BA,valid,valid,True,False,,,
+tsh:315,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients
+2. Action A: flattening dough onto a sheet",BA,BA,BA,valid,valid,True,False,,,
+tsh:316,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients
+2. Action B: cutting the cookie",AB,AB,AB,valid,valid,True,False,,,
+tsh:317,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Shoveling sand
+2. Action A: Walking to the water
+
+The girl is first seen shoveling sand, then she walks towards the water.",BA,BA,BA,valid,valid,True,False,,,
+tsh:318,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: soaking the skewers
+2. Action B: skewering marinated shrimp, pineapple, and bacon",AB,AB,AB,valid,valid,True,False,,,
+tsh:319,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: washing vegetables
+2. Action B: cutting wrapping paper
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:320,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: Skateboarding tricks in a bowl
+2. Action B: Posing for photos
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:321,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: jumping on a trampoline
+2. Action B: standing and talking
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:322,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: jumping on the trampoline
+2. Action A: holding up a speedo",BA,BA,BA,valid,valid,True,False,,,
+tsh:323,qwen2.5-vl-7b,base,AB,"The actions in the video are:
+
+1. Action A: hitting a ball with a bat
+2. Action B: lying down
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:324,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: driving a car
+2. Action A: skiing
+
+The video starts with a person driving a car, followed by scenes of people skiing on a snowy slope.",BA,BA,BA,valid,valid,True,False,,,
+tsh:325,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: rubbing lemons onto the counter
+2. Action A: stirring the bowl with a spoon",BA,BA,BA,valid,valid,False,False,,,
+tsh:326,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: pouring boiling water into a bowl
+2. Action A: stirring the bowl with a spoon",BA,BA,BA,valid,valid,False,False,,,
+tsh:327,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: nailing shingles down
+2. Action B: showing the house
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:328,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: removing old shingles
+2. Action A: unloading shingles onto the roof
+
+The person is first seen removing old shingles from the roof, and then they are shown unloading new shingles onto the roof.",BA,BA,BA,valid,valid,False,False,,,
+tsh:329,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pouring ingredients into a mixer
+2. Action B: placing items in the oven
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:330,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: pouring ingredients into a mixer
+2. Action A: making dough balls
+
+The video starts with a person pouring ingredients into a mixer, followed by the person making dough balls.",BA,BA,BA,valid,valid,True,False,,,
+tsh:331,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mounting a camera to a tube
+2. Action B: dancing with a hula hoop
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:332,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mounting a camera to a tube
+2. Action A: dancing with a hula hoop",BA,BA,BA,valid,valid,True,False,,,
+tsh:333,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: driving a car
+2. Action A: stopping the car and inflating tire
+
+The video starts with a close-up of a car's wheel, then transitions to a man driving the car, followed by the car stopping on a street. The final scene shows the man inflating the tire.",BA,BA,BA,valid,valid,False,False,,,
+tsh:334,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: pouring sauce on the meatballs
+2. Action B: adding condiments",AB,AB,AB,valid,valid,False,False,,,
+tsh:335,qwen2.5-vl-7b,base,BA,"The action that happens first is:
+
+Action A. washing dishes
+
+The action that happens second is:
+
+Action B. flipping a plate",AB,AB,AB,valid,valid,False,False,,,
+tsh:336,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: drawing on the floor
+2. Action A: measuring the tiles",BA,BA,BA,valid,valid,False,False,,,
+tsh:337,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action B: Scraping wax off a snowboard
+2. Action A: Dragging the melted wax through the board
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:338,qwen2.5-vl-7b,base,BA,The action that happens first is Action B. playing guitar.,B,B,,valid,valid,False,False,,,
+tsh:339,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: hitting a toy
+2. Action B: rubbing face with hand
+
+The first action is hitting a toy, and it happens before the second action of rubbing face with hand.",AB,AB,AB,valid,valid,True,False,,,
+tsh:340,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: hitting a toy
+2. Action A: rubbing face with hand",BA,BA,BA,valid,valid,True,False,,,
+tsh:341,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cheering
+2. Action A: hugging
+
+The crowd is seen cheering in the background, and then the focus shifts to a close-up of two people hugging.",BA,BA,BA,valid,valid,True,False,,,
+tsh:342,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: coating the onion rings in a mixture and then in breadcrumbs
+2. Action B: frying the onion rings
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:343,qwen2.5-vl-7b,base,BA,The action B. filling a coffee cup happens before the action A. discussing in front of the camera.,BA.,BA.,BA,valid,valid,False,False,,,
+tsh:344,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: vacuuming
+2. Action B: filling a container
+
+The video starts with the Hoover FloorMate vacuuming on hard floors, followed by a person filling a container with water from a faucet.",AB,AB,AB,valid,valid,True,False,,,
+tsh:345,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: stirring with a wooden spoon
+2. Action A: pouring liquid into a cup",BA,BA,BA,valid,valid,True,False,,,
+tsh:346,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: pouring liquid into a cup
+2. Action A: adding sugar to the pitcher
+
+The video first shows a person pouring liquid into a cup, followed by the addition of sugar to the pitcher.",BA,BA,BA,valid,valid,False,False,,,
+tsh:347,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Squeezing a lemon (Action A)
+2. Adding water to the pitcher (Action B)",AB,AB,AB,valid,valid,True,False,,,
+tsh:348,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Squeezing a lemon (Action B)
+2. Stirring with a wooden spoon (Action A)",BA,BA,BA,valid,valid,True,False,,,
+tsh:349,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: awarding a gold medal
+2. Action B: throwing a javelin
+
+The video first shows an athlete receiving a gold medal from an official, followed by a scene of an athlete throwing a javelin.",AB,AB,AB,valid,valid,True,False,,,
+tsh:350,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: toasting the muffins
+2. Action B: heating water and then adding it to a pot
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:351,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: lifting a dirt bike
+2. Action A: mobilizing the hands
+
+The video starts with a close-up of a person's hands, which suggests they are mobilizing their hands. Then, the scene transitions to show a dirt bike being lifted by a crane, indicating the second action.",BA,BA,BA,valid,valid,False,False,,,
+tsh:352,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: bowling
+2. Action A: celebrating victory",BA,BA,BA,valid,valid,True,False,,,
+tsh:353,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing the ingredients in the bowl
+2. Action A: folding the pot stickers",BA,BA,BA,valid,valid,True,False,,,
+tsh:354,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: slicing the meat
+2. Action B: adding the meat to the tortilla",AB,AB,AB,valid,valid,True,False,,,
+tsh:355,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: adding ingredients to a saucepan and stirring
+2. Action A: coating chicken wings with sauce",BA,BA,BA,valid,valid,True,False,,,
+tsh:356,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: frying bacon in a pan
+2. Action B: transferring the cooked mixture into the saucepan and adding corn starch",AB,AB,AB,valid,valid,True,False,,,
+tsh:357,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: practicing archery
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,False,False,,,
+tsh:358,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cooking the sausages and steaming the bread
+2. Action B: placing the sausage and toppings in the bun",AB,AB,AB,valid,valid,True,False,,,
+tsh:359,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. driving in the desert
+2. Action A. riding camels
+
+The video starts with a view from inside a car, showing other vehicles driving on a sandy road, which indicates the first action is driving in the desert. The scene then transitions to people riding camels, indicating the second action is riding camels.",BA,BA,BA,valid,valid,True,False,,,
+tsh:360,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: handing skis to a child
+2. Action B: skiing on a ramp
+
+The first part of the video shows a person handing skis to a child, followed by the child skiing on a ramp.",AB,AB,AB,valid,valid,True,False,,,
+tsh:361,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: skiing with assistance
+2. Action B: handing skis to a child
+
+The video first shows a person skiing down a slope with another person assisting them, and then it transitions to a scene where a child is being handed skis by an adult.",AB,AB,AB,valid,valid,False,False,,,
+tsh:362,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: Building a fire
+2. Action A: Moving rocks
+
+The person is first seen building a fire by arranging sticks and kindling, and then moving rocks to create a fire pit or to adjust the fire's structure.",BA,BA,BA,valid,valid,False,False,,,
+tsh:363,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: baking colorful layers for a cake
+2. Action B: going outside to a rabbit cage",AB,AB,AB,valid,valid,True,False,,,
+tsh:364,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Putting contact lenses in a cleaning solution
+2. Action B: Wiping hands
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:365,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: a dog playing by a lakeside
+2. Action A: grooming dogs",BA,BA,BA,valid,valid,True,False,,,
+tsh:366,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action A: checking the phone
+2. Action B: getting dressed
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:367,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: breaking eggs and adding the yolks into a bowl
+2. Action A: adding ingredients to a blender
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:368,qwen2.5-vl-7b,base,AB,"The actions in the video are:
+
+1. Action A: weightlifting
+2. Action B: arm wrestling
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:369,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: arm wrestling
+2. Action A: weightlifting",BA,BA,BA,valid,valid,True,False,,,
+tsh:370,qwen2.5-vl-7b,base,AB,The action that happens first is Action A: putting potatoes in cold water.,A,A,,valid,valid,False,False,,,
+tsh:371,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. riding a four-wheeler
+2. Action A. demonstrating features on a bow",BA,BA,BA,valid,valid,True,False,,,
+tsh:372,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding spices to flour and mixing
+2. Action B: adding an egg to the chicken and mixing
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:373,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing the car
+2. Action A: speaking
+
+The person is first seen washing the car, and then later speaking to the camera.",BA.,BA.,BA,valid,valid,False,False,,,
+tsh:374,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: using the toilet in a stall
+2. Action B: washing hands
+
+The first action (using the toilet) happens before the second action (washing hands).",AB,AB,AB,valid,valid,True,False,,,
+tsh:375,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: backing a boat down a ramp
+2. Action B: wakeboarding
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:376,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: performing a dance
+2. Action A: laying down
+
+The first part of the video shows a person performing a dance, followed by the second part where the same person is seen lying down on the floor.",BA,BA,BA,valid,valid,True,False,,,
+tsh:377,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: placing the tuna on shredded vegetables
+2. Action B: placing wasabi on the plate
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:378,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: removing snow from a car
+2. Action A: shoveling snow",BA,BA,BA,valid,valid,True,False,,,
+tsh:379,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Dancing with sticks
+2. Action A: Waving to the camera",BA,BA,BA,valid,valid,True,False,,,
+tsh:380,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: assembling bicycles
+2. Action A: walking up a staircase
+
+The video starts with a person assembling bicycles, followed by a scene of a person walking up a staircase.",BA,BA,BA,valid,valid,False,False,,,
+tsh:381,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Putting on winter clothes
+2. Action B: Shoveling snow
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:382,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Putting on winter clothes
+2. Action A: Putting down sand on the floor",BA,BA,BA,valid,valid,True,False,,,
+tsh:383,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Creating a marbling effect in batter
+2. Action B: Slicing a cake
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:384,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: stirring the chocolate
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,False,False,,,
+tsh:385,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: laying on the field
+2. Action B: celebrating a goal
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:386,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Brushing rims
+2. Action A: Rinsing the car",BA,BA,BA,valid,valid,True,False,,,
+tsh:387,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: rafting down a river
+2. Action B: zip lining
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:388,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: removing a car wheel
+2. Action A: driving on a road",BA,BA,BA,valid,valid,True,False,,,
+tsh:389,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: cooking ingredients in a pot
+2. Action A: putting meat and cheese on the pasta
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:390,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. combining various ingredients
+2. Action A. adding sauce to the pan",BA,BA,BA,valid,valid,True,False,,,
+tsh:391,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: Getting geared up for wakeboarding
+2. Action B: Wakeboarding
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:392,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Getting geared up for wakeboarding
+2. Action A: Wakeboarding
+
+The person is first seen preparing to wakeboard (getting geared up), and then they are shown wakeboarding on the water.",BA,BA,BA,valid,valid,True,False,,,
+tsh:393,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action B: Juicing lemons
+2. Action A: Making sparkling lemonade
+
+The video first shows a person juicing lemons, followed by the preparation of sparkling lemonade.",BA,BA,BA,valid,valid,True,False,,,
+tsh:394,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: talking to the camera
+2. Action B: knitting",AB,AB,AB,valid,valid,True,False,,,
+tsh:395,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. pushing a helicopter out of a shed
+2. Action A. scuba diving
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:396,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: standing in a gymnasium
+2. Action B: performing a baton routine
+
+The person is first seen standing in the gymnasium, then begins to perform a baton routine.",AB,AB,AB,valid,valid,True,False,,,
+tsh:397,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: surfing
+2. Action B: receiving awards
+
+The sequence of events is as follows:
+- First, there is a scene of a person surfing on a wave.
+- Then, the scene transitions to a group of people standing under a banner, where one person is receiving an award.
+
+So, Action A (surfing) happens before Action B (receiving awards).",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:398,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. surfing
+2. Action A. receiving awards",BA,BA,BA,valid,valid,True,False,,,
+tsh:399,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: fixing a bun
+2. Action B: holding a child",AB,AB,AB,valid,valid,True,False,,,
+tsh:400,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: eating and talking
+2. Action A: a man hits another man",BA,BA,BA,valid,valid,True,False,,,
+tsh:401,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing the car
+2. Action A: taking off sunglasses",BA,BA,BA,valid,valid,True,False,,,
+tsh:402,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding mayonnaise and lemon juice to a bowl and mixing it well
+2. Action B: cutting apples, chopping celery, and taking some walnuts
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:403,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: chopping vegetables
+2. Action A: putting stuff on a salad",BA,BA,BA,valid,valid,True,False,,,
+tsh:404,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: running
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:405,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: stretching
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:406,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: explaining food
+2. Action A: cutting the hulte into pieces
+
+The salesman is first seen explaining the hulte to the customers, and then Dr. Cristian Segura is shown cutting the hulte into bite-size pieces.",BA,BA,BA,valid,valid,True,False,,,
+tsh:407,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: toasting bread
+2. Action B: making a sandwich
+
+The video first shows a close-up of a toaster with a slice of bread being toasted. After the bread is toasted, the scene transitions to a plate where a sandwich is being made by placing the toasted bread slices together with other ingredients.",AB,AB,AB,valid,valid,True,False,,,
+tsh:408,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: demonstrating the functions of a washing machine
+2. Action B: pouring water and soap into a bin",AB,AB,AB,valid,valid,False,False,,,
+tsh:409,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: playing saxophone
+2. Action B: playing piano",AB,AB,AB,valid,valid,True,False,,,
+tsh:410,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: throwing darts at a dartboard
+2. Action B: trying to feed someone
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:411,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action B: playing volleyball
+2. Action A: stretching exercises
+
+The video starts with a person playing volleyball, and then transitions to a scene where the same person appears to be performing stretching exercises.",BA,BA,BA,valid,valid,False,False,,,
+tsh:412,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: walking to a piano
+2. Action A: clapping
+
+The man walks to the piano first, then the audience starts clapping.",BA,BA,BA,valid,valid,True,False,,,
+tsh:413,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action A: making lemonade
+2. Action B: preparing syrup
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:414,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking through a crowd
+2. Action B: playing table tennis
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:415,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Getting a haircut
+2. Action A: Talking to the camera",BA,BA,BA,valid,valid,True,False,,,
+tsh:416,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: using a tool to adjust a car
+2. Action B: driving the car over an object
+
+The video first shows a person using a tool to adjust something near a car tire, followed by the car being driven over a small object on the ground.",AB,AB,AB,valid,valid,True,False,,,
+tsh:417,qwen2.5-vl-7b,base,BA,The action that happens first is Action A: inspecting the bike.,A,A,,valid,valid,False,False,,,
+tsh:418,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Shooting an arrow from a bow
+2. Action B: The arrow uncaps the bottle
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:419,qwen2.5-vl-7b,base,BA,"The first action in the video is:
+
+Action A. welding
+
+The second action in the video is:
+
+Action B. torching a gray substance",AB,AB,AB,valid,valid,False,False,,,
+tsh:420,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Turning a knob on a machine
+2. Action B: Torching a gray substance
+
+The video first shows a close-up of a control panel with a digital display and knobs, indicating the turning of a knob on a machine. This is followed by a scene where a person is torching a gray substance.",AB,AB,AB,valid,valid,True,False,,,
+tsh:421,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Jump to a tightrope
+2. Action A: Drinking from a coconut",BA,BA,BA,valid,valid,True,False,,,
+tsh:422,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking through the forest
+2. Action B: jumping into water
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:423,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: carrying a raft
+2. Action B: jumping into water
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:424,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Adding peas to boiling water and then transferring them to a pan.
+2. Action A: Adding ingredients to a bowl and mixing them.",BA,BA,BA,valid,valid,True,False,,,
+tsh:425,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: arm wrestling
+2. Action B: using duct tape
+
+The video first shows two people arm wrestling at a table. Later, it transitions to a scene where a person is seen applying duct tape to their face.",AB,AB,AB,valid,valid,True,False,,,
+tsh:426,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: rowing on a machine
+2. Action A: showing the screen on the rowing machine",BA,BA,BA,valid,valid,True,False,,,
+tsh:427,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Sitting on a rowing machine
+2. Action A: Showing the screen on the rowing machine",BA,BA,BA,valid,valid,True,False,,,
+tsh:428,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: putting on a mask
+2. Action A: throwing face wash
+
+The first part of the video shows a person putting on a mask, followed by the second part where the person is seen throwing a face wash.",BA,BA,BA,valid,valid,False,False,,,
+tsh:429,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: opening a bottle
+2. Action A: shooting targets
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:430,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Opening a bottle
+2. Action B: Shooting at targets
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:431,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: showing the images of ingredients
+2. Action B: chopping vegetables",AB,AB,AB,valid,valid,True,False,,,
+tsh:432,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. preparing healthy mussels
+2. Action A. chopping some vegetables and herbs
+
+The first part of the video shows hands preparing mussels, while the second part shows hands chopping vegetables and herbs.",BA,BA,BA,valid,valid,True,False,,,
+tsh:433,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: applying heat to hair wrapped in foil
+2. Action B: spinning in front of the camera
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:434,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. carving bell peppers
+2. Action A. adding ingredients to a bowl",BA,BA,BA,valid,valid,True,False,,,
+tsh:435,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding the pasta in the pot
+2. Action B: adding olive oil to pasta
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:436,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. doing exercise in a gym
+2. Action A. rock climbing",BA,BA,BA,valid,valid,True,False,,,
+tsh:437,qwen2.5-vl-7b,base,AB,"The actions in the video are:
+
+1. Action A: pouring water on a sharpening stone
+2. Action B: sharpening a knife
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:438,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. **Action B. making a kite** - This occurs first, where a person is seen working on assembling or preparing a kite.
+2. **Action A. flying kites** - This happens after the kite is prepared, as the video shows a child flying a kite.
+
+So, Action B (making a kite) happens before Action A (flying kites).",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:439,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting the chicken
+2. Action B: placing the mixed salad leaves into a bowl and adding the chicken and croutons",AB,AB,AB,valid,valid,True,False,,,
+tsh:440,qwen2.5-vl-7b,base,BA,"The two actions in the video are:
+
+1. Action A: buying sunscreen
+2. Action B: applying sunscreen
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:441,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. buying sunscreen
+2. Action A. applying sunscreen",BA,BA,BA,valid,valid,True,False,,,
+tsh:442,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients
+2. Action B: baking a cake in a rice cooker
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:443,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: inserting a toothpick into a sandwich
+2. Action B: talking to the camera
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:444,qwen2.5-vl-7b,base,AB,"The action happens in the following order:
+
+1. Action A. talking to the camera
+2. Action B. making a sandwich",AB,AB,AB,valid,valid,True,False,,,
+tsh:445,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: displaying a picture of a oreo cheesecake
+2. Action B: crushing cookies",AB,AB,AB,valid,valid,True,False,,,
+tsh:446,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients in a bowl
+2. Action A: stir-frying croutons",BA,BA,BA,valid,valid,True,False,,,
+tsh:447,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: cutting onion and eggs
+2. Action B: putting egg salad on bread
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:448,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is:
+
+1. Action A: putting on a contact lens
+2. Action B: washing hands
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:449,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: applying contact lenses
+2. Action A: cleaning and disinfecting hands
+
+The video first shows a person applying a contact lens to their eye, followed by a close-up of hands holding a bottle of Opti-Free Replenish solution, which is used for cleaning and disinfecting contact lenses.",BA,BA,BA,valid,valid,True,False,,,
+tsh:450,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action A: Showing skateboarding tricks
+2. Action B: Falling off a skateboard
+
+The person is initially shown performing skateboarding tricks, and then falls off the skateboard.",AB,AB,AB,valid,valid,True,False,,,
+tsh:451,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: dirt biking
+2. Action A: walking off
+
+The first part of the video shows a person dirt biking, and the second part shows a person walking off.",BA,BA,BA,valid,valid,True,False,,,
+tsh:452,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding pasta to a pan
+2. Action B: pouring the sauce on top of the pasta",AB,AB,AB,valid,valid,True,False,,,
+tsh:453,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pouring liquid into a bucket and sprayer tank
+2. Action B: washing the car
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:454,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: cooking pancetta in a pot without adding oil
+2. Action B: adding ingredients and mixing them well",AB,AB,AB,valid,valid,False,False,,,
+tsh:455,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: cooking the noodles in boiling water
+2. Action A: placing the meat onto a wonton sheet and closing it
+
+The video first shows the noodles being cooked in boiling water, followed by the meat being placed onto a wonton sheet and closed.",BA,BA,BA,valid,valid,False,False,,,
+tsh:456,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Hula hooping with multiple hoops
+2. Action B: Opening eyes
+
+The video starts with the person hula hooping with multiple hoops, and then it transitions to showing a close-up of a pair of eyes opening.",AB,AB,AB,valid,valid,False,False,,,
+tsh:457,qwen2.5-vl-7b,base,AB,The action that happens first is Action A: playing the flute.,A,A,,valid,valid,False,False,,,
+tsh:458,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: pouring oil and vegetables into a pan
+2. Action A: mixing ingredients in a pan",BA,BA,BA,valid,valid,True,False,,,
+tsh:459,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pouring oil and vegetables into a pan
+2. Action B: blending ingredients",AB,AB,AB,valid,valid,True,False,,,
+tsh:460,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: using a hookah
+2. Action A: putting on a jacket
+
+The woman is seen using a hookah first, then she puts on a jacket.",BA,BA,BA,valid,valid,True,False,,,
+tsh:461,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: mowing the lawn
+2. Action A: raking leaves into a bag
+
+The person is first seen mowing the lawn with a lawnmower, then later raking leaves into a bag.",BA,BA,BA,valid,valid,False,False,,,
+tsh:462,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: pouring water into a white bucket
+2. Action A: washing a car",BA,BA,BA,valid,valid,True,False,,,
+tsh:463,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Putting on scuba gear
+2. Action B: Handing an underwater animal
+
+The person is first seen putting on scuba gear, and then they are shown handing an underwater animal to another person.",AB,AB,AB,valid,valid,True,False,,,
+tsh:464,qwen2.5-vl-7b,base,BA,"The action that happens first is:
+
+Action B. walking to a tool
+
+The person in the video is seen walking towards a tool before starting to weld.",B,B,,valid,valid,False,False,,,
+tsh:465,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: rolling a wet cloth into a dry towel
+2. Action A: holding a cloth",BA,BA,BA,valid,valid,False,False,,,
+tsh:466,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. running water in a bathtub
+2. Action A. ironing a cloth",BA,BA,BA,valid,valid,True,False,,,
+tsh:467,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: holding a cloth
+2. Action A: running water in a bathtub",BA,BA,BA,valid,valid,True,False,,,
+tsh:468,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing ingredients in a bowl
+2. Action B: flipping the cakes",AB,AB,AB,valid,valid,True,False,,,
+tsh:469,qwen2.5-vl-7b,base,AB,The action that occurs first is Action B: jumping into a pool.,B,B,,valid,valid,False,False,,,
+tsh:470,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. adding parsley to a pot
+2. Action A. mixing pasta and sauce",BA,BA,BA,valid,valid,True,False,,,
+tsh:471,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: applying lipstick
+2. Action A: walking out the door",BA,BA,BA,valid,valid,True,False,,,
+tsh:472,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: frying tofu in a pan
+2. Action B: placing the tofu and vegetables in the buns",AB,AB,AB,valid,valid,True,False,,,
+tsh:473,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing the chicken with the eggs
+2. Action B: mixing spices with the flour
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:474,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: shifting the seat of a bike
+2. Action B: picking up and holding the object
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:475,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: jumping with stilts
+2. Action B: a man running to a bike
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:476,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: brushing a horse
+2. Action B: talking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:477,qwen2.5-vl-7b,base,BA,"The sequence of actions in the video is as follows:
+
+1. **Action B. Changing a tire** - This occurs first, where a group of people is actively working on a tire, likely removing or replacing it.
+2. **Action A. Inspecting a tire** - This happens after the tire change, where a group of people is gathered around a spare tire, possibly inspecting it.
+
+So, Action B (changing a tire) happens before Action A (inspecting a tire).",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:478,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action A: Changing a tire
+2. Action B: Inspecting a tire
+
+The video first shows people actively working on changing a tire, followed by individuals inspecting the tire after it has been changed.",AB,AB,AB,valid,valid,True,False,,,
+tsh:479,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: assembling a razor
+2. Action B: applying lotion to the neck
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:480,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Action B: inspecting the bike
+2. Action A: replacing the tube of the tire
+
+The first part of the video shows a person inspecting the bike, followed by the second part where the person is seen replacing the tube of the tire.",BA,BA,BA,valid,valid,True,False,,,
+tsh:481,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: flipping the fish and pressing the rice into it
+2. Action B: garnishing the sushi
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:482,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: boiling wonton and baby bok choy
+2. Action A: combining the ingredients and serving the soup",BA,BA,BA,valid,valid,True,False,,,
+tsh:483,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Walking out the door of the store
+2. Action A: Skateboarding between cars",BA,BA,BA,valid,valid,True,False,,,
+tsh:484,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mixing the ingredients by hand
+2. Action B: frying the meat patty in a pan
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:485,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: mixing ingredients together
+2. Action A: baking the potatoes
+
+The video first shows a person mixing ingredients in a bowl, then it transitions to showing baked potatoes being taken out of an oven.",BA,BA,BA,valid,valid,False,False,,,
+tsh:486,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: removing the leaves from the stems and chopping them
+2. Action A: adding ingredients to the pan",BA,BA,BA,valid,valid,True,False,,,
+tsh:487,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: playing foosball
+2. Action A: falling down on the sofa",BA,BA,BA,valid,valid,True,False,,,
+tsh:488,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: playing the drums
+2. Action B: clapping hands
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:489,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking to the end of a diving board
+2. Action B: swimming to the edge
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:490,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: closing a door and opening a car door
+2. Action A: turning off the lights
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:491,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Juicing fruits
+2. Action B: Mixing ingredients in a bowl
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:492,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: filling the wonton wrappers
+2. Action B: combining ingredients and stirring them together
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:493,qwen2.5-vl-7b,base,AB,"The actions in the video are:
+
+1. Action B: playing bassoons
+2. Action A: playing the violin
+
+The video starts with a group of musicians playing bassoons, followed by a transition to a solo violinist playing the violin.",BA,BA,BA,valid,valid,False,False,,,
+tsh:494,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: reading a newspaper
+2. Action A: crossing the zebra crossing
+
+The person is seen reading a newspaper at the beginning of the video, and then later crosses the zebra crossing.",BA,BA,BA,valid,valid,True,False,,,
+tsh:495,qwen2.5-vl-7b,base,AB,The action that happens first is Action A: pouring water into a bowl. The action that happens second is Action B: showing a washing machine.,AB,AB,AB,valid,valid,True,False,,,
+tsh:496,qwen2.5-vl-7b,base,BA,The action that happens first is Action B: pouring water into a bowl. The action that happens second is Action A: showing a washing machine.,BA,BA,BA,valid,valid,True,False,,,
+tsh:497,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: whisking ingredients in a bowl
+2. Action A: cooking bread on a grill",BA,BA,BA,valid,valid,True,False,,,
+tsh:498,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: rowing on a machine
+2. Action B: showing blisters on hand
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:499,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: jumping on the sidewalk
+2. Action B: sitting in a sidewalk and talking to the camera
+
+The video starts with the person jumping on the sidewalk, followed by the scene of the person sitting and talking to the camera.",AB.,AB.,AB,valid,valid,False,False,,,
+tsh:500,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: placing baked bacon slices on a plate
+2. Action B: toasting the bread
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:501,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: preparing ingredients
+2. Action B: cooking pasta with shrimp
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:502,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: playing the violin
+2. Action A: talking to the camera",BA,BA,BA,valid,valid,True,False,,,
+tsh:503,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting tofu into strips
+2. Action B: adding various ingredients to a pot
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:504,qwen2.5-vl-7b,base,BA,"The correct order of the actions is:
+
+1. Action B: the opening of the arms
+2. Action A: swimming
+
+The person opens their arms as they prepare to dive into the water, and then they begin swimming after entering the water.",BA,BA,BA,valid,valid,True,False,,,
+tsh:505,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: walking to the edge of the diving board
+2. Action A: swimming
+
+The person first walks to the edge of the diving board, then jumps into the pool and swims.",BA,BA,BA,valid,valid,True,False,,,
+tsh:506,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Picking up a cell phone on a bed
+2. Action B: Drinking a beer
+
+The first action (picking up the cell phone) happens before the second action (drinking a beer).",AB,AB,AB,valid,valid,True,False,,,
+tsh:507,qwen2.5-vl-7b,base,AB,The action that happens first is Action B: picking up a cell phone on a bed.,B,B,,valid,valid,False,False,,,
+tsh:508,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: peeling a potato
+2. Action A: displaying a knife on the table",BA,BA,BA,valid,valid,True,False,,,
+tsh:509,qwen2.5-vl-7b,base,BA,"The correct order of the actions is:
+
+1. Action B: raising the car with a jack
+2. Action A: putting a tire into the trunk
+
+The video first shows a person raising the car with a jack, and then it transitions to a person putting a tire into the trunk.",BA,BA,BA,valid,valid,True,False,,,
+tsh:510,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: running and jumping
+2. Action B: playing American football
+
+The video first shows a person running and jumping on a track, followed by a scene of a football player running with the ball.",AB,AB,AB,valid,valid,True,False,,,
+tsh:511,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: running and jumping
+2. Action A: playing American football
+
+The video starts with a man in an orange shirt standing in front of a football field, then transitions to a football player running and jumping on the field.",BA,BA,BA,valid,valid,False,False,,,
+tsh:512,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: paddling a raft
+2. Action B: driving a bus
+
+The video starts with people paddling a raft on a river, then transitions to a scene inside a bus where a person is driving.",AB,AB,AB,valid,valid,False,False,,,
+tsh:513,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Monitoring a storm
+2. Action B: Flying kites
+
+The video starts with a person monitoring a storm, followed by scenes of people flying kites.",AB,AB,AB,valid,valid,True,False,,,
+tsh:514,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Applying liquid with a paintbrush
+2. Action A: Use a tack rag to remove dust",BA,BA,BA,valid,valid,True,False,,,
+tsh:515,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting pancetta
+2. Action A: boiling water, adding salt, and cooking the spaghetti",BA,BA,BA,valid,valid,True,False,,,
+tsh:516,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: raking leaves
+2. Action B: drinking from a can
+
+The person is first seen raking leaves, and then the scene transitions to a close-up of a can with the text ""please drink responsibly"" on it.",AB,AB,AB,valid,valid,True,False,,,
+tsh:517,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Raking leaves
+2. Action B: Drinking from a can
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:518,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: adding ingredients to the pan
+2. Action B: adding meatballs to the pan
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:519,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding wine to the pan
+2. Action B: adding various seasonings to a bowl",AB,AB,AB,valid,valid,True,False,,,
+tsh:520,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. boating on a lake
+2. Action A. wakeboarding
+
+The video starts with a view of a lake surrounded by trees, indicating that someone is boating on the lake. Later, the video transitions to show a person wakeboarding behind a boat.",BA,BA,BA,valid,valid,True,False,,,
+tsh:521,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: Wakeboarding
+2. Action A: Boating on a lake
+
+The video starts with a person wakeboarding on a lake, followed by a scene of a boat on the water.",BA,BA,BA,valid,valid,False,False,,,
+tsh:522,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. adding herbs to the soup
+2. Action A. placing the pasta in a bowl",BA,BA,BA,valid,valid,True,False,,,
+tsh:523,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: riding horses
+2. Action B: playing together
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:524,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: riding horses
+2. Action A: playing together
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:525,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Removing contact lenses
+2. Action B: Pouring liquid into a contact case
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:526,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding various ingredients to the bowl and mixing well
+2. Action B: shaping the beef into patties",AB,AB,AB,valid,valid,True,False,,,
+tsh:527,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: lifting weights above the head
+2. Action B: running
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:528,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: sautéing chopped onions and garlic
+2. Action A: chopping basil and adding it with cheese",BA,BA,BA,valid,valid,True,False,,,
+tsh:529,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: adding spaghetti to a pot of boiling water
+2. Action B: chopping basil and adding it with cheese",AB,AB,AB,valid,valid,True,False,,,
+tsh:530,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: bowling
+2. Action A: displaying a bowling score",BA,BA,BA,valid,valid,True,False,,,
+tsh:531,qwen2.5-vl-7b,base,AB,The action that happens first is Action B: rolling wrapping paper.,B,B,,valid,valid,False,False,,,
+tsh:532,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: wrapping a box
+2. Action B: showing a boy bear
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:533,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: mopping the floor
+2. Action B: squeezing the handle",AB,AB,AB,valid,valid,True,False,,,
+tsh:534,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: placing butter in a mixing bowl
+2. Action A: to remove cookies from the baking sheet",BA,BA,BA,valid,valid,True,False,,,
+tsh:535,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: placing a parchment paper on a baking sheet
+2. Action B: to remove cookies from the baking sheet
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:536,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Slicing the cheese thinly
+2. Action A: Heating a pan and toasting bread in it
+
+The video first shows a close-up of a block of cheese being sliced, followed by a scene where a pan is being heated on a stove.",BA,BA,BA,valid,valid,True,False,,,
+tsh:537,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: drying hands
+2. Action A: walking
+
+The person is first seen drying their hands with a sterile towel, and then they walk towards the operating room.",BA,BA,BA,valid,valid,False,False,,,
+tsh:538,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: frying bacon
+2. Action A: laying ingredients on the bread
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:539,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: triple jump
+2. Action B: posing in front of a scoreboard
+
+The sequence of events is as follows:
+
+- First, the athlete performs the triple jump.
+- After the jump, the athlete poses in front of the scoreboard.
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:540,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: putting the lid on and slow cooking
+2. Action A: adding vinegar
+
+The video first shows a person putting the lid on a slow cooker, followed by a shot of the slow cooker with the lid on, indicating that the slow cooking process has begun. Later, there is a shot of a person adding vinegar to a pot, but this action does not appear to be part of the slow cooking process shown in the video.",BA,BA,BA,valid,valid,True,False,,,
+tsh:541,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: throwing grass in the garbage
+2. Action B: throwing a rake
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:542,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: throwing grass in the garbage
+2. Action A: picking up and smelling a twig
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:543,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: adding ingredients to a bowl and whisking them well
+2. Action A: cutting the onions into rings",BA,BA,BA,valid,valid,False,False,,,
+tsh:544,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B. squeezing lemons
+2. Action A. pouring lemonade to cups",BA,BA,BA,valid,valid,True,False,,,
+tsh:545,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: Vacuuming the liquid in a sink
+2. Action B: Scrubbing and drying a tiled floor
+
+The first action (vacuuming the liquid in a sink) happens before the second action (scrubbing and drying a tiled floor).",AB,AB,AB,valid,valid,False,False,,,
+tsh:546,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Vacuuming a carpet
+2. Action B: Vacuuming the liquid in a sink
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:547,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: adding various seasonings to a bowl of spinach
+2. Action A: adding radish to a pan of hot oil and seasoning it",BA,BA,BA,valid,valid,True,False,,,
+tsh:548,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: creating a nail polish design in water
+2. Action B: applying a clear coat over fingernails
+
+The first part of the video shows the creation of a nail polish design in water, followed by the application of a clear coat over fingernails.",AB,AB,AB,valid,valid,True,False,,,
+tsh:549,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: mashing the potatoes
+2. Action A: shaping the mixture into small patties",BA,BA,BA,valid,valid,True,False,,,
+tsh:550,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: cutting hotdogs and inserting skewers
+2. Action A: adding eggs and milk and mixing them",BA,BA,BA,valid,valid,False,False,,,
+tsh:551,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. **Action A: welding**
+2. **Action B: chiseling and beating rust off**
+
+The video first shows a person welding, followed by a close-up of a metal object being chiseled and beaten to remove rust.",AB,AB,AB,valid,valid,True,False,,,
+tsh:552,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: cooking in a pan
+2. Action B: checking the flame
+
+The person is first seen cooking in a pan, then they check the flame.",AB,AB,AB,valid,valid,False,False,,,
+tsh:553,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: pouring liquid into a pan
+2. Action A: adding seasonings to the pan",BA,BA,BA,valid,valid,False,False,,,
+tsh:554,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: changing a tire
+2. Action B: driving down the street
+
+The video starts with a person driving down the street, then transitions to a scene where the same person is changing a tire.",AB,AB,AB,valid,valid,False,False,,,
+tsh:555,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: walking with horses
+2. Action A: riding horse",BA,BA,BA,valid,valid,True,False,,,
+tsh:556,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: tightening shoes
+2. Action B: standing up from the car
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:557,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: sanding a surface with an electric sander
+2. Action A: sanding wood by hand",BA,BA,BA,valid,valid,True,False,,,
+tsh:558,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: frying the pieces in a pan
+2. Action B: squeezing lemon on the fried pieces",AB,AB,AB,valid,valid,True,False,,,
+tsh:559,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: windsurfing
+2. Action A: receiving certificates and awards
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:560,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: windsurfing
+2. Action B: receiving certificates and awards
+
+The video first shows a person windsurfing, followed by scenes of people receiving certificates and awards.",AB,AB,AB,valid,valid,True,False,,,
+tsh:561,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: seasoning the chicken
+2. Action A: mixing the remaining spice with flour",BA,BA,BA,valid,valid,True,False,,,
+tsh:562,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: entering the car
+2. Action B: snowboarding
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:563,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Scuba diving
+2. Action B: Climbing onto the boat
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:564,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Playing on the beach
+2. Action A: A girl taking a cloth from a bag",BA,BA,BA,valid,valid,True,False,,,
+tsh:565,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Putting on a blue apron
+2. Action B: Attaching handlebars
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:566,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: putting an item in the trunk of a car
+2. Action A: driving
+
+The first frame shows a person putting an item in the trunk of a car, while the second frame shows a car driving on a road at night.",BA,BA,BA,valid,valid,True,False,,,
+tsh:567,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action B: Picking up a contact lens
+2. Action A: Inserting a contact lens
+
+The video starts with the person picking up the contact lens, followed by the insertion process.",BA,BA,BA,valid,valid,False,False,,,
+tsh:568,qwen2.5-vl-7b,base,AB,"The sequence of actions in the video is as follows:
+
+1. Action B: undergoing an eye exam
+2. Action A: inserting a contact lens
+
+The first part of the video shows a person undergoing an eye exam, while the second part shows a person inserting a contact lens.",BA,BA,BA,valid,valid,False,False,,,
+tsh:569,qwen2.5-vl-7b,base,AB,"The actions in the video are:
+
+1. Action A: poking holes in tin foil
+2. Action B: assembling a hookah
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:570,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: pulling a snow tube
+2. Action A: sitting on a snow tube",BA,BA,BA,valid,valid,False,False,,,
+tsh:571,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Boiling water (Action B)
+2. Stirring pasta (Action A)",BA,BA,BA,valid,valid,True,False,,,
+tsh:572,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: playing pool
+2. Action A: interviewing a man",BA,BA,BA,valid,valid,False,False,,,
+tsh:573,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: playing pool
+2. Action B: interviewing a man
+
+The video first shows a person playing pool, followed by a scene where a man is being interviewed.",AB,AB,AB,valid,valid,False,False,,,
+tsh:574,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: playing billiards
+2. Action A: wiping face with a towel",BA,BA,BA,valid,valid,False,False,,,
+tsh:575,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: Slicing the beef and marinating it
+2. Action A: Frying the beef and sprinkling sesame seeds over it",BA,BA,BA,valid,valid,True,False,,,
+tsh:576,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: operating a manual vacuum cleaner
+2. Action B: assembly line work
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:577,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: talking
+2. Action B: wrapping a book
+
+The woman is seen talking to the camera while she is also shown wrapping a book.",AB,AB,AB,valid,valid,True,False,,,
+tsh:578,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: slicing a potato
+2. Action A: garnishing the food with some ingredients",BA,BA,BA,valid,valid,True,False,,,
+tsh:579,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action B: adding flour to the dough and kneading it
+2. Action A: adding flour and mixing it",BA,BA,BA,valid,valid,False,False,,,
+tsh:580,qwen2.5-vl-7b,base,BA,"The actions in the video are:
+
+1. Starting a fire (Action B)
+2. Gutting a fish (Action A)
+
+So, Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:581,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Washing face with face wash
+2. Action B: Speaking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:582,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: speaking to the camera
+2. Action A: washing face with face wash",BA,BA,BA,valid,valid,True,False,,,
+tsh:583,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: blow drying a dog
+2. Action B: grooming a dog
+
+The video first shows a person blow drying a dog with a yellow hair dryer, followed by another person grooming a white dog with scissors.",AB,AB,AB,valid,valid,True,False,,,
+tsh:584,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting lemons
+2. Action A: pouring juice into a pot",BA,BA,BA,valid,valid,True,False,,,
+tsh:585,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: pouring juice into a pot
+2. Action A: drinking",BA,BA,BA,valid,valid,True,False,,,
+tsh:586,qwen2.5-vl-7b,base,AB,"The sequence of events in the video is as follows:
+
+1. Action A: wakeboarding
+2. Action B: an award ceremony
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:587,qwen2.5-vl-7b,base,AB,"The two actions in the video are:
+
+1. Action A: wakeboarding
+2. Action B: an award ceremony
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:588,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: adding and mixing ingredients
+2. Action A: putting cheese and green leaves on top the pasta",BA,BA,BA,valid,valid,True,False,,,
+tsh:589,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Dropping liquid into a contact lens
+2. Action B: Putting a contact lens on",AB,AB,AB,valid,valid,True,False,,,
+tsh:590,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: applying fake nails
+2. Action A: cutting nails
+
+The video first shows hands applying fake nails, followed by cutting the nails with scissors.",BA,BA,BA,valid,valid,True,False,,,
+tsh:591,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: displaying a sweater
+2. Action A: knitting
+
+The video first shows a sweater being displayed, followed by scenes of people knitting.",BA,BA,BA,valid,valid,True,False,,,
+tsh:592,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pressing the carpet down onto the ground
+2. Action B: sitting in front of a fireplace
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:593,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: sharpening a blade
+2. Action A: celebrating
+
+The video starts with a close-up of a circular saw blade being sharpened, followed by a scene where a man and woman are celebrating outside a house.",BA,BA,BA,valid,valid,True,False,,,
+tsh:594,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: preparing and tying a herb sachet
+2. Action B: placing various ingredients in a big bowl",AB,AB,AB,valid,valid,True,False,,,
+tsh:595,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting chocolate bars
+2. Action A: baking cookies",BA,BA,BA,valid,valid,True,False,,,
+tsh:596,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: Melting butter in the microwave
+2. Action B: Baking cookies
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:597,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: making cookie dough
+2. Action B: baking cookies
+
+The video first shows the process of making cookie dough by mixing ingredients in a bowl, followed by placing the dough balls on a baking sheet, which indicates the preparation for baking.",AB,AB,AB,valid,valid,True,False,,,
+tsh:598,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action B: shopping in a store
+2. Action A: wrapping a gift
+
+The video starts with a person walking into a store, then transitions to a close-up of hands wrapping a gift.",BA,BA,BA,valid,valid,True,False,,,
+tsh:599,qwen2.5-vl-7b,base,AB,"The actions in the video occur in the following order:
+
+1. Action A: pushing a table into the sand
+2. Action B: surfing on a table
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:600,qwen2.5-vl-7b,base,BA,"The actions in the video occur in the following order:
+
+1. Action A: cutting a tile and sanding it
+2. Action B: wiping down wooden floorboards
+
+So, Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,

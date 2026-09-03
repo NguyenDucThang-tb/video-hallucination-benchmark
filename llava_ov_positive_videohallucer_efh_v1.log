@@ -1,0 +1,444 @@
+{
+  "config": "/tmp/llava_ov_positive_videohallucer_efh_v1.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "positive_feature",
+      "benchmark": "videohallucer",
+      "task": "efh",
+      "status": "ready",
+      "note": "NOT VALIDATED: LLaVA-OV positive-feature projector hook requires an end-to-end GPU smoke test",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:01<10:44,  1.18it/s]Loading weights:   0%|          | 3/765 [00:10<55:19,  4.36s/it]Loading weights:   2%|▏         | 18/765 [00:14<08:11,  1.52it/s]Loading weights:   4%|▍         | 29/765 [00:18<05:59,  2.05it/s]Loading weights:   4%|▍         | 30/765 [00:18<06:05,  2.01it/s]Loading weights:   4%|▍         | 31/765 [00:19<06:21,  1.92it/s]Loading weights:   6%|▌         | 43/765 [00:24<05:51,  2.06it/s]Loading weights:   7%|▋         | 53/765 [00:26<04:11,  2.83it/s]Loading weights:   7%|▋         | 54/765 [00:27<04:25,  2.68it/s]Loading weights:   8%|▊         | 65/765 [00:29<03:16,  3.57it/s]Loading weights:   9%|▊         | 66/765 [00:30<03:56,  2.95it/s]Loading weights:  10%|█         | 78/765 [00:30<02:01,  5.64it/s]Loading weights:  12%|█▏        | 90/765 [00:35<02:57,  3.80it/s]Loading weights:  13%|█▎        | 101/765 [00:36<02:17,  4.82it/s]Loading weights:  13%|█▎        | 103/765 [00:36<02:11,  5.03it/s]Loading weights:  15%|█▌        | 115/765 [00:41<03:08,  3.44it/s]Loading weights:  16%|█▋        | 125/765 [00:41<02:10,  4.90it/s]Loading weights:  17%|█▋        | 127/765 [00:44<02:58,  3.58it/s]Loading weights:  18%|█▊        | 137/765 [00:44<02:09,  4.87it/s]Loading weights:  18%|█▊        | 139/765 [00:46<02:38,  3.95it/s]Loading weights:  19%|█▉        | 149/765 [00:50<03:19,  3.09it/s]Loading weights:  21%|██        | 161/765 [00:53<02:46,  3.62it/s]Loading weights:  21%|██        | 162/765 [00:53<02:55,  3.44it/s]Loading weights:  23%|██▎       | 175/765 [00:54<01:46,  5.57it/s]Loading weights:  24%|██▍       | 185/765 [00:54<01:13,  7.88it/s]Loading weights:  24%|██▍       | 187/765 [00:55<01:33,  6.16it/s]Loading weights:  26%|██▌       | 197/765 [00:55<01:03,  8.92it/s]Loading weights:  26%|██▌       | 199/765 [00:57<01:53,  4.98it/s]Loading weights:  27%|██▋       | 209/765 [00:58<01:09,  7.99it/s]Loading weights:  28%|██▊       | 212/765 [01:04<03:45,  2.45it/s]Loading weights:  29%|██▉       | 221/765 [01:05<02:54,  3.12it/s]Loading weights:  29%|██▉       | 223/765 [01:06<02:47,  3.23it/s]Loading weights:  30%|██▉       | 229/765 [01:07<02:18,  3.87it/s]Loading weights:  30%|███       | 233/765 [01:13<05:02,  1.76it/s]Loading weights:  31%|███       | 234/765 [01:13<04:42,  1.88it/s]Loading weights:  31%|███       | 235/765 [01:13<04:28,  1.97it/s]Loading weights:  32%|███▏      | 245/765 [01:18<03:56,  2.19it/s]Loading weights:  32%|███▏      | 246/765 [01:21<05:40,  1.53it/s]Loading weights:  32%|███▏      | 247/765 [01:21<05:13,  1.65it/s]Loading weights:  34%|███▎      | 257/765 [01:23<03:06,  2.72it/s]Loading weights:  34%|███▍      | 259/765 [01:26<04:24,  1.91it/s]Loading weights:  35%|███▌      | 271/765 [01:29<03:17,  2.50it/s]Loading weights:  37%|███▋      | 281/765 [01:32<02:45,  2.93it/s]Loading weights:  37%|███▋      | 283/765 [01:32<02:31,  3.18it/s]Loading weights:  40%|███▉      | 305/765 [01:39<02:27,  3.11it/s]Loading weights:  40%|████      | 306/765 [01:39<02:28,  3.09it/s]Loading weights:  42%|████▏     | 318/765 [01:43<02:16,  3.27it/s]Loading weights:  42%|████▏     | 319/765 [01:46<03:13,  2.30it/s]Loading weights:  43%|████▎     | 330/765 [01:46<01:57,  3.71it/s]Loading weights:  51%|█████     | 389/765 [01:47<00:25, 14.97it/s]Loading weights:  52%|█████▏    | 401/765 [01:47<00:20, 17.74it/s]Loading weights:  55%|█████▍    | 417/765 [01:47<00:15, 22.58it/s]Loading weights:  56%|█████▌    | 428/765 [01:47<00:13, 24.16it/s]Loading weights:  57%|█████▋    | 437/765 [01:47<00:12, 25.27it/s]Loading weights:  63%|██████▎   | 483/765 [01:48<00:05, 54.90it/s]Loading weights:  66%|██████▌   | 503/765 [01:48<00:04, 63.06it/s]Loading weights:  70%|██████▉   | 535/765 [01:48<00:02, 86.22it/s]Loading weights:  72%|███████▏  | 552/765 [01:48<00:03, 63.21it/s]Loading weights:  75%|███████▌  | 577/765 [01:49<00:02, 67.00it/s]Loading weights:  77%|███████▋  | 589/765 [01:49<00:02, 68.93it/s]Loading weights:  80%|███████▉  | 611/765 [01:49<00:01, 83.34it/s]Loading weights:  82%|████████▏ | 631/765 [01:49<00:01, 99.85it/s]Loading weights:  84%|████████▍ | 645/765 [01:50<00:01, 62.22it/s]Loading weights:  88%|████████▊ | 675/765 [01:50<00:00, 91.89it/s]Loading weights:  92%|█████████▏| 707/765 [01:50<00:00, 104.34it/s]Loading weights:  95%|█████████▍| 725/765 [01:50<00:00, 107.83it/s]Loading weights:  97%|█████████▋| 740/765 [01:50<00:00, 86.95it/s] Loading weights:  99%|█████████▉| 759/765 [01:51<00:00, 86.12it/s]Loading weights: 100%|██████████| 765/765 [01:51<00:00,  6.88it/s]
+[2026-08-30 23:04:29] START llava-ov-7b / positive_feature / videohallucer / efh | total=400 | resume_valid=0 | limit=full
+Loading weights:   0%|          | 0/439 [00:00<?, ?it/s]Loading weights: 100%|██████████| 439/439 [00:00<00:00, 6848.70it/s]
+[2026-08-30 23:05:51] DONE  videohallucer 1/400 | new=1 | sample=efh:0:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:06:36] DONE  videohallucer 2/400 | new=2 | sample=efh:0:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:06:46] DONE  videohallucer 3/400 | new=3 | sample=efh:1:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:06:56] DONE  videohallucer 4/400 | new=4 | sample=efh:1:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:07:25] DONE  videohallucer 5/400 | new=5 | sample=efh:2:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:07:52] DONE  videohallucer 6/400 | new=6 | sample=efh:2:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:08:47] DONE  videohallucer 7/400 | new=7 | sample=efh:3:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:09:47] DONE  videohallucer 8/400 | new=8 | sample=efh:3:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:10:24] DONE  videohallucer 9/400 | new=9 | sample=efh:4:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:10:51] DONE  videohallucer 10/400 | new=10 | sample=efh:4:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:11:04] DONE  videohallucer 11/400 | new=11 | sample=efh:5:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:11:17] DONE  videohallucer 12/400 | new=12 | sample=efh:5:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:11:27] DONE  videohallucer 13/400 | new=13 | sample=efh:6:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:11:37] DONE  videohallucer 14/400 | new=14 | sample=efh:6:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:11:45] DONE  videohallucer 15/400 | new=15 | sample=efh:7:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:11:53] DONE  videohallucer 16/400 | new=16 | sample=efh:7:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:12:33] DONE  videohallucer 17/400 | new=17 | sample=efh:8:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:13:20] DONE  videohallucer 18/400 | new=18 | sample=efh:8:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:13:56] DONE  videohallucer 19/400 | new=19 | sample=efh:9:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:14:21] DONE  videohallucer 20/400 | new=20 | sample=efh:9:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:15:04] DONE  videohallucer 21/400 | new=21 | sample=efh:10:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:15:48] DONE  videohallucer 22/400 | new=22 | sample=efh:10:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:16:42] DONE  videohallucer 23/400 | new=23 | sample=efh:11:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:17:27] DONE  videohallucer 24/400 | new=24 | sample=efh:11:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:17:38] DONE  videohallucer 25/400 | new=25 | sample=efh:12:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:17:47] DONE  videohallucer 26/400 | new=26 | sample=efh:12:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:18:06] DONE  videohallucer 27/400 | new=27 | sample=efh:13:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:18:22] DONE  videohallucer 28/400 | new=28 | sample=efh:13:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:18:32] DONE  videohallucer 29/400 | new=29 | sample=efh:14:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:18:41] DONE  videohallucer 30/400 | new=30 | sample=efh:14:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:19:03] DONE  videohallucer 31/400 | new=31 | sample=efh:15:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:19:18] DONE  videohallucer 32/400 | new=32 | sample=efh:15:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:19:32] DONE  videohallucer 33/400 | new=33 | sample=efh:16:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:19:50] DONE  videohallucer 34/400 | new=34 | sample=efh:16:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:20:10] DONE  videohallucer 35/400 | new=35 | sample=efh:17:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:20:29] DONE  videohallucer 36/400 | new=36 | sample=efh:17:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:20:42] DONE  videohallucer 37/400 | new=37 | sample=efh:18:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:20:56] DONE  videohallucer 38/400 | new=38 | sample=efh:18:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:21:26] DONE  videohallucer 39/400 | new=39 | sample=efh:19:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:21:48] DONE  videohallucer 40/400 | new=40 | sample=efh:19:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:22:15] DONE  videohallucer 41/400 | new=41 | sample=efh:20:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:22:49] DONE  videohallucer 42/400 | new=42 | sample=efh:20:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:23:10] DONE  videohallucer 43/400 | new=43 | sample=efh:21:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:23:38] DONE  videohallucer 44/400 | new=44 | sample=efh:21:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:23:53] DONE  videohallucer 45/400 | new=45 | sample=efh:22:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:24:08] DONE  videohallucer 46/400 | new=46 | sample=efh:22:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:24:32] DONE  videohallucer 47/400 | new=47 | sample=efh:23:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:24:54] DONE  videohallucer 48/400 | new=48 | sample=efh:23:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:25:43] DONE  videohallucer 49/400 | new=49 | sample=efh:24:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:26:29] DONE  videohallucer 50/400 | new=50 | sample=efh:24:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:26:42] DONE  videohallucer 51/400 | new=51 | sample=efh:25:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:26:53] DONE  videohallucer 52/400 | new=52 | sample=efh:25:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:27:21] DONE  videohallucer 53/400 | new=53 | sample=efh:26:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:27:42] DONE  videohallucer 54/400 | new=54 | sample=efh:26:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:28:13] DONE  videohallucer 55/400 | new=55 | sample=efh:27:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:28:44] DONE  videohallucer 56/400 | new=56 | sample=efh:27:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:29:13] DONE  videohallucer 57/400 | new=57 | sample=efh:28:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:29:44] DONE  videohallucer 58/400 | new=58 | sample=efh:28:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:30:14] DONE  videohallucer 59/400 | new=59 | sample=efh:29:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:30:47] DONE  videohallucer 60/400 | new=60 | sample=efh:29:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:31:05] DONE  videohallucer 61/400 | new=61 | sample=efh:30:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:31:22] DONE  videohallucer 62/400 | new=62 | sample=efh:30:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:31:54] DONE  videohallucer 63/400 | new=63 | sample=efh:31:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:32:28] DONE  videohallucer 64/400 | new=64 | sample=efh:31:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:32:49] DONE  videohallucer 65/400 | new=65 | sample=efh:32:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:33:06] DONE  videohallucer 66/400 | new=66 | sample=efh:32:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:33:30] DONE  videohallucer 67/400 | new=67 | sample=efh:33:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:33:54] DONE  videohallucer 68/400 | new=68 | sample=efh:33:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:34:12] DONE  videohallucer 69/400 | new=69 | sample=efh:34:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:34:31] DONE  videohallucer 70/400 | new=70 | sample=efh:34:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:34:50] DONE  videohallucer 71/400 | new=71 | sample=efh:35:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:35:10] DONE  videohallucer 72/400 | new=72 | sample=efh:35:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:36:05] DONE  videohallucer 73/400 | new=73 | sample=efh:36:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:37:05] DONE  videohallucer 74/400 | new=74 | sample=efh:36:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:37:51] DONE  videohallucer 75/400 | new=75 | sample=efh:37:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:38:19] DONE  videohallucer 76/400 | new=76 | sample=efh:37:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:38:55] DONE  videohallucer 77/400 | new=77 | sample=efh:38:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:39:30] DONE  videohallucer 78/400 | new=78 | sample=efh:38:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:40:09] DONE  videohallucer 79/400 | new=79 | sample=efh:39:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:40:35] DONE  videohallucer 80/400 | new=80 | sample=efh:39:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:41:16] DONE  videohallucer 81/400 | new=81 | sample=efh:40:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:41:47] DONE  videohallucer 82/400 | new=82 | sample=efh:40:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:41:59] DONE  videohallucer 83/400 | new=83 | sample=efh:41:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:42:09] DONE  videohallucer 84/400 | new=84 | sample=efh:41:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:42:46] DONE  videohallucer 85/400 | new=85 | sample=efh:42:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:43:17] DONE  videohallucer 86/400 | new=86 | sample=efh:42:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:44:18] DONE  videohallucer 87/400 | new=87 | sample=efh:43:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:45:18] DONE  videohallucer 88/400 | new=88 | sample=efh:43:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:45:29] DONE  videohallucer 89/400 | new=89 | sample=efh:44:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:45:38] DONE  videohallucer 90/400 | new=90 | sample=efh:44:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:45:58] DONE  videohallucer 91/400 | new=91 | sample=efh:45:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:46:16] DONE  videohallucer 92/400 | new=92 | sample=efh:45:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:46:33] DONE  videohallucer 93/400 | new=93 | sample=efh:46:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:46:52] DONE  videohallucer 94/400 | new=94 | sample=efh:46:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:47:02] DONE  videohallucer 95/400 | new=95 | sample=efh:47:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:47:12] DONE  videohallucer 96/400 | new=96 | sample=efh:47:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:47:33] DONE  videohallucer 97/400 | new=97 | sample=efh:48:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:47:53] DONE  videohallucer 98/400 | new=98 | sample=efh:48:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:48:05] DONE  videohallucer 99/400 | new=99 | sample=efh:49:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:48:17] DONE  videohallucer 100/400 | new=100 | sample=efh:49:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:48:51] DONE  videohallucer 101/400 | new=101 | sample=efh:50:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:49:26] DONE  videohallucer 102/400 | new=102 | sample=efh:50:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:49:41] DONE  videohallucer 103/400 | new=103 | sample=efh:51:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:49:55] DONE  videohallucer 104/400 | new=104 | sample=efh:51:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:50:09] DONE  videohallucer 105/400 | new=105 | sample=efh:52:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:50:25] DONE  videohallucer 106/400 | new=106 | sample=efh:52:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:50:55] DONE  videohallucer 107/400 | new=107 | sample=efh:53:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:51:21] DONE  videohallucer 108/400 | new=108 | sample=efh:53:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:51:32] DONE  videohallucer 109/400 | new=109 | sample=efh:54:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:51:42] DONE  videohallucer 110/400 | new=110 | sample=efh:54:hallucination | parse=valid | correct=True | batch=1
+[2026-08-30 23:52:13] DONE  videohallucer 111/400 | new=111 | sample=efh:55:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:52:38] DONE  videohallucer 112/400 | new=112 | sample=efh:55:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:52:55] DONE  videohallucer 113/400 | new=113 | sample=efh:56:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:53:11] DONE  videohallucer 114/400 | new=114 | sample=efh:56:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:53:21] DONE  videohallucer 115/400 | new=115 | sample=efh:57:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:53:31] DONE  videohallucer 116/400 | new=116 | sample=efh:57:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:54:40] DONE  videohallucer 117/400 | new=117 | sample=efh:58:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:55:50] DONE  videohallucer 118/400 | new=118 | sample=efh:58:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:56:00] DONE  videohallucer 119/400 | new=119 | sample=efh:59:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:56:11] DONE  videohallucer 120/400 | new=120 | sample=efh:59:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:56:30] DONE  videohallucer 121/400 | new=121 | sample=efh:60:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:56:51] DONE  videohallucer 122/400 | new=122 | sample=efh:60:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:56:59] DONE  videohallucer 123/400 | new=123 | sample=efh:61:basic | parse=valid | correct=False | batch=1
+[2026-08-30 23:57:07] DONE  videohallucer 124/400 | new=124 | sample=efh:61:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:57:38] DONE  videohallucer 125/400 | new=125 | sample=efh:62:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:58:06] DONE  videohallucer 126/400 | new=126 | sample=efh:62:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:58:35] DONE  videohallucer 127/400 | new=127 | sample=efh:63:basic | parse=valid | correct=True | batch=1
+[2026-08-30 23:59:01] DONE  videohallucer 128/400 | new=128 | sample=efh:63:hallucination | parse=valid | correct=False | batch=1
+[2026-08-30 23:59:28] DONE  videohallucer 129/400 | new=129 | sample=efh:64:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:00:00] DONE  videohallucer 130/400 | new=130 | sample=efh:64:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:00:16] DONE  videohallucer 131/400 | new=131 | sample=efh:65:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:00:31] DONE  videohallucer 132/400 | new=132 | sample=efh:65:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:00:54] DONE  videohallucer 133/400 | new=133 | sample=efh:66:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:01:17] DONE  videohallucer 134/400 | new=134 | sample=efh:66:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:01:36] DONE  videohallucer 135/400 | new=135 | sample=efh:67:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:01:53] DONE  videohallucer 136/400 | new=136 | sample=efh:67:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:02:03] DONE  videohallucer 137/400 | new=137 | sample=efh:68:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:02:13] DONE  videohallucer 138/400 | new=138 | sample=efh:68:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:02:29] DONE  videohallucer 139/400 | new=139 | sample=efh:69:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:02:43] DONE  videohallucer 140/400 | new=140 | sample=efh:69:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:03:07] DONE  videohallucer 141/400 | new=141 | sample=efh:70:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:03:30] DONE  videohallucer 142/400 | new=142 | sample=efh:70:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:03:55] DONE  videohallucer 143/400 | new=143 | sample=efh:71:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:04:17] DONE  videohallucer 144/400 | new=144 | sample=efh:71:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:04:37] DONE  videohallucer 145/400 | new=145 | sample=efh:72:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:04:56] DONE  videohallucer 146/400 | new=146 | sample=efh:72:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:05:04] DONE  videohallucer 147/400 | new=147 | sample=efh:73:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:05:12] DONE  videohallucer 148/400 | new=148 | sample=efh:73:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:05:57] DONE  videohallucer 149/400 | new=149 | sample=efh:74:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:06:42] DONE  videohallucer 150/400 | new=150 | sample=efh:74:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:06:59] DONE  videohallucer 151/400 | new=151 | sample=efh:75:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:07:14] DONE  videohallucer 152/400 | new=152 | sample=efh:75:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:07:33] DONE  videohallucer 153/400 | new=153 | sample=efh:76:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:07:50] DONE  videohallucer 154/400 | new=154 | sample=efh:76:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:08:29] DONE  videohallucer 155/400 | new=155 | sample=efh:77:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:09:05] DONE  videohallucer 156/400 | new=156 | sample=efh:77:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:09:41] DONE  videohallucer 157/400 | new=157 | sample=efh:78:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:10:18] DONE  videohallucer 158/400 | new=158 | sample=efh:78:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:10:41] DONE  videohallucer 159/400 | new=159 | sample=efh:79:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:11:02] DONE  videohallucer 160/400 | new=160 | sample=efh:79:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:11:18] DONE  videohallucer 161/400 | new=161 | sample=efh:80:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:11:36] DONE  videohallucer 162/400 | new=162 | sample=efh:80:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:11:49] DONE  videohallucer 163/400 | new=163 | sample=efh:81:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:12:02] DONE  videohallucer 164/400 | new=164 | sample=efh:81:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:12:13] DONE  videohallucer 165/400 | new=165 | sample=efh:82:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:12:23] DONE  videohallucer 166/400 | new=166 | sample=efh:82:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:12:44] DONE  videohallucer 167/400 | new=167 | sample=efh:83:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:13:08] DONE  videohallucer 168/400 | new=168 | sample=efh:83:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:13:20] DONE  videohallucer 169/400 | new=169 | sample=efh:84:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:13:33] DONE  videohallucer 170/400 | new=170 | sample=efh:84:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:14:17] DONE  videohallucer 171/400 | new=171 | sample=efh:85:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:15:00] DONE  videohallucer 172/400 | new=172 | sample=efh:85:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:15:24] DONE  videohallucer 173/400 | new=173 | sample=efh:86:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:15:51] DONE  videohallucer 174/400 | new=174 | sample=efh:86:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:16:14] DONE  videohallucer 175/400 | new=175 | sample=efh:87:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:16:38] DONE  videohallucer 176/400 | new=176 | sample=efh:87:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:17:54] DONE  videohallucer 177/400 | new=177 | sample=efh:88:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:19:05] DONE  videohallucer 178/400 | new=178 | sample=efh:88:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:19:22] DONE  videohallucer 179/400 | new=179 | sample=efh:89:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:19:36] DONE  videohallucer 180/400 | new=180 | sample=efh:89:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:20:09] DONE  videohallucer 181/400 | new=181 | sample=efh:90:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:20:37] DONE  videohallucer 182/400 | new=182 | sample=efh:90:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:21:02] DONE  videohallucer 183/400 | new=183 | sample=efh:91:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:21:33] DONE  videohallucer 184/400 | new=184 | sample=efh:91:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:21:52] DONE  videohallucer 185/400 | new=185 | sample=efh:92:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:22:15] DONE  videohallucer 186/400 | new=186 | sample=efh:92:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:22:28] DONE  videohallucer 187/400 | new=187 | sample=efh:93:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:22:43] DONE  videohallucer 188/400 | new=188 | sample=efh:93:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:22:52] DONE  videohallucer 189/400 | new=189 | sample=efh:94:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:23:03] DONE  videohallucer 190/400 | new=190 | sample=efh:94:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:23:21] DONE  videohallucer 191/400 | new=191 | sample=efh:95:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:23:36] DONE  videohallucer 192/400 | new=192 | sample=efh:95:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:23:54] DONE  videohallucer 193/400 | new=193 | sample=efh:96:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:24:09] DONE  videohallucer 194/400 | new=194 | sample=efh:96:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:24:49] DONE  videohallucer 195/400 | new=195 | sample=efh:97:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:25:28] DONE  videohallucer 196/400 | new=196 | sample=efh:97:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:25:50] DONE  videohallucer 197/400 | new=197 | sample=efh:98:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:26:09] DONE  videohallucer 198/400 | new=198 | sample=efh:98:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:26:29] DONE  videohallucer 199/400 | new=199 | sample=efh:99:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:26:51] DONE  videohallucer 200/400 | new=200 | sample=efh:99:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:27:02] DONE  videohallucer 201/400 | new=201 | sample=efh:100:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:27:13] DONE  videohallucer 202/400 | new=202 | sample=efh:100:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:27:21] DONE  videohallucer 203/400 | new=203 | sample=efh:101:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:27:29] DONE  videohallucer 204/400 | new=204 | sample=efh:101:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:27:38] DONE  videohallucer 205/400 | new=205 | sample=efh:102:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:27:46] DONE  videohallucer 206/400 | new=206 | sample=efh:102:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:27:54] DONE  videohallucer 207/400 | new=207 | sample=efh:103:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:28:01] DONE  videohallucer 208/400 | new=208 | sample=efh:103:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:28:11] DONE  videohallucer 209/400 | new=209 | sample=efh:104:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:28:20] DONE  videohallucer 210/400 | new=210 | sample=efh:104:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:28:36] DONE  videohallucer 211/400 | new=211 | sample=efh:105:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:28:52] DONE  videohallucer 212/400 | new=212 | sample=efh:105:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:29:02] DONE  videohallucer 213/400 | new=213 | sample=efh:106:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:29:12] DONE  videohallucer 214/400 | new=214 | sample=efh:106:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:29:20] DONE  videohallucer 215/400 | new=215 | sample=efh:107:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:29:28] DONE  videohallucer 216/400 | new=216 | sample=efh:107:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:29:36] DONE  videohallucer 217/400 | new=217 | sample=efh:108:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:29:44] DONE  videohallucer 218/400 | new=218 | sample=efh:108:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:29:53] DONE  videohallucer 219/400 | new=219 | sample=efh:109:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:30:02] DONE  videohallucer 220/400 | new=220 | sample=efh:109:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:30:18] DONE  videohallucer 221/400 | new=221 | sample=efh:110:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:30:32] DONE  videohallucer 222/400 | new=222 | sample=efh:110:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:30:44] DONE  videohallucer 223/400 | new=223 | sample=efh:111:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:30:55] DONE  videohallucer 224/400 | new=224 | sample=efh:111:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:31:03] DONE  videohallucer 225/400 | new=225 | sample=efh:112:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:31:11] DONE  videohallucer 226/400 | new=226 | sample=efh:112:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:31:25] DONE  videohallucer 227/400 | new=227 | sample=efh:113:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:31:38] DONE  videohallucer 228/400 | new=228 | sample=efh:113:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:31:50] DONE  videohallucer 229/400 | new=229 | sample=efh:114:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:32:01] DONE  videohallucer 230/400 | new=230 | sample=efh:114:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:32:09] DONE  videohallucer 231/400 | new=231 | sample=efh:115:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:32:18] DONE  videohallucer 232/400 | new=232 | sample=efh:115:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:32:27] DONE  videohallucer 233/400 | new=233 | sample=efh:116:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:32:37] DONE  videohallucer 234/400 | new=234 | sample=efh:116:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:32:49] DONE  videohallucer 235/400 | new=235 | sample=efh:117:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:33:00] DONE  videohallucer 236/400 | new=236 | sample=efh:117:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:33:15] DONE  videohallucer 237/400 | new=237 | sample=efh:118:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:33:29] DONE  videohallucer 238/400 | new=238 | sample=efh:118:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:33:42] DONE  videohallucer 239/400 | new=239 | sample=efh:119:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:33:54] DONE  videohallucer 240/400 | new=240 | sample=efh:119:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:34:09] DONE  videohallucer 241/400 | new=241 | sample=efh:120:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:34:23] DONE  videohallucer 242/400 | new=242 | sample=efh:120:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:34:38] DONE  videohallucer 243/400 | new=243 | sample=efh:121:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:34:53] DONE  videohallucer 244/400 | new=244 | sample=efh:121:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:35:04] DONE  videohallucer 245/400 | new=245 | sample=efh:122:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:35:14] DONE  videohallucer 246/400 | new=246 | sample=efh:122:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:35:24] DONE  videohallucer 247/400 | new=247 | sample=efh:123:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:35:34] DONE  videohallucer 248/400 | new=248 | sample=efh:123:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:35:41] DONE  videohallucer 249/400 | new=249 | sample=efh:124:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:35:48] DONE  videohallucer 250/400 | new=250 | sample=efh:124:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:35:55] DONE  videohallucer 251/400 | new=251 | sample=efh:125:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:36:03] DONE  videohallucer 252/400 | new=252 | sample=efh:125:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:36:11] DONE  videohallucer 253/400 | new=253 | sample=efh:126:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:36:18] DONE  videohallucer 254/400 | new=254 | sample=efh:126:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:36:32] DONE  videohallucer 255/400 | new=255 | sample=efh:127:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:36:44] DONE  videohallucer 256/400 | new=256 | sample=efh:127:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:36:51] DONE  videohallucer 257/400 | new=257 | sample=efh:128:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:36:59] DONE  videohallucer 258/400 | new=258 | sample=efh:128:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:37:08] DONE  videohallucer 259/400 | new=259 | sample=efh:129:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:37:18] DONE  videohallucer 260/400 | new=260 | sample=efh:129:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:37:30] DONE  videohallucer 261/400 | new=261 | sample=efh:130:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:37:41] DONE  videohallucer 262/400 | new=262 | sample=efh:130:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:37:49] DONE  videohallucer 263/400 | new=263 | sample=efh:131:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:37:56] DONE  videohallucer 264/400 | new=264 | sample=efh:131:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:38:03] DONE  videohallucer 265/400 | new=265 | sample=efh:132:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:38:10] DONE  videohallucer 266/400 | new=266 | sample=efh:132:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:38:20] DONE  videohallucer 267/400 | new=267 | sample=efh:133:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:38:29] DONE  videohallucer 268/400 | new=268 | sample=efh:133:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:38:38] DONE  videohallucer 269/400 | new=269 | sample=efh:134:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:38:47] DONE  videohallucer 270/400 | new=270 | sample=efh:134:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:38:55] DONE  videohallucer 271/400 | new=271 | sample=efh:135:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:39:02] DONE  videohallucer 272/400 | new=272 | sample=efh:135:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:39:20] DONE  videohallucer 273/400 | new=273 | sample=efh:136:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:39:35] DONE  videohallucer 274/400 | new=274 | sample=efh:136:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:39:43] DONE  videohallucer 275/400 | new=275 | sample=efh:137:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:39:51] DONE  videohallucer 276/400 | new=276 | sample=efh:137:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:40:04] DONE  videohallucer 277/400 | new=277 | sample=efh:138:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:40:17] DONE  videohallucer 278/400 | new=278 | sample=efh:138:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:40:33] DONE  videohallucer 279/400 | new=279 | sample=efh:139:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:40:48] DONE  videohallucer 280/400 | new=280 | sample=efh:139:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:40:57] DONE  videohallucer 281/400 | new=281 | sample=efh:140:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:41:05] DONE  videohallucer 282/400 | new=282 | sample=efh:140:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:41:17] DONE  videohallucer 283/400 | new=283 | sample=efh:141:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:41:28] DONE  videohallucer 284/400 | new=284 | sample=efh:141:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:41:38] DONE  videohallucer 285/400 | new=285 | sample=efh:142:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:41:49] DONE  videohallucer 286/400 | new=286 | sample=efh:142:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:41:58] DONE  videohallucer 287/400 | new=287 | sample=efh:143:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:42:06] DONE  videohallucer 288/400 | new=288 | sample=efh:143:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:42:21] DONE  videohallucer 289/400 | new=289 | sample=efh:144:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:42:33] DONE  videohallucer 290/400 | new=290 | sample=efh:144:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:42:41] DONE  videohallucer 291/400 | new=291 | sample=efh:145:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:42:49] DONE  videohallucer 292/400 | new=292 | sample=efh:145:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:43:15] DONE  videohallucer 293/400 | new=293 | sample=efh:146:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:43:37] DONE  videohallucer 294/400 | new=294 | sample=efh:146:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:43:46] DONE  videohallucer 295/400 | new=295 | sample=efh:147:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:43:55] DONE  videohallucer 296/400 | new=296 | sample=efh:147:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:44:04] DONE  videohallucer 297/400 | new=297 | sample=efh:148:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:44:14] DONE  videohallucer 298/400 | new=298 | sample=efh:148:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:44:23] DONE  videohallucer 299/400 | new=299 | sample=efh:149:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:44:32] DONE  videohallucer 300/400 | new=300 | sample=efh:149:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:44:41] DONE  videohallucer 301/400 | new=301 | sample=efh:150:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:44:49] DONE  videohallucer 302/400 | new=302 | sample=efh:150:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:44:58] DONE  videohallucer 303/400 | new=303 | sample=efh:151:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:45:08] DONE  videohallucer 304/400 | new=304 | sample=efh:151:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:45:17] DONE  videohallucer 305/400 | new=305 | sample=efh:152:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:45:26] DONE  videohallucer 306/400 | new=306 | sample=efh:152:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:45:38] DONE  videohallucer 307/400 | new=307 | sample=efh:153:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:45:49] DONE  videohallucer 308/400 | new=308 | sample=efh:153:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:46:03] DONE  videohallucer 309/400 | new=309 | sample=efh:154:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:46:17] DONE  videohallucer 310/400 | new=310 | sample=efh:154:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:46:29] DONE  videohallucer 311/400 | new=311 | sample=efh:155:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:46:40] DONE  videohallucer 312/400 | new=312 | sample=efh:155:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:46:51] DONE  videohallucer 313/400 | new=313 | sample=efh:156:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:47:02] DONE  videohallucer 314/400 | new=314 | sample=efh:156:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:47:17] DONE  videohallucer 315/400 | new=315 | sample=efh:157:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:47:31] DONE  videohallucer 316/400 | new=316 | sample=efh:157:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:47:43] DONE  videohallucer 317/400 | new=317 | sample=efh:158:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:47:55] DONE  videohallucer 318/400 | new=318 | sample=efh:158:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 00:48:10] DONE  videohallucer 319/400 | new=319 | sample=efh:159:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:48:25] DONE  videohallucer 320/400 | new=320 | sample=efh:159:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:48:38] DONE  videohallucer 321/400 | new=321 | sample=efh:160:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:48:50] DONE  videohallucer 322/400 | new=322 | sample=efh:160:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:49:13] DONE  videohallucer 323/400 | new=323 | sample=efh:161:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:49:34] DONE  videohallucer 324/400 | new=324 | sample=efh:161:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:49:55] DONE  videohallucer 325/400 | new=325 | sample=efh:162:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:50:14] DONE  videohallucer 326/400 | new=326 | sample=efh:162:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:50:36] DONE  videohallucer 327/400 | new=327 | sample=efh:163:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:50:58] DONE  videohallucer 328/400 | new=328 | sample=efh:163:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:51:11] DONE  videohallucer 329/400 | new=329 | sample=efh:164:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:51:24] DONE  videohallucer 330/400 | new=330 | sample=efh:164:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:52:08] DONE  videohallucer 331/400 | new=331 | sample=efh:165:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:52:38] DONE  videohallucer 332/400 | new=332 | sample=efh:165:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:52:56] DONE  videohallucer 333/400 | new=333 | sample=efh:166:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:53:10] DONE  videohallucer 334/400 | new=334 | sample=efh:166:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:53:25] DONE  videohallucer 335/400 | new=335 | sample=efh:167:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:53:39] DONE  videohallucer 336/400 | new=336 | sample=efh:167:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:53:52] DONE  videohallucer 337/400 | new=337 | sample=efh:168:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:54:04] DONE  videohallucer 338/400 | new=338 | sample=efh:168:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:55:00] DONE  videohallucer 339/400 | new=339 | sample=efh:169:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:55:46] DONE  videohallucer 340/400 | new=340 | sample=efh:169:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:56:16] DONE  videohallucer 341/400 | new=341 | sample=efh:170:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:56:39] DONE  videohallucer 342/400 | new=342 | sample=efh:170:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:56:53] DONE  videohallucer 343/400 | new=343 | sample=efh:171:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:57:05] DONE  videohallucer 344/400 | new=344 | sample=efh:171:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:57:26] DONE  videohallucer 345/400 | new=345 | sample=efh:172:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:57:48] DONE  videohallucer 346/400 | new=346 | sample=efh:172:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:58:05] DONE  videohallucer 347/400 | new=347 | sample=efh:173:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:58:21] DONE  videohallucer 348/400 | new=348 | sample=efh:173:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:58:50] DONE  videohallucer 349/400 | new=349 | sample=efh:174:basic | parse=valid | correct=True | batch=1
+[2026-08-31 00:59:10] DONE  videohallucer 350/400 | new=350 | sample=efh:174:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 00:59:27] DONE  videohallucer 351/400 | new=351 | sample=efh:175:basic | parse=valid | correct=False | batch=1
+[2026-08-31 00:59:40] DONE  videohallucer 352/400 | new=352 | sample=efh:175:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:00:05] DONE  videohallucer 353/400 | new=353 | sample=efh:176:basic | parse=valid | correct=False | batch=1
+[2026-08-31 01:00:28] DONE  videohallucer 354/400 | new=354 | sample=efh:176:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:00:46] DONE  videohallucer 355/400 | new=355 | sample=efh:177:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:01:02] DONE  videohallucer 356/400 | new=356 | sample=efh:177:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:01:51] DONE  videohallucer 357/400 | new=357 | sample=efh:178:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:02:30] DONE  videohallucer 358/400 | new=358 | sample=efh:178:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:02:55] DONE  videohallucer 359/400 | new=359 | sample=efh:179:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:03:16] DONE  videohallucer 360/400 | new=360 | sample=efh:179:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:03:42] DONE  videohallucer 361/400 | new=361 | sample=efh:180:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:04:03] DONE  videohallucer 362/400 | new=362 | sample=efh:180:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:05:06] DONE  videohallucer 363/400 | new=363 | sample=efh:181:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:06:05] DONE  videohallucer 364/400 | new=364 | sample=efh:181:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:07:10] DONE  videohallucer 365/400 | new=365 | sample=efh:182:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:08:15] DONE  videohallucer 366/400 | new=366 | sample=efh:182:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:08:40] DONE  videohallucer 367/400 | new=367 | sample=efh:183:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:08:58] DONE  videohallucer 368/400 | new=368 | sample=efh:183:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:09:28] DONE  videohallucer 369/400 | new=369 | sample=efh:184:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:09:54] DONE  videohallucer 370/400 | new=370 | sample=efh:184:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:10:11] DONE  videohallucer 371/400 | new=371 | sample=efh:185:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:10:29] DONE  videohallucer 372/400 | new=372 | sample=efh:185:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:10:46] DONE  videohallucer 373/400 | new=373 | sample=efh:186:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:11:05] DONE  videohallucer 374/400 | new=374 | sample=efh:186:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:12:09] DONE  videohallucer 375/400 | new=375 | sample=efh:187:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:13:15] DONE  videohallucer 376/400 | new=376 | sample=efh:187:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:14:07] DONE  videohallucer 377/400 | new=377 | sample=efh:188:basic | parse=valid | correct=False | batch=1
+[2026-08-31 01:14:58] DONE  videohallucer 378/400 | new=378 | sample=efh:188:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:15:36] DONE  videohallucer 379/400 | new=379 | sample=efh:189:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:16:09] DONE  videohallucer 380/400 | new=380 | sample=efh:189:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:17:19] DONE  videohallucer 381/400 | new=381 | sample=efh:190:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:18:25] DONE  videohallucer 382/400 | new=382 | sample=efh:190:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:19:02] DONE  videohallucer 383/400 | new=383 | sample=efh:191:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:19:25] DONE  videohallucer 384/400 | new=384 | sample=efh:191:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:20:38] DONE  videohallucer 385/400 | new=385 | sample=efh:192:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:21:53] DONE  videohallucer 386/400 | new=386 | sample=efh:192:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:23:18] DONE  videohallucer 387/400 | new=387 | sample=efh:193:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:24:38] DONE  videohallucer 388/400 | new=388 | sample=efh:193:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:25:05] DONE  videohallucer 389/400 | new=389 | sample=efh:194:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:25:27] DONE  videohallucer 390/400 | new=390 | sample=efh:194:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:26:19] DONE  videohallucer 391/400 | new=391 | sample=efh:195:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:27:16] DONE  videohallucer 392/400 | new=392 | sample=efh:195:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:27:46] DONE  videohallucer 393/400 | new=393 | sample=efh:196:basic | parse=valid | correct=False | batch=1
+[2026-08-31 01:28:10] DONE  videohallucer 394/400 | new=394 | sample=efh:196:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:28:33] DONE  videohallucer 395/400 | new=395 | sample=efh:197:basic | parse=valid | correct=False | batch=1
+[2026-08-31 01:28:57] DONE  videohallucer 396/400 | new=396 | sample=efh:197:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:29:28] DONE  videohallucer 397/400 | new=397 | sample=efh:198:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:30:02] DONE  videohallucer 398/400 | new=398 | sample=efh:198:hallucination | parse=valid | correct=True | batch=1
+[2026-08-31 01:31:02] DONE  videohallucer 399/400 | new=399 | sample=efh:199:basic | parse=valid | correct=True | batch=1
+[2026-08-31 01:32:02] DONE  videohallucer 400/400 | new=400 | sample=efh:199:hallucination | parse=valid | correct=False | batch=1
+[2026-08-31 01:32:02] END   llava-ov-7b / positive_feature / videohallucer / efh | wrote=400 total records
+[2026-08-31 01:32:02] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_ov_positive_videohallucer_efh_v1.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_positive_videohallucer_efh_v1.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "positive_feature",
+        "benchmark": "videohallucer",
+        "task": "efh",
+        "status": "ready",
+        "note": "NOT VALIDATED: LLaVA-OV positive-feature projector hook requires an end-to-end GPU smoke test",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/llava_ov_positive_videohallucer_efh_v1__llava-ov-7b__positive_feature__videohallucer__efh.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/llava_ov_positive_videohallucer_efh_v1__llava-ov-7b__positive_feature__videohallucer__efh.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/llava_ov_positive_videohallucer_efh_v1__llava-ov-7b__positive_feature__videohallucer__efh.manifest.jsonl",
+      "n_new_records": 400,
+      "n_total_samples": 400
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_ov_positive_videohallucer_efh_v1.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_positive_videohallucer_efh_v1.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_positive_videohallucer_efh_v1.results.md"
+  }
+}

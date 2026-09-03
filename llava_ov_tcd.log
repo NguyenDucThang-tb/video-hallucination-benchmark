@@ -1,0 +1,114 @@
+{
+  "config": "/scratch/jp09/dd9648/video-hallucination-benchmark/configs/experiment1_llava_ov_tcd_only.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "bqa",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "mcq",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "videohallucer",
+      "task": "orh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "videohallucer",
+      "task": "tph",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "videohallucer",
+      "task": "sdh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "videohallucer",
+      "task": "efh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "videohallucer",
+      "task": "enfh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "eventhallusion",
+      "task": "entire",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "eventhallusion",
+      "task": "misleading",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "eventhallusion",
+      "task": "mix",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:01<10:32,  1.21it/s]Loading weights:   9%|▉         | 67/765 [00:01<00:13, 51.48it/s]Loading weights:  13%|█▎        | 97/765 [00:08<01:04, 10.41it/s]Loading weights:  15%|█▍        | 114/765 [00:19<02:34,  4.22it/s]Loading weights:  17%|█▋        | 127/765 [00:22<02:31,  4.22it/s]Loading weights:  18%|█▊        | 138/765 [00:25<02:33,  4.10it/s]Loading weights:  19%|█▉        | 149/765 [00:31<03:05,  3.32it/s]Loading weights:  20%|██        | 154/765 [00:31<02:47,  3.64it/s]Loading weights:  21%|██        | 161/765 [00:34<02:56,  3.42it/s]Loading weights:  21%|██▏       | 164/765 [00:37<03:49,  2.61it/s]Loading weights:  23%|██▎       | 173/765 [00:40<03:29,  2.83it/s]Loading weights:  23%|██▎       | 175/765 [00:43<04:30,  2.18it/s]Loading weights:  24%|██▍       | 185/765 [00:46<03:47,  2.55it/s]Loading weights:  26%|██▌       | 197/765 [00:47<02:30,  3.78it/s]Loading weights:  29%|██▉       | 221/765 [00:47<01:10,  7.68it/s]Loading weights:  29%|██▉       | 224/765 [00:53<02:33,  3.54it/s]Loading weights:  30%|███       | 233/765 [00:54<02:13,  3.98it/s]Loading weights:  31%|███       | 235/765 [00:58<03:20,  2.65it/s]Loading weights:  32%|███▏      | 245/765 [01:00<02:48,  3.09it/s]Loading weights:  32%|███▏      | 246/765 [01:00<02:43,  3.18it/s]Loading weights:  32%|███▏      | 247/765 [01:01<02:57,  2.92it/s]

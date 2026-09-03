@@ -1,0 +1,81 @@
+{
+  "config": "/tmp/experiment_llava_ov_base_vidhalluc_tsh_sth_recheck_v2.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "base",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "LLaVA-OV base adapter enabled for local real-video benchmark runs",
+      "validation_override": false
+    },
+    {
+      "model": "llava-ov-7b",
+      "method": "base",
+      "benchmark": "vidhalluc",
+      "task": "sth",
+      "status": "ready",
+      "note": "LLaVA-OV base adapter enabled for local real-video benchmark runs",
+      "validation_override": false
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:01<08:13,  1.55it/s]Loading weights:   0%|          | 3/765 [00:01<05:35,  2.27it/s]Loading weights:   8%|▊         | 59/765 [00:01<00:10, 67.09it/s]Loading weights:  11%|█         | 81/765 [00:01<00:10, 62.67it/s]Loading weights:  13%|█▎        | 97/765 [00:02<00:09, 67.09it/s]Loading weights:  14%|█▍        | 110/765 [00:02<00:09, 71.85it/s]Loading weights:  16%|█▌        | 122/765 [00:02<00:08, 76.07it/s]Loading weights:  17%|█▋        | 133/765 [00:02<00:09, 66.03it/s]Loading weights:  19%|█▉        | 149/765 [00:02<00:08, 68.45it/s]Loading weights:  21%|██        | 161/765 [00:02<00:07, 75.83it/s]Loading weights:  23%|██▎       | 173/765 [00:03<00:07, 75.06it/s]Loading weights:  24%|██▍       | 185/765 [00:03<00:07, 77.81it/s]Loading weights:  26%|██▌       | 197/765 [00:03<00:07, 80.29it/s]Loading weights:  27%|██▋       | 209/765 [00:03<00:06, 81.05it/s]Loading weights:  29%|██▉       | 221/765 [00:03<00:06, 84.53it/s]Loading weights:  30%|███       | 233/765 [00:03<00:06, 86.04it/s]Loading weights:  32%|███▏      | 245/765 [00:03<00:06, 85.05it/s]Loading weights:  34%|███▎      | 257/765 [00:04<00:07, 72.07it/s]Loading weights:  35%|███▌      | 271/765 [00:04<00:05, 82.74it/s]Loading weights:  37%|███▋      | 281/765 [00:04<00:05, 81.61it/s]Loading weights:  38%|███▊      | 293/765 [00:04<00:05, 89.64it/s]Loading weights:  40%|███▉      | 305/765 [00:04<00:05, 87.97it/s]Loading weights:  41%|████▏     | 317/765 [00:04<00:05, 83.05it/s]Loading weights:  43%|████▎     | 329/765 [00:04<00:05, 85.58it/s]Loading weights:  52%|█████▏    | 401/765 [00:05<00:01, 229.28it/s]Loading weights:  67%|██████▋   | 513/765 [00:05<00:00, 441.54it/s]Loading weights:  84%|████████▍ | 643/765 [00:05<00:00, 646.51it/s]Loading weights:  99%|█████████▊| 755/765 [00:05<00:00, 766.04it/s]Loading weights: 100%|██████████| 765/765 [00:05<00:00, 141.24it/s]
+[2026-08-25 04:57:50] START llava-ov-7b / base / vidhalluc / tsh | total=600 | resume_valid=0 | limit=5
+[2026-08-25 04:57:54] DONE  vidhalluc 1/600 | new=1 | sample=tsh:1 | parse=valid | correct=False | batch=1
+[2026-08-25 04:57:55] DONE  vidhalluc 2/600 | new=2 | sample=tsh:2 | parse=unparseable | correct=None | batch=1
+[2026-08-25 04:57:56] DONE  vidhalluc 3/600 | new=3 | sample=tsh:3 | parse=valid | correct=False | batch=1
+[2026-08-25 04:57:59] DONE  vidhalluc 4/600 | new=4 | sample=tsh:4 | parse=valid | correct=False | batch=1
+[2026-08-25 04:58:05] DONE  vidhalluc 5/600 | new=5 | sample=tsh:5 | parse=valid | correct=False | batch=1
+[2026-08-25 04:58:05] END   llava-ov-7b / base / vidhalluc / tsh | wrote=5 total records
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:01<07:18,  1.74it/s]Loading weights:   0%|          | 3/765 [00:01<05:02,  2.52it/s]Loading weights:   8%|▊         | 59/765 [00:01<00:09, 72.74it/s]Loading weights:  10%|█         | 80/765 [00:01<00:10, 67.90it/s]Loading weights:  12%|█▏        | 95/765 [00:01<00:08, 75.45it/s]Loading weights:  14%|█▍        | 109/765 [00:02<00:08, 79.90it/s]Loading weights:  16%|█▌        | 122/765 [00:02<00:07, 81.93it/s]Loading weights:  18%|█▊        | 134/765 [00:02<00:07, 83.77it/s]Loading weights:  19%|█▉        | 145/765 [00:02<00:07, 81.71it/s]Loading weights:  20%|██        | 155/765 [00:02<00:08, 69.05it/s]Loading weights:  23%|██▎       | 173/765 [00:02<00:08, 69.22it/s]Loading weights:  24%|██▍       | 186/765 [00:03<00:07, 77.68it/s]Loading weights:  26%|██▌       | 197/765 [00:03<00:06, 83.78it/s]Loading weights:  27%|██▋       | 207/765 [00:03<00:06, 82.41it/s]Loading weights:  28%|██▊       | 217/765 [00:03<00:06, 78.44it/s]Loading weights:  30%|██▉       | 226/765 [00:03<00:07, 68.81it/s]Loading weights:  31%|███       | 235/765 [00:03<00:07, 67.16it/s]Loading weights:  32%|███▏      | 245/765 [00:03<00:07, 72.57it/s]Loading weights:  34%|███▎      | 257/765 [00:03<00:06, 79.50it/s]Loading weights:  35%|███▌      | 269/765 [00:04<00:05, 83.83it/s]Loading weights:  37%|███▋      | 281/765 [00:04<00:06, 80.34it/s]Loading weights:  38%|███▊      | 293/765 [00:04<00:05, 83.35it/s]Loading weights:  40%|███▉      | 305/765 [00:04<00:05, 77.78it/s]Loading weights:  41%|████▏     | 317/765 [00:04<00:05, 83.42it/s]Loading weights:  43%|████▎     | 329/765 [00:04<00:04, 89.44it/s]Loading weights:  50%|█████     | 383/765 [00:04<00:01, 199.58it/s]Loading weights:  61%|██████    | 467/765 [00:05<00:00, 363.31it/s]Loading weights:  75%|███████▌  | 577/765 [00:05<00:00, 546.27it/s]Loading weights:  90%|█████████ | 689/765 [00:05<00:00, 687.44it/s]Loading weights: 100%|██████████| 765/765 [00:05<00:00, 143.94it/s]
+[2026-08-25 04:58:11] START llava-ov-7b / base / vidhalluc / sth | total=445 | resume_valid=0 | limit=5
+[2026-08-25 04:58:14] DONE  vidhalluc 1/445 | new=1 | sample=sth:oL3BcY3CbYg_cp8t27oT_ww | parse=valid | correct=True | batch=1
+[2026-08-25 04:58:16] DONE  vidhalluc 2/445 | new=2 | sample=sth:NAypGTZJhyE_Cis2EFd9m2U | parse=valid | correct=False | batch=1
+[2026-08-25 04:58:19] DONE  vidhalluc 3/445 | new=3 | sample=sth:9kZgaZbDuqI_clip_1_5 | parse=valid | correct=False | batch=1
+[2026-08-25 04:58:19] DONE  vidhalluc 4/445 | new=4 | sample=sth:0T45fkKkCCk_ABCUrbSmLuo | parse=valid | correct=True | batch=1
+[2026-08-25 04:58:20] DONE  vidhalluc 5/445 | new=5 | sample=sth:Ztlcnd14Kn4_eFsDYomfkaQ | parse=valid | correct=True | batch=1
+[2026-08-25 04:58:20] END   llava-ov-7b / base / vidhalluc / sth | wrote=5 total records
+[2026-08-25 04:58:20] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_ov_base_vidhalluc_tsh_sth_recheck_v2.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_base_vidhalluc_tsh_sth_recheck_v2.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "base",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "status": "ready",
+        "note": "LLaVA-OV base adapter enabled for local real-video benchmark runs",
+        "validation_override": false
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/llava_ov_base_vidhalluc_tsh_sth_recheck_v2__llava-ov-7b__base__vidhalluc__tsh.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/llava_ov_base_vidhalluc_tsh_sth_recheck_v2__llava-ov-7b__base__vidhalluc__tsh.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/llava_ov_base_vidhalluc_tsh_sth_recheck_v2__llava-ov-7b__base__vidhalluc__tsh.manifest.jsonl",
+      "n_new_records": 5,
+      "n_total_samples": 600
+    },
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "base",
+        "benchmark": "vidhalluc",
+        "task": "sth",
+        "status": "ready",
+        "note": "LLaVA-OV base adapter enabled for local real-video benchmark runs",
+        "validation_override": false
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/llava_ov_base_vidhalluc_tsh_sth_recheck_v2__llava-ov-7b__base__vidhalluc__sth.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/llava_ov_base_vidhalluc_tsh_sth_recheck_v2__llava-ov-7b__base__vidhalluc__sth.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/llava_ov_base_vidhalluc_tsh_sth_recheck_v2__llava-ov-7b__base__vidhalluc__sth.manifest.jsonl",
+      "n_new_records": 5,
+      "n_total_samples": 445
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_ov_base_vidhalluc_tsh_sth_recheck_v2.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_base_vidhalluc_tsh_sth_recheck_v2.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_base_vidhalluc_tsh_sth_recheck_v2.results.md"
+  }
+}

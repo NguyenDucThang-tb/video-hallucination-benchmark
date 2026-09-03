@@ -1,0 +1,5 @@
+/home/562/dd9648/.bashrc: line 54: /scratch/hn98/dd9648/rcag_repro/uv/env: No such file or directory
+/home/562/dd9648/.bash_profile: line 10: /scratch/hn98/dd9648/rcag_repro/uv/env: No such file or directory
+/local/spool/pbs/mom_priv/jobs/177642647.gadi-pbs.SC: line 1: ^X: command not found
+/local/spool/pbs/mom_priv/jobs/177642647.gadi-pbs.SC: line 2: x: command not found
+/local/spool/pbs/mom_priv/jobs/177642647.gadi-pbs.SC: line 43: .venv/bin/activate: No such file or directory

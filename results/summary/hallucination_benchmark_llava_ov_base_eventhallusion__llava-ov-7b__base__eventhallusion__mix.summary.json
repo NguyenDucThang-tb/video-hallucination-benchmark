@@ -1,0 +1,40 @@
+{
+  "entire": {
+    "n": 0,
+    "n_valid": 0,
+    "correct": 0,
+    "n_parser_error": 0,
+    "n_missing": 0,
+    "accuracy": null
+  },
+  "misleading": {
+    "n": 0,
+    "n_valid": 0,
+    "correct": 0,
+    "n_parser_error": 0,
+    "n_missing": 0,
+    "accuracy": null
+  },
+  "mix": {
+    "n": 193,
+    "n_valid": 153,
+    "correct": 100,
+    "n_parser_error": 40,
+    "n_missing": 40,
+    "accuracy": 0.5181347150259067
+  },
+  "overall": {
+    "n_valid": 153,
+    "n": 193,
+    "correct": 100,
+    "n_parser_error": 40,
+    "n_missing": 40,
+    "accuracy": 0.5181347150259067
+  },
+  "description": {
+    "accuracy": null,
+    "status": "N/A",
+    "reason": "GPT-4o description judging was not supplied; binary evaluation does not require an API."
+  },
+  "n_duplicate_records_ignored": 193
+}

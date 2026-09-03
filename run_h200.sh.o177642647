@@ -1,0 +1,37 @@
+========================================
+JOB ID   : 177642647.gadi-pbs
+HOST     : gadi-cpu-clx-1800.gadi.nci.org.au
+START    : Fri Aug 28 04:10:03 AEST 2026
+========================================
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+
+Log: results/gadi/positive_feature_177642647.gadi-pbs.log
+=== ERROR ===
+The use of the 'python' command to launch a python script
+has been deprecated. Please run either
+
+python3 -u scripts/run_benchmark.py --config configs/experiment1_positive_feature.yaml
+
+or
+
+python2 -u scripts/run_benchmark.py --config configs/experiment1_positive_feature.yaml
+
+depending on which version of python you require
+Alternatively, if you are unable to modify this script
+You can load the python2-as-python or python3-as-python
+modules depending on which version of python you require
+========================================
+END      : Fri Aug 28 04:10:03 AEST 2026
+========================================
+
+======================================================================================
+                  Resource Usage on 2026-08-28 04:10:07:
+   Job Id:             177642647.gadi-pbs
+   Project:            li96
+   Exit Status:        0
+   Service Units:      0.00
+   NCPUs Requested:    1                   CPU Time Used: 00:00:00        
+   Memory Requested:   500.0MB               Memory Used: 17.03MB         
+   Walltime Requested: 10:00:00            Walltime Used: 00:00:01        
+   JobFS Requested:    100.0MB                JobFS Used: 0B              
+======================================================================================

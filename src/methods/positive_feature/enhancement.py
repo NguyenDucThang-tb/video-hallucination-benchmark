@@ -92,6 +92,74 @@ def ensure_birefnet_loaded(holder: dict, checkpoint: str, device: str, torch_mod
     return model, transform
 
 
+# def compute_birefnet_foreground(
+#     video_frames,
+#     T: int,
+#     P: int,
+#     birefnet_model,
+#     birefnet_transform,
+#     torch_module,
+#     target_device,
+# ) -> "torch.Tensor":
+#     """Compute per-token foreground mask ``[T, P]`` using BiRefNet.
+
+#     Args:
+#         video_frames: Numpy array ``[n_frames, H, W, 3]``.
+#         T: Number of temporal positions in the vision grid.
+#         P: Number of spatial patches per frame (``Ht * Wt``).
+#         birefnet_model: Loaded BiRefNet model.
+#         birefnet_transform: Torchvision transform for BiRefNet input.
+#         torch_module: The ``torch`` module reference.
+#         target_device: Device to place the output tensor.
+
+#     Returns:
+#         Tensor of shape ``[T, P]`` with foreground scores in [0, 1].
+#     """
+#     from PIL import Image
+
+#     n_frames = len(video_frames)
+#     birefnet_parameter = next(birefnet_model.parameters())
+#     birefnet_device = birefnet_parameter.device
+#     birefnet_dtype = birefnet_parameter.dtype
+
+#     images = [Image.fromarray(np.asarray(f, dtype=np.uint8)) for f in video_frames]
+#     inputs = torch_module.stack([birefnet_transform(img) for img in images]).to(
+#         device=birefnet_device,
+#         dtype=birefnet_dtype,
+#     )
+
+#     with torch_module.inference_mode():
+#         outputs = birefnet_model(inputs)
+#         preds = outputs[-1].sigmoid() if isinstance(outputs, (list, tuple)) else outputs.sigmoid()
+
+#     # Compute Ht, Wt from P (assume roughly square grid)
+#     Ht = int(np.sqrt(P))
+#     Wt = P // Ht
+#     if Ht * Wt != P:
+#         # Fallback: flatten to 1×P
+#         Ht, Wt = 1, P
+
+#     # Resize prediction masks to [n_frames, Ht, Wt]
+#     preds = torch_module.nn.functional.interpolate(
+#         preds, size=(Ht, Wt), mode="bilinear", align_corners=False,
+#     ).squeeze(1)
+
+#     scores = preds.view(n_frames, -1).float()  # [n_frames, P]
+
+#     # Map n_frames → T temporal positions
+#     if n_frames == T:
+#         fg = scores
+#     elif n_frames < T:
+#         idx = np.rint(np.linspace(0, n_frames - 1, T)).astype(int)
+#         fg = scores[idx]
+#     else:
+#         fg = torch_module.zeros(T, P, device=scores.device, dtype=scores.dtype)
+#         for t in range(T):
+#             lo = t * n_frames // T
+#             hi = max(lo + 1, (t + 1) * n_frames // T)
+#             fg[t] = scores[lo:hi].mean(0)
+
+#     return fg.to(target_device)
 def compute_birefnet_foreground(
     video_frames,
     T: int,
@@ -100,67 +168,368 @@ def compute_birefnet_foreground(
     birefnet_transform,
     torch_module,
     target_device,
+    thr: float = 0.15,
+    kernel: int = 5,
+    return_soft: bool = False,
+    avg_weight: float = 0.7,
 ) -> "torch.Tensor":
-    """Compute per-token foreground mask ``[T, P]`` using BiRefNet.
-
-    Args:
-        video_frames: Numpy array ``[n_frames, H, W, 3]``.
-        T: Number of temporal positions in the vision grid.
-        P: Number of spatial patches per frame (``Ht * Wt``).
-        birefnet_model: Loaded BiRefNet model.
-        birefnet_transform: Torchvision transform for BiRefNet input.
-        torch_module: The ``torch`` module reference.
-        target_device: Device to place the output tensor.
-
-    Returns:
-        Tensor of shape ``[T, P]`` with foreground scores in [0, 1].
     """
+    Compute foreground evidence using BiRefNet and align it
+    with visual temporal tokens.
+
+    Parameters
+    ----------
+    video_frames:
+        Numpy array [n_frames, H, W, 3] hoặc list[PIL.Image].
+
+        Trường hợp quan trọng:
+            n_frames == T
+                -> mỗi temporal slice dùng 1 frame
+
+            n_frames == 2*T
+                -> temporal slice t dùng:
+                    frame[2*t]
+                    frame[2*t+1]
+
+                foreground được hợp nhất bằng:
+                    max(mask_0, mask_1)
+
+    T: Number of temporal positions in vision grid.
+
+    P: Number of spatial visual tokens per temporal slice:   P = Ht * Wt
+
+    thr: Threshold dùng khi return_soft=False.
+
+    kernel:   Morphological closing kernel.  <= 1 hoặc None để disable.
+
+    return_soft:
+        True:
+            return float foreground confidence [0,1]
+
+        False:
+            return binary foreground mask.
+
+    avg_weight:
+        Hybrid pooling:
+
+            g =
+                avg_weight * avg_pool
+                + (1 - avg_weight) * max_pool
+
+    Returns
+    -------
+    fg:
+        Tensor [T, P].
+
+        return_soft=True:
+            float32
+
+        return_soft=False:
+            bool
+    """
+
+    import numpy as np
     from PIL import Image
 
-    n_frames = len(video_frames)
-    birefnet_parameter = next(birefnet_model.parameters())
-    birefnet_device = birefnet_parameter.device
-    birefnet_dtype = birefnet_parameter.dtype
+    F = torch_module.nn.functional
 
-    images = [Image.fromarray(np.asarray(f, dtype=np.uint8)) for f in video_frames]
-    inputs = torch_module.stack([birefnet_transform(img) for img in images]).to(
-        device=birefnet_device,
-        dtype=birefnet_dtype,
-    )
+    # ============================================================
+    # 0. Grid
+    # ============================================================
 
-    with torch_module.inference_mode():
-        outputs = birefnet_model(inputs)
-        preds = outputs[-1].sigmoid() if isinstance(outputs, (list, tuple)) else outputs.sigmoid()
-
-    # Compute Ht, Wt from P (assume roughly square grid)
+    # Nếu caller có grid thật thì tốt nhất truyền Ht/Wt trực tiếp.
+    # Với signature hiện tại chỉ có P nên suy ra gần-square grid.
     Ht = int(np.sqrt(P))
     Wt = P // Ht
+
     if Ht * Wt != P:
-        # Fallback: flatten to 1×P
+        # fallback an toàn
         Ht, Wt = 1, P
 
-    # Resize prediction masks to [n_frames, Ht, Wt]
-    preds = torch_module.nn.functional.interpolate(
-        preds, size=(Ht, Wt), mode="bilinear", align_corners=False,
-    ).squeeze(1)
+    n_frames = len(video_frames)
 
-    scores = preds.view(n_frames, -1).float()  # [n_frames, P]
+    if n_frames == 0:
+        raise ValueError("video_frames is empty")
 
-    # Map n_frames → T temporal positions
-    if n_frames == T:
-        fg = scores
-    elif n_frames < T:
-        idx = np.rint(np.linspace(0, n_frames - 1, T)).astype(int)
-        fg = scores[idx]
-    else:
-        fg = torch_module.zeros(T, P, device=scores.device, dtype=scores.dtype)
-        for t in range(T):
-            lo = t * n_frames // T
-            hi = max(lo + 1, (t + 1) * n_frames // T)
-            fg[t] = scores[lo:hi].mean(0)
+    # ============================================================
+    # 1. Device / dtype của BiRefNet
+    # ============================================================
 
-    return fg.to(target_device)
+    try:
+        parameter = next(birefnet_model.parameters())
+        birefnet_device = parameter.device
+        birefnet_dtype = parameter.dtype
+    except StopIteration:
+        birefnet_device = target_device
+        birefnet_dtype = torch_module.float32
 
+    # ============================================================
+    # 2. Convert frame -> PIL
+    # ============================================================
+
+    def to_pil(frame):
+
+        if isinstance(frame, Image.Image):
+            return frame.convert("RGB")
+
+        arr = np.asarray(frame)
+
+        # tránh lỗi nếu frame float [0,1]
+        if np.issubdtype(arr.dtype, np.floating):
+            if arr.max() <= 1.0:
+                arr = arr * 255.0
+
+        arr = np.clip(arr, 0, 255).astype(np.uint8)
+
+        return Image.fromarray(arr).convert("RGB")
+
+    # ============================================================
+    # 3. BiRefNet prediction cho 1 frame
+    # ============================================================
+
+    def predict_one(frame):
+
+        img = to_pil(frame)
+
+        x = birefnet_transform(img).unsqueeze(0)
+
+        x = x.to(
+            device=birefnet_device,
+            dtype=birefnet_dtype,
+        )
+
+        with torch_module.inference_mode():
+
+            outputs = birefnet_model(x)
+
+            if isinstance(outputs, (list, tuple)):
+                pred = outputs[-1]
+            else:
+                pred = outputs
+
+            pred = pred.sigmoid()
+
+        # --------------------------------------------------------
+        # Normalize shape về [H, W]
+        # --------------------------------------------------------
+
+        # thường là [1, 1, H, W]
+        if pred.ndim == 4:
+            pred = pred[0, 0]
+
+        elif pred.ndim == 3:
+            pred = pred[0]
+
+        pred = (
+            pred
+            .float()
+            .detach()
+            .cpu()
+        )
+
+        return pred
+
+    # ============================================================
+    # 4. Predict tất cả frame trước
+    #
+    # Tránh chạy BiRefNet lại nếu một frame được sử dụng nhiều lần.
+    # ============================================================
+
+    all_preds = []
+
+    for i in range(n_frames):
+        all_preds.append(
+            predict_one(video_frames[i])
+        )
+
+    # ============================================================
+    # 5. Align frame -> visual temporal slice
+    # ============================================================
+
+    temporal_preds = []
+
+    for t in range(T):
+
+        # --------------------------------------------------------
+        # CASE 1:
+        #
+        # 8 sampled frames -> T = 4
+        #
+        # temporal token t đại diện frame:
+        #
+        #       2t và 2t+1
+        # --------------------------------------------------------
+
+        if n_frames == 2 * T:
+            idx0 = min(  2 * t,  n_frames - 1, )
+
+            idx1 = min(  2 * t + 1, n_frames - 1, )
+
+            pred0 = all_preds[idx0]
+            pred1 = all_preds[idx1]
+
+            # ====================================================
+            # TEMPORAL RESCUE
+            #
+            # Nếu object bị BiRefNet miss ở một frame nhưng xuất
+            # hiện rõ ở frame còn lại, vẫn giữ foreground evidence.
+            # ====================================================
+
+            pred = torch_module.maximum(  pred0,  pred1,   )
+
+        # --------------------------------------------------------
+        # CASE 2:
+        # n_frames == T
+        # --------------------------------------------------------
+
+        elif n_frames == T:
+
+            pred = all_preds[t]
+
+        # --------------------------------------------------------
+        # CASE 3:
+        # fallback arbitrary number of frames
+        # --------------------------------------------------------
+
+        else:
+
+            idx = round(
+                t
+                * (n_frames - 1)
+                / max(T - 1, 1)
+            )
+
+            idx = min(
+                max(idx, 0),
+                n_frames - 1,
+            )
+
+            pred = all_preds[idx]
+
+        # ========================================================
+        # 6. Morphological closing
+        # ========================================================
+
+        if kernel is not None and kernel > 1:
+
+            import cv2
+
+            pred_np = pred.numpy().astype(
+                np.float32,
+                copy=False,
+            )
+
+            k = np.ones(
+                (kernel, kernel),
+                dtype=np.uint8,
+            )
+
+            pred_np = cv2.morphologyEx(
+                pred_np,
+                cv2.MORPH_CLOSE,
+                k,
+            )
+
+            pred = torch_module.from_numpy(
+                pred_np
+            ).float()
+
+        # ========================================================
+        # 7. Pixel foreground -> visual token grid
+        # ========================================================
+
+        pred_4d = pred[
+            None,
+            None,
+            ...,
+        ]
+
+        # --------------------------------------------------------
+        # Average pooling
+        #
+        # phản ánh tỷ lệ foreground trong patch
+        # --------------------------------------------------------
+
+        g_avg = F.adaptive_avg_pool2d(
+            pred_4d,
+            output_size=(Ht, Wt),
+        )[0, 0]
+
+        # --------------------------------------------------------
+        # Max pooling
+        #
+        # giúp không bỏ mất object nhỏ
+        # --------------------------------------------------------
+
+        g_max = F.adaptive_max_pool2d(
+            pred_4d,
+            output_size=(Ht, Wt),
+        )[0, 0]
+
+        # --------------------------------------------------------
+        # Hybrid pooling
+        # --------------------------------------------------------
+
+        w_avg = float(avg_weight)
+        w_max = 1.0 - w_avg
+
+        g = (
+            w_avg * g_avg
+            + w_max * g_max
+        )
+
+        g = g.clamp(
+            0.0,
+            1.0,
+        )
+
+        # ========================================================
+        # 8. Soft / Binary foreground
+        # ========================================================
+
+        if return_soft:
+
+            foreground = (
+                g
+                .flatten()
+                .float()
+            )
+
+        else:
+
+            foreground = (
+                g > thr
+            ).flatten()
+
+        temporal_preds.append(
+            foreground
+        )
+
+    # ============================================================
+    # 9. [T, P]
+    # ============================================================
+
+    fg = torch_module.stack(
+        temporal_preds,
+        dim=0,
+    )
+
+    if fg.shape != (T, P):
+        raise RuntimeError(
+            f"Foreground shape mismatch: "
+            f"expected {(T, P)}, got {tuple(fg.shape)}"
+        )
+
+    if return_soft:
+        return fg.to(
+            device=target_device,
+            dtype=torch_module.float32,
+        )
+
+    return fg.to(
+        device=target_device,
+        dtype=torch_module.bool,
+    )
 
 def enhance_visual_embeddings(
     V: "torch.Tensor",

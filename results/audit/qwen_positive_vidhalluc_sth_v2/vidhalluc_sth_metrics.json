@@ -1,0 +1,38 @@
+{
+  "diagnostic_metrics_by_model_method": {
+    "qwen2.5-vl-7b/positive_feature": {
+      "accuracy": null,
+      "binary_accuracy_diagnostic": 0.7078651685393258,
+      "classification_score": 0.5713474034959466,
+      "classification_unknown_count": 0,
+      "description_accuracy": null,
+      "description_parse_coverage": 0.32808988764044944,
+      "formula": "0.6 * classification_score + 0.4 * description_accuracy",
+      "invalid_prediction_policy_for_mcc": "upstream-compatible: values other than yes are treated as no",
+      "mcc": 0.5117505131415653,
+      "n": 445,
+      "n_parser_error": 0,
+      "official_accuracy": null,
+      "official_status": "SIMCSE_NOT_AVAILABLE",
+      "overall_score": null,
+      "reason": "Official STH requires SimCSE location-description scoring; it was not executed.",
+      "simcse_model": "princeton-nlp/sup-simcse-roberta-large",
+      "similarity_threshold_low": 0.5,
+      "status": "N/A"
+    }
+  },
+  "official_runs": {
+    "qwen2.5-vl-7b/positive_feature": {
+      "classification_score": 0.5713474034959466,
+      "description_accuracy": 0.28249851088575206,
+      "mcc": 0.5117505131415653,
+      "n": 445,
+      "official_status": "VERIFIED",
+      "overall_score": 0.4558078464518688,
+      "simcse_checkpoint": "/scratch/jp09/dd9648/huggingface/models--princeton-nlp--sup-simcse-roberta-large/snapshots/96d164d9950b72f4ce179cb1eb3414de0910953f",
+      "similarity_threshold_low": 0.5
+    }
+  },
+  "official_status": "EXECUTED",
+  "reason": "Pass --simcse-model with the official checkpoint to execute description scoring."
+}

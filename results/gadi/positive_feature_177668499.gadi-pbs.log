@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/scripts/run_benchmark.py", line 721, in <module>
+    main()
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/scripts/run_benchmark.py", line 659, in main
+    config = load_yaml(config_path)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/utils/config.py", line 12, in load_yaml
+    with Path(path).open(encoding="utf-8") as handle:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/scratch/jp09/dd9648/video-hallucination-benchmark/configs/experiment1_positive_feature.yaml'

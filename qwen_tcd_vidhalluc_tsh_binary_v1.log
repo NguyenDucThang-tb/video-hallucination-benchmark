@@ -1,0 +1,37 @@
+{
+  "config": "/tmp/qwen_tcd_vidhalluc_tsh_binary_v1.yaml",
+  "jobs": [
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; prior local H200 execution does not satisfy the reproduction gate",
+      "validation_override": true
+    }
+  ]
+}
+[2026-08-27 17:11:39] ERROR qwen2.5-vl-7b / tcd / vidhalluc / tsh | ValueError("Unrecognized processing class in /scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct. Can't instantiate a processor, a tokenizer, an image processor, a video processor or a feature extractor for this model. Make sure the repository contains the files of at least one of those processing classes.")
+[2026-08-27 17:11:39] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/qwen_tcd_vidhalluc_tsh_binary_v1.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_tcd_vidhalluc_tsh_binary_v1.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "tcd",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "status": "ready",
+        "note": "BASELINE NOT REPRODUCED; prior local H200 execution does not satisfy the reproduction gate",
+        "validation_override": true
+      },
+      "error": "ValueError(\"Unrecognized processing class in /scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct. Can't instantiate a processor, a tokenizer, an image processor, a video processor or a feature extractor for this model. Make sure the repository contains the files of at least one of those processing classes.\")"
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/qwen_tcd_vidhalluc_tsh_binary_v1.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_tcd_vidhalluc_tsh_binary_v1.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/qwen_tcd_vidhalluc_tsh_binary_v1.results.md"
+  }
+}

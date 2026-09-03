@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/scripts/run_benchmark.py", line 25, in <module>
+    from src.methods.base import BaseMethod
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/methods/__init__.py", line 1, in <module>
+    from .base import InferenceMethod, MethodOutput
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/methods/base.py", line 9, in <module>
+    from src.models.base import GenerationConfig, ModelAdapter
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/models/__init__.py", line 2, in <module>
+    from .llava_ov import LlavaOVAdapter
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/models/llava_ov.py", line 12, in <module>
+    from src.methods.positive_feature.enhancement import (
+  File "/scratch/jp09/dd9648/video-hallucination-benchmark/src/methods/positive_feature/__init__.py", line 1, in <module>
+    from .enhancement import enhance_output_by_frame_saliency, enhance_tensor_by_frame_saliency
+ImportError: cannot import name 'enhance_tensor_by_frame_saliency' from 'src.methods.positive_feature.enhancement' (/scratch/jp09/dd9648/video-hallucination-benchmark/src/methods/positive_feature/enhancement.py). Did you mean: 'enhance_output_by_frame_saliency'?

@@ -1,0 +1,3 @@
+/scratch/jp09/dd9648/.venv-llava-video/lib64/python3.12/site-packages/transformers/utils/hub.py:124: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+Wrote VidHalluc TSH/STH audit artifacts to /scratch/jp09/dd9648/video-hallucination-benchmark/results/audit/llava_video_tcd_vidhalluc_sth_tsh

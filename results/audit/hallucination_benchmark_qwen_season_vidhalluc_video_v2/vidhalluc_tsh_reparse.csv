@@ -1,0 +1,1515 @@
+sample_id,model,method,ground_truth,raw_model_output,local_prediction,official_prediction,diagnostic_prediction,parse_status,original_parser_status,correct_status,parser_difference,original_parser_error,failure_stage,runtime_error
+tsh:1,qwen2.5-vl-7b,season,BA,"Action A. cleaning the sinks
+Action B. place a bottle with liquid
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:2,qwen2.5-vl-7b,season,AB,Action A. powdering hands happens before Action B. holding the barbell.,AB,AB,AB,valid,valid,True,False,,,
+tsh:3,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: fencing
+2. Action B: play table tennis
+
+The fencing action happens before the play table tennis action.",AB,AB,AB,valid,valid,True,False,,,
+tsh:4,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:5,qwen2.5-vl-7b,season,AB,Action A. skateboarding on the road happens before Action B. windsurfing.,AB,AB,AB,valid,valid,True,False,,,
+tsh:6,qwen2.5-vl-7b,season,BA,"The action that happens before the other other is:
+
+Action B: cutting the pita bread to small slices
+
+This is followed by:
+
+Action A: frying the bread
+
+So
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion",BA,BA,BA,valid,valid,True,False,,,
+tsh:7,qwen2.5-vl-7b,season,BA,Action A. drawing on a map happens before Action B. sailing on a yacht.,AB,AB,AB,valid,valid,False,False,,,
+tsh:8,qwen2.5-vl-7b,season,AB,"Action A. cutting a paper
+Action B. present a gold bowl
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:9,qwen2.5-vl-7b,season,BA,Action B. holding a gift happens before Action A. blowing sequins.,BA,BA,BA,valid,valid,True,False,,,
+tsh:10,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: play croquet
+2. Action B: play with a cat
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:11,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: play croquet
+2. Action B: play with a cat
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:12,qwen2.5-vl-7b,season,AB,"Action A. apply paint to a sponge
+Action B. apply glitter nail polish
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:13,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: drawing on tape and cutting it out
+2. Action B: apply a top coat
+
+The action of A happens before action B.",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:14,qwen2.5-vl-7b,season,BA,Action B. flying a helicopter over a river happens before Action A. rafting to a tunnel.,BA,BA,BA,valid,valid,True,False,,,
+tsh:15,qwen2.5-vl-7b,season,BA,Action A. cooking meat happens before Action B. cutting dough to rounds,AB,AB,AB,valid,valid,False,False,,,
+tsh:16,qwen2.5-vl-7b,season,AB,Action A. eating together,A,A,,valid,valid,False,False,,,
+tsh:17,qwen2.5-vl-7b,season,BA,"In the video, the actions occur in the following order:
+
+1. **Action A. play music** - This happens first. The video shows a band playing music on a stage.
+2. **Action B. dancing** - This happens after the music. The video then shows people dancing in front of the stage.",AB,AB,AB,valid,valid,False,False,,,
+tsh:18,qwen2.5-vl-7b,season,AB,Action A. stirring cabbage with oil happens before Action B. boiling the broccoli.,AB,AB,AB,valid,valid,True,False,,,
+tsh:19,qwen2.5-vl-7b,season,AB,Action A. mix various spices and olive oil happens before Action B. cooking sausages on a grill pan.,AB,AB,AB,valid,valid,True,False,,,
+tsh:20,qwen2.5-vl-7b,season,BA,"Action A. carving pumpkins
+Action B. walking down the road
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:21,qwen2.5-vl-7b,season,AB,Action A. displaying welding equipment happens before Action B. cleaning a welded area.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:22,qwen2.5-vl-7b,season,BA,"The actions in the video are the order they occur are:
+
+1. Action A: an award ceremony
+2. Action B: play polo
+
+The video starts with an award ceremony where people are holding trophies and celebrating, and then it transitions to a scene of people playing polo.",AB,AB,AB,valid,valid,False,False,,,
+tsh:23,qwen2.5-vl-7b,season,BA,Action B. cleaning the seats of a car,B,B,,valid,valid,False,False,,,
+tsh:24,qwen2.5-vl-7b,season,AB,"Action A. putting on labels
+Action B. ironing a label on a fabric
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:25,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: mixing ingredients in a bowl
+2. Action A: making a sandwich",BA,BA,BA,valid,valid,True,False,,,
+tsh:26,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:27,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:28,qwen2.5-vl-7b,season,AB,Action A. displaying a sand dunes happens before Action B. riding camels.,AB,AB,AB,valid,valid,True,False,,,
+tsh:29,qwen2.5-vl-7b,season,AB,"Action A. washing a car happens before Action B. showing
+
+ 自动生成",AB,AB,AB,valid,valid,True,False,,,
+tsh:30,qwen2.5-vl-7b,season,BA,"The two actions in the video are the following order:
+
+1. Action A: flying a drone
+2. Action B: jumping into the water
+
+The drone flying action happens before the jumping into the water action.",AB,AB,AB,valid,valid,False,False,,,
+tsh:31,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: exiting a building with a snowboard
+2. Action B: snowboarding on a street
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:32,qwen2.5-vl-7b,season,BA,Action B. walking up stairs happens before Action A. trim hedges.,BA,BA,BA,valid,valid,True,False,,,
+tsh:33,qwen2.5-vl-7b,season,BA,"Action A. whisking eggs and steaming
+Action B. serving scrambled eggs on toast",AB,AB,AB,valid,valid,False,False,,,
+tsh:34,qwen2.5-vl-7b,season,BA,Action B. attending a bullfight happens before Action A. Matadors walking in the ring.,BA,BA,BA,valid,valid,True,False,,,
+tsh:35,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Action A: preparing to jump
+2. Action B: zip lining
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:36,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:37,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:38,qwen2.5-vl-7b,season,AB,Action A. mix ingredients in a bowl happens before Action B. making a sandwich.,AB,AB,AB,valid,valid,True,False,,,
+tsh:39,qwen2.5-vl-7b,season,BA,"Action A. submerging basil leaves in salt water and removing excess water
+Action B. turning the swordfish over happens before Action A.",ABA,ABA,AB,valid,valid,False,False,,,
+tsh:40,qwen2.5-vl-7b,season,AB,Action A. assembling a bike happens before Action B. putting tool in the box.,AB,AB,AB,valid,valid,True,False,,,
+tsh:41,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:42,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:43,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: mix ingredients
+2. Action A: baking cookies
+
+So
+
+styleType",BA,BA,BA,valid,valid,True,False,,,
+tsh:44,qwen2.5-vl-7b,season,AB,Action A. opening a door happens before Action B. cutting hair.,AB,AB,AB,valid,valid,True,False,,,
+tsh:45,qwen2.5-vl-7b,season,BA,Action A. get tattoos done happens before Action B. woman talking.,AB,AB,AB,valid,valid,False,False,,,
+tsh:46,qwen2.5-vl-7b,season,AB,Action A. a man's face move happens before Action B. shining a shoe.,AB,AB,AB,valid,valid,True,False,,,
+tsh:47,qwen2.5-vl-7b,season,AB,Action A. coating the squid rings with flour happens before Action B. frying the squid rings.,AB,AB,AB,valid,valid,True,False,,,
+tsh:48,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:49,qwen2.5-vl-7b,season,BA,Action A. cleaning a toilet happens before Action B. cleaning a bathtub.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:50,qwen2.5-vl-7b,season,AB,"In the video, the action of B (giving a high five) happens before action A (playing rock paper scissors).",A,A,,valid,valid,False,False,,,
+tsh:51,qwen2.5-vl-7b,season,AB,Action A. reach for the last beer happens before Action B. give a high five.,AB,AB,AB,valid,valid,True,False,,,
+tsh:52,qwen2.5-vl-7b,season,BA,Action A. running water from a faucet happens before Action B. scrolling text.,AB,AB,AB,valid,valid,False,False,,,
+tsh:53,qwen2.5-vl-7b,season,AB,The two actions in the video are throwing a pebble and throwing a javelin. The action of throwing a pebble happens before the action of throwing a javelin.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:54,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:55,qwen2.5-vl-7b,season,AB,"Action A. crushing the ingredients
+Action B. cooking pasta",AB,AB,AB,valid,valid,True,False,,,
+tsh:56,qwen2.5-vl-7b,season,BA,Action B. mix water and vinegar in a bowl happens before Action A. cooking pasta.,BA.,BA.,BA,valid,valid,False,False,,,
+tsh:57,qwen2.5-vl-7b,season,AB,Action A. throwing a hammer happens before Action B. celebrating a medal.,AB,AB,AB,valid,valid,True,False,,,
+tsh:58,qwen2.5-vl-7b,season,BA,Action A. entering a workshop happens before Action B. walking toward the door of a house,AB,AB,AB,valid,valid,False,False,,,
+tsh:59,qwen2.5-vl-7b,season,BA,Action B. shoveling snow happens before Action A. entering a workshop.,BA,BA,BA,valid,valid,True,False,,,
+tsh:60,qwen2.5-vl-7b,season,AB,Action A. blending ingredients in a food processor happens before Action B. mix various ingredients in a bowl.,AB,AB,AB,valid,valid,True,False,,,
+tsh:61,qwen2.5-vl-7b,season,AB,"Action A. register for the event
+Action B. skateboarding
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:62,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:63,qwen2.5-vl-7b,season,BA,Action B. chilling against a fence happens before Action A. roller skating on ramps.,BA,BA,BA,valid,valid,True,False,,,
+tsh:64,qwen2.5-vl-7b,season,AB,Action A. play fighting with croquet malletlet happens before Action B. hitting a ball.,AB,AB,AB,valid,valid,True,False,,,
+tsh:65,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:66,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:67,qwen2.5-vl-7b,season,AB,Action A. driving a car,A,A,,valid,valid,False,False,,,
+tsh:68,qwen2.5-vl-7b,season,BA,Action A. smoothing wallpaper happens before Action B. walking around a ladder.,AB,AB,AB,valid,valid,False,False,,,
+tsh:69,qwen2.5-vl-7b,season,AB,Action A. walking around a ladder happens before Action B. measure wallpaper.,AB,AB,AB,valid,valid,True,False,,,
+tsh:70,qwen2.5-vl-7b,season,BA,Action B. mix cake ingredients happens before Action A. frosting a cake,BA,BA,BA,valid,valid,True,False,,,
+tsh:71,qwen2.5-vl-7b,season,BA,Action A. opening a can,A,A,,valid,valid,False,False,,,
+tsh:72,qwen2.5-vl-7b,season,AB,Action A. mashing the mixture in a bowl,A,A,,valid,valid,False,False,,,
+tsh:73,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:74,qwen2.5-vl-7b,season,AB,Action A. placing it in the oven happens before Action B. slicing a loaf of bread.,AB,AB,AB,valid,valid,True,False,,,
+tsh:75,qwen2.5-vl-7b,season,AB,"The action that happens before the other in the video is:
+
+Action A. bungee jumping from a bridge",A,A,,valid,valid,False,False,,,
+tsh:76,qwen2.5-vl-7b,season,BA,"Action B. riding bikes happens before Action A. giving
+
+ addCriterion",BA,BA,BA,valid,valid,True,False,,,
+tsh:77,qwen2.5-vl-7b,season,BA,Action A. roasting a pepper on a stove happens before Action B. juicing a lemon.,AB,AB,AB,valid,valid,False,False,,,
+tsh:78,qwen2.5-vl-7b,season,AB,Action A. adding oil to the dough in the mixer happens before Action B. rolling a piece of dough to a ball.,AB,AB,AB,valid,valid,True,False,,,
+tsh:79,qwen2.5-vl-7b,season,BA,"Action A. do
+
+ addCriterion",A,A,,valid,valid,False,False,,,
+tsh:80,qwen2.5-vl-7b,season,AB,Action A. apply wallpaper happens before Action B. smoothing wallpaper with a spatula.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:81,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:82,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking on a dock
+2. Action B: wakeboarding tricks
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:83,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action A: washing hands
+2. Action B: working in an office
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:84,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Action B: washing hands
+2. Action A: working in an office",BA,BA,BA,valid,valid,False,False,,,
+tsh:85,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A: heating a pan
+2. Action B: adding mashed potatoes and ch chney, then mix
+
+So
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+
+ addCriterion
+
+
+ addCriterion",AB,AB,AB,valid,valid,False,False,,,
+tsh:86,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: cutting and squeezing lemons
+2. Action B: making lemonade",AB,AB,AB,valid,valid,True,False,,,
+tsh:87,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:88,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:89,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:90,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:91,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:92,qwen2.5-vl-7b,season,AB,Action A. examining paint brushes happens before Action B. mix paint with a paint brush,AB,AB,AB,valid,valid,True,False,,,
+tsh:93,qwen2.5-vl-7b,season,BA,"Action A. preparing ingredients
+Action B. talking to the camera",AB,AB,AB,valid,valid,False,False,,,
+tsh:94,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: scuba diving
+2. Action B: taking photos on a boat",AB,AB,AB,valid,valid,True,False,,,
+tsh:95,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:96,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:97,qwen2.5-vl-7b,season,AB,"Action A. cars driving by the road
+Action B. a bus parked outside the building",AB,AB,AB,valid,valid,True,False,,,
+tsh:98,qwen2.5-vl-7b,season,BA,Action B. presenting ingredients happens before Action A. making a sandwich,BA,BA,BA,valid,valid,True,False,,,
+tsh:99,qwen2.5-vl-7b,season,AB,Action A. performing a belly button piercing happens before Action B. looking in the mirror.,AB,AB,AB,valid,valid,True,False,,,
+tsh:100,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:101,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:102,qwen2.5-vl-7b,season,BA,Action A. play clarinets happens before Action B. Sort the band.,AB,AB,AB,valid,valid,False,False,,,
+tsh:103,qwen2.5-vl-7b,season,AB,"Action A. putting a cake in a display
+
+ addCriterion
+Action B. mix",AB,AB,AB,valid,valid,True,False,,,
+tsh:104,qwen2.5-vl-7b,season,AB,Action A. grooming a dog happens before Action B. trim dog nails.,AB,AB,AB,valid,valid,True,False,,,
+tsh:105,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:106,qwen2.5-vl-7b,season,AB,Action A. guiding a tour in a desert happens before Action B. riding camels.,AB,AB,AB,valid,valid,True,False,,,
+tsh:107,qwen2.5-vl-7b,season,BA,"Action A. get a tattoo
+Action B. talking to the camera
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:108,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:109,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:110,qwen2.5-vl-7b,season,BA,"Action A. dancing on point
+Action B. speaking to the camera",AB,AB,AB,valid,valid,False,False,,,
+tsh:111,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: seasoning the chicken
+2. Action A: tearing apart the chicken",BA,BA,BA,valid,valid,True,False,,,
+tsh:112,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:113,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:114,qwen2.5-vl-7b,season,BA,Action A. removing a tire happens before Action B. getting a spare tire out,AB,AB,AB,valid,valid,False,False,,,
+tsh:115,qwen2.5-vl-7b,season,BA,"The action of B (riding
+ addCriterion",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:116,qwen2.5-vl-7b,season,AB,Action A. apply fake nails happens before Action B. apply lipstick.,AB,AB,AB,valid,valid,True,False,,,
+tsh:117,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:118,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Action A: Running a sharp object along the paper
+2. Action B: Screwing the tool in place of the hole
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:119,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: mix ingredients
+2. Action B: rolling out dough and adding sugar on it
+
+The action of A (mixing ingredients) happens before action B (rolling out dough and adding sugar on it).",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:120,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Action B: Rolling a flatten dough
+2. Action A: S slicing a cake and placing slice on a cooking sheet
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:121,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Action B: mix ingredients
+2. Action A: slicing a cake and placing slice on a cooking sheet
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:122,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: rolling out dough and adding sugar on it
+2. Action B: slicing a cake and placing slice on a cooking sheet
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:123,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: mix ingredients
+2. Action B: rolling a flatten dough
+
+Action A (mixing ingredients) happens before Action B (rolling a flatten dough).",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:124,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:125,qwen2.5-vl-7b,season,AB,Action A. working out on spin bikes happens before Action B. talking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:126,qwen2.5-vl-7b,season,BA,"The action of B, ""observe a temple,"" happens before the action A, ""receive a white box.""",A,A,,valid,valid,False,False,,,
+tsh:127,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A: an arrow hitting a board
+2. Action B: observe a temple
+
+The arrow hitting the board happens before observing a temple.",AB,AB,AB,valid,valid,False,False,,,
+tsh:128,qwen2.5-vl-7b,season,AB,Action A. cutting hair happens before Action B. walking down a street.,AB,AB,AB,valid,valid,True,False,,,
+tsh:129,qwen2.5-vl-7b,season,AB,Action A. talking to the camera happens before Action B. opening the door.,AB,AB,AB,valid,valid,True,False,,,
+tsh:130,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action B: walking across a suspension bridge
+2. Action A: rafting down a river
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:131,qwen2.5-vl-7b,season,AB,Action A. play baseball happens before Action B. holding up a large silver award.,AB,AB,AB,valid,valid,True,False,,,
+tsh:132,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:133,qwen2.5-vl-7b,season,BA,Action A. washing clothes happens before Action B. rolling the garment in a towel.,AB,AB,AB,valid,valid,False,False,,,
+tsh:134,qwen2.5-vl-7b,season,AB,Action A. making dough happens before Action B. baking cookies.,AB,AB,AB,valid,valid,True,False,,,
+tsh:135,qwen2.5-vl-7b,season,AB,The action B (fryinging the patties) happens before action A (cutting and taking out small patties of potato).,BA,BA,BA,valid,valid,False,False,,,
+tsh:136,qwen2.5-vl-7b,season,BA,"The action that happens before the other in the video is:
+
+Action B. grabbing a surfboard
+
+This is followed by:
+
+Action A. surfing",BA,BA,BA,valid,valid,True,False,,,
+tsh:137,qwen2.5-vl-7b,season,BA,"The action that happens before the other other action in the video is:
+
+Action B: grabbing a surfboard",B,B,,valid,valid,False,False,,,
+tsh:138,qwen2.5-vl-7b,season,AB,Action A. adding the mixture to the kale pot and mix it,A,A,,valid,valid,False,False,,,
+tsh:139,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action B: putting on a sock
+2. Action A: tying shoelaces
+
+The person first puts on a sock and then ties the shoelaces.",BA,BA,BA,valid,valid,True,False,,,
+tsh:140,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:141,qwen2.5-vl-7b,season,BA,Action A. play a piano,A,A,,valid,valid,False,False,,,
+tsh:142,qwen2.5-vl-7b,season,AB,"Action A. play a piano
+Action B. play a bagpipe",AB,AB,AB,valid,valid,True,False,,,
+tsh:143,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:144,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: Preparing scuba diving
+2. Action A: Scuba diving in the sea
+
+So
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+
+ addCriterion
+
+
+ addCriterion",BA,BA,BA,valid,valid,True,False,,,
+tsh:145,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: placing contact lenses into a case
+2. Action B: removing contact lenses
+
+The action of B (removing contact lenses) happens before the action A (placing contact lenses into a case).",ABA,ABA,AB,valid,valid,False,False,,,
+tsh:146,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:147,qwen2.5-vl-7b,season,AB,"Action A. puring water to a pan
+Action B. grating carrots
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:148,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Choppinging kale up on a cutting board (Action A)
+2. Pouring water to a pan (Action B)
+
+The action of A happens before Action B.",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:149,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A: chilling on a lakeside
+2. Action B: drinking coffee
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:150,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:151,qwen2.5-vl-7b,season,AB,"Action A. five men walking on the street happens before Action B. drinking
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion",AB,AB,AB,valid,valid,True,False,,,
+tsh:152,qwen2.5-vl-7b,season,BA,Action B. making cuts to the shrimp happens before Action A. mix various ingredients.,BA,BA,BA,valid,valid,True,False,,,
+tsh:153,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:154,qwen2.5-vl-7b,season,BA,Action A. drying a dog happens before Action B. talking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:155,qwen2.5-vl-7b,season,BA,"Action A. apply makeup to hair
+Action B. talking to the camera",AB,AB,AB,valid,valid,False,False,,,
+tsh:156,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:157,qwen2.5-vl-7b,season,BA,Action A. pouring dressing on the lettuce happens before Action B. blending all the ingredients together.,AB,AB,AB,valid,valid,False,False,,,
+tsh:158,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:159,qwen2.5-vl-7b,season,BA,Action B. opening a door happens before Action A. swinging on a swing.,BA,BA,BA,valid,valid,True,False,,,
+tsh:160,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:161,qwen2.5-vl-7b,season,BA,"Action A. walking
+Action B. swinging on a swing",AB,AB,AB,valid,valid,False,False,,,
+tsh:162,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:163,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:164,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: washing clothes
+2. Action A: hanging laundry on a clothesline",BA,BA,BA,valid,valid,True,False,,,
+tsh:165,qwen2.5-vl-7b,season,AB,Action A. walking through a door happens before Action B. displaying an amplifier.,AB,AB,AB,valid,valid,True,False,,,
+tsh:166,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:167,qwen2.5-vl-7b,season,BA,Action B. walking down stairs happens before Action A. working out with a rowing machine.,BA,BA,BA,valid,valid,True,False,,,
+tsh:168,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:169,qwen2.5-vl-7b,season,AB,Action A. cleaning car tires happens before Action B. steam cleaning the car's engine.,AB,AB,AB,valid,valid,True,False,,,
+tsh:170,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: play water polo
+2. Action A: celebrating on the podium
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:171,qwen2.5-vl-7b,season,AB,Action A. scuba diving through a cave,A,A,,valid,valid,False,False,,,
+tsh:172,qwen2.5-vl-7b,season,BA,Action A. plating the spring rolls with sauce happens before Action B. adding the spring roll to hot oil.,AB,AB,AB,valid,valid,False,False,,,
+tsh:173,qwen2.5-vl-7b,season,BA,Action A. putting noodles in boiling water and separating them,A,A,,valid,valid,False,False,,,
+tsh:174,qwen2.5-vl-7b,season,AB,"The two actions in the video are bullfighting and fighting in armor are not directly shown in the provided frames. The first frame shows a bullfighting scene, while the second frame is a title card for ""Animal Gladiators,"" which suggests a historical context of gladiators fights. Therefore, based on the provided frames, the action of A. bullfighting happens before action b. fighting in armor.",B,B,,valid,valid,False,False,,,
+tsh:175,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:176,qwen2.5-vl-7b,season,AB,The action that happens before is Action A: jumping and walking on the stilts.,A,A,,valid,valid,False,False,,,
+tsh:177,qwen2.5-vl-7b,season,BA,Action B. performing skateboard tricks happens before Action A. celebrating awards.,BA,BA,BA,valid,valid,True,False,,,
+tsh:178,qwen2.5-vl-7b,season,AB,Action A. performing skateboarding tricks happens before Action B. celebrating awards.,AB,AB,AB,valid,valid,True,False,,,
+tsh:179,qwen2.5-vl-7b,season,BA,Action B. traveling on bus happens before Action A. floating on inner tubes in the water.,BA,BA,BA,valid,valid,True,False,,,
+tsh:180,qwen2.5-vl-7b,season,AB,Action A. flying in a plane happens before Action B. skiing down a snowy slope.,AB,AB,AB,valid,valid,True,False,,,
+tsh:181,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action A: filling a basket
+2. Action B: drawing on a sweet potato
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:182,qwen2.5-vl-7b,season,AB,The action that happens before the other other is Action A: making cuts to the chicken leg.,A,A,,valid,valid,False,False,,,
+tsh:183,qwen2.5-vl-7b,season,BA,Action B. flowing water happens before Action A. holding a kayak paddle.,BA,BA,BA,valid,valid,True,False,,,
+tsh:184,qwen2.5-vl-7b,season,AB,"Action A. mixing candied fruits with liquor
+Action B. mixing ingredients
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:185,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:186,qwen2.5-vl-7b,season,BA,Action B. mix ingredients together happens before Action A. baking cookies,BA,BA,BA,valid,valid,True,False,,,
+tsh:187,qwen2.5-vl-7b,season,AB,Action A. play table tennis with unusual object happens before Action B. collecting ping pong balls.,AB,AB,AB,valid,valid,True,False,,,
+tsh:188,qwen2.5-vl-7b,season,BA,Action A. collecting ping pong balls happens before Action B. play table tennis with unusual objects.,AB,AB,AB,valid,valid,False,False,,,
+tsh:189,qwen2.5-vl-7b,season,AB,Action A. taking a bike out of a case happens before Action B. assembling a bicycle.,AB,AB,AB,valid,valid,True,False,,,
+tsh:190,qwen2.5-vl-7b,season,BA,Action B. holding a makeup brush happens before Action A. brushing nails,BA,BA,BA,valid,valid,True,False,,,
+tsh:191,qwen2.5-vl-7b,season,BA,Action B. holding a makeup brush happens before Action A. painting nails,BA,BA,BA,valid,valid,True,False,,,
+tsh:192,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:193,qwen2.5-vl-7b,season,BA,Action B. mix ingredients happens before Action A. eating ice cream.,BA,BA,BA,valid,valid,True,False,,,
+tsh:194,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:195,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:196,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. B. a drumming performance
+2. A. walking in a crowd",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:197,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: Skateboarding down a hill
+2. Action A: Tilt the board upright",BA,BA,BA,valid,valid,True,False,,,
+tsh:198,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:199,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: riding down an escalator
+2. Action A: play cards",BA,BA,BA,valid,valid,True,False,,,
+tsh:200,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:201,qwen2.5-vl-7b,season,BA,Action B. mix ingredients happens before Action A. baking cookies,BA,BA,BA,valid,valid,True,False,,,
+tsh:202,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:203,qwen2.5-vl-7b,season,BA,Action A. preparing a salad happens before Action B. adding ingredients to a salad.,AB,AB,AB,valid,valid,False,False,,,
+tsh:204,qwen2.5-vl-7b,season,AB,Action A. preparing ingredients happens before Action B. adding ingredients to a salad.,AB,AB,AB,valid,valid,True,False,,,
+tsh:205,qwen2.5-vl-7b,season,BA,Action A. ice cream production happens before Action B. eating ice cream.,AB,AB,AB,valid,valid,False,False,,,
+tsh:206,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:207,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:208,qwen2.5-vl-7b,season,AB,Action A. traveling on a bus happens before Action B. celebrating with a trophy.,AB,AB,AB,valid,valid,True,False,,,
+tsh:209,qwen2.5-vl-7b,season,BA,Action A. decorating a Christmas tree happens before Action B. putting a skirt over a rod.,AB,AB,AB,valid,valid,False,False,,,
+tsh:210,qwen2.5-vl-7b,season,AB,"Action A. assembling a a pole
+Action B. decorating a Christmas tree
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:211,qwen2.5-vl-7b,season,BA,"Action A. the end credits
+Action B. gardening activity
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:212,qwen2.5-vl-7b,season,AB,"Action A. gardening activity
+Action B. talking",AB,AB,AB,valid,valid,True,False,,,
+tsh:213,qwen2.5-vl-7b,season,BA,"Action A. mix mayonnaise, hot sauce, and milk
+Action B. frying the onion rings",AB,AB,AB,valid,valid,False,False,,,
+tsh:214,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:215,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: diving to the ocean
+2. Action A: explore a submerged cockpit",BA,BA,BA,valid,valid,True,False,,,
+tsh:216,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:217,qwen2.5-vl-7b,season,AB,Action A. eating ice cream,A,A,,valid,valid,False,False,,,
+tsh:218,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Action B: making a drawstring bag
+2. Action A: tying a double knot
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:219,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:220,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:221,qwen2.5-vl-7b,season,BA,Action A. shoveling snow happens before Action B. putting on clothes.,AB,AB,AB,valid,valid,False,False,,,
+tsh:222,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: reading on a sofa
+2. Action B: shoveling snow
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:223,qwen2.5-vl-7b,season,AB,Action A. preparing ingredients for cooking happens before Action B. boiling water.,AB,AB,AB,valid,valid,True,False,,,
+tsh:224,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: climbing stairs on a bridge
+2. Action B: skydiving
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:225,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: making syrup
+2. Action A: decorating straws
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:226,qwen2.5-vl-7b,season,BA,Action B. talking to the camera happens before Action A. play polo.,BA,BA,BA,valid,valid,True,False,,,
+tsh:227,qwen2.5-vl-7b,season,AB,Action A. play polo happens before Action B. talking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:228,qwen2.5-vl-7b,season,BA,Action A. moving dirt next to a tree happens before Action B. talking.,AB,AB,AB,valid,valid,False,False,,,
+tsh:229,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:230,qwen2.5-vl-7b,season,BA,Action A. washing hand and using hand sanitizes happens before Action B. a doctor reviews the injured leg.,AB,AB,AB,valid,valid,False,False,,,
+tsh:231,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:232,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:233,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action A: apply mixture to a wall
+2. Action B: Is the prominent action showing sand cement plaster
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:234,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: preparing a vaccine
+2. Action B: performing an MRI scan
+
+The action of A (preparing a vaccine) happens before action B (performing an MRI scan).",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:235,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:236,qwen2.5-vl-7b,season,AB,Action A. kayaking in rapids happens before Action B. standing on the shore.,AB,AB,AB,valid,valid,True,False,,,
+tsh:237,qwen2.5-vl-7b,season,AB,Action A. pouring paint to a sprayer happens before Action B. spraying the fence.,AB,AB,AB,valid,valid,True,False,,,
+tsh:238,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A: Spraying the fence
+2. Action B: Hanging newspaper on a fence
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:239,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:240,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:241,qwen2.5-vl-7b,season,BA,"Action A. waxing skki
+Action B. adjusting ski bindings
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:242,qwen2.5-vl-7b,season,AB,"Action A. skiing
+Action B. ironing wax on the ski
+Action A. skiing happens before Action B. ironing wax on the ski",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:243,qwen2.5-vl-7b,season,BA,Action A. arm wrestling happens before Action B. shaking hands.,AB,AB,AB,valid,valid,False,False,,,
+tsh:244,qwen2.5-vl-7b,season,AB,Action A. pouring a drink to a glass,A,A,,valid,valid,False,False,,,
+tsh:245,qwen2.5-vl-7b,season,AB,Action A. get a foot tattooed happens before Action B. show a foot tattoo.,AB,AB,AB,valid,valid,True,False,,,
+tsh:246,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:247,qwen2.5-vl-7b,season,AB,Action B. adding various ingredients to the chicken stock happens before Action A. mix various ingredients.,BA,BA,BA,valid,valid,False,False,,,
+tsh:248,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action B: performing capoeira
+2. Action A: play instruments
+
+The capoeira performance happens first, followed by the people playing instruments.",BA,BA,BA,valid,valid,True,False,,,
+tsh:249,qwen2.5-vl-7b,season,AB,"The two actions in the video are the following order:
+
+1. Action A: rolling up paper and dipping it in water
+2. Action B: sticking paper to the wall
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:250,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:251,qwen2.5-vl-7b,season,BA,The two actions in the video are B. assembling a hookah and A. smoking a hookah. The action that happens before the other B. assembling a hookah is A. smoking a hookah.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:252,qwen2.5-vl-7b,season,AB,The action that happens first is Action B: play water polo in a pool.,B,B,,valid,valid,False,False,,,
+tsh:253,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:254,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Action A: dusting with flour and shaking off the excess
+2. Action B: frying the calamari
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:255,qwen2.5-vl-7b,season,AB,Action A. driving into a car wash bay happens before Action B. viewing vending machines,AB,AB,AB,valid,valid,True,False,,,
+tsh:256,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: Wrapping thread around a pencil
+2. Action A: Tattooing a design on a leg
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:257,qwen2.5-vl-7b,season,BA,Action A. cutting hair happens before Action B. speaking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:258,qwen2.5-vl-7b,season,AB,"Action A. blending tomato
+Action B. pouring crushed red peppers and garlic to the skillet
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:259,qwen2.5-vl-7b,season,BA,Action A. cooking sauce happens before Action B. blending tomato,AB,AB,AB,valid,valid,False,False,,,
+tsh:260,qwen2.5-vl-7b,season,AB,"The two actions in the video are the order they occur are:
+
+1. Action A: a swimming competition
+2. Action B: a Judo match
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:261,qwen2.5-vl-7b,season,AB,"The two actions in the video are the order they occur are:
+
+1. Action A: a triple jump
+2. Action B: a swimming competition
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:262,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: showing a minivan
+2. Action A: inserting and twisting a rod
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:263,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Action A: inserting and twisting a rod
+2. Action B: installing the new tire
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:264,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:265,qwen2.5-vl-7b,season,BA,Action A. carving a pumpkin happens before Action B. flipping through pages.,AB,AB,AB,valid,valid,False,False,,,
+tsh:266,qwen2.5-vl-7b,season,AB,Action A. a lady talking happens before Action B. groom a dog,AB,AB,AB,valid,valid,True,False,,,
+tsh:267,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: printing paper
+2. Action B: installing wallpaper",AB,AB,AB,valid,valid,True,False,,,
+tsh:268,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. B. mowing the lawn
+2. A
+
+
+ addCriterion",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:269,qwen2.5-vl-7b,season,BA,Action A. people celebrating happens before Action B. performing a headstand with a bowling ball,AB,AB,AB,valid,valid,False,False,,,
+tsh:270,qwen2.5-vl-7b,season,AB,Action B. walk around a memorial,B,B,,valid,valid,False,False,,,
+tsh:271,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:272,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:273,qwen2.5-vl-7b,season,BA,Action B. walking on the snow happens before Action A. cooking fish on a wood fire.,BA,BA,BA,valid,valid,True,False,,,
+tsh:274,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:275,qwen2.5-vl-7b,season,AB,Action A. jumping a ramp happens before Action B. standing and discussing in the parking lot.,AB,AB,AB,valid,valid,True,False,,,
+tsh:276,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:277,qwen2.5-vl-7b,season,BA,Action B. baking cookies happens before Action A. washing the baking sheet,BA,BA,BA,valid,valid,True,False,,,
+tsh:278,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:279,qwen2.5-vl-7b,season,AB,Action A. swimming to a boat happens before Action B. diving underwater.,AB,AB,AB,valid,valid,True,False,,,
+tsh:280,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:281,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:282,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:283,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: cutting hair to a short length
+2. Action B: walking up the stairs",AB,AB,AB,valid,valid,False,False,,,
+tsh:284,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: stirring shoe shine materials
+2. Action B: shining shoes
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:285,qwen2.5-vl-7b,season,AB,The two actions in the video are driving a car and wakeboarding. The action of B (wakeboarding) happens before action A (driving a car).,A,A,,valid,valid,False,False,,,
+tsh:286,qwen2.5-vl-7b,season,BA,Action B. driving on a road happens before Action A. loading a snowboard onto a car.,BA,BA,BA,valid,valid,True,False,,,
+tsh:287,qwen2.5-vl-7b,season,BA,The action that happens first is Action A: placing the chicken pieces into hot oil.,A,A,,valid,valid,False,False,,,
+tsh:288,qwen2.5-vl-7b,season,AB,Action A. play dodgeball happens before Action B. interviewing the kids.,AB,AB,AB,valid,valid,True,False,,,
+tsh:289,qwen2.5-vl-7b,season,AB,Action A. play dodgeball,A,A,,valid,valid,False,False,,,
+tsh:290,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A: promote a casino
+2. Action B: play blackjack
+
+The video starts with the logo of ""C",AB,AB,AB,valid,valid,False,False,,,
+tsh:291,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:292,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:293,qwen2.5-vl-7b,season,AB,Action A. rafting happens before Action B. to lunch under an outdoor pavilion.,AB,AB,AB,valid,valid,True,False,,,
+tsh:294,qwen2.5-vl-7b,season,BA,Action B. putting on helmets and equipment happens before Action A. having lunch under an outdoor pavilion.,BA,BA,BA,valid,valid,True,False,,,
+tsh:295,qwen2.5-vl-7b,season,AB,Action A. opening a box happens before Action B. attaching both pedals onto the bicycle.,AB,AB,AB,valid,valid,True,False,,,
+tsh:296,qwen2.5-vl-7b,season,BA,Action B. speaking to the camera happens before Action A. jumping rope.,BA,BA,BA,valid,valid,True,False,,,
+tsh:297,qwen2.5-vl-7b,season,AB,The action that happens before the other in the video is paddling on a kayak.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:298,qwen2.5-vl-7b,season,AB,Action A. grinding coffee beans happens before Action B. pouring coffee to a cup.,AB,AB,AB,valid,valid,True,False,,,
+tsh:299,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:300,qwen2.5-vl-7b,season,BA,"Action A. throwing ddart
+Action B. grabbing the dart",AB,AB,AB,valid,valid,False,False,,,
+tsh:301,qwen2.5-vl-7b,season,BA,Action A. play on swings happens before Action B. throwing a ball.,AB,AB,AB,valid,valid,False,False,,,
+tsh:302,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:303,qwen2.5-vl-7b,season,BA,Action A. river tubing,A,A,,valid,valid,False,False,,,
+tsh:304,qwen2.5-vl-7b,season,AB,"Action A. to crush the bananas
+Action B. breaking food in half
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:305,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:306,qwen2.5-vl-7b,season,AB,Action A. displaying a jackpot happens before Action B. checking cards at a casino table.,AB,AB,AB,valid,valid,True,False,,,
+tsh:307,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:308,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: adding ingredients to a bowl
+2. Action B: baking cookies
+
+The action of A (adding ingredients to a bowl) happens before action B (bakinging cookies).",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:309,qwen2.5-vl-7b,season,AB,Action A. talking to the camera happens before Action B. bowling.,AB,AB,AB,valid,valid,True,False,,,
+tsh:310,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:311,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:312,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking with surfboards to a boat
+2. Action B: surfing on waves
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:313,qwen2.5-vl-7b,season,AB,"Action A. walking with surfboards to a boat happens before Action B. showing
+
+
+Action A. walking with surfboards to a boat happens before Action B. showing
+ addCriterion
+
+
+Action A. walking with surfboards to a boat happens before Action B. showing
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion",ABABAB,ABABAB,AB,valid,valid,False,False,,,
+tsh:314,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:315,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: mix ingredients
+2. Action A: flattening dough onto a sheet
+
+So
+
+styleType",BA,BA,BA,valid,valid,True,False,,,
+tsh:316,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: mix ingredients
+2. Action B: cutting the cookie
+
+The action of A (mixing ingredients) happens before the action B (cutting the cookie).",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:317,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:318,qwen2.5-vl-7b,season,AB,"Action A. soaking the skewersers
+Action B. skewerer marinated shrimp, pineapple, and bacon",AB,AB,AB,valid,valid,True,False,,,
+tsh:319,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: washing vegetables
+2. Action B: cutting wrapping paper
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:320,qwen2.5-vl-7b,season,AB,Action A. skateboarding tricks in a bowl happens before Action B. posing for photos.,AB,AB,AB,valid,valid,True,False,,,
+tsh:321,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:322,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:323,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:324,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: skiing
+2. Action B: driving a car
+
+The skiing action happens before the driving a car action.",AB,AB,AB,valid,valid,False,False,,,
+tsh:325,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:326,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:327,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:328,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Action A: unloading shingles onto the roof
+2. Action B: removing old shingles
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:329,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:330,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: pouring ingredients into a mixer
+2. Action A: making dough balls
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:331,qwen2.5-vl-7b,season,AB,Action A. mounting a camera to a tube happens before Action B. dancing with a hula hoop.,AB,AB,AB,valid,valid,True,False,,,
+tsh:332,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: mounting a camera to a tube
+2. Action A: dancing with a hula hoop
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:333,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action B: driving a car
+2. Action A: stopping the car and inflating tire",BA,BA,BA,valid,valid,False,False,,,
+tsh:334,qwen2.5-vl-7b,season,BA,Action A. pouring sauce on the meatballs happens before Action B. adding condiments.,AB,AB,AB,valid,valid,False,False,,,
+tsh:335,qwen2.5-vl-7b,season,BA,Action A. washing dishes happens before Action B. flipping a plate.,AB,AB,AB,valid,valid,False,False,,,
+tsh:336,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: measuring the tiles
+2. Action B: drawing on the floor",AB,AB,AB,valid,valid,True,False,,,
+tsh:337,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Action A: Dragging the melted wax through the board
+2. Action B: Scraping wax off a snowboard
+
+Action B (scraping wax off a snowboard) happens before Action A (dragging the melted wax through the board).",ABBA,ABBA,AB,valid,valid,False,False,,,
+tsh:338,qwen2.5-vl-7b,season,BA,The action that happens before the other in the video is Action B: play guitar.,B,B,,valid,valid,False,False,,,
+tsh:339,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:340,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:341,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: cheering
+2. Action A: hugging
+
+The cheering happens before the hugging.",BA,BA,BA,valid,valid,True,False,,,
+tsh:342,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: coating the onion rings in a mixture and then in breadcrumbs
+2. Action B: frying the onion rings
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:343,qwen2.5-vl-7b,season,BA,Action B. filling a coffee cup happens before Action A. discussing in front of the camera,BA,BA,BA,valid,valid,True,False,,,
+tsh:344,qwen2.5-vl-7b,season,AB,"Action A. vacuum
+
+ addCriterion",A,A,,valid,valid,False,False,,,
+tsh:345,qwen2.5-vl-7b,season,BA,Action B. stirring with a wooden spoon happens before Action A. pouring liquid to a cup.,BA,BA,BA,valid,valid,True,False,,,
+tsh:346,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:347,qwen2.5-vl-7b,season,AB,Action A. squeezing a lemon happens before Action B. adding water to the pitcher.,AB,AB,AB,valid,valid,True,False,,,
+tsh:348,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:349,qwen2.5-vl-7b,season,AB,Action A. awarding a gold medal happens before Action B. throwing a javelin.,AB,AB,AB,valid,valid,True,False,,,
+tsh:350,qwen2.5-vl-7b,season,AB,"Action A. toasting the muffins
+Action B. heating water and then adding it to a pot",AB,AB,AB,valid,valid,True,False,,,
+tsh:351,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: Mobilizing the hands
+2. Action B: L
+ addCriterion
+
+ addCriterion",AB,AB,AB,valid,valid,True,False,,,
+tsh:352,qwen2.5-vl-7b,season,BA,Action B. bowling happens before Action A. celebrating victory,BA,BA,BA,valid,valid,True,False,,,
+tsh:353,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:354,qwen2.5-vl-7b,season,AB,Action A. slicing the meat happens before Action B. adding the meat to the tortort.,AB,AB,AB,valid,valid,True,False,,,
+tsh:355,qwen2.5-vl-7b,season,BA,Action B. adding ingredients to a saucepan and stirring happens before Action A. coating chicken wings with sauce,BA,BA,BA,valid,valid,True,False,,,
+tsh:356,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:357,qwen2.5-vl-7b,season,BA,Action A. practicing archery happens before Action B. talking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:358,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: cooking the sausages and steaminging the bread
+2. Action B: placing
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+ addCriterion
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+
+ addCriterion
+
+
+ addCriterion",AB,AB,AB,valid,valid,True,False,,,
+tsh:359,qwen2.5-vl-7b,season,BA,Action B. driving in the desert happens before Action A. riding camel,BA,BA,BA,valid,valid,True,False,,,
+tsh:360,qwen2.5-vl-7b,season,AB,Action A. handing skki to a child happens before Action B. skiing on a ramp.,AB,AB,AB,valid,valid,True,False,,,
+tsh:361,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: skiing with assistance
+2. Action B: handing skki to a child
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:362,qwen2.5-vl-7b,season,AB,Action A. moving rocks happens before Action B. building a fire.,AB,AB,AB,valid,valid,True,False,,,
+tsh:363,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:364,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:365,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:366,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:367,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:368,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:369,qwen2.5-vl-7b,season,BA,Action A. weightlifting,A,A,,valid,valid,False,False,,,
+tsh:370,qwen2.5-vl-7b,season,AB,"Action A. putting potatoes in cold water
+Action B. cooking
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:371,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:372,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:373,qwen2.5-vl-7b,season,BA,Action B. washing the car happens before Action A. speaking.,BA,BA,BA,valid,valid,True,False,,,
+tsh:374,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:375,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: backing a boat down a ramp
+2. Action B: wakeboarding
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:376,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:377,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:378,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:379,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:380,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: walkinging up a staircase
+2. Action B: assembling bicycles",AB,AB,AB,valid,valid,True,False,,,
+tsh:381,qwen2.5-vl-7b,season,AB,Action A. putting on winter clothes happens before Action B. shoveling snow.,AB,AB,AB,valid,valid,True,False,,,
+tsh:382,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:383,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: create a marbling effect in batter
+2. Action B: slicing a cake
+
+So
+
+��
+ addCriterion",AB,AB,AB,valid,valid,True,False,,,
+tsh:384,qwen2.5-vl-7b,season,BA,The action of A. stirring the chocolate happens before the action B. talking to the camera.,B,B,,valid,valid,False,False,,,
+tsh:385,qwen2.5-vl-7b,season,AB,Action A. laying on the field happens before Action B. celebrating a goal.,AB,AB,AB,valid,valid,True,False,,,
+tsh:386,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: rinsing the car
+2. Action B: brushing rims",AB,AB,AB,valid,valid,False,False,,,
+tsh:387,qwen2.5-vl-7b,season,AB,"The two actions in the video are rafting down a river (Action A) and zip lining (Action B) occur in the following order:
+
+1. Action A: rafting down a river
+2. Action B: zip lining
+
+The rafting down a river happens before the zip lining.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:388,qwen2.5-vl-7b,season,BA,"The two actions in the video are driving on a road and removing a car wheel are not directly shown in the provided image. The image shows a promotional graphic for a tire change service, which does not depict driving or removing a car wheel. Therefore, it is not possible to determine the order of these actions based on the provided image.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:389,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:390,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:391,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: Getting geared up for wakeboarding
+2. Action B: Wakeboarding
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:392,qwen2.5-vl-7b,season,BA,The two actions in the video are wakeboarding and getting geared up for wakeboarding. The action of B (getting geared up for wakeboarding) happens before the action A (wakeboarding).,A,A,,valid,valid,False,False,,,
+tsh:393,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: Juicing lemons
+2. Action A: Making sparkling lemonade
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:394,qwen2.5-vl-7b,season,AB,"Action A. talking to the camera
+Action B. knitting",AB,AB,AB,valid,valid,True,False,,,
+tsh:395,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: pushing a helicopter out of a shed
+2. Action A: scuba diving
+
+So
+
+��
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+
+ addCriterion",BA,BA,BA,valid,valid,True,False,,,
+tsh:396,qwen2.5-vl-7b,season,AB,Action A. standing in a gymnasium happens before Action B. performing a baton routine.,AB,AB,AB,valid,valid,True,False,,,
+tsh:397,qwen2.5-vl-7b,season,AB,Action A. surfing happens before Action B. receive awards.,AB,AB,AB,valid,valid,True,False,,,
+tsh:398,qwen2.5-vl-7b,season,BA,"Action B. surfing happens before Action A. receiving
+
+
+
+ addCriterion
+Action B. surfing happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:399,qwen2.5-vl-7b,season,AB,Action A. fixing a bun happens before Action B. holding a child.,AB,AB,AB,valid,valid,True,False,,,
+tsh:400,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:401,qwen2.5-vl-7b,season,BA,Action A. taking off sunglasses happens before Action B. washing the car.,AB,AB,AB,valid,valid,False,False,,,
+tsh:402,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:403,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: chopping vegetables
+2. Action A: putting stuff on a salad",BA,BA,BA,valid,valid,True,False,,,
+tsh:404,qwen2.5-vl-7b,season,AB,"Action A. running
+Action B. talking to the camera",AB,AB,AB,valid,valid,True,False,,,
+tsh:405,qwen2.5-vl-7b,season,AB,"Action A. stretch
+
+ addCriterion",A,A,,valid,valid,False,False,,,
+tsh:406,qwen2.5-vl-7b,season,BA,Action B. explaining happens before Action A. cutting the hulte into pieces,BA,BA,BA,valid,valid,True,False,,,
+tsh:407,qwen2.5-vl-7b,season,AB,Action A. toasting bread happens before Action B. making a sandwich.,AB,AB,AB,valid,valid,True,False,,,
+tsh:408,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:409,qwen2.5-vl-7b,season,AB,Action A. play saxophone happens before Action B. play piano.,AB,AB,AB,valid,valid,True,False,,,
+tsh:410,qwen2.5-vl-7b,season,BA,Action A. throwing a dart at a dartboard happens before Action B. trying to feed someone.,AB,AB,AB,valid,valid,False,False,,,
+tsh:411,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Action A: stretch
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion",A,A,,valid,valid,False,False,,,
+tsh:412,qwen2.5-vl-7b,season,BA,"Action A. clapping
+Action B. walking to a piano
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:413,qwen2.5-vl-7b,season,BA,Action A. making lemonade happens before Action B. preparing syrup.,AB,AB,AB,valid,valid,False,False,,,
+tsh:414,qwen2.5-vl-7b,season,AB,Action A. walking through a crowd happens before Action B. play table tennis.,AB,AB,AB,valid,valid,True,False,,,
+tsh:415,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:416,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:417,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:418,qwen2.5-vl-7b,season,AB,Action A. shooting an arrow from a bow happens before Action B. the arrow uncaps the bottle.,AB,AB,AB,valid,valid,True,False,,,
+tsh:419,qwen2.5-vl-7b,season,BA,Action A. welding happens before Action B. torching a gray substance.,AB,AB,AB,valid,valid,False,False,,,
+tsh:420,qwen2.5-vl-7b,season,AB,Action A. turning a knob on a machine happens before Action B. torching a gray substance.,AB,AB,AB,valid,valid,True,False,,,
+tsh:421,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action B: jump to a tightrope
+2. Action A: drinking from a coconut",BA,BA,BA,valid,valid,True,False,,,
+tsh:422,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: walking through the forest
+2. Action B: jumping into water
+
+So
+
+
+ addCriterion
+Action A happens before Action B",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:423,qwen2.5-vl-7b,season,AB,The action that happens before the other other is Action A: carrying a raft.,A,A,,valid,valid,False,False,,,
+tsh:424,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:425,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: arm wrestling
+2. Action B: using duct tape",AB,AB,AB,valid,valid,True,False,,,
+tsh:426,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:427,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:428,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:429,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A: shooting targets
+2. Action B: opening a bottle
+
+Action B (opening a bottle) happens before Action A (shooting targets).",ABBA,ABBA,AB,valid,valid,False,False,,,
+tsh:430,qwen2.5-vl-7b,season,AB,"The two actions in the video are the following order:
+
+1. Action A. opening a bottle
+2. Action B. shooting at targets
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:431,qwen2.5-vl-7b,season,AB,"Action A. showing the images of ingredients
+Action B. chopping vegetables
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:432,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:433,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:434,qwen2.5-vl-7b,season,BA,Action A. adding ingredients to a bowl happens before Action B. carving bell peppers.,AB,AB,AB,valid,valid,False,False,,,
+tsh:435,qwen2.5-vl-7b,season,AB,Action A. adding the pasta in the pot happens before Action B. adding olive oil to pasta.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:436,qwen2.5-vl-7b,season,BA,"Action B. doing
+
+ addCriterion",B,B,,valid,valid,False,False,,,
+tsh:437,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:438,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action B: making a kite
+2. Action A: flying kites
+
+The video starts with a person making a kite, and then transitions to a person flying a kite.",BA,BA,BA,valid,valid,True,False,,,
+tsh:439,qwen2.5-vl-7b,season,AB,"Action A. cutting the chicken
+Action B. place the mixed salad leaves into a bowl and adding the chicken and crrots",AB,AB,AB,valid,valid,True,False,,,
+tsh:440,qwen2.5-vl-7b,season,BA,Action A. buying sunscreen happens before Action B. apply sunscreen,AB,AB,AB,valid,valid,False,False,,,
+tsh:441,qwen2.5-vl-7b,season,BA,Action B. buying sunscreen happens before Action A. apply sunscreen,BA,BA,BA,valid,valid,True,False,,,
+tsh:442,qwen2.5-vl-7b,season,AB,Action A. mix ingredients happens before Action B. baking a cake in a rice cooker,AB,AB,AB,valid,valid,True,False,,,
+tsh:443,qwen2.5-vl-7b,season,BA,"Action A. inserting a toothpick into a sandwich
+h
+
+ addCriterion
+Action B. talking to the camera",AB,AB,AB,valid,valid,False,False,,,
+tsh:444,qwen2.5-vl-7b,season,AB,"Action A. talking to the camera
+Action B. making a sandwich",AB,AB,AB,valid,valid,True,False,,,
+tsh:445,qwen2.5-vl-7b,season,AB,"Action A. displaying a picture of a oreo cheesecake
+Action B. crushing cookies
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:446,qwen2.5-vl-7b,season,BA,The action that happens before is Action B: mix ingredients in a bowl.,B,B,,valid,valid,False,False,,,
+tsh:447,qwen2.5-vl-7b,season,BA,Action A. cutting onion and eggs happens before Action B. putting egg salad on bread.,AB,AB,AB,valid,valid,False,False,,,
+tsh:448,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:449,qwen2.5-vl-7b,season,BA,The actions in the video are B. apply contact lenses happen before A. cleaning and disinfecting hands.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:450,qwen2.5-vl-7b,season,AB,"Action A. showing
+
+ addCriterion",A,A,,valid,valid,False,False,,,
+tsh:451,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:452,qwen2.5-vl-7b,season,AB,Action A. adding pasta to a pan,A,A,,valid,valid,False,False,,,
+tsh:453,qwen2.5-vl-7b,season,AB,Action A. pouring liquid to a bucket and sprayer happens before Action B. washing the car.,AB,AB,AB,valid,valid,True,False,,,
+tsh:454,qwen2.5-vl-7b,season,BA,"Action A. cooking pancetta in a pot without without adding oil
+Action B. adding ingredients and mix well",AB,AB,AB,valid,valid,False,False,,,
+tsh:455,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:456,qwen2.5-vl-7b,season,BA,Action A. hula hooping with multiple hoops happens before Action B. opening eyes.,AB,AB,AB,valid,valid,False,False,,,
+tsh:457,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:458,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:459,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:460,qwen2.5-vl-7b,season,BA,"Action A. putting on a jacket
+Action B. using a hookah",AB,AB,AB,valid,valid,False,False,,,
+tsh:461,qwen2.5-vl-7b,season,AB,Action A. raking leaves to a bag,A,A,,valid,valid,False,False,,,
+tsh:462,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:463,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:464,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:465,qwen2.5-vl-7b,season,AB,Action A. holding a cloth happens before Action B. rolling a wet cloth to a dry towel.,AB,AB,AB,valid,valid,True,False,,,
+tsh:466,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:467,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:468,qwen2.5-vl-7b,season,AB,Action A. mix ingredients in a bowl happens before Action B. flipping the cakes,AB,AB,AB,valid,valid,True,False,,,
+tsh:469,qwen2.5-vl-7b,season,AB,Action A. jumping on a trampoline happens before Action B. jumping into a pool.,AB,AB,AB,valid,valid,True,False,,,
+tsh:470,qwen2.5-vl-7b,season,BA,Action B. adding parsley to a pot happens before Action A. mix pasta and sauce,BA,BA,BA,valid,valid,True,False,,,
+tsh:471,qwen2.5-vl-7b,season,BA,Action B. apply lipstick happens before Action A. walk out the door.,BA,BA,BA,valid,valid,True,False,,,
+tsh:472,qwen2.5-vl-7b,season,AB,Action A. frying tofu in a pan happens before Action B. place the tofu and vegetables in the buns.,AB,AB,AB,valid,valid,True,False,,,
+tsh:473,qwen2.5-vl-7b,season,AB,Action A. mix the chicken with the eggs happens before Action B. mix spices with the flour.,AB,AB,AB,valid,valid,True,False,,,
+tsh:474,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:475,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A: jumping with stilts
+2. Action B: a man running to a bike
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:476,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:477,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:478,qwen2.5-vl-7b,season,AB,"In the video, the action of of ""inspecting a tire"" happens before the action of ""changing a tire."" The sequence of events is as follows:
+
+1. **Inspecting a tire**:** The individuals are to inspect the tire before they proceed to change it.
+2. **Changing a tire:**** After the inspection, the individuals change the tire.
+
+So
+
+
+ addCriterion",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:479,qwen2.5-vl-7b,season,AB,Action A. assembling a razor,A,A,,valid,valid,False,False,,,
+tsh:480,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Action A: replacing the tube of the tire
+2. Action B: inspecting the bike
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:481,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:482,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:483,qwen2.5-vl-7b,season,BA,Action B. walking out the door of the store happens before Action A. skateboarding between cars.,BA,BA,BA,valid,valid,True,False,,,
+tsh:484,qwen2.5-vl-7b,season,AB,"Action A. mix the ingredients by hand
+Action B. frying the meat patty in a pan",AB,AB,AB,valid,valid,True,False,,,
+tsh:485,qwen2.5-vl-7b,season,AB,Action A. baking the potatoes happens before Action B. mix ingredients together.,AB,AB,AB,valid,valid,True,False,,,
+tsh:486,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:487,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:488,qwen2.5-vl-7b,season,AB,"Action A. play the drums
+Action B. clapping hands",AB,AB,AB,valid,valid,True,False,,,
+tsh:489,qwen2.5-vl-7b,season,AB,Action A. walking to the end of a diving board happens before Action B. swimming to the edge.,AB,AB,AB,valid,valid,True,False,,,
+tsh:490,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:491,qwen2.5-vl-7b,season,AB,"Action A. juicing fruits
+Action B. mix ingredients in a bowl",AB,AB,AB,valid,valid,True,False,,,
+tsh:492,qwen2.5-vl-7b,season,BA,Action A. filling the wonton wrappers happens before Action B. combining ingredients and stirring them together.,AB,AB,AB,valid,valid,False,False,,,
+tsh:493,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:494,qwen2.5-vl-7b,season,BA,Action B. reading a newspaper happens before Action A. crossing the zebra crossing.,BA,BA,BA,valid,valid,True,False,,,
+tsh:495,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:496,qwen2.5-vl-7b,season,BA,Action A. showinging a washing machine,A,A,,valid,valid,False,False,,,
+tsh:497,qwen2.5-vl-7b,season,BA,Action B. whisking ingredients in a bowl,B,B,,valid,valid,False,False,,,
+tsh:498,qwen2.5-vl-7b,season,AB,"Action A. rowing on a machine happens before Action B. showing
+
+
+Action A.",ABA,ABA,AB,valid,valid,False,False,,,
+tsh:499,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:500,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:501,qwen2.5-vl-7b,season,AB,Action A. preparing ingredients happens before Action B. cooking pasta with shrimp.,AB,AB,AB,valid,valid,True,False,,,
+tsh:502,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:503,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A: cutting tofu to strips
+2. Action B: adding various ingredients to a pot
+
+So
+
+��
+��
+
+ addCriterion
+
+ addCriterion
+
+
+��
+��",AB,AB,AB,valid,valid,True,False,,,
+tsh:504,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:505,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action B: walk to the edge of the diving board
+2. Action A: swimming
+
+The first action is walking to the edge of the diving board, and the second action is swimming.",BA,BA,BA,valid,valid,True,False,,,
+tsh:506,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:507,qwen2.5-vl-7b,season,AB,Action A. drinking a beer happens before Action B. picking up a cell phone on a bed.,AB,AB,AB,valid,valid,True,False,,,
+tsh:508,qwen2.5-vl-7b,season,BA,Action B. peeling a potato happens before Action A. displaying a knife on the table,BA,BA,BA,valid,valid,True,False,,,
+tsh:509,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:510,qwen2.5-vl-7b,season,AB,"The actions in the video are the order they occur are:
+
+1. Action A. running and jumping
+2. Action B. play American football",AB,AB,AB,valid,valid,True,False,,,
+tsh:511,qwen2.5-vl-7b,season,AB,Action A. play American football happens before Action B. running and jumping.,AB,AB,AB,valid,valid,True,False,,,
+tsh:512,qwen2.5-vl-7b,season,BA,Action A. paddling a raft happens before Action B. driving a bus,AB,AB,AB,valid,valid,False,False,,,
+tsh:513,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: Monitoring a storm
+2. Action B: Flying kites
+
+The video starts with a person monitoring a storm, and then transitions to a person flying a kite.",AB,AB,AB,valid,valid,True,False,,,
+tsh:514,qwen2.5-vl-7b,season,BA,Action B. apply liquid with a paintbrush happens before Action A. Use a tack rag to remove dust.,BA,BA,BA,valid,valid,True,False,,,
+tsh:515,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:516,qwen2.5-vl-7b,season,AB,Action A. raking leaves,A,A,,valid,valid,False,False,,,
+tsh:517,qwen2.5-vl-7b,season,AB,"Action A. raking leaves
+Action B. drink from a can",AB,AB,AB,valid,valid,True,False,,,
+tsh:518,qwen2.5-vl-7b,season,BA,Action A. adding ingredients to the pan happens before Action B. adding meatballs to the pan.,AB,AB,AB,valid,valid,False,False,,,
+tsh:519,qwen2.5-vl-7b,season,AB,Action A. adding wine to the pan happens before Action B. adding various seasonings to a bowl.,AB,AB,AB,valid,valid,True,False,,,
+tsh:520,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action A. wakeboarding
+2. Action B. boating on a lake
+
+The wakeboarding action happens before the boating on a lake.",AB,AB,AB,valid,valid,False,False,,,
+tsh:521,qwen2.5-vl-7b,season,AB,"The two actions in the video are the order they occur are:
+
+1. Action A: boating on a lake
+2. Action B: wakeboarding
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:522,qwen2.5-vl-7b,season,BA,Action A. placing the pasta in a bowl happens before Action B. adding herbs to the soup.,AB,AB,AB,valid,valid,False,False,,,
+tsh:523,qwen2.5-vl-7b,season,AB,"The two actions in the video are the order they occur are:
+
+1. Action A. riding horses
+2. Action B. play together",AB,AB,AB,valid,valid,True,False,,,
+tsh:524,qwen2.5-vl-7b,season,BA,"The actions in the video are the order they occur are:
+
+1. Action B: riding horses
+2. Action A: play together",BA,BA,BA,valid,valid,True,False,,,
+tsh:525,qwen2.5-vl-7b,season,BA,Action A. removing contact lenses happens before Action B. pouring liquid to a contact case.,AB,AB,AB,valid,valid,False,False,,,
+tsh:526,qwen2.5-vl-7b,season,AB,Action A. adding various ingredients to the bowl and mix well happens before Action B. shaping the beef to patties.,AB,AB,AB,valid,valid,True,False,,,
+tsh:527,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:528,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:529,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:530,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:531,qwen2.5-vl-7b,season,AB,"Action A. showinging a boy bear
+Action B. rolling wrapping paper
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:532,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:533,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:534,qwen2.5-vl-7b,season,BA,Action B. place butter in a mix bowl happens before Action A. to remove cookies from the baking sheet,BA,BA,BA,valid,valid,True,False,,,
+tsh:535,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:536,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: Slicing the cheese thinly
+2. Action A: Heating a pan and toasting bread in it",BA,BA,BA,valid,valid,True,False,,,
+tsh:537,qwen2.5-vl-7b,season,AB,Action B. drying hands happens before Action A. walking.,BA,BA,BA,valid,valid,False,False,,,
+tsh:538,qwen2.5-vl-7b,season,BA,Action B. frying bacon happens before Action A. laying ingredients on the bread.,BA,BA,BA,valid,valid,True,False,,,
+tsh:539,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: triple jump
+2. Action B: posing in front of a scoreboard
+
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:540,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:541,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:542,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:543,qwen2.5-vl-7b,season,AB,"Action A. cutting the onions to rings
+Action B. adding ingredients to a bowl and whisking",AB,AB,AB,valid,valid,True,False,,,
+tsh:544,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:545,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:546,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:547,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:548,qwen2.5-vl-7b,season,AB,"Action A. create a nail polish design in water
+h
+ addCriterion
+Action B. apply a clear coat over fingernails",AB,AB,AB,valid,valid,True,False,,,
+tsh:549,qwen2.5-vl-7b,season,BA,Action B. mashing the potatoes happens before Action A. shaping the mixture to small patties.,BA,BA,BA,valid,valid,True,False,,,
+tsh:550,qwen2.5-vl-7b,season,AB,Action A. adding eggs and milk and mix happens before Action B. cutting hotdogs and inserting skewers.,AB,AB,AB,valid,valid,True,False,,,
+tsh:551,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:552,qwen2.5-vl-7b,season,BA,Action A. cooking in a pan happens before Action B. checking the flame.,AB,AB,AB,valid,valid,False,False,,,
+tsh:553,qwen2.5-vl-7b,season,AB,Action A. adding seasonings to the pan happens before Action B. pouring liquid to a pan.,AB,AB,AB,valid,valid,True,False,,,
+tsh:554,qwen2.5-vl-7b,season,BA,"The two actions in the video are are:
+
+1. Action A: Changing a tire
+2. Action B: Driving down the street
+
+The action of A (changing a tire) happens before action B (driving down the street).",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:555,qwen2.5-vl-7b,season,BA,Action B. walking with horses happens before Action A. riding horse.,BA,BA,BA,valid,valid,True,False,,,
+tsh:556,qwen2.5-vl-7b,season,AB,Action A. tightening shoes happens before Action B. standing up from the car.,AB,AB,AB,valid,valid,True,False,,,
+tsh:557,qwen2.5-vl-7b,season,BA,"The actions in the video are the following order:
+
+1. Action B: sanding a surface with an electric sander
+2. Action A: sanding wood by hand",BA,BA,BA,valid,valid,True,False,,,
+tsh:558,qwen2.5-vl-7b,season,AB,Action A. frying the pieces in a pan happens before Action B. squeezing lemon on the fried pieces.,AB,AB,AB,valid,valid,True,False,,,
+tsh:559,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: windsurfing
+2. Action A: receiving certificates and awards
+
+The windsurfing action happens before the receiving certificates and awards action.",BA,BA,BA,valid,valid,True,False,,,
+tsh:560,qwen2.5-vl-7b,season,AB,Action A. windsurfing happens before Action B. receive certificates and awards.,AB,AB,AB,valid,valid,True,False,,,
+tsh:561,qwen2.5-vl-7b,season,BA,"Action A. mix the remaining spice with flour
+Action B. seasoning the chicken
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:562,qwen2.5-vl-7b,season,AB,Action A. entering the car happens before Action B. snowboarding.,AB,AB,AB,valid,valid,True,False,,,
+tsh:563,qwen2.5-vl-7b,season,AB,Action A. scuba diving happens before Action B. climbing onto the boat.,AB,AB,AB,valid,valid,True,False,,,
+tsh:564,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:565,qwen2.5-vl-7b,season,AB,Action A. putting on a blue apron happens before Action B. attaching handlebars.,AB,AB,AB,valid,valid,True,False,,,
+tsh:566,qwen2.5-vl-7b,season,BA,Action B. putting an item in the trunk of a car happens before Action A. driving.,BA,BA,BA,valid,valid,True,False,,,
+tsh:567,qwen2.5-vl-7b,season,AB,"The two actions in the video are are:
+
+1. Action A: Inserting a contact lens
+2. Action B: Picking up a contact lens
+
+The action of B (picking up a contact lens) happens before action A (inserting a contact lens).",ABA,ABA,AB,valid,valid,False,False,,,
+tsh:568,qwen2.5-vl-7b,season,AB,Action A. inserting a contact lens happens before Action B. undergoing an eye exam.,AB,AB,AB,valid,valid,True,False,,,
+tsh:569,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:570,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:571,qwen2.5-vl-7b,season,BA,Action B. boiling water happens before Action A. stirring pasta,BA,BA,BA,valid,valid,True,False,,,
+tsh:572,qwen2.5-vl-7b,season,AB,Action A. interviewing a man happens before Action B. play pool.,AB,AB,AB,valid,valid,True,False,,,
+tsh:573,qwen2.5-vl-7b,season,BA,Action B. interviewing a man happens before Action A. play pool.,BA,BA,BA,valid,valid,True,False,,,
+tsh:574,qwen2.5-vl-7b,season,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:575,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: Slicing the beef and marinating it
+2. Action A: frying the beef and sprinkling sesame seeds over it",BA,BA,BA,valid,valid,True,False,,,
+tsh:576,qwen2.5-vl-7b,season,AB,Action A. operating a manual vacuum cleaner happens before Action B. assembly line work.,AB,AB,AB,valid,valid,True,False,,,
+tsh:577,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:578,qwen2.5-vl-7b,season,BA,Action B. slicing a potato happens before Action A. garnishing the food with some ingredients,BA,BA,BA,valid,valid,True,False,,,
+tsh:579,qwen2.5-vl-7b,season,AB,"The actions in the video are are:
+
+1. Adding flour and mixing it (Action A)
+2. Adding flour to the dough and kneading it (Action B)
+
+The action of A happens before action B.",ABB,ABB,AB,valid,valid,False,False,,,
+tsh:580,qwen2.5-vl-7b,season,BA,"The actions in the video are are:
+
+1. Starting a fire
+2. Gutting a fish
+
+Action B (starting a fire) happens before Action A (g
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+
+ addCriterion
+
+
+ addCriterion
+
+
+ addCriterion
+
+
+ addCriterion",BA,BA,BA,valid,valid,True,False,,,
+tsh:581,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:582,qwen2.5-vl-7b,season,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:583,qwen2.5-vl-7b,season,AB,Action A. blow drying a dog happens before Action B. grooming a dog.,AB,AB,AB,valid,valid,True,False,,,
+tsh:584,qwen2.5-vl-7b,season,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:585,qwen2.5-vl-7b,season,BA,"Action B. pouring juice to a pot happens before Action A. drinking
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+ addCriterion
+
+
+ addCriterion",BA,BA,BA,valid,valid,True,False,,,
+tsh:586,qwen2.5-vl-7b,season,AB,"The actions in the video are the following order:
+
+1. Action A: wakeboarding
+2. Action B: an award ceremony
+
+The wakeboarding action happens before the award ceremony.",AB,AB,AB,valid,valid,True,False,,,
+tsh:587,qwen2.5-vl-7b,season,AB,"The two actions in the video are wakeboarding and an award ceremony. The video starts with a scene of a person wakeboarding, which happens before the award ceremony. Therefore, the order of the actions is:
+
+1. Action A. wakeboarding
+2. Action B. an award ceremony",AB,AB,AB,valid,valid,True,False,,,
+tsh:588,qwen2.5-vl-7b,season,BA,Action B. adding and mix ingredients happens before Action A. putting cheese and green leaves on top the pasta,BA,BA,BA,valid,valid,True,False,,,
+tsh:589,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:590,qwen2.5-vl-7b,season,BA,Action A. cutting nails,A,A,,valid,valid,False,False,,,
+tsh:591,qwen2.5-vl-7b,season,BA,Action A. knitting happens before Action B. displaying a sweater.,AB,AB,AB,valid,valid,False,False,,,
+tsh:592,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:593,qwen2.5-vl-7b,season,BA,"Action A. celebrating
+Action B. sharpening a blade
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:594,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:595,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action B: cutting chocolate bars
+2. Action A: baking cookies
+
+Action B happens before Action A.",BABA,BABA,BA,valid,valid,False,False,,,
+tsh:596,qwen2.5-vl-7b,season,AB,"Action A. melting butter in the microwave
+Action B. baking cookies
+Action A happens before Action B.",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:597,qwen2.5-vl-7b,season,AB,"The actions in the video occur in the following order:
+
+1. Action A. making cookie dough
+2. Action B. baking cookies
+
+So
+
+styleType
+Action A. making cookie dough
+Action B. baking cookies",ABAB,ABAB,AB,valid,valid,False,False,,,
+tsh:598,qwen2.5-vl-7b,season,BA,"The actions in the video occur in the following order:
+
+1. Action A. wrapping a gift
+2. Action B. shopping in a store",AB,AB,AB,valid,valid,False,False,,,
+tsh:599,qwen2.5-vl-7b,season,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:600,qwen2.5-vl-7b,season,BA,Action A. cutting a tile and sanding it happens before Action B. wiping down wooden floorboards.,AB,AB,AB,valid,valid,False,False,,,

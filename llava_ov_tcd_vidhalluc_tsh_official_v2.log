@@ -1,0 +1,26 @@
+{
+  "config": "/scratch/jp09/dd9648/experiment_llava_ov_tcd_vidhalluc_tsh_official_v2.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "tcd",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "BASELINE NOT REPRODUCED; TCD grid and GPU validation are blocked",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:01<08:23,  1.51it/s]Loading weights:   0%|          | 3/765 [00:01<05:44,  2.21it/s]Loading weights:   7%|▋         | 53/765 [00:01<00:14, 48.15it/s]Loading weights:   9%|▊         | 66/765 [00:01<00:12, 55.37it/s]Loading weights:  10%|█         | 77/765 [00:02<00:11, 61.14it/s]Loading weights:  12%|█▏        | 89/765 [00:02<00:10, 63.04it/s]Loading weights:  13%|█▎        | 101/765 [00:02<00:09, 71.55it/s]Loading weights:  15%|█▍        | 113/765 [00:02<00:09, 68.82it/s]Loading weights:  16%|█▋        | 125/765 [00:02<00:08, 71.16it/s]Loading weights:  18%|█▊        | 137/765 [00:02<00:08, 74.75it/s]Loading weights:  19%|█▉        | 149/765 [00:02<00:07, 78.03it/s]Loading weights:  21%|██        | 161/765 [00:03<00:08, 71.73it/s]Loading weights:  23%|██▎       | 173/765 [00:03<00:07, 76.88it/s]Loading weights:  24%|██▍       | 185/765 [00:03<00:07, 80.11it/s]Loading weights:  26%|██▌       | 197/765 [00:03<00:07, 72.75it/s]Loading weights:  27%|██▋       | 209/765 [00:03<00:06, 81.53it/s]Loading weights:  29%|██▉       | 221/765 [00:03<00:07, 74.85it/s]Loading weights:  30%|███       | 233/765 [00:04<00:06, 80.98it/s]Loading weights:  32%|███▏      | 245/765 [00:04<00:06, 82.72it/s]Loading weights:  34%|███▎      | 257/765 [00:04<00:06, 81.90it/s]Loading weights:  35%|███▌      | 269/765 [00:04<00:05, 85.71it/s]Loading weights:  37%|███▋      | 281/765 [00:04<00:05, 81.72it/s]Loading weights:  38%|███▊      | 293/765 [00:04<00:05, 83.73it/s]Loading weights:  40%|███▉      | 305/765 [00:04<00:05, 78.10it/s]Loading weights:  41%|████▏     | 317/765 [00:05<00:06, 68.03it/s]Loading weights:  43%|████▎     | 330/765 [00:05<00:05, 75.11it/s]Loading weights:  59%|█████▊    | 449/765 [00:05<00:01, 303.65it/s]Loading weights:  75%|███████▌  | 577/765 [00:05<00:00, 516.13it/s]Loading weights:  90%|█████████ | 689/765 [00:05<00:00, 656.65it/s]Loading weights: 100%|██████████| 765/765 [00:05<00:00, 135.19it/s]
+[2026-08-28 22:31:32] START llava-ov-7b / tcd / vidhalluc / tsh | total=600 | resume_valid=0 | limit=full
+[2026-08-28 22:31:40] DONE  vidhalluc 1/600 | new=1 | sample=tsh:1 | parse=unparseable | correct=None | batch=1
+[2026-08-28 22:31:40] DONE  vidhalluc 2/600 | new=2 | sample=tsh:2 | parse=unparseable | correct=None | batch=1
+[2026-08-28 22:31:42] DONE  vidhalluc 3/600 | new=3 | sample=tsh:3 | parse=valid | correct=True | batch=1
+[2026-08-28 22:31:46] DONE  vidhalluc 4/600 | new=4 | sample=tsh:4 | parse=valid | correct=True | batch=1
+[2026-08-28 22:31:54] DONE  vidhalluc 5/600 | new=5 | sample=tsh:5 | parse=valid | correct=True | batch=1
+[2026-08-28 22:32:11] DONE  vidhalluc 6/600 | new=6 | sample=tsh:6 | parse=unparseable | correct=None | batch=1
+[2026-08-28 22:32:19] DONE  vidhalluc 7/600 | new=7 | sample=tsh:7 | parse=unparseable | correct=None | batch=1
+[2026-08-28 22:32:20] DONE  vidhalluc 8/600 | new=8 | sample=tsh:8 | parse=valid | correct=True | batch=1
+[2026-08-28 22:32:20] DONE  vidhalluc 9/600 | new=9 | sample=tsh:9 | parse=valid | correct=True | batch=1
+[2026-08-28 22:32:25] DONE  vidhalluc 10/600 | new=10 | sample=tsh:10 | parse=unparseable | correct=None | batch=1

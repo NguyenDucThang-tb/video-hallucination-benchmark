@@ -1,0 +1,783 @@
+sample_id,model,method,ground_truth,raw_model_output,local_prediction,official_prediction,diagnostic_prediction,parse_status,original_parser_status,correct_status,parser_difference,original_parser_error,failure_stage,runtime_error
+tsh:1,llava-ov-7b,tcd,BA,Action A. cleaning the sinks happens before Action B. placing a bottle with blue liquid.,AB,AB,AB,valid,valid,False,False,,,
+tsh:2,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. powdering hands, B. holding the barbell.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:3,llava-ov-7b,tcd,AB,"A. fencing
+B. playing table tennis",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:4,llava-ov-7b,tcd,BA,B. washing dishes,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:5,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:6,llava-ov-7b,tcd,BA,"B. cutting the pita bread into small slices
+A. frying the bread",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:7,llava-ov-7b,tcd,BA,"B. sailing on a yacht
+A. drawing on a map",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:8,llava-ov-7b,tcd,AB,Action A. cutting a paper happens before Action B. presenting a gold bowl.,AB,AB,AB,valid,valid,True,False,,,
+tsh:9,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, the person is holding a gift (Action B), and then they start blowing sequins (Action A).",BA,BA,BA,valid,valid,True,False,,,
+tsh:10,llava-ov-7b,tcd,AB,"A. playing croquet
+B. playing with a cat",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:11,llava-ov-7b,tcd,AB,"A. playing croquet
+B. playing with a cat",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:12,llava-ov-7b,tcd,AB,"A. applying paint to a sponge
+B. applying glitter nail polish",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:13,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:14,llava-ov-7b,tcd,BA,"B. flying a helicopter over a river
+A. rafting into a tunnel",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:15,llava-ov-7b,tcd,BA,"B. cutting dough into rounds
+A. cooking meat",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:16,llava-ov-7b,tcd,AB,The actions occur in the following order: eating together (Action A) and then practicing martial arts (Action B).,AB,AB,AB,valid,valid,True,False,,,
+tsh:17,llava-ov-7b,tcd,BA,B. dancing,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:18,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:19,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:20,llava-ov-7b,tcd,BA,B. walking down the road happens before A. carving pumpkins.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:21,llava-ov-7b,tcd,AB,Action A. displaying welding equipment happens before Action B. cleaning a welded area.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:22,llava-ov-7b,tcd,BA,"B. playing polo
+A. an award ceremony",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:23,llava-ov-7b,tcd,BA,Action B. cleaning the seats of a car happens before Action A. carpet cleaning.,BA,BA,BA,valid,valid,True,False,,,
+tsh:24,llava-ov-7b,tcd,AB,Action A. putting on labels happens before Action B. ironing a label on a fabric.,AB,AB,AB,valid,valid,True,False,,,
+tsh:25,llava-ov-7b,tcd,BA,"B. mixing ingredients in a bowl
+A. making a sandwich",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:26,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:27,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:28,llava-ov-7b,tcd,AB,Action A. displaying a sand dunes happens before Action B. leading and riding camels.,AB,AB,AB,valid,valid,True,False,,,
+tsh:29,llava-ov-7b,tcd,AB,B. washing a car,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:30,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:31,llava-ov-7b,tcd,AB,"A. exiting a building with a snowboard
+B. snowboarding on a street",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:32,llava-ov-7b,tcd,BA,"The actions occur in the following order: B. walking up stairs, followed by A. trimming hedges.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:33,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:34,llava-ov-7b,tcd,BA,Action B. attending a bullfight happens before Action A. Matadors walking in the ring.,BA,BA,BA,valid,valid,True,False,,,
+tsh:35,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:36,llava-ov-7b,tcd,BA,"B. playing the guitar
+A. playing the flute",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:37,llava-ov-7b,tcd,BA,"B. preparing for a dive on a diving board
+A. jumping into a pool",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:38,llava-ov-7b,tcd,AB,"A. mixing ingredients in a bowl
+B. making a sandwich",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:39,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:40,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:41,llava-ov-7b,tcd,BA,Action B. putting something in the trunk of a car happens before Action A. walking on a slackline.,BA,BA,BA,valid,valid,True,False,,,
+tsh:42,llava-ov-7b,tcd,AB,"A. pedaling a bike
+B. arm-wrestling",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:43,llava-ov-7b,tcd,BA,B. mixing ingredients,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:44,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:45,llava-ov-7b,tcd,BA,Action B. women talking happens before Action A. getting tattoos done.,BA,BA,BA,valid,valid,True,False,,,
+tsh:46,llava-ov-7b,tcd,AB,The actions occur in the following order: A man's face moving (Action A) before shining a shoe (Action B).,AB,AB,AB,valid,valid,True,False,,,
+tsh:47,llava-ov-7b,tcd,AB,"A. coating the squid rings with flour
+B. frying the squid rings",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:48,llava-ov-7b,tcd,BA,B. washing hands,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:49,llava-ov-7b,tcd,BA,Action A. cleaning a toilet happens before Action B. cleaning a bathtub.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:50,llava-ov-7b,tcd,AB,Action A. playing rock paper scissors happens before Action B. giving a high five.,AB,AB,AB,valid,valid,True,False,,,
+tsh:51,llava-ov-7b,tcd,AB,Action B. giving a high five happens before Action A. reaching for the last beer.,BA,BA,BA,valid,valid,False,False,,,
+tsh:52,llava-ov-7b,tcd,BA,Action B. scrolling text happens before Action A. running water from a faucet.,BA,BA,BA,valid,valid,True,False,,,
+tsh:53,llava-ov-7b,tcd,AB,Action B. throwing a javelin happens before Action A. throwing a pebble.,BA,BA,BA,valid,valid,False,False,,,
+tsh:54,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:55,llava-ov-7b,tcd,AB,"A. crushing the ingredients
+B. cooking pasta",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:56,llava-ov-7b,tcd,BA,B. mixing water and vinegar in a bowl happens before cooking pasta.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:57,llava-ov-7b,tcd,AB,Action A. throwing a hammer happens before Action B. celebrating a medal.,AB,AB,AB,valid,valid,True,False,,,
+tsh:58,llava-ov-7b,tcd,BA,"B. walking toward the door of a house
+A. entering a workshop",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:59,llava-ov-7b,tcd,BA,"B. shoveling snow
+A. entering a workshop",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:60,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:61,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:62,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:63,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:64,llava-ov-7b,tcd,AB,"A. play fighting with croquet mallets
+B. hitting a ball",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:65,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:66,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, the person uses a welding tool to join the steel pieces, and then they use a hammer to remove debris.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:67,llava-ov-7b,tcd,AB,"A. driving a car
+B. skating on the railing",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:68,llava-ov-7b,tcd,BA,"B. walking around a ladder
+A. smoothing wallpaper",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:69,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:70,llava-ov-7b,tcd,BA,B. mixing cake ingredients happens before A. frosting a cake.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:71,llava-ov-7b,tcd,BA,"B. wiping the boot with a towel
+A. opening a can",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:72,llava-ov-7b,tcd,AB,"A. mashing the mixture in a bowl
+B. topping the tortillas with various ingredients",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:73,llava-ov-7b,tcd,BA,Action B. knitting,B,B,,valid,valid,False,False,,,
+tsh:74,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:75,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. bungee jumping from a bridge, followed by B. swimming.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:76,llava-ov-7b,tcd,BA,B. riding bikes,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:77,llava-ov-7b,tcd,BA,B. juicing a lemon happens before A. roasting a pepper on a stove.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:78,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:79,llava-ov-7b,tcd,BA,B. skateboarding,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:80,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. applying wallpaper, followed by B. smoothing wallpaper with a spatula.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:81,llava-ov-7b,tcd,BA,Tying shoes and getting up from the couch happens before a person walking to the door.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:82,llava-ov-7b,tcd,AB,"A. wakeboarding tricks
+B. walking on a dock",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:83,llava-ov-7b,tcd,BA,Action B. working in an office happens before Action A. washing hands.,BA,BA,BA,valid,valid,True,False,,,
+tsh:84,llava-ov-7b,tcd,AB,B. washing hands happens before A. working in an office.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:85,llava-ov-7b,tcd,BA,"B. adding mashed potatoes and chutney, then mixing happens before A. heating a pan.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:86,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:87,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:88,llava-ov-7b,tcd,BA,Action B. mixing milk with vinegar happens before Action A. mixing ingredients in a bowl.,BA,BA,BA,valid,valid,True,False,,,
+tsh:89,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:90,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:91,llava-ov-7b,tcd,BA,B. washing a car happens before A. cleaning the interior of a car.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:92,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:93,llava-ov-7b,tcd,BA,B. talking to the camera happens before A. preparing ingredients.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:94,llava-ov-7b,tcd,AB,"The actions occur in the following order: first, the video shows scuba diving, and then it transitions to taking photos on a boat.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:95,llava-ov-7b,tcd,AB,"A. mixing ingredients together in a bowl
+B. making a sandwich",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:96,llava-ov-7b,tcd,BA,"B. cutting vegetables
+A. crushing the ingredients in a food processor",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:97,llava-ov-7b,tcd,AB,Action A. cars driving by the road happens before Action B. a bus parked outside the building.,AB,AB,AB,valid,valid,True,False,,,
+tsh:98,llava-ov-7b,tcd,BA,Action B. presenting ingredients happens before Action A. making a sandwich.,BA,BA,BA,valid,valid,True,False,,,
+tsh:99,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:100,llava-ov-7b,tcd,BA,"The two actions occur in the same sequence in the video. First, the person performs a frisbee routine with dogs, and then they swing a dog on a red plate.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:101,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:102,llava-ov-7b,tcd,BA,Action B. leading the band happens before Action A. playing clarinets.,BA,BA,BA,valid,valid,True,False,,,
+tsh:103,llava-ov-7b,tcd,AB,B,B,B,,valid,valid,False,False,,,
+tsh:104,llava-ov-7b,tcd,AB,Action A. grooming a dog happens before Action B. trimming dog nails.,AB,AB,AB,valid,valid,True,False,,,
+tsh:105,llava-ov-7b,tcd,BA,B. grooming a dog,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:106,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:107,llava-ov-7b,tcd,BA,Action A. getting a tattoo happens before Action B. talking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:108,llava-ov-7b,tcd,AB,"A. exercising in a gym
+B. driving",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:109,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:110,llava-ov-7b,tcd,BA,B. speaking to the camera happens before A. dancing on pointe.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:111,llava-ov-7b,tcd,BA,B. seasoning the chicken happens before A. tearing apart the chicken.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:112,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:113,llava-ov-7b,tcd,AB,Action A. getting a spare tire out happens before Action B. lowering a car.,AB,AB,AB,valid,valid,True,False,,,
+tsh:114,llava-ov-7b,tcd,BA,Action B. getting a spare tire out happens before Action A. removing a tire.,BA,BA,BA,valid,valid,True,False,,,
+tsh:115,llava-ov-7b,tcd,BA,Action B. riding a motor boat happens before Action A. wearing sunblock.,BA,BA,BA,valid,valid,True,False,,,
+tsh:116,llava-ov-7b,tcd,AB,"A. applying fake nails
+B. applying lipstick",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:117,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:118,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:119,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:120,llava-ov-7b,tcd,BA,"B. rolling a flatten dough
+A. slicing a cake and placing slices on a cooking sheet",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:121,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:122,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:123,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:124,llava-ov-7b,tcd,BA,"The actions occur in the following order: A. trying to get something in the eye, followed by B. a child crying.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:125,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:126,llava-ov-7b,tcd,BA,Action B. observing a temple happens before Action A. receiving a white box.,BA,BA,BA,valid,valid,True,False,,,
+tsh:127,llava-ov-7b,tcd,BA,"B. observing a temple
+A. an arrow hitting a board",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:128,llava-ov-7b,tcd,AB,"A. cutting hair
+B. walking down a street",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:129,llava-ov-7b,tcd,AB,"A. talking to the camera
+B. opening the door",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:130,llava-ov-7b,tcd,BA,"B. walking across a suspension bridge
+A. rafting down a river",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:131,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:132,llava-ov-7b,tcd,BA,B. playing ping pong,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:133,llava-ov-7b,tcd,BA,"B. rolling the garment in a towel
+A. washing clothes",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:134,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:135,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:136,llava-ov-7b,tcd,BA,Action B. grabbing a surfboard happens before Action A. surfing.,BA,BA,BA,valid,valid,True,False,,,
+tsh:137,llava-ov-7b,tcd,BA,"B. grabbing a surfboard
+A. surfing",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:138,llava-ov-7b,tcd,AB,"A. adding the mixture to the kale pot and mixing it
+B. serving it with fried sausage and egg",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:139,llava-ov-7b,tcd,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:140,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:141,llava-ov-7b,tcd,BA,Action B. playing a bagpipe happens before Action A. playing a piano.,BA,BA,BA,valid,valid,True,False,,,
+tsh:142,llava-ov-7b,tcd,AB,"A. playing a piano
+B. playing a bagpipe",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:143,llava-ov-7b,tcd,AB,"A. vacuuming the car interior
+B. washing a car",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:144,llava-ov-7b,tcd,BA,"B. preparing scuba diving
+A. scuba diving in the sea",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:145,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:146,llava-ov-7b,tcd,BA,Action B. washing hands happens before Action A. throwing a paper towel in the waste bin.,BA,BA,BA,valid,valid,True,False,,,
+tsh:147,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:148,llava-ov-7b,tcd,BA,B. puring water to a pan happens before A. chopping kale up on a cutting block.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:149,llava-ov-7b,tcd,BA,Action B. drinking coffee happens before Action A. chilling on a lakeside.,BA,BA,BA,valid,valid,True,False,,,
+tsh:150,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:151,llava-ov-7b,tcd,AB,"A. five men walking on the street
+B. drinking beer",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:152,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:153,llava-ov-7b,tcd,AB,"A. extracting oil from a car engine
+B. lighting a woodfire",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:154,llava-ov-7b,tcd,BA,Action B. talking to the camera happens before Action A. drying a dog.,BA,BA,BA,valid,valid,True,False,,,
+tsh:155,llava-ov-7b,tcd,BA,B. talking to the camera happens before A. applying makeup to hair.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:156,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:157,llava-ov-7b,tcd,BA,"B. blending all the ingredients together
+A. pouring dressing on the lettuce",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:158,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:159,llava-ov-7b,tcd,BA,"B. opening a door
+A. swinging on a swing",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:160,llava-ov-7b,tcd,AB,"A. opening a door
+B. a child going down the slide",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:161,llava-ov-7b,tcd,BA,"B. swinging on a swing
+A. walking",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:162,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:163,llava-ov-7b,tcd,AB,"A. bringing a pot of salted water to a boil
+B. cooking pasta",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:164,llava-ov-7b,tcd,BA,B. washing clothes,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:165,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:166,llava-ov-7b,tcd,BA,B. bikers flying through the sky happens before Action A. opening the coconut using a knife.,A,A,,valid,valid,False,False,,,
+tsh:167,llava-ov-7b,tcd,BA,"The actions occur in the following order: B. walking down stairs, followed by A. working out with a rowing machine.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:168,llava-ov-7b,tcd,BA,Action B. washing the surface of a car happens before Action A. cleaning car tires.,BA,BA,BA,valid,valid,True,False,,,
+tsh:169,llava-ov-7b,tcd,AB,Action A. cleaning car tires happens before Action B. steam cleaning the car's engine.,AB,AB,AB,valid,valid,True,False,,,
+tsh:170,llava-ov-7b,tcd,BA,"B. playing water polo
+A. celebrating on the podium",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:171,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:172,llava-ov-7b,tcd,BA,"B. adding the spring rolls to hot oil
+A. plating the spring rolls with sauce",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:173,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:174,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:175,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, a person is seen climbing up the stairs of the tower, and then another person is seen putting on safety harnesses.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:176,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. jumping and walking on the stilts, B. jumping over a bench.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:177,llava-ov-7b,tcd,BA,"B. performing skateboard tricks
+A. celebrating awards",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:178,llava-ov-7b,tcd,AB,"A. performing skateboarding tricks
+B. celebrating awards",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:179,llava-ov-7b,tcd,BA,"The actions occur in the following order: B. traveling on bus, A. floating on inner tubes in the water.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:180,llava-ov-7b,tcd,AB,B. skiing down a snowy slope happens before A. flying in a plane.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:181,llava-ov-7b,tcd,BA,"B. drawing on a sweet potato
+A. filling a basket",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:182,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:183,llava-ov-7b,tcd,BA,"B. flowing water
+A. holding a kayak paddle",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:184,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:185,llava-ov-7b,tcd,AB,B. smoothing the batter happens before A. mixing candied fruits with liquor.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:186,llava-ov-7b,tcd,BA,"B. mixing ingredients together
+A. baking cookies",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:187,llava-ov-7b,tcd,AB,Action A. playing table tennis with unusual objects happens before Action B. collecting ping pong balls.,AB,AB,AB,valid,valid,True,False,,,
+tsh:188,llava-ov-7b,tcd,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:189,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:190,llava-ov-7b,tcd,BA,"B. holding a makeup brush
+A. brushing nails",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:191,llava-ov-7b,tcd,BA,"B. holding a makeup brush
+A. painting nails",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:192,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:193,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:194,llava-ov-7b,tcd,AB,"A. pouring the eggs and stirring them
+B. plating the eggs and seasoning them",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:195,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:196,llava-ov-7b,tcd,BA,"B. a drumming performance
+A. walking in a crowd",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:197,llava-ov-7b,tcd,BA,"B. skateboarding down a hill
+A. setting the board upright",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:198,llava-ov-7b,tcd,AB,"The actions occur in the following order: first, the two men are driving a convertible, and then they are riding down an escalator.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:199,llava-ov-7b,tcd,BA,"B. riding down an escalator
+A. playing cards",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:200,llava-ov-7b,tcd,AB,"A. seasoning the goose liver
+B. removing an ingredient and adding another",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:201,llava-ov-7b,tcd,BA,"B. mixing ingredients
+A. baking cookies",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:202,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:203,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:204,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:205,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:206,llava-ov-7b,tcd,AB,Action A. applying sunscreen happens before Action B. about packing up stuff in box.,AB,AB,AB,valid,valid,True,False,,,
+tsh:207,llava-ov-7b,tcd,BA,"B. adding garlic to hot oil in a pan
+A. cooking chicken and pasta",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:208,llava-ov-7b,tcd,AB,"A. traveling on a bus
+B. celebrating with a trophy",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:209,llava-ov-7b,tcd,BA,"B. putting a skirt over a rod
+A. decorating a Christmas tree",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:210,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:211,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:212,llava-ov-7b,tcd,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:213,llava-ov-7b,tcd,BA,"B. frying the onion rings
+A. mixing mayonnaise, hot sauce, and milk",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:214,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:215,llava-ov-7b,tcd,BA,B. diving into the ocean happens before A. exploring a submerged cockpit.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:216,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:217,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:218,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:219,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:220,llava-ov-7b,tcd,BA,Action B. boiling and draining udon noodles happens before Action A. boiling chicken broth.,BA,BA,BA,valid,valid,True,False,,,
+tsh:221,llava-ov-7b,tcd,BA,B. putting on clothes happens before A. shoveling snow.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:222,llava-ov-7b,tcd,AB,Action A. reading on a sofa happens before Action B. shoveling snow.,AB,AB,AB,valid,valid,True,False,,,
+tsh:223,llava-ov-7b,tcd,AB,Action A. preparing ingredients for cooking happens before Action B. boiling water.,AB,AB,AB,valid,valid,True,False,,,
+tsh:224,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, the person climbs stairs on a bridge (Action A), and then they skydive (Action B).",AB,AB,AB,valid,valid,False,False,,,
+tsh:225,llava-ov-7b,tcd,BA,Action B. making syrup happens before Action A. decorating straws.,BA,BA,BA,valid,valid,True,False,,,
+tsh:226,llava-ov-7b,tcd,BA,B. talking to the camera happens before A. playing polo.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:227,llava-ov-7b,tcd,AB,"A. playing polo
+B. talking to the camera",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:228,llava-ov-7b,tcd,BA,Action B. talking outside happens before Action A. moving dirt next to a tree.,BA,BA,BA,valid,valid,True,False,,,
+tsh:229,llava-ov-7b,tcd,AB,"A. mashing the potatoes
+B. placing the lamb and potatoes in a bowl",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:230,llava-ov-7b,tcd,BA,"B. a doctor reviewing the injured leg
+A. washing hand and using hand sanitizes",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:231,llava-ov-7b,tcd,BA,"B. making a call
+A. washing hand and using hand sanitizes",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:232,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:233,llava-ov-7b,tcd,BA,"Action B. is the prominent action showing sand cement plaster, and it happens before Action A. applying mixture to a wall.",BA,BA,BA,valid,valid,True,False,,,
+tsh:234,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:235,llava-ov-7b,tcd,BA,Action B. preparing a vaccine happens before Action A. pouring coffee into a mug.,BA,BA,BA,valid,valid,True,False,,,
+tsh:236,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:237,llava-ov-7b,tcd,AB,"A. pouring paint into a sprayer
+B. spraying the fence",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:238,llava-ov-7b,tcd,BA,"B. hanging newspaper on a fence
+A. spraying the fence",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:239,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:240,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:241,llava-ov-7b,tcd,BA,"B. adjusting ski bindings
+A. waxing skis",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:242,llava-ov-7b,tcd,AB,"A. skiing
+B. ironing wax on the ski",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:243,llava-ov-7b,tcd,BA,"A. arm wrestling
+B. shaking hands",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:244,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:245,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:246,llava-ov-7b,tcd,BA,"B. riding a horse, A. a running cow",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:247,llava-ov-7b,tcd,AB,Action B. adding various ingredients to the chicken stock happens before Action A. mixing various ingredients.,BA,BA,BA,valid,valid,False,False,,,
+tsh:248,llava-ov-7b,tcd,BA,Action B. performing capoeira happens before Action A. playing instruments.,BA,BA,BA,valid,valid,True,False,,,
+tsh:249,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:250,llava-ov-7b,tcd,BA,"The actions occur in the following order: A. inhaling the hookah and puffing out some smoke, followed by B. kissing.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:251,llava-ov-7b,tcd,BA,B. assembling a hookah,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:252,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:253,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:254,llava-ov-7b,tcd,AB,"A. dusting with flour and shaking off the excess
+B. frying the calamari",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:255,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:256,llava-ov-7b,tcd,BA,Action B. wrapping thread around a pencil happens before Action A. tattooing a design on a leg.,BA,BA,BA,valid,valid,True,False,,,
+tsh:257,llava-ov-7b,tcd,BA,"A. cutting hair
+B. speaking to the camera",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:258,llava-ov-7b,tcd,AB,"A. blending tomatoes
+B. pouring crushed red peppers and garlic into the skillet",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:259,llava-ov-7b,tcd,BA,B. blending tomatoes happens before A. cooking sauce.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:260,llava-ov-7b,tcd,AB,Action A. a swimming competition happens before Action B. a Judo match.,AB,AB,AB,valid,valid,True,False,,,
+tsh:261,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:262,llava-ov-7b,tcd,BA,Action B. showing a minivan happens before Action A. inserting and twisting a rod.,BA,BA,BA,valid,valid,True,False,,,
+tsh:263,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:264,llava-ov-7b,tcd,BA,"Action B. chopping tomatoes, parsley, and cilantro happens before Action A. adding grated cauliflower to a bowl and mixing it with lemon juice.",BA,BA,BA,valid,valid,True,False,,,
+tsh:265,llava-ov-7b,tcd,BA,"B. flipping through pages
+A. carving a pumpkin",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:266,llava-ov-7b,tcd,AB,B,B,B,,valid,valid,False,False,,,
+tsh:267,llava-ov-7b,tcd,AB,"A. printing paper
+B. installing wallpaper",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:268,llava-ov-7b,tcd,BA,B. mowing the lawn,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:269,llava-ov-7b,tcd,BA,B. performing a headstand with a bowling ball happens before A. people celebrating.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:270,llava-ov-7b,tcd,AB,Action A. running happens before Action B. walking around a memorial.,AB,AB,AB,valid,valid,True,False,,,
+tsh:271,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:272,llava-ov-7b,tcd,BA,Action A happens before Action B.,AB,AB,AB,valid,valid,False,False,,,
+tsh:273,llava-ov-7b,tcd,BA,"B. walking on the snow
+A. cooking fish on a wood fire",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:274,llava-ov-7b,tcd,AB,"A. inserting a tool into the vacuum
+B. vacuuming around windows",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:275,llava-ov-7b,tcd,AB,"A. jumping a ramp
+B. standing and discussing in the parking lot",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:276,llava-ov-7b,tcd,BA,"B. stirring cookie dough
+A. rolling the baking sheet up",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:277,llava-ov-7b,tcd,BA,"B. baking cookies
+A. washing the baking sheet",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:278,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:279,llava-ov-7b,tcd,AB,B. diving underwater,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:280,llava-ov-7b,tcd,BA,Action B. swimming underwater happens before Action A. swimming to a boat.,BA,BA,BA,valid,valid,True,False,,,
+tsh:281,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:282,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:283,llava-ov-7b,tcd,BA,Action B. walking up the stairs happens before Action A. cutting hair to a short length.,BA,BA,BA,valid,valid,True,False,,,
+tsh:284,llava-ov-7b,tcd,AB,"A. stirring shoe shine materials
+B. shining shoes",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:285,llava-ov-7b,tcd,AB,"A. driving a car
+B. wakeboarding",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:286,llava-ov-7b,tcd,BA,"A. loading a snowboard onto a car
+B. driving on a road",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:287,llava-ov-7b,tcd,BA,"B. adding oil to the chicken
+A. placing the chicken pieces into hot oil",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:288,llava-ov-7b,tcd,AB,"The actions occur in the following order: playing dodgeball, then interviewing the kids.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:289,llava-ov-7b,tcd,AB,"A. playing dodgeball
+B. interviewing the kids",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:290,llava-ov-7b,tcd,BA,Action B. playing blackjack happens before Action A. promoting a casino.,BA,BA,BA,valid,valid,True,False,,,
+tsh:291,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:292,llava-ov-7b,tcd,BA,Action B. discussing the building happens before Action A. inspecting the wall.,BA,BA,BA,valid,valid,True,False,,,
+tsh:293,llava-ov-7b,tcd,AB,"A. rafting
+B. having lunch under an outdoor pavilion",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:294,llava-ov-7b,tcd,BA,B. putting on helmets and equipment happens before A. having lunch under an outdoor pavilion.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:295,llava-ov-7b,tcd,AB,"A. opening a box
+B. attaching both pedals onto the bicycle",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:296,llava-ov-7b,tcd,BA,B. speaking to the camera happens before A. jumping rope.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:297,llava-ov-7b,tcd,AB,"A. jumping a ramp
+B. paddling on a kayak",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:298,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:299,llava-ov-7b,tcd,AB,B. applying a towel to a wound happens before A. covering the ears with the hands.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:300,llava-ov-7b,tcd,BA,"B. grabbing the darts
+A. throwing darts",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:301,llava-ov-7b,tcd,BA,"B. throwing a ball
+A. playing on swings",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:302,llava-ov-7b,tcd,AB,"A. knocking over a cup
+B. reaching for a ball",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:303,llava-ov-7b,tcd,BA,"The actions occur in the following order: A. river tubing, B. emerging from water.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:304,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:305,llava-ov-7b,tcd,BA,"B. displaying a jackpot
+A. the dealer turning over the cards",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:306,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:307,llava-ov-7b,tcd,BA,"B. seasoning the mixture
+A. adding mussels to the mixture",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:308,llava-ov-7b,tcd,AB,"A. adding ingredients to a bowl
+B. baking cookies",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:309,llava-ov-7b,tcd,AB,Action B happens before Action A.,BA,BA,BA,valid,valid,False,False,,,
+tsh:310,llava-ov-7b,tcd,BA,B. skateboarding in a skate park happens before A. running across the road.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:311,llava-ov-7b,tcd,BA,"B. teaching pool techniques
+A. talking into the microphone",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:312,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:313,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:314,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:315,llava-ov-7b,tcd,BA,B. mixing ingredients,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:316,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:317,llava-ov-7b,tcd,BA,"B. shoveling sand
+A. walking to the water",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:318,llava-ov-7b,tcd,AB,"The actions occur in the following order: first, the skewers are soaked, and then the skewers are skewered with marinated shrimp, pineapple, and bacon.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:319,llava-ov-7b,tcd,BA,Action A. washing vegetables happens before Action B. cutting wrapping paper.,AB,AB,AB,valid,valid,False,False,,,
+tsh:320,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:321,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:322,llava-ov-7b,tcd,BA,"B. jumping on the trampoline, A. holding up a speedo",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:323,llava-ov-7b,tcd,AB,Action A. hitting a ball with a bat happens before Action B. lying down.,AB,AB,AB,valid,valid,True,False,,,
+tsh:324,llava-ov-7b,tcd,BA,"B. driving a car
+A. skiing",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:325,llava-ov-7b,tcd,AB,Action B. rubbing lemons onto the counter happens before Action A. stirring the bowl with a spoon.,BA,BA,BA,valid,valid,False,False,,,
+tsh:326,llava-ov-7b,tcd,AB,B. pouring boiling water into a bowl,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:327,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:328,llava-ov-7b,tcd,AB,Action B. removing old shingles happens before Action A. unloading shingles onto the roof.,BA,BA,BA,valid,valid,False,False,,,
+tsh:329,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:330,llava-ov-7b,tcd,BA,B. pouring ingredients into a mixer happens before A. making dough balls.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:331,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. mounting a camera to a tube, followed by B. dancing with a hula hoop.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:332,llava-ov-7b,tcd,BA,Action B. mounting a camera to a tube happens before Action A. dancing with a hula hoop.,BA,BA,BA,valid,valid,True,False,,,
+tsh:333,llava-ov-7b,tcd,AB,Action B. driving a car happens before Action A. stopping the car and inflating tire.,BA,BA,BA,valid,valid,False,False,,,
+tsh:334,llava-ov-7b,tcd,BA,Action B. adding condiments happens before Action A. pouring sauce on the meatballs.,BA,BA,BA,valid,valid,True,False,,,
+tsh:335,llava-ov-7b,tcd,BA,"The actions occur in the following order: A. washing dishes, B. flipping a plate.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:336,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:337,llava-ov-7b,tcd,BA,Action B. scraping wax off a snowboard happens before Action A. dragging the melted wax through the board.,BA,BA,BA,valid,valid,True,False,,,
+tsh:338,llava-ov-7b,tcd,BA,B. playing guitar,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:339,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:340,llava-ov-7b,tcd,BA,Action B. hitting a toy happens before Action A. rubbing face with hand.,BA,BA,BA,valid,valid,True,False,,,
+tsh:341,llava-ov-7b,tcd,BA,"The actions occur in the following order: B. cheering, followed by A. hugging.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:342,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:343,llava-ov-7b,tcd,BA,"B. filling a coffee cup
+A. discussing in front of the camera",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:344,llava-ov-7b,tcd,AB,"A. vacuuming
+B. filling a container",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:345,llava-ov-7b,tcd,BA,"B. stirring with a wooden spoon
+A. pouring liquid into a cup",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:346,llava-ov-7b,tcd,AB,B,B,B,,valid,valid,False,False,,,
+tsh:347,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:348,llava-ov-7b,tcd,BA,B. squeezing a lemon,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:349,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:350,llava-ov-7b,tcd,AB,Action B. heating water and then adding it to a pot happens before Action A. toasting the muffins.,BA,BA,BA,valid,valid,False,False,,,
+tsh:351,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:352,llava-ov-7b,tcd,BA,Action B. bowling happens before Action A. celebrating victory.,BA,BA,BA,valid,valid,True,False,,,
+tsh:353,llava-ov-7b,tcd,BA,B. mixing the ingredients in the bowl happens before A. folding the pot stickers.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:354,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:355,llava-ov-7b,tcd,BA,"B. adding ingredients to a saucepan and stirring
+A. coating chicken wings with sauce",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:356,llava-ov-7b,tcd,AB,"A. frying bacon in a pan
+B. transferring the cooked mixture into the saucepan and adding corn starch",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:357,llava-ov-7b,tcd,BA,B. talking to the camera,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:358,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:359,llava-ov-7b,tcd,BA,"B. driving in the desert
+A. riding camels",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:360,llava-ov-7b,tcd,AB,"A. handing skis to a child
+B. skiing on a ramp",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:361,llava-ov-7b,tcd,BA,"B. handing skis to a child
+A. skiing with assistance",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:362,llava-ov-7b,tcd,AB,Action A. moving rocks happens before Action B. building a fire.,AB,AB,AB,valid,valid,True,False,,,
+tsh:363,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:364,llava-ov-7b,tcd,BA,Action B. wiping hands happens before Action A. putting contact lenses in a cleaning solution.,BA,BA,BA,valid,valid,True,False,,,
+tsh:365,llava-ov-7b,tcd,BA,"B. a dog playing by a lakeside
+A. grooming dogs",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:366,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:367,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:368,llava-ov-7b,tcd,AB,"A. weightlifting
+B. arm wrestling",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:369,llava-ov-7b,tcd,BA,"B. arm wrestling
+A. weightlifting",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:370,llava-ov-7b,tcd,AB,B,B,B,,valid,valid,False,False,,,
+tsh:371,llava-ov-7b,tcd,BA,"B. riding a four-wheeler
+A. demonstrating features on a bow",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:372,llava-ov-7b,tcd,AB,Action B. adding an egg to the chicken and mixing happens before Action A. adding spices to flour and mixing.,BA,BA,BA,valid,valid,False,False,,,
+tsh:373,llava-ov-7b,tcd,BA,B. washing the car,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:374,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:375,llava-ov-7b,tcd,AB,"A. backing a boat down a ramp
+B. wakeboarding",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:376,llava-ov-7b,tcd,BA,"B. performing a dance, A. laying down",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:377,llava-ov-7b,tcd,AB,Action B. placing wasabi on the plate happens before Action A. placing the tuna on shredded vegetables.,BA,BA,BA,valid,valid,False,False,,,
+tsh:378,llava-ov-7b,tcd,BA,"B. removing snow from a car, A. shoveling snow",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:379,llava-ov-7b,tcd,BA,Action B. dancing with sticks happens before Action A. waving to the camera.,BA.,BA.,BA,valid,valid,False,False,,,
+tsh:380,llava-ov-7b,tcd,AB,The action of assembling bicycles happens before walking up a staircase.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:381,llava-ov-7b,tcd,AB,B,B,B,,valid,valid,False,False,,,
+tsh:382,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:383,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:384,llava-ov-7b,tcd,BA,B. talking to the camera happens before A. stirring the chocolate.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:385,llava-ov-7b,tcd,AB,"The actions occur in the following order: laying on the field, celebrating a goal.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:386,llava-ov-7b,tcd,BA,"B. brushing rims, A. rinsing the car",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:387,llava-ov-7b,tcd,AB,"A. rafting down a river
+B. zip lining",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:388,llava-ov-7b,tcd,BA,B. removing a car wheel happens before A. driving on a road.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:389,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:390,llava-ov-7b,tcd,BA,B. combining various ingredients happens before A. adding sauce to the pan.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:391,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:392,llava-ov-7b,tcd,BA,"B. getting geared up for wakeboarding
+A. wakeboarding",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:393,llava-ov-7b,tcd,BA,"B. juicing lemons
+A. making sparkling lemonade",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:394,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:395,llava-ov-7b,tcd,BA,"B. pushing a helicopter out of a shed
+A. scuba diving",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:396,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:397,llava-ov-7b,tcd,AB,"A. surfing
+B. receiving awards",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:398,llava-ov-7b,tcd,BA,B. surfing,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:399,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:400,llava-ov-7b,tcd,BA,"B. eating and talking, A. a man hits another man",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:401,llava-ov-7b,tcd,BA,B. washing the car,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:402,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:403,llava-ov-7b,tcd,BA,B. chopping vegetables,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:404,llava-ov-7b,tcd,AB,Action A. running happens before Action B. talking to the camera.,AB.,AB.,AB,valid,valid,False,False,,,
+tsh:405,llava-ov-7b,tcd,AB,"A. stretching
+B. talking to the camera",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:406,llava-ov-7b,tcd,BA,Action B. explaining food happens before Action A. cutting the hulte into pieces.,BA,BA,BA,valid,valid,True,False,,,
+tsh:407,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:408,llava-ov-7b,tcd,BA,Action B. pouring water and soap into a bin happens before Action A. demonstrating the functions of a washing machine.,BA,BA,BA,valid,valid,True,False,,,
+tsh:409,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:410,llava-ov-7b,tcd,BA,Action B. trying to feed someone happens before Action A. throwing darts at a dartboard.,BA,BA,BA,valid,valid,True,False,,,
+tsh:411,llava-ov-7b,tcd,AB,"A. stretching exercises
+B. playing volleyball",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:412,llava-ov-7b,tcd,BA,Action B. walking to a piano happens before Action A. clapping.,BA,BA,BA,valid,valid,True,False,,,
+tsh:413,llava-ov-7b,tcd,BA,Action B. preparing syrup happens before Action A. making lemonade.,BA,BA,BA,valid,valid,True,False,,,
+tsh:414,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. walking through a crowd, B. playing table tennis.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:415,llava-ov-7b,tcd,BA,B. getting a haircut,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:416,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:417,llava-ov-7b,tcd,BA,"B. using a tool to adjust a car
+A. inspecting the bike",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:418,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. shooting an arrow from a bow, followed by B. the arrow uncaps the bottle.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:419,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, a gray substance is being torching, and then welding is performed.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:420,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:421,llava-ov-7b,tcd,BA,"B. jump to a tightrope
+A. drinking from a coconut",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:422,llava-ov-7b,tcd,AB,"The two actions occur in the following order: first, the group is seen walking through the forest (Action A), and then a person is seen jumping into the water (Action B).",AB,AB,AB,valid,valid,True,False,,,
+tsh:423,llava-ov-7b,tcd,AB,Action A. carrying a raft happens before Action B. jumping into water.,AB,AB,AB,valid,valid,True,False,,,
+tsh:424,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:425,llava-ov-7b,tcd,AB,"A. arm wrestling
+B. using duct tape",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:426,llava-ov-7b,tcd,BA,"B. rowing on a machine
+A. showing the screen on the rowing machine",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:427,llava-ov-7b,tcd,BA,"B. sitting on a rowing machine
+A. showing the screen on the rowing machine",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:428,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:429,llava-ov-7b,tcd,BA,"B. opening a bottle
+A. shooting targets",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:430,llava-ov-7b,tcd,AB,"A. opening a bottle
+B. shooting at targets",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:431,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:432,llava-ov-7b,tcd,BA,Action B. preparing healthy mussels happens before Action A. chopping some vegetables and herbs.,BA,BA,BA,valid,valid,True,False,,,
+tsh:433,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:434,llava-ov-7b,tcd,BA,B. carving bell peppers happens before A. adding ingredients to a bowl.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:435,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:436,llava-ov-7b,tcd,BA,Action B. doing exercise in a gym happens before Action A. rock climbing.,BA,BA,BA,valid,valid,True,False,,,
+tsh:437,llava-ov-7b,tcd,AB,Action B. sharpening a knife happens before Action A. pouring water on a sharpening stone.,BA,BA,BA,valid,valid,False,False,,,
+tsh:438,llava-ov-7b,tcd,BA,"B. making a kite
+A. flying kites",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:439,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:440,llava-ov-7b,tcd,BA,Action A. buying sunscreen happens before Action B. applying sunscreen.,AB,AB,AB,valid,valid,False,False,,,
+tsh:441,llava-ov-7b,tcd,BA,"B. buying sunscreen
+A. applying sunscreen",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:442,llava-ov-7b,tcd,AB,"A. mixing ingredients
+B. baking a cake in a rice cooker",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:443,llava-ov-7b,tcd,BA,Action B. talking to the camera happens before Action A. inserting a toothpick into a sandwich.,BA,BA,BA,valid,valid,True,False,,,
+tsh:444,llava-ov-7b,tcd,AB,"A. talking to the camera
+B. making a sandwich",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:445,llava-ov-7b,tcd,AB,"A. displaying a picture of a oreo cheesecake
+B. crushing cookies",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:446,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:447,llava-ov-7b,tcd,BA,Action B. putting egg salad on bread happens before Action A. cutting onion and eggs.,BA,BA,BA,valid,valid,True,False,,,
+tsh:448,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. putting on a contact lens, followed by B. washing hands.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:449,llava-ov-7b,tcd,BA,B. applying contact lenses happens before A. cleaning and disinfecting hands.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:450,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:451,llava-ov-7b,tcd,BA,B. dirt biking,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:452,llava-ov-7b,tcd,AB,"A. adding pasta to a pan
+B. pouring the sauce on top of the pasta",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:453,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:454,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:455,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:456,llava-ov-7b,tcd,BA,Action B. opening eyes happens before Action A. hula hooping with multiple hoops.,BA,BA,BA,valid,valid,True,False,,,
+tsh:457,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:458,llava-ov-7b,tcd,BA,"B. pouring oil and vegetables into a pan
+A. mixing ingredients in a pan",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:459,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:460,llava-ov-7b,tcd,BA,B. using a hookah,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:461,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:462,llava-ov-7b,tcd,BA,"B. pouring water into a white bucket
+A. washing a car",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:463,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:464,llava-ov-7b,tcd,BA,"The actions occur in the following order: B. walking to a tool, followed by A. welding.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:465,llava-ov-7b,tcd,AB,Action A. holding a cloth happens before Action B. rolling a wet cloth into a dry towel.,AB,AB,AB,valid,valid,True,False,,,
+tsh:466,llava-ov-7b,tcd,BA,"B. running water in a bathtub
+A. ironing a cloth",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:467,llava-ov-7b,tcd,BA,Action B. holding a cloth happens before Action A. running water in a bathtub.,BA.,BA.,BA,valid,valid,False,False,,,
+tsh:468,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:469,llava-ov-7b,tcd,AB,Action B. jumping into a pool happens before Action A. jumping on a trampoline.,BA,BA,BA,valid,valid,False,False,,,
+tsh:470,llava-ov-7b,tcd,BA,"B. adding parsley to a pot
+A. mixing pasta and sauce",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:471,llava-ov-7b,tcd,BA,"B. applying lipstick
+A. walking out the door",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:472,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:473,llava-ov-7b,tcd,AB,Action B. mixing spices with the flour happens before Action A. mixing the chicken with the eggs.,BA,BA,BA,valid,valid,False,False,,,
+tsh:474,llava-ov-7b,tcd,BA,"B. picking up and holding the object
+A. shifting the seat of a bike",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:475,llava-ov-7b,tcd,BA,Action B. a man running to a bike happens before Action A. jumping with stilts.,BA,BA,BA,valid,valid,True,False,,,
+tsh:476,llava-ov-7b,tcd,AB,"A. brushing a horse
+B. talking to the camera",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:477,llava-ov-7b,tcd,BA,B. changing a tire,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:478,llava-ov-7b,tcd,AB,The actions occur in the following order: changing a tire (Action A) happens before inspecting a tire (Action B).,AB,AB,AB,valid,valid,True,False,,,
+tsh:479,llava-ov-7b,tcd,AB,"A. assembling a razor
+B. applying lotion to the neck",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:480,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, the person inspects the bike, and then they replace the tube of the tire.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:481,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:482,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:483,llava-ov-7b,tcd,BA,"B. walking out the door of the store
+A. skateboarding between cars",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:484,llava-ov-7b,tcd,AB,"A. mixing the ingredients by hand
+B. frying the meat patty in a pan",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:485,llava-ov-7b,tcd,AB,"A. baking the potatoes
+B. mixing ingredients together",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:486,llava-ov-7b,tcd,BA,B. removing the leaves from the stems and chopping them happens before A. adding ingredients to the pan.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:487,llava-ov-7b,tcd,BA,"B. playing foosball, A. falling down on the sofa",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:488,llava-ov-7b,tcd,AB,"A. playing the drums
+B. clapping hands",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:489,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. walking to the end of a diving board, B. swimming to the edge.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:490,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:491,llava-ov-7b,tcd,AB,"A. juicing fruits
+B. mixing ingredients in a bowl",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:492,llava-ov-7b,tcd,BA,"B. combining ingredients and stirring them together
+A. filling the wonton wrappers",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:493,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:494,llava-ov-7b,tcd,BA,B. reading a newspaper happens before A. crossing the zebra crossing.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:495,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:496,llava-ov-7b,tcd,BA,Action B. pouring water into a bowl happens before Action A. showing a washing machine.,BA,BA,BA,valid,valid,True,False,,,
+tsh:497,llava-ov-7b,tcd,BA,"B. whisking ingredients in a bowl
+A. cooking bread on a grill",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:498,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:499,llava-ov-7b,tcd,BA,"B. sitting in a sidewalk and talking to the camera
+A. jumping on the sidewalk",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:500,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:501,llava-ov-7b,tcd,AB,"A. preparing ingredients
+B. cooking pasta with shrimp",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:502,llava-ov-7b,tcd,BA,"B. playing the violin, A. talking to the camera",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:503,llava-ov-7b,tcd,AB,"A. cutting tofu into strips
+B. adding various ingredients to a pot",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:504,llava-ov-7b,tcd,BA,The actions occur in the following order: B (the opening of the arms) before A (swimming).,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:505,llava-ov-7b,tcd,BA,"B. walking to the edge of the diving board
+A. swimming",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:506,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:507,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:508,llava-ov-7b,tcd,BA,B. peeling a potato,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:509,llava-ov-7b,tcd,BA,"B. raising the car with a jack
+A. putting a tire into the trunk",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:510,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:511,llava-ov-7b,tcd,AB,"A. playing American football
+B. running and jumping",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:512,llava-ov-7b,tcd,BA,"B. driving a bus
+A. paddling a raft",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:513,llava-ov-7b,tcd,AB,"The actions occur in the following order: monitoring a storm, flying kites.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:514,llava-ov-7b,tcd,BA,"B. applying liquid with a paintbrush
+A. Use a tack rag to remove dust",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:515,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:516,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:517,llava-ov-7b,tcd,AB,"A. raking leaves
+B. drinking from a can",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:518,llava-ov-7b,tcd,BA,"B. adding meatballs to the pan
+A. adding ingredients to the pan",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:519,llava-ov-7b,tcd,AB,"A. adding wine to the pan
+B. adding various seasonings to a bowl",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:520,llava-ov-7b,tcd,BA,"B. boating on a lake
+A. wakeboarding",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:521,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:522,llava-ov-7b,tcd,BA,Action B. adding herbs to the soup happens before Action A. placing the pasta in a bowl.,BA,BA,BA,valid,valid,True,False,,,
+tsh:523,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:524,llava-ov-7b,tcd,BA,B. riding horses,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:525,llava-ov-7b,tcd,BA,Action B happens before Action A.,BA,BA,BA,valid,valid,True,False,,,
+tsh:526,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:527,llava-ov-7b,tcd,AB,"The actions occur in the following order: first, the person lifts the weights above their head (Action A), and then they run (Action B).",AB,AB,AB,valid,valid,True,False,,,
+tsh:528,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:529,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:530,llava-ov-7b,tcd,BA,Action B. bowling happens before Action A. displaying a bowling score.,BA,BA,BA,valid,valid,True,False,,,
+tsh:531,llava-ov-7b,tcd,AB,Action B. rolling wrapping paper happens before Action A. showing a boy bear.,BA,BA,BA,valid,valid,False,False,,,
+tsh:532,llava-ov-7b,tcd,BA,A,A,A,,valid,valid,False,False,,,
+tsh:533,llava-ov-7b,tcd,AB,"A. mopping the floor
+B. squeezing the handle",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:534,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:535,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:536,llava-ov-7b,tcd,BA,B. slicing the cheese thinly happens before A. heating a pan and toasting bread in it.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:537,llava-ov-7b,tcd,AB,"A. walking
+B. drying hands",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:538,llava-ov-7b,tcd,BA,Action B. frying bacon happens before Action A. laying ingredients on the bread.,BA,BA,BA,valid,valid,True,False,,,
+tsh:539,llava-ov-7b,tcd,AB,"A. triple jump
+B. posing in front of a scoreboard",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:540,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:541,llava-ov-7b,tcd,AB,Action A. throwing grass in the garbage happens before Action B. throwing a rake.,AB,AB,AB,valid,valid,True,False,,,
+tsh:542,llava-ov-7b,tcd,BA,"B. throwing grass in the garbage
+A. picking up and smelling a twig",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:543,llava-ov-7b,tcd,AB,"A. cutting the onions into rings
+B. adding ingredients to a bowl and whisking them well",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:544,llava-ov-7b,tcd,BA,B. squeezing lemons,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:545,llava-ov-7b,tcd,BA,Action B. scrubbing and drying a tiled floor happens before Action A. vacuuming the liquid in a sink.,BA,BA,BA,valid,valid,True,False,,,
+tsh:546,llava-ov-7b,tcd,AB,Action A. vacuuming a carpet happens before Action B. vacuuming the liquid in a sink.,AB,AB,AB,valid,valid,True,False,,,
+tsh:547,llava-ov-7b,tcd,BA,Action B. adding various seasonings to a bowl of spinach happens before Action A. adding radish to a pan of hot oil and seasoning it.,BA,BA,BA,valid,valid,True,False,,,
+tsh:548,llava-ov-7b,tcd,AB,"The actions occur in the following order: A. creating a nail polish design in water, followed by B. applying a clear coat over fingernails.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:549,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, the mixture is mashed in a pot on the stove, and then it is shaped into small patties on a baking sheet.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:550,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:551,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:552,llava-ov-7b,tcd,BA,"The actions occur in the following order: A. cooking in a pan, B. checking the flame.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:553,llava-ov-7b,tcd,AB,Action B. pouring liquid into a pan happens before Action A. adding seasonings to the pan.,BA,BA,BA,valid,valid,False,False,,,
+tsh:554,llava-ov-7b,tcd,BA,"The actions occur in the following order: first, the person drives down the street (Action B), and then they change a tire (Action A).",BA,BA,BA,valid,valid,True,False,,,
+tsh:555,llava-ov-7b,tcd,BA,"B. walking with horses
+A. riding horse",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:556,llava-ov-7b,tcd,AB,"The actions occur in the following order: first, the person is seen adjusting their shoes, and then they stand up from the car.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:557,llava-ov-7b,tcd,BA,Action B. sanding a surface with an electric sander happens before Action A. sanding wood by hand.,BA,BA,BA,valid,valid,True,False,,,
+tsh:558,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:559,llava-ov-7b,tcd,BA,B. windsurfing,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:560,llava-ov-7b,tcd,AB,Action A. windsurfing happens before Action B. receiving certificates and awards.,AB,AB,AB,valid,valid,True,False,,,
+tsh:561,llava-ov-7b,tcd,BA,B. seasoning the chicken happens before A. mixing the remaining spice with flour.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:562,llava-ov-7b,tcd,AB,"A. entering the car
+B. snowboarding",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:563,llava-ov-7b,tcd,AB,"A. scuba diving
+B. climbing onto the boat",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:564,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:565,llava-ov-7b,tcd,AB,"The actions occur in the following order: first, the person puts on a blue apron (Action A), and then they attach handlebars (Action B).",AB,AB,AB,valid,valid,True,False,,,
+tsh:566,llava-ov-7b,tcd,BA,"B. putting an item in the trunk of a car
+A. driving",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:567,llava-ov-7b,tcd,AB,Action B. picking up a contact lens happens before Action A. inserting a contact lens.,BA,BA,BA,valid,valid,False,False,,,
+tsh:568,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:569,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:570,llava-ov-7b,tcd,AB,B. pulling a snow tube,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:571,llava-ov-7b,tcd,BA,"B. boiling water
+A. stirring pasta",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:572,llava-ov-7b,tcd,AB,B,B,B,,valid,valid,False,False,,,
+tsh:573,llava-ov-7b,tcd,BA,B. interviewing a man,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:574,llava-ov-7b,tcd,AB,"A. wiping face with a towel
+B. playing billiards",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:575,llava-ov-7b,tcd,BA,"B. slicing the beef and marinating it
+A. frying the beef and sprinkling sesame seeds over it",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:576,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:577,llava-ov-7b,tcd,AB,"A. talking
+B. wrapping a book",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:578,llava-ov-7b,tcd,BA,B. slicing a potato,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:579,llava-ov-7b,tcd,AB,"A. adding flour and mixing it
+B. adding flour to the dough and kneading it",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:580,llava-ov-7b,tcd,BA,"B. starting a fire
+A. gutting a fish",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:581,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:582,llava-ov-7b,tcd,BA,B. speaking to the camera happens before A. washing face with face wash.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:583,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:584,llava-ov-7b,tcd,BA,B. cutting lemons,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:585,llava-ov-7b,tcd,BA,B. pouring juice into a pot,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:586,llava-ov-7b,tcd,AB,"A. wakeboarding
+B. an award ceremony",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:587,llava-ov-7b,tcd,AB,B. an award ceremony happens before A. wakeboarding.,,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:588,llava-ov-7b,tcd,BA,B,B,B,,valid,valid,False,False,,,
+tsh:589,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:590,llava-ov-7b,tcd,BA,"The actions occur in the following order: A. cutting nails, followed by B. applying fake nails.",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:591,llava-ov-7b,tcd,BA,"B. displaying a sweater
+A. knitting",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:592,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:593,llava-ov-7b,tcd,BA,Action B. sharpening a blade happens before Action A. celebrating.,BA,BA,BA,valid,valid,True,False,,,
+tsh:594,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:595,llava-ov-7b,tcd,BA,"B. cutting chocolate bars
+A. baking cookies",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:596,llava-ov-7b,tcd,AB,A,A,A,,valid,valid,False,False,,,
+tsh:597,llava-ov-7b,tcd,AB,"A. making cookie dough
+B. baking cookies",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:598,llava-ov-7b,tcd,BA,"B. shopping in a store
+A. wrapping a gift",,,,unparseable,unparseable,,False,official parser returned None,,
+tsh:599,llava-ov-7b,tcd,AB,Action A happens before Action B.,AB,AB,AB,valid,valid,True,False,,,
+tsh:600,llava-ov-7b,tcd,BA,B. wiping down wooden floorboards happens before A. cutting a tile and sanding it.,,,,unparseable,unparseable,,False,official parser returned None,,

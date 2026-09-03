@@ -172,6 +172,17 @@ class Qwen25VLAdapter(ModelAdapter):
         self._last_input_audit = audit
         return audit
 
+    def _build_video_messages(self, video_frames, prompt, fps):
+        from PIL import Image
+        frames = [Image.fromarray(np.asarray(f, dtype=np.uint8)) for f in video_frames]
+        return [{
+            "role": "user",
+            "content": [
+                {"type": "video", "video": frames, "fps": fps},
+                {"type": "text", "text": prompt},
+            ],
+        }]
+        
     def generate(self, video_frames: np.ndarray, prompt: str, generation_config: GenerationConfig) -> str:
         messages, video = self._frames_to_messages(video_frames, prompt)
         text = self.processor.apply_chat_template(

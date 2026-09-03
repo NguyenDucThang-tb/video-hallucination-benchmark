@@ -1,0 +1,63 @@
+{
+  "config": "/tmp/llava_ov_base_tsh_video_smoke.yaml",
+  "jobs": [
+    {
+      "model": "llava-ov-7b",
+      "method": "base",
+      "benchmark": "vidhalluc",
+      "task": "tsh",
+      "status": "ready",
+      "note": "LLaVA-OV base adapter enabled for local real-video benchmark runs",
+      "validation_override": false
+    }
+  ]
+}
+Loading weights:   0%|          | 0/765 [00:00<?, ?it/s]Loading weights:   0%|          | 2/765 [00:04<30:47,  2.42s/it]Loading weights:  27%|██▋       | 209/765 [00:04<00:09, 58.92it/s]Loading weights:  38%|███▊      | 292/765 [00:05<00:07, 66.39it/s]Loading weights:  45%|████▍     | 341/765 [00:06<00:06, 64.78it/s]Loading weights: 100%|██████████| 765/765 [00:06<00:00, 111.49it/s]
+[2026-08-25 06:52:52] START llava-ov-7b / base / vidhalluc / tsh | total=600 | resume_valid=0 | limit=20
+[2026-08-25 06:52:56] DONE  vidhalluc 1/600 | new=1 | sample=tsh:1 | parse=valid | correct=False | batch=1
+[2026-08-25 06:52:57] DONE  vidhalluc 2/600 | new=2 | sample=tsh:2 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:52:58] DONE  vidhalluc 3/600 | new=3 | sample=tsh:3 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:00] DONE  vidhalluc 4/600 | new=4 | sample=tsh:4 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:04] DONE  vidhalluc 5/600 | new=5 | sample=tsh:5 | parse=valid | correct=False | batch=1
+[2026-08-25 06:53:12] DONE  vidhalluc 6/600 | new=6 | sample=tsh:6 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:17] DONE  vidhalluc 7/600 | new=7 | sample=tsh:7 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:17] DONE  vidhalluc 8/600 | new=8 | sample=tsh:8 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:18] DONE  vidhalluc 9/600 | new=9 | sample=tsh:9 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:21] DONE  vidhalluc 10/600 | new=10 | sample=tsh:10 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:23] DONE  vidhalluc 11/600 | new=11 | sample=tsh:11 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:24] DONE  vidhalluc 12/600 | new=12 | sample=tsh:12 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:25] DONE  vidhalluc 13/600 | new=13 | sample=tsh:13 | parse=valid | correct=False | batch=1
+[2026-08-25 06:53:26] DONE  vidhalluc 14/600 | new=14 | sample=tsh:14 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:27] DONE  vidhalluc 15/600 | new=15 | sample=tsh:15 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:29] DONE  vidhalluc 16/600 | new=16 | sample=tsh:16 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:34] DONE  vidhalluc 17/600 | new=17 | sample=tsh:17 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:35] DONE  vidhalluc 18/600 | new=18 | sample=tsh:18 | parse=valid | correct=True | batch=1
+[2026-08-25 06:53:36] DONE  vidhalluc 19/600 | new=19 | sample=tsh:19 | parse=valid | correct=False | batch=1
+[2026-08-25 06:53:37] DONE  vidhalluc 20/600 | new=20 | sample=tsh:20 | parse=unparseable | correct=None | batch=1
+[2026-08-25 06:53:37] END   llava-ov-7b / base / vidhalluc / tsh | wrote=20 total records
+[2026-08-25 06:53:37] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_ov_base_tsh_video_smoke.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_base_tsh_video_smoke.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "llava-ov-7b",
+        "method": "base",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "status": "ready",
+        "note": "LLaVA-OV base adapter enabled for local real-video benchmark runs",
+        "validation_override": false
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/llava_ov_base_tsh_video_smoke__llava-ov-7b__base__vidhalluc__tsh.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/llava_ov_base_tsh_video_smoke__llava-ov-7b__base__vidhalluc__tsh.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/llava_ov_base_tsh_video_smoke__llava-ov-7b__base__vidhalluc__tsh.manifest.jsonl",
+      "n_new_records": 20,
+      "n_total_samples": 600
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/llava_ov_base_tsh_video_smoke.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_base_tsh_video_smoke.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/llava_ov_base_tsh_video_smoke.results.md"
+  }
+}

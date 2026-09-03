@@ -1,0 +1,199 @@
+{
+  "config": "/tmp/experiment_qwen_season_eventhallusion.yaml",
+  "jobs": [
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "eventhallusion",
+      "task": "entire",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "eventhallusion",
+      "task": "misleading",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    },
+    {
+      "model": "qwen2.5-vl-7b",
+      "method": "season",
+      "benchmark": "eventhallusion",
+      "task": "mix",
+      "status": "ready",
+      "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+      "validation_override": true
+    }
+  ]
+}
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:12,  3.78it/s]Loading weights:   0%|          | 2/729 [00:00<04:49,  2.51it/s]Loading weights:   1%|          | 4/729 [00:00<02:11,  5.51it/s]Loading weights:   1%|          | 6/729 [00:01<01:48,  6.68it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:32, 21.84it/s]Loading weights:   3%|▎         | 20/729 [00:01<00:34, 20.27it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:25, 27.70it/s]Loading weights:   4%|▍         | 32/729 [00:01<00:28, 24.05it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:23, 29.35it/s]Loading weights:   6%|▌         | 44/729 [00:02<00:26, 25.74it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:20, 32.59it/s]Loading weights:   8%|▊         | 56/729 [00:02<00:23, 28.59it/s]Loading weights:   9%|▊         | 63/729 [00:02<00:20, 32.51it/s]Loading weights:   9%|▉         | 67/729 [00:02<00:23, 28.09it/s]Loading weights:  10%|█         | 76/729 [00:03<00:21, 30.76it/s]Loading weights:  11%|█         | 80/729 [00:03<00:20, 32.05it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:17, 37.09it/s]Loading weights:  13%|█▎        | 92/729 [00:03<00:20, 30.42it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:17, 35.59it/s]Loading weights:  14%|█▍        | 104/729 [00:04<00:20, 30.08it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:20, 30.04it/s]Loading weights:  16%|█▌        | 116/729 [00:04<00:19, 31.48it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:16, 36.55it/s]Loading weights:  18%|█▊        | 128/729 [00:04<00:20, 29.78it/s]Loading weights:  19%|█▊        | 136/729 [00:05<00:18, 32.92it/s]Loading weights:  19%|█▉        | 140/729 [00:05<00:21, 27.69it/s]Loading weights:  20%|██        | 148/729 [00:05<00:17, 32.44it/s]Loading weights:  21%|██        | 152/729 [00:05<00:20, 27.64it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:17, 32.96it/s]Loading weights:  22%|██▏       | 164/729 [00:06<00:20, 27.46it/s]Loading weights:  24%|██▎       | 172/729 [00:06<00:16, 32.93it/s]Loading weights:  24%|██▍       | 176/729 [00:06<00:20, 27.60it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:18, 28.86it/s]Loading weights:  26%|██▌       | 188/729 [00:06<00:17, 30.55it/s]Loading weights:  27%|██▋       | 196/729 [00:07<00:17, 30.80it/s]Loading weights:  27%|██▋       | 200/729 [00:07<00:16, 32.12it/s]Loading weights:  29%|██▊       | 208/729 [00:07<00:14, 36.86it/s]Loading weights:  29%|██▉       | 212/729 [00:07<00:16, 31.08it/s]Loading weights:  30%|███       | 220/729 [00:07<00:13, 37.06it/s]Loading weights:  31%|███       | 224/729 [00:07<00:16, 30.64it/s]Loading weights:  32%|███▏      | 232/729 [00:08<00:14, 34.16it/s]Loading weights:  32%|███▏      | 236/729 [00:08<00:17, 28.33it/s]Loading weights:  33%|███▎      | 244/729 [00:08<00:14, 32.96it/s]Loading weights:  34%|███▍      | 248/729 [00:08<00:17, 27.81it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:14, 33.30it/s]Loading weights:  36%|███▌      | 260/729 [00:09<00:16, 27.84it/s]Loading weights:  37%|███▋      | 268/729 [00:09<00:13, 33.23it/s]Loading weights:  37%|███▋      | 272/729 [00:09<00:16, 27.94it/s]Loading weights:  38%|███▊      | 280/729 [00:09<00:15, 28.21it/s]Loading weights:  39%|███▉      | 283/729 [00:09<00:16, 27.87it/s]Loading weights:  40%|████      | 292/729 [00:10<00:12, 35.07it/s]Loading weights:  41%|████      | 296/729 [00:10<00:14, 28.97it/s]Loading weights:  42%|████▏     | 304/729 [00:10<00:12, 34.00it/s]Loading weights:  42%|████▏     | 308/729 [00:10<00:14, 28.74it/s]Loading weights:  43%|████▎     | 316/729 [00:10<00:13, 29.88it/s]Loading weights:  44%|████▍     | 320/729 [00:11<00:13, 31.33it/s]Loading weights:  45%|████▍     | 328/729 [00:11<00:10, 37.22it/s]Loading weights:  46%|████▌     | 332/729 [00:11<00:12, 31.41it/s]Loading weights:  49%|████▊     | 355/729 [00:11<00:05, 69.03it/s]Loading weights:  53%|█████▎    | 384/729 [00:11<00:02, 116.26it/s]Loading weights:  57%|█████▋    | 417/729 [00:11<00:01, 163.08it/s]Loading weights:  61%|██████▏   | 448/729 [00:11<00:01, 199.33it/s]Loading weights:  65%|██████▌   | 477/729 [00:11<00:01, 221.06it/s]Loading weights:  69%|██████▉   | 505/729 [00:12<00:00, 235.74it/s]Loading weights:  73%|███████▎  | 533/729 [00:12<00:00, 242.47it/s]Loading weights:  77%|███████▋  | 560/729 [00:12<00:00, 246.61it/s]Loading weights:  81%|████████  | 587/729 [00:12<00:00, 252.27it/s]Loading weights:  84%|████████▍ | 613/729 [00:12<00:00, 252.37it/s]Loading weights:  88%|████████▊ | 643/729 [00:12<00:00, 261.33it/s]Loading weights:  92%|█████████▏| 670/729 [00:12<00:00, 261.83it/s]Loading weights:  96%|█████████▌| 697/729 [00:12<00:00, 256.02it/s]Loading weights: 100%|█████████▉| 726/729 [00:12<00:00, 217.75it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 56.25it/s] 
+[2026-08-24 16:49:05] START qwen2.5-vl-7b / season / eventhallusion / entire | total=114 | resume_valid=114 | limit=full
+[2026-08-24 16:49:06] END   qwen2.5-vl-7b / season / eventhallusion / entire | wrote=121 total records
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<04:50,  2.50it/s]Loading weights:   0%|          | 2/729 [00:00<05:11,  2.34it/s]Loading weights:   1%|          | 4/729 [00:00<02:19,  5.20it/s]Loading weights:   1%|          | 6/729 [00:01<01:52,  6.43it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:34, 20.59it/s]Loading weights:   3%|▎         | 19/729 [00:01<00:39, 17.91it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:25, 27.13it/s]Loading weights:   4%|▍         | 32/729 [00:01<00:29, 23.67it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:22, 30.01it/s]Loading weights:   6%|▌         | 44/729 [00:02<00:26, 25.61it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:25, 26.96it/s]Loading weights:   8%|▊         | 55/729 [00:02<00:25, 26.74it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:19, 34.05it/s]Loading weights:   9%|▉         | 68/729 [00:03<00:23, 28.21it/s]Loading weights:  10%|█         | 76/729 [00:03<00:19, 33.14it/s]Loading weights:  11%|█         | 80/729 [00:03<00:22, 28.44it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:18, 34.65it/s]Loading weights:  13%|█▎        | 92/729 [00:03<00:21, 29.59it/s]Loading weights:  14%|█▎        | 100/729 [00:04<00:21, 29.93it/s]Loading weights:  14%|█▍        | 104/729 [00:04<00:19, 31.61it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:16, 37.36it/s]Loading weights:  16%|█▌        | 116/729 [00:04<00:19, 31.16it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:19, 30.46it/s]Loading weights:  18%|█▊        | 128/729 [00:05<00:19, 31.56it/s]Loading weights:  19%|█▊        | 136/729 [00:05<00:18, 31.50it/s]Loading weights:  19%|█▉        | 140/729 [00:05<00:18, 32.69it/s]Loading weights:  20%|██        | 148/729 [00:05<00:15, 38.20it/s]Loading weights:  21%|██        | 152/729 [00:05<00:18, 31.67it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:15, 37.66it/s]Loading weights:  23%|██▎       | 165/729 [00:06<00:17, 33.04it/s]Loading weights:  24%|██▎       | 172/729 [00:06<00:15, 37.12it/s]Loading weights:  24%|██▍       | 176/729 [00:06<00:17, 30.74it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:14, 36.70it/s]Loading weights:  26%|██▌       | 188/729 [00:06<00:17, 30.83it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:14, 36.84it/s]Loading weights:  27%|██▋       | 200/729 [00:07<00:17, 30.85it/s]Loading weights:  29%|██▊       | 208/729 [00:07<00:14, 36.60it/s]Loading weights:  29%|██▉       | 212/729 [00:07<00:16, 30.95it/s]Loading weights:  30%|███       | 220/729 [00:07<00:16, 30.51it/s]Loading weights:  31%|███       | 224/729 [00:07<00:15, 32.06it/s]Loading weights:  32%|███▏      | 232/729 [00:08<00:15, 31.74it/s]Loading weights:  32%|███▏      | 236/729 [00:08<00:14, 33.12it/s]Loading weights:  33%|███▎      | 244/729 [00:08<00:12, 38.54it/s]Loading weights:  34%|███▍      | 249/729 [00:08<00:14, 32.61it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:12, 36.64it/s]Loading weights:  36%|███▌      | 260/729 [00:08<00:15, 31.05it/s]Loading weights:  37%|███▋      | 268/729 [00:09<00:12, 36.98it/s]Loading weights:  37%|███▋      | 272/729 [00:09<00:14, 30.50it/s]Loading weights:  38%|███▊      | 280/729 [00:09<00:12, 35.45it/s]Loading weights:  39%|███▉      | 284/729 [00:09<00:15, 28.81it/s]Loading weights:  40%|████      | 292/729 [00:09<00:12, 33.88it/s]Loading weights:  41%|████      | 296/729 [00:10<00:15, 28.51it/s]Loading weights:  42%|████▏     | 304/729 [00:10<00:12, 33.72it/s]Loading weights:  42%|████▏     | 308/729 [00:10<00:14, 28.79it/s]Loading weights:  43%|████▎     | 316/729 [00:10<00:11, 34.79it/s]Loading weights:  44%|████▍     | 320/729 [00:10<00:14, 29.14it/s]Loading weights:  45%|████▍     | 328/729 [00:11<00:11, 34.71it/s]Loading weights:  46%|████▌     | 332/729 [00:11<00:13, 28.85it/s]Loading weights:  48%|████▊     | 349/729 [00:11<00:07, 54.17it/s]Loading weights:  52%|█████▏    | 379/729 [00:11<00:03, 102.25it/s]Loading weights:  56%|█████▌    | 405/729 [00:11<00:02, 136.75it/s]Loading weights:  59%|█████▉    | 433/729 [00:11<00:01, 170.34it/s]Loading weights:  63%|██████▎   | 460/729 [00:11<00:01, 195.41it/s]Loading weights:  67%|██████▋   | 489/729 [00:11<00:01, 217.09it/s]Loading weights:  71%|███████   | 517/729 [00:11<00:00, 232.70it/s]Loading weights:  75%|███████▍  | 545/729 [00:12<00:00, 245.44it/s]Loading weights:  79%|███████▉  | 577/729 [00:12<00:00, 260.71it/s]Loading weights:  84%|████████▎ | 609/729 [00:12<00:00, 272.10it/s]Loading weights:  87%|████████▋ | 637/729 [00:12<00:00, 274.11it/s]Loading weights:  92%|█████████▏| 669/729 [00:12<00:00, 283.07it/s]Loading weights:  96%|█████████▌| 698/729 [00:12<00:00, 284.06it/s]Loading weights: 100%|█████████▉| 727/729 [00:12<00:00, 260.91it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 57.12it/s] 
+[2026-08-24 16:49:21] START qwen2.5-vl-7b / season / eventhallusion / misleading | total=102 | resume_valid=102 | limit=full
+[2026-08-24 16:49:22] END   qwen2.5-vl-7b / season / eventhallusion / misleading | wrote=102 total records
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<04:55,  2.46it/s]Loading weights:   0%|          | 2/729 [00:00<05:21,  2.26it/s]Loading weights:   1%|          | 4/729 [00:01<02:56,  4.10it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:34, 20.41it/s]Loading weights:   3%|▎         | 20/729 [00:01<00:35, 20.03it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:29, 23.88it/s]Loading weights:   4%|▍         | 31/729 [00:01<00:28, 24.79it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:24, 28.61it/s]Loading weights:   6%|▌         | 44/729 [00:02<00:22, 30.46it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:18, 36.68it/s]Loading weights:   8%|▊         | 56/729 [00:02<00:21, 30.71it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:18, 35.64it/s]Loading weights:   9%|▉         | 68/729 [00:02<00:22, 28.96it/s]Loading weights:  10%|█         | 76/729 [00:03<00:22, 28.86it/s]Loading weights:  11%|█         | 80/729 [00:03<00:21, 30.13it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:18, 35.17it/s]Loading weights:  13%|█▎        | 92/729 [00:03<00:22, 28.67it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:18, 33.92it/s]Loading weights:  14%|█▍        | 104/729 [00:04<00:22, 28.00it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:18, 33.08it/s]Loading weights:  16%|█▌        | 116/729 [00:04<00:22, 27.73it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:18, 33.04it/s]Loading weights:  18%|█▊        | 128/729 [00:04<00:21, 27.71it/s]Loading weights:  19%|█▊        | 136/729 [00:05<00:18, 32.91it/s]Loading weights:  19%|█▉        | 140/729 [00:05<00:20, 28.53it/s]Loading weights:  20%|██        | 148/729 [00:05<00:16, 34.74it/s]Loading weights:  21%|██        | 152/729 [00:05<00:19, 29.69it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:19, 29.82it/s]Loading weights:  22%|██▏       | 164/729 [00:06<00:18, 31.32it/s]Loading weights:  24%|██▎       | 172/729 [00:06<00:15, 37.07it/s]Loading weights:  24%|██▍       | 176/729 [00:06<00:17, 31.29it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:17, 31.44it/s]Loading weights:  26%|██▌       | 188/729 [00:06<00:16, 32.73it/s]Loading weights:  27%|██▋       | 196/729 [00:07<00:16, 31.48it/s]Loading weights:  27%|██▋       | 200/729 [00:07<00:16, 32.68it/s]Loading weights:  29%|██▊       | 208/729 [00:07<00:13, 38.64it/s]Loading weights:  29%|██▉       | 213/729 [00:07<00:15, 33.61it/s]Loading weights:  30%|███       | 220/729 [00:07<00:16, 31.41it/s]Loading weights:  31%|███       | 224/729 [00:07<00:15, 32.12it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:13, 37.82it/s]Loading weights:  32%|███▏      | 236/729 [00:08<00:16, 30.73it/s]Loading weights:  33%|███▎      | 244/729 [00:08<00:18, 26.23it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:12, 36.62it/s]Loading weights:  36%|███▌      | 261/729 [00:08<00:14, 32.29it/s]Loading weights:  37%|███▋      | 268/729 [00:09<00:15, 30.12it/s]Loading weights:  37%|███▋      | 272/729 [00:09<00:14, 30.94it/s]Loading weights:  38%|███▊      | 280/729 [00:09<00:16, 26.71it/s]Loading weights:  40%|████      | 292/729 [00:09<00:11, 37.80it/s]Loading weights:  41%|████      | 297/729 [00:10<00:12, 34.04it/s]Loading weights:  42%|████▏     | 304/729 [00:10<00:11, 36.88it/s]Loading weights:  42%|████▏     | 309/729 [00:10<00:13, 32.02it/s]Loading weights:  43%|████▎     | 316/729 [00:10<00:13, 30.55it/s]Loading weights:  44%|████▍     | 320/729 [00:10<00:12, 31.92it/s]Loading weights:  45%|████▍     | 327/729 [00:10<00:11, 35.26it/s]Loading weights:  45%|████▌     | 331/729 [00:11<00:13, 30.06it/s]Loading weights:  49%|████▊     | 355/729 [00:11<00:05, 69.07it/s]Loading weights:  53%|█████▎    | 383/729 [00:11<00:03, 113.04it/s]Loading weights:  56%|█████▌    | 410/729 [00:11<00:02, 149.10it/s]Loading weights:  60%|██████    | 439/729 [00:11<00:01, 180.35it/s]Loading weights:  64%|██████▍   | 465/729 [00:11<00:01, 200.19it/s]Loading weights:  68%|██████▊   | 493/729 [00:11<00:01, 218.38it/s]Loading weights:  72%|███████▏  | 522/729 [00:11<00:00, 237.39it/s]Loading weights:  75%|███████▌  | 549/729 [00:12<00:00, 244.54it/s]Loading weights:  79%|███████▉  | 575/729 [00:12<00:00, 248.03it/s]Loading weights:  83%|████████▎ | 605/729 [00:12<00:00, 261.12it/s]Loading weights:  87%|████████▋ | 633/729 [00:12<00:00, 262.89it/s]Loading weights:  91%|█████████ | 660/729 [00:12<00:00, 264.03it/s]Loading weights:  94%|█████████▍| 687/729 [00:12<00:00, 261.86it/s]Loading weights:  98%|█████████▊| 715/729 [00:12<00:00, 261.09it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 57.15it/s] 
+[2026-08-24 16:49:36] START qwen2.5-vl-7b / season / eventhallusion / mix | total=193 | resume_valid=93 | limit=full
+[2026-08-24 16:49:37] FAIL  eventhallusion 1/193 | new=1 | sample=mix:mix_001:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 2/193 | new=2 | sample=mix:mix_002:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 3/193 | new=3 | sample=mix:mix_003:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 4/193 | new=4 | sample=mix:mix_004:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 5/193 | new=5 | sample=mix:mix_005:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 6/193 | new=6 | sample=mix:mix_006:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 7/193 | new=7 | sample=mix:mix_007:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 10/193 | new=8 | sample=mix:mix_010:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 11/193 | new=9 | sample=mix:mix_011:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 12/193 | new=10 | sample=mix:mix_012:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 13/193 | new=11 | sample=mix:mix_013:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 14/193 | new=12 | sample=mix:mix_014:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 15/193 | new=13 | sample=mix:mix_015:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 16/193 | new=14 | sample=mix:mix_016:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 17/193 | new=15 | sample=mix:mix_017:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 28/193 | new=16 | sample=mix:mix_028:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 38/193 | new=17 | sample=mix:mix_038:0 | stage=video_sampling
+[2026-08-24 16:49:37] FAIL  eventhallusion 39/193 | new=18 | sample=mix:mix_039:0 | stage=video_sampling
+[2026-08-24 16:50:15] DONE  eventhallusion 112/193 | new=19 | sample=mix:mix_112:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:50:53] DONE  eventhallusion 113/193 | new=20 | sample=mix:mix_113:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:51:31] DONE  eventhallusion 114/193 | new=21 | sample=mix:mix_114:0 | parse=valid | correct=False | batch=1
+[2026-08-24 16:52:09] DONE  eventhallusion 115/193 | new=22 | sample=mix:mix_115:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:52:47] DONE  eventhallusion 116/193 | new=23 | sample=mix:mix_116:0 | parse=valid | correct=False | batch=1
+[2026-08-24 16:53:24] DONE  eventhallusion 117/193 | new=24 | sample=mix:mix_117:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:54:02] DONE  eventhallusion 118/193 | new=25 | sample=mix:mix_118:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:54:39] DONE  eventhallusion 119/193 | new=26 | sample=mix:mix_119:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:55:17] DONE  eventhallusion 120/193 | new=27 | sample=mix:mix_120:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:55:54] DONE  eventhallusion 121/193 | new=28 | sample=mix:mix_121:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:56:31] DONE  eventhallusion 122/193 | new=29 | sample=mix:mix_122:0 | parse=valid | correct=False | batch=1
+[2026-08-24 16:57:10] DONE  eventhallusion 123/193 | new=30 | sample=mix:mix_123:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:57:48] DONE  eventhallusion 124/193 | new=31 | sample=mix:mix_124:0 | parse=valid | correct=True | batch=1
+[2026-08-24 16:58:26] DONE  eventhallusion 125/193 | new=32 | sample=mix:mix_125:0 | parse=valid | correct=False | batch=1
+[2026-08-24 16:59:04] DONE  eventhallusion 126/193 | new=33 | sample=mix:mix_126:0 | parse=valid | correct=False | batch=1
+[2026-08-24 16:59:42] DONE  eventhallusion 127/193 | new=34 | sample=mix:mix_127:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:00:20] DONE  eventhallusion 128/193 | new=35 | sample=mix:mix_128:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:00:58] DONE  eventhallusion 129/193 | new=36 | sample=mix:mix_129:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:01:37] DONE  eventhallusion 130/193 | new=37 | sample=mix:mix_130:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:02:15] DONE  eventhallusion 131/193 | new=38 | sample=mix:mix_131:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:02:53] DONE  eventhallusion 132/193 | new=39 | sample=mix:mix_132:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:03:30] DONE  eventhallusion 133/193 | new=40 | sample=mix:mix_133:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:04:08] DONE  eventhallusion 134/193 | new=41 | sample=mix:mix_134:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:04:45] DONE  eventhallusion 135/193 | new=42 | sample=mix:mix_135:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:05:23] DONE  eventhallusion 136/193 | new=43 | sample=mix:mix_136:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:06:02] DONE  eventhallusion 137/193 | new=44 | sample=mix:mix_137:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:06:39] DONE  eventhallusion 138/193 | new=45 | sample=mix:mix_138:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:07:18] DONE  eventhallusion 139/193 | new=46 | sample=mix:mix_139:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:07:55] DONE  eventhallusion 140/193 | new=47 | sample=mix:mix_140:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:08:32] DONE  eventhallusion 141/193 | new=48 | sample=mix:mix_141:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:09:09] DONE  eventhallusion 142/193 | new=49 | sample=mix:mix_142:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:09:50] DONE  eventhallusion 143/193 | new=50 | sample=mix:mix_143:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:10:29] DONE  eventhallusion 144/193 | new=51 | sample=mix:mix_144:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:11:08] DONE  eventhallusion 145/193 | new=52 | sample=mix:mix_145:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:11:46] DONE  eventhallusion 146/193 | new=53 | sample=mix:mix_146:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:12:25] DONE  eventhallusion 147/193 | new=54 | sample=mix:mix_147:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:12:25] FAIL  eventhallusion 148/193 | new=55 | sample=mix:mix_148:0 | stage=video_sampling
+[2026-08-24 17:12:25] FAIL  eventhallusion 149/193 | new=56 | sample=mix:mix_149:0 | stage=video_sampling
+[2026-08-24 17:13:07] DONE  eventhallusion 150/193 | new=57 | sample=mix:mix_150:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:13:46] DONE  eventhallusion 151/193 | new=58 | sample=mix:mix_151:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:14:23] DONE  eventhallusion 152/193 | new=59 | sample=mix:mix_152:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:15:00] DONE  eventhallusion 153/193 | new=60 | sample=mix:mix_153:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:15:39] DONE  eventhallusion 154/193 | new=61 | sample=mix:mix_154:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:16:19] DONE  eventhallusion 155/193 | new=62 | sample=mix:mix_155:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:16:58] DONE  eventhallusion 156/193 | new=63 | sample=mix:mix_156:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:17:36] DONE  eventhallusion 157/193 | new=64 | sample=mix:mix_157:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:17:36] FAIL  eventhallusion 158/193 | new=65 | sample=mix:mix_158:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 159/193 | new=66 | sample=mix:mix_159:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 160/193 | new=67 | sample=mix:mix_160:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 161/193 | new=68 | sample=mix:mix_161:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 162/193 | new=69 | sample=mix:mix_162:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 163/193 | new=70 | sample=mix:mix_163:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 164/193 | new=71 | sample=mix:mix_164:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 165/193 | new=72 | sample=mix:mix_165:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 166/193 | new=73 | sample=mix:mix_166:0 | stage=video_sampling
+[2026-08-24 17:17:36] FAIL  eventhallusion 167/193 | new=74 | sample=mix:mix_167:0 | stage=video_sampling
+[2026-08-24 17:18:29] DONE  eventhallusion 168/193 | new=75 | sample=mix:mix_168:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:19:07] DONE  eventhallusion 169/193 | new=76 | sample=mix:mix_169:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:19:07] FAIL  eventhallusion 170/193 | new=77 | sample=mix:mix_170:0 | stage=video_sampling
+[2026-08-24 17:19:07] FAIL  eventhallusion 171/193 | new=78 | sample=mix:mix_171:0 | stage=video_sampling
+[2026-08-24 17:19:07] FAIL  eventhallusion 172/193 | new=79 | sample=mix:mix_172:0 | stage=video_sampling
+[2026-08-24 17:19:07] FAIL  eventhallusion 173/193 | new=80 | sample=mix:mix_173:0 | stage=video_sampling
+[2026-08-24 17:19:07] FAIL  eventhallusion 174/193 | new=81 | sample=mix:mix_174:0 | stage=video_sampling
+[2026-08-24 17:19:07] FAIL  eventhallusion 175/193 | new=82 | sample=mix:mix_175:0 | stage=video_sampling
+[2026-08-24 17:19:07] FAIL  eventhallusion 176/193 | new=83 | sample=mix:mix_176:0 | stage=video_sampling
+[2026-08-24 17:19:08] FAIL  eventhallusion 177/193 | new=84 | sample=mix:mix_177:0 | stage=video_sampling
+[2026-08-24 17:19:47] DONE  eventhallusion 178/193 | new=85 | sample=mix:mix_178:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:20:29] DONE  eventhallusion 179/193 | new=86 | sample=mix:mix_179:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:21:07] DONE  eventhallusion 180/193 | new=87 | sample=mix:mix_180:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:21:45] DONE  eventhallusion 181/193 | new=88 | sample=mix:mix_181:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:22:25] DONE  eventhallusion 182/193 | new=89 | sample=mix:mix_182:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:23:07] DONE  eventhallusion 183/193 | new=90 | sample=mix:mix_183:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:23:52] DONE  eventhallusion 184/193 | new=91 | sample=mix:mix_184:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:24:30] DONE  eventhallusion 185/193 | new=92 | sample=mix:mix_185:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:25:07] DONE  eventhallusion 186/193 | new=93 | sample=mix:mix_186:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:25:45] DONE  eventhallusion 187/193 | new=94 | sample=mix:mix_187:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:25:45] FAIL  eventhallusion 188/193 | new=95 | sample=mix:mix_188:0 | stage=video_sampling
+[2026-08-24 17:25:45] FAIL  eventhallusion 189/193 | new=96 | sample=mix:mix_189:0 | stage=video_sampling
+[2026-08-24 17:26:25] DONE  eventhallusion 190/193 | new=97 | sample=mix:mix_190:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:27:05] DONE  eventhallusion 191/193 | new=98 | sample=mix:mix_191:0 | parse=valid | correct=True | batch=1
+[2026-08-24 17:27:42] DONE  eventhallusion 192/193 | new=99 | sample=mix:mix_192:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:28:18] DONE  eventhallusion 193/193 | new=100 | sample=mix:mix_193:0 | parse=valid | correct=False | batch=1
+[2026-08-24 17:28:20] END   qwen2.5-vl-7b / season / eventhallusion / mix | wrote=257 total records
+[2026-08-24 17:28:26] AGGREGATED metrics -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/hallucination_benchmark_qwen_season_eventhallusion.metrics.json | table -> /scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_qwen_season_eventhallusion.results.csv
+{
+  "executed": [
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "eventhallusion",
+        "task": "entire",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__entire.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__entire.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__entire.manifest.jsonl",
+      "n_new_records": 0,
+      "n_total_samples": 114
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "eventhallusion",
+        "task": "misleading",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__misleading.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__misleading.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__misleading.manifest.jsonl",
+      "n_new_records": 0,
+      "n_total_samples": 102
+    },
+    {
+      "job": {
+        "model": "qwen2.5-vl-7b",
+        "method": "season",
+        "benchmark": "eventhallusion",
+        "task": "mix",
+        "status": "ready",
+        "note": "PARTIAL: Qwen SEASON path has not passed end-to-end validation",
+        "validation_override": true
+      },
+      "predictions": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/raw/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__mix.jsonl",
+      "summary": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/summary/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__mix.summary.json",
+      "manifest": "/scratch/jp09/dd9648/video-hallucination-benchmark/manifests/hallucination_benchmark_qwen_season_eventhallusion__qwen2.5-vl-7b__season__eventhallusion__mix.manifest.jsonl",
+      "n_new_records": 100,
+      "n_total_samples": 193
+    }
+  ],
+  "artifacts": {
+    "metrics_json": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/metrics/hallucination_benchmark_qwen_season_eventhallusion.metrics.json",
+    "results_csv": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_qwen_season_eventhallusion.results.csv",
+    "results_md": "/scratch/jp09/dd9648/video-hallucination-benchmark/results/tables/hallucination_benchmark_qwen_season_eventhallusion.results.md"
+  }
+}

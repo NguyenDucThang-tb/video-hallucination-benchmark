@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 41796.59it/s]
+Wrote VidHalluc TSH/STH audit artifacts to /scratch/jp09/dd9648/video-hallucination-benchmark/results/audit/qwen_base_vidhalluc_8frame

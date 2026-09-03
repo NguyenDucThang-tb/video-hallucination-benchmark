@@ -1,0 +1,67 @@
+{
+  "orh": {
+    "n_pairs": 0,
+    "n_observed_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "denominator_source": "unverified_observed_records",
+    "protocol_status": "UNVERIFIED_DENOMINATOR",
+    "observed_only_accuracy": null,
+    "accuracy": null
+  },
+  "tph": {
+    "n_pairs": 0,
+    "n_observed_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "denominator_source": "unverified_observed_records",
+    "protocol_status": "UNVERIFIED_DENOMINATOR",
+    "observed_only_accuracy": null,
+    "accuracy": null
+  },
+  "sdh": {
+    "n_pairs": 0,
+    "n_observed_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "denominator_source": "unverified_observed_records",
+    "protocol_status": "UNVERIFIED_DENOMINATOR",
+    "observed_only_accuracy": null,
+    "accuracy": null
+  },
+  "efh": {
+    "n_pairs": 200,
+    "n_observed_pairs": 200,
+    "n_complete_pairs": 200,
+    "n_missing_pairs": 0,
+    "correct_pairs": 37,
+    "n_parser_error_records": 0,
+    "denominator_source": "annotation_metadata",
+    "protocol_status": "VALID",
+    "observed_only_accuracy": 0.185,
+    "accuracy": 0.185
+  },
+  "enfh": {
+    "n_pairs": 0,
+    "n_observed_pairs": 0,
+    "n_complete_pairs": 0,
+    "n_missing_pairs": 0,
+    "correct_pairs": 0,
+    "n_parser_error_records": 0,
+    "denominator_source": "unverified_observed_records",
+    "protocol_status": "UNVERIFIED_DENOMINATOR",
+    "observed_only_accuracy": null,
+    "accuracy": null
+  },
+  "avg": {
+    "accuracy": null
+  },
+  "metric": "strict_pair_accuracy",
+  "n_duplicate_records_ignored": 0
+}
