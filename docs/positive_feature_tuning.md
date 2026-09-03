@@ -21,7 +21,8 @@ PYTHONPATH=. ./.venv/bin/python scripts/create_tuning_subset.py \
 
 Do not regenerate this file between grid points. The manifest stores exact
 sample IDs; TPH selection always retains complete pairs and the runner adjusts
-the pair denominator to the selected subset.
+the pair denominator to the selected subset. Videos that cannot be resolved on
+disk are excluded before random selection.
 
 Preview the 109-point grid without inference:
 

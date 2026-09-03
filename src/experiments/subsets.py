@@ -34,6 +34,10 @@ def _video_name(sample: BenchmarkSample) -> str:
     return str(sample.metadata.get("video_name") or sample.video_path)
 
 
+def _resolved(samples: Iterable[BenchmarkSample]) -> list[BenchmarkSample]:
+    return [sample for sample in samples if sample.metadata.get("video_resolved", True)]
+
+
 def build_tuning_subset_manifest(
     *,
     vidhalluc_samples: Iterable[BenchmarkSample],
@@ -52,9 +56,9 @@ def build_tuning_subset_manifest(
     complete pairs (normally 100 videos means 50 pairs).
     """
     rng = random.Random(seed)
-    vidhalluc = list(vidhalluc_samples)
-    video_hallucer = list(videohallucer_samples)
-    event = list(eventhallusion_samples)
+    vidhalluc = _resolved(vidhalluc_samples)
+    video_hallucer = _resolved(videohallucer_samples)
+    event = _resolved(eventhallusion_samples)
 
     tsh_units, tsh_ids = _select_grouped_samples(
         (sample for sample in vidhalluc if sample.task == "tsh"), _video_name, tsh_videos, rng
@@ -67,9 +71,11 @@ def build_tuning_subset_manifest(
     for sample in video_hallucer:
         if sample.task == "tph":
             tph_groups.setdefault(str(sample.metadata.get("pair_id")), []).append(sample)
-    malformed = {key: len(items) for key, items in tph_groups.items() if len(items) != 2}
-    if malformed:
-        raise ValueError(f"TPH requires complete two-record pairs; malformed pairs: {malformed}")
+    tph_groups = {
+        key: items
+        for key, items in tph_groups.items()
+        if len(items) == 2 and {item.metadata.get("branch") for item in items} == {"basic", "hallucination"}
+    }
     if tph_videos % 2:
         raise ValueError("tph_videos must be even so complete basic/hallucination pairs are retained")
     tph_pair_count = tph_videos // 2

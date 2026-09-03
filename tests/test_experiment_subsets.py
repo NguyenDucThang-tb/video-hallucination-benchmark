@@ -15,7 +15,7 @@ def sample(sample_id, benchmark, task, video, **metadata):
         prompt="question",
         ground_truth="yes",
         answer_type="yes_no",
-        metadata={"video_name": video, **metadata},
+        metadata={"video_name": video, "video_resolved": True, **metadata},
     )
 
 
@@ -81,3 +81,16 @@ def test_filter_rewrites_videohallucer_subset_denominator():
 
     assert len(selected) == 4
     assert {item.metadata["expected_task_pairs"] for item in selected} == {2}
+
+
+def test_subset_generator_excludes_unresolved_videos():
+    vidhalluc, videohallucer, event = fixture_samples()
+    for item in event:
+        if item.metadata["video_id"] == "event-0":
+            item.metadata["video_resolved"] = False
+    manifest = build_tuning_subset_manifest(
+        vidhalluc_samples=vidhalluc, videohallucer_samples=videohallucer,
+        eventhallusion_samples=event, seed=2, tsh_videos=1,
+        mcq_videos=1, tph_videos=2, event_videos=3,
+    )
+    assert "entire:event-0" not in manifest["selections"]["eventhallusion/*"]["selected_units"]
