@@ -29,7 +29,7 @@ methods:
     dino_checkpoint: /scratch/jp09/dd9648/huggingface/dinov2-large
     dino_device: cpu
     alpha: 0.4
-    alpha_spatial: 0.4
-    beta_temporal: 0.4
+    alpha_s: 0.4
+    beta: 0.4
     epsilon: 1.0e-6
     require_dino: true

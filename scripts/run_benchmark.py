@@ -29,6 +29,7 @@ from src.methods.season.season_method import SeasonMethod
 from src.methods.tcd import TCDMethod
 from src.models import GenerationConfig, LlavaOVAdapter, LlavaVideoAdapter, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
+from src.experiments.subsets import filter_samples_by_manifest, load_subset_manifest
 from src.utils.config import load_yaml
 
 
@@ -84,8 +85,13 @@ def load_method_configs() -> dict:
     return load_yaml(PROJECT / "configs/methods.yaml")["methods"]
 
 
-def resolve_method_config(name: str) -> dict:
+def resolve_method_config(name: str, experiment_config: dict | None = None) -> dict:
     config = dict(load_method_configs()[name])
+    experiment_config = experiment_config or {}
+    overrides = experiment_config.get("method_configs", {}).get(name, {})
+    if not isinstance(overrides, dict):
+        raise ValueError(f"method_configs.{name} must be a mapping")
+    config.update(overrides)
     override = os.environ.get(f"{name.upper()}_BATCH_SIZE")
     if override:
         config["batch_size"] = int(override)
@@ -188,17 +194,18 @@ def instantiate_model(name: str):
     raise RuntimeError(f"Model adapter not implemented yet for {name}")
 
 
-def instantiate_method(name: str, model):
+def instantiate_method(name: str, model, experiment_config: dict | None = None):
+    method_config = resolve_method_config(name, experiment_config)
     if name == "base":
-        return BaseMethod(model, resolve_method_config(name))
+        return BaseMethod(model, method_config)
     if name == "tcd":
-        return TCDMethod(model, resolve_method_config(name))
+        return TCDMethod(model, method_config)
     if name == "dino_heal":
-        return DINOHealMethod(model, resolve_method_config(name))
+        return DINOHealMethod(model, method_config)
     if name == "season":
-        return SeasonMethod(model, resolve_method_config(name))
+        return SeasonMethod(model, method_config)
     if name == "positive_feature":
-        return PositiveFeatureMethod(model, resolve_method_config(name))
+        return PositiveFeatureMethod(model, method_config)
     raise RuntimeError(f"Method not implemented yet for runnable benchmark path: {name}")
 
 
@@ -518,9 +525,11 @@ def run_job(
     limit: int | None = None,
     cli_args=None,
     plan: list[dict] | None = None,
+    model=None,
+    method=None,
 ) -> dict:
-    model = instantiate_model(job["model"])
-    method = instantiate_method(job["method"], model)
+    model = model or instantiate_model(job["model"])
+    method = method or instantiate_method(job["method"], model, config)
     loader = instantiate_loader(job["benchmark"])
     task = job.get("task")
     if samples is None:
@@ -657,6 +666,12 @@ def main():
     if not config_path.is_absolute():
         config_path = PROJECT / config_path
     config = load_yaml(config_path)
+    subset_manifest = None
+    if config.get("subset_manifest"):
+        subset_path = Path(config["subset_manifest"])
+        if not subset_path.is_absolute():
+            subset_path = PROJECT / subset_path
+        subset_manifest = load_subset_manifest(subset_path)
     plan = build_plan(config, allow_unvalidated=args.allow_unvalidated)
     write_vidhalluc_resolved_config(config, args, plan)
     print(json.dumps({"config": str(config_path), "jobs": plan}, indent=2))
@@ -674,6 +689,7 @@ def main():
         )
     generation_config = GenerationConfig(**config["generation"])
     results = []
+    runtime_cache = {}
     grouped_samples: dict[str, dict[str, list]] = {}
     benchmark_task_overrides: dict[str, list[str] | None] = {}
     for benchmark_entry in config["benchmarks"]:
@@ -688,7 +704,13 @@ def main():
             benchmark,
             benchmark_entry if isinstance(benchmark_entry, dict) else None,
         )
-        grouped_samples[benchmark] = group_samples_by_task(loader)
+        samples = list(loader.iter_samples())
+        if subset_manifest is not None:
+            samples = filter_samples_by_manifest(samples, benchmark, subset_manifest)
+        grouped: dict[str, list] = defaultdict(list)
+        for sample in samples:
+            grouped[sample.task].append(sample)
+        grouped_samples[benchmark] = dict(grouped)
 
     for benchmark_entry in config["benchmarks"]:
         if isinstance(benchmark_entry, str):
@@ -701,9 +723,17 @@ def main():
             task_samples = grouped_samples.get(benchmark, {}).get(task, [])
             for job in task_jobs:
                 try:
+                    cache_key = (job["model"], job["method"])
+                    if cache_key not in runtime_cache:
+                        cached_model = instantiate_model(job["model"])
+                        runtime_cache[cache_key] = (
+                            cached_model,
+                            instantiate_method(job["method"], cached_model, config),
+                        )
+                    model, method = runtime_cache[cache_key]
                     results.append(run_job(
                         config, job, generation_config, samples=task_samples, limit=args.limit,
-                        cli_args=args, plan=plan,
+                        cli_args=args, plan=plan, model=model, method=method,
                     ))
                 except Exception as exc:
                     print_progress(
