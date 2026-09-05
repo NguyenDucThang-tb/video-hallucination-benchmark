@@ -28,6 +28,10 @@ def test_experiment_method_config_overrides_repository_defaults():
     assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.2, 0.1, 0.6)
     assert "alpha_spatial" not in config
     assert "beta_temporal" not in config
+    assert config["foreground_return_soft"] is True
+    assert config["foreground_pair_fusion"] == "mean"
+    assert config["foreground_morph_kernel"] == 0
+    assert config["foreground_pool_avg_weight"] == 1.0
 
 
 @pytest.mark.parametrize(
@@ -66,6 +70,29 @@ def test_zero_coefficients_are_an_exact_identity():
     assert diagnostics["positive_feature_delta"] == 0.0
 
 
+def test_enhancement_reports_mask_distribution_diagnostics():
+    torch = pytest.importorskip("torch")
+    values = torch.arange(16, dtype=torch.float32).reshape(2, 2, 4) + 1
+    foreground = torch.tensor([[0.1, 0.4], [0.6, 0.9]])
+
+    _, diagnostics = enhance_visual_embeddings(
+        values,
+        foreground,
+        PositiveFeatureConfig(alpha=0.2, alpha_s=0.1, beta=0.0),
+        torch,
+    )
+
+    assert diagnostics["foreground_min"] == pytest.approx(0.1)
+    assert diagnostics["foreground_max"] == pytest.approx(0.9)
+    assert diagnostics["foreground_std"] > 0
+    assert diagnostics["foreground_spatial_std"] > 0
+    assert diagnostics["foreground_temporal_std"] > 0
+    assert diagnostics["foreground_coverage_at_0p5"] == pytest.approx(0.5)
+    assert diagnostics["foreground_p10"] < diagnostics["foreground_p50"]
+    assert diagnostics["foreground_p50"] < diagnostics["foreground_p90"]
+    assert diagnostics["persistence_std"] > 0
+
+
 def test_grid_summary_marks_only_complete_runs_as_best_and_worst():
     rows = [
         {"experiment": "bad", "status": "failed", "mean_score": 0.99},
@@ -83,10 +110,35 @@ def test_run_diagnostics_validate_hook_and_all_coefficients(tmp_path):
     row = {
         "sample_id": "tsh:1", "model": "m", "method": "positive_feature",
         "benchmark": "vidhalluc", "task": "tsh", "error": None,
-        "method_config": {"alpha": 0.2, "alpha_s": 0.1, "beta": 0.6},
+        "method_config": {
+            "alpha": 0.2,
+            "alpha_s": 0.1,
+            "beta": 0.6,
+            "foreground_threshold": 0.5,
+            "foreground_morph_kernel": 0,
+            "foreground_return_soft": True,
+            "foreground_pair_fusion": "mean",
+            "foreground_pool_avg_weight": 1.0,
+        },
         "metadata": {
             "positive_feature_hook_applied": True,
             "alpha": 0.2, "alpha_s": 0.1, "beta": 0.6,
+            "foreground_threshold": 0.5,
+            "foreground_morph_kernel": 0,
+            "foreground_return_soft": True,
+            "foreground_pair_fusion": "mean",
+            "foreground_pool_avg_weight": 1.0,
+            "foreground_mean": 0.5,
+            "foreground_std": 0.2,
+            "foreground_min": 0.1,
+            "foreground_max": 0.9,
+            "foreground_p10": 0.2,
+            "foreground_p50": 0.5,
+            "foreground_p90": 0.8,
+            "foreground_coverage_at_0p5": 0.5,
+            "foreground_spatial_std": 0.2,
+            "foreground_temporal_std": 0.1,
+            "persistence_std": 0.15,
         },
     }
     (tmp_path / "run__records.jsonl").write_text(__import__("json").dumps(row) + "\n")

@@ -54,6 +54,21 @@ class PositiveFeatureConfig:
     saliency_device: str = "cpu"
     """Device to run the saliency model on."""
 
+    foreground_threshold: float = 0.5
+    """Threshold used only when a binary foreground mask is requested."""
+
+    foreground_morph_kernel: int = 0
+    """Morphological-closing kernel; zero disables closing."""
+
+    foreground_return_soft: bool = True
+    """Preserve BiRefNet probabilities instead of saturating a binary mask."""
+
+    foreground_pair_fusion: str = "mean"
+    """How two sampled frames represented by one temporal token are fused."""
+
+    foreground_pool_avg_weight: float = 1.0
+    """Average-pooling weight; one disables foreground-expanding max pooling."""
+
 
 def ensure_birefnet_loaded(holder: dict, checkpoint: str, device: str, torch_module):
     """Lazy-load BiRefNet model and transform, caching on *holder*.
@@ -168,10 +183,11 @@ def compute_birefnet_foreground(
     birefnet_transform,
     torch_module,
     target_device,
-    thr: float = 0.15,
-    kernel: int = 5,
-    return_soft: bool = False,
-    avg_weight: float = 0.7,
+    thr: float = 0.5,
+    kernel: int = 0,
+    return_soft: bool = True,
+    avg_weight: float = 1.0,
+    pair_fusion: str = "mean",
 ) -> "torch.Tensor":
     """
     Compute foreground evidence using BiRefNet and align it
@@ -191,8 +207,7 @@ def compute_birefnet_foreground(
                     frame[2*t]
                     frame[2*t+1]
 
-                foreground được hợp nhất bằng:
-                    max(mask_0, mask_1)
+                foreground được hợp nhất theo ``pair_fusion``.
 
     T: Number of temporal positions in vision grid.
 
@@ -247,6 +262,11 @@ def compute_birefnet_foreground(
         Ht, Wt = 1, P
 
     n_frames = len(video_frames)
+
+    if pair_fusion not in {"mean", "max"}:
+        raise ValueError("pair_fusion must be 'mean' or 'max'")
+    if not 0.0 <= float(avg_weight) <= 1.0:
+        raise ValueError("avg_weight must be between 0 and 1")
 
     if n_frames == 0:
         raise ValueError("video_frames is empty")
@@ -368,14 +388,10 @@ def compute_birefnet_foreground(
             pred0 = all_preds[idx0]
             pred1 = all_preds[idx1]
 
-            # ====================================================
-            # TEMPORAL RESCUE
-            #
-            # Nếu object bị BiRefNet miss ở một frame nhưng xuất
-            # hiện rõ ở frame còn lại, vẫn giữ foreground evidence.
-            # ====================================================
-
-            pred = torch_module.maximum(  pred0,  pred1,   )
+            if pair_fusion == "max":
+                pred = torch_module.maximum(pred0, pred1)
+            else:
+                pred = (pred0 + pred1) * 0.5
 
         # --------------------------------------------------------
         # CASE 2:
@@ -582,10 +598,22 @@ def enhance_visual_embeddings(
 
     # Diagnostics
     delta = ((V_prime - V).norm(dim=-1) / (V.norm(dim=-1) + eps)).mean().item()
+    fg_float = fg.float()
+    persist_float = persist.float()
     diagnostics = {
         "positive_feature_delta": float(delta),
-        "foreground_mean": float(fg.mean().item()),
-        "persistence_mean": float(persist.mean().item()),
+        "foreground_mean": float(fg_float.mean().item()),
+        "foreground_std": float(fg_float.std(unbiased=False).item()),
+        "foreground_min": float(fg_float.min().item()),
+        "foreground_max": float(fg_float.max().item()),
+        "foreground_p10": float(torch_module.quantile(fg_float, 0.1).item()),
+        "foreground_p50": float(torch_module.quantile(fg_float, 0.5).item()),
+        "foreground_p90": float(torch_module.quantile(fg_float, 0.9).item()),
+        "foreground_coverage_at_0p5": float((fg_float >= 0.5).float().mean().item()),
+        "foreground_spatial_std": float(fg_float.std(dim=1, unbiased=False).mean().item()),
+        "foreground_temporal_std": float(fg_float.std(dim=0, unbiased=False).mean().item()),
+        "persistence_mean": float(persist_float.mean().item()),
+        "persistence_std": float(persist_float.std(unbiased=False).item()),
         "temporal_evidence_mean_norm": float(diff.norm(dim=-1).mean().item()),
         "alpha": config.alpha,
         "alpha_s": config.alpha_s,

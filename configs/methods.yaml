@@ -32,4 +32,9 @@ methods:
     alpha_s: 0.4
     beta: 0.4
     epsilon: 1.0e-6
+    foreground_threshold: 0.5
+    foreground_morph_kernel: 0
+    foreground_return_soft: true
+    foreground_pair_fusion: mean
+    foreground_pool_avg_weight: 1.0
     require_dino: true

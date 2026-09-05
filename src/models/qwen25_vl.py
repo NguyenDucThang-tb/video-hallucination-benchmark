@@ -905,6 +905,11 @@ class Qwen25VLAdapter(ModelAdapter):
             birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
             dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
             saliency_device=str(config.get("dino_device", "cpu")),
+            foreground_threshold=float(config.get("foreground_threshold", 0.5)),
+            foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
+            foreground_return_soft=bool(config.get("foreground_return_soft", True)),
+            foreground_pair_fusion=str(config.get("foreground_pair_fusion", "mean")),
+            foreground_pool_avg_weight=float(config.get("foreground_pool_avg_weight", 1.0)),
         )
 
         # ── prepare inputs ──
@@ -945,6 +950,11 @@ class Qwen25VLAdapter(ModelAdapter):
                 fg = compute_birefnet_foreground(
                     video_frames, T, P, birefnet_model, birefnet_transform,
                     self.torch, self.device,
+                    thr=pf_config.foreground_threshold,
+                    kernel=pf_config.foreground_morph_kernel,
+                    return_soft=pf_config.foreground_return_soft,
+                    avg_weight=pf_config.foreground_pool_avg_weight,
+                    pair_fusion=pf_config.foreground_pair_fusion,
                 )
                 diagnostics["birefnet_loaded"] = True
             else:
@@ -1057,6 +1067,11 @@ class Qwen25VLAdapter(ModelAdapter):
             "grid_P_after_merge": P,
             "spatial_merge_size": merge_size,
             "alpha": pf_config.alpha, "alpha_s": pf_config.alpha_s, "beta": pf_config.beta,
+            "foreground_threshold": pf_config.foreground_threshold,
+            "foreground_morph_kernel": pf_config.foreground_morph_kernel,
+            "foreground_return_soft": pf_config.foreground_return_soft,
+            "foreground_pair_fusion": pf_config.foreground_pair_fusion,
+            "foreground_pool_avg_weight": pf_config.foreground_pool_avg_weight,
         })
         return answer, diagnostics
 

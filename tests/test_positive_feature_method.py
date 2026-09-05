@@ -123,3 +123,55 @@ def test_birefnet_inputs_match_half_precision_model_dtype():
 
     assert model.input_dtype == torch.float16
     assert foreground.shape == (2, 4)
+    assert foreground.dtype == torch.float32
+
+
+def test_birefnet_defaults_preserve_soft_mask_and_mean_frame_pairs():
+    torch = pytest.importorskip("torch")
+
+    class FakeBiRefNet:
+        def __init__(self):
+            self.parameter = torch.zeros(1)
+
+        def parameters(self):
+            yield self.parameter
+
+        def __call__(self, inputs):
+            return [inputs[:, :1]]
+
+    def transform(image):
+        value = float(np.asarray(image).mean() / 255.0)
+        return torch.full((3, 4, 4), value)
+
+    foreground = compute_birefnet_foreground(
+        np.stack([
+            np.zeros((4, 4, 3), dtype=np.uint8),
+            np.full((4, 4, 3), 255, dtype=np.uint8),
+        ]),
+        T=1,
+        P=1,
+        birefnet_model=FakeBiRefNet(),
+        birefnet_transform=transform,
+        torch_module=torch,
+        target_device=torch.device("cpu"),
+    )
+
+    expected = (torch.sigmoid(torch.tensor(0.0)) + torch.sigmoid(torch.tensor(1.0))) / 2
+    assert foreground.dtype == torch.float32
+    assert torch.allclose(foreground, expected.reshape(1, 1))
+
+
+def test_birefnet_rejects_unknown_pair_fusion():
+    torch = pytest.importorskip("torch")
+
+    with pytest.raises(ValueError, match="pair_fusion"):
+        compute_birefnet_foreground(
+            np.zeros((1, 4, 4, 3), dtype=np.uint8),
+            T=1,
+            P=1,
+            birefnet_model=object(),
+            birefnet_transform=lambda _image: torch.ones(3, 4, 4),
+            torch_module=torch,
+            target_device=torch.device("cpu"),
+            pair_fusion="invalid",
+        )

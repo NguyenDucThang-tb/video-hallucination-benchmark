@@ -98,6 +98,26 @@ def validate_run_diagnostics(
                 latest[key] = row
     errors = []
     expected = {"alpha": point.alpha, "alpha_s": point.alpha_s, "beta": point.beta}
+    preprocessing_fields = (
+        "foreground_threshold",
+        "foreground_morph_kernel",
+        "foreground_return_soft",
+        "foreground_pair_fusion",
+        "foreground_pool_avg_weight",
+    )
+    distribution_fields = (
+        "foreground_mean",
+        "foreground_std",
+        "foreground_min",
+        "foreground_max",
+        "foreground_p10",
+        "foreground_p50",
+        "foreground_p90",
+        "foreground_coverage_at_0p5",
+        "foreground_spatial_std",
+        "foreground_temporal_std",
+        "persistence_std",
+    )
     for key, row in latest.items():
         if row.get("error"):
             continue
@@ -110,6 +130,16 @@ def validate_run_diagnostics(
                 errors.append(f"{key[0]}: method_config.{name} does not equal {value}")
             if float(metadata.get(name, float("nan"))) != value:
                 errors.append(f"{key[0]}: diagnostics.{name} does not equal {value}")
+        for name in preprocessing_fields:
+            if name not in method_config:
+                errors.append(f"{key[0]}: method_config.{name} is missing")
+            elif metadata.get(name) != method_config[name]:
+                errors.append(
+                    f"{key[0]}: diagnostics.{name} does not match method_config"
+                )
+        for name in distribution_fields:
+            if metadata.get(name) is None:
+                errors.append(f"{key[0]}: diagnostics.{name} is missing")
     return errors
 
 
