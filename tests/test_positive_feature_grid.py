@@ -68,6 +68,48 @@ def test_zero_coefficients_are_an_exact_identity():
     )
     assert torch.equal(enhanced, values)
     assert diagnostics["positive_feature_delta"] == 0.0
+    assert diagnostics["positive_feature_direction_delta"] == pytest.approx(0.0)
+
+
+def test_foreground_context_changes_direction_and_survives_token_normalization():
+    torch = pytest.importorskip("torch")
+    values = torch.tensor([[[1.0, 0.0], [0.0, 1.0]]])
+    foreground = torch.tensor([[1.0, 0.5]])
+
+    enhanced, diagnostics = enhance_visual_embeddings(
+        values,
+        foreground,
+        PositiveFeatureConfig(alpha=0.4, alpha_s=0.0, beta=0.0),
+        torch,
+    )
+
+    normalized_before = torch.nn.functional.normalize(values, dim=-1)
+    normalized_after = torch.nn.functional.normalize(enhanced, dim=-1)
+    assert not torch.allclose(normalized_after, normalized_before)
+    assert diagnostics["positive_feature_direction_delta"] > 0
+    assert diagnostics["foreground_residual_mean_norm"] > 0
+
+
+def test_persistence_context_changes_direction_and_survives_token_normalization():
+    torch = pytest.importorskip("torch")
+    values = torch.tensor([
+        [[1.0, 0.0], [0.0, 1.0]],
+        [[0.0, 1.0], [1.0, 0.0]],
+    ])
+    foreground = torch.tensor([[1.0, 0.2], [0.8, 1.0]])
+
+    enhanced, diagnostics = enhance_visual_embeddings(
+        values,
+        foreground,
+        PositiveFeatureConfig(alpha=0.0, alpha_s=0.4, beta=0.0),
+        torch,
+    )
+
+    normalized_before = torch.nn.functional.normalize(values, dim=-1)
+    normalized_after = torch.nn.functional.normalize(enhanced, dim=-1)
+    assert not torch.allclose(normalized_after, normalized_before)
+    assert diagnostics["positive_feature_direction_delta"] > 0
+    assert diagnostics["persistence_residual_mean_norm"] > 0
 
 
 def test_enhancement_reports_mask_distribution_diagnostics():
@@ -139,6 +181,9 @@ def test_run_diagnostics_validate_hook_and_all_coefficients(tmp_path):
             "foreground_spatial_std": 0.2,
             "foreground_temporal_std": 0.1,
             "persistence_std": 0.15,
+            "positive_feature_direction_delta": 0.03,
+            "foreground_residual_mean_norm": 1.2,
+            "persistence_residual_mean_norm": 1.1,
         },
     }
     (tmp_path / "run__records.jsonl").write_text(__import__("json").dumps(row) + "\n")
@@ -147,3 +192,54 @@ def test_run_diagnostics_validate_hook_and_all_coefficients(tmp_path):
     row["metadata"]["beta"] = 0.4
     (tmp_path / "run__records.jsonl").write_text(__import__("json").dumps(row) + "\n")
     assert "diagnostics.beta" in validate_run_diagnostics(tmp_path, "run", point)[0]
+
+
+def test_run_diagnostics_reject_norm_only_feature_changes(tmp_path):
+    point = GridPoint("foreground_only", 0.2, 0.0, 0.0)
+    row = {
+        "sample_id": "tsh:1",
+        "model": "m",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "error": None,
+        "method_config": {
+            "alpha": 0.2,
+            "alpha_s": 0.0,
+            "beta": 0.0,
+            "foreground_threshold": 0.5,
+            "foreground_morph_kernel": 0,
+            "foreground_return_soft": True,
+            "foreground_pair_fusion": "mean",
+            "foreground_pool_avg_weight": 1.0,
+        },
+        "metadata": {
+            "positive_feature_hook_applied": True,
+            "alpha": 0.2,
+            "alpha_s": 0.0,
+            "beta": 0.0,
+            "foreground_threshold": 0.5,
+            "foreground_morph_kernel": 0,
+            "foreground_return_soft": True,
+            "foreground_pair_fusion": "mean",
+            "foreground_pool_avg_weight": 1.0,
+            "foreground_mean": 0.5,
+            "foreground_std": 0.2,
+            "foreground_min": 0.1,
+            "foreground_max": 0.9,
+            "foreground_p10": 0.2,
+            "foreground_p50": 0.5,
+            "foreground_p90": 0.8,
+            "foreground_coverage_at_0p5": 0.5,
+            "foreground_spatial_std": 0.2,
+            "foreground_temporal_std": 0.1,
+            "persistence_std": 0.15,
+            "positive_feature_direction_delta": 0.0,
+            "foreground_residual_mean_norm": 1.2,
+            "persistence_residual_mean_norm": 1.1,
+        },
+    }
+    (tmp_path / "run__records.jsonl").write_text(__import__("json").dumps(row) + "\n")
+
+    errors = validate_run_diagnostics(tmp_path, "run", point)
+    assert any("did not change feature direction" in error for error in errors)

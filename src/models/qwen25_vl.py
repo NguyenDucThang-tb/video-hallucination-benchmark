@@ -890,8 +890,8 @@ class Qwen25VLAdapter(ModelAdapter):
     def generate_positive_feature(self, video_frames, prompt, generation_config, config):
         """Generate text with BiRefNet-based positive visual-feature enhancement.
 
-        Hooks into the vision encoder to apply spatial saliency scaling and
-        directed temporal motion evidence, then runs ``model.generate()``.
+        Hooks into the vision encoder to inject foreground/persistence context
+        and directed temporal motion evidence, then runs ``model.generate()``.
 
         Uses BiRefNet for foreground segmentation by default (``use_birefnet=True``).
         """
@@ -1087,14 +1087,17 @@ class Qwen25VLAdapter(ModelAdapter):
     ) -> dict:
         """Forward pass with positive visual-feature enhancement via vision encoder hook.
 
-        Hooks into the vision encoder output to apply:
-        1. Spatial scaling: V' = V * (1 + alpha*fg + alpha_s*persist)
-        2. Directed motion evidence: V' += beta * norm_stabilized_diff
+        Uses the shared direction-changing foreground, persistence, and motion
+        residuals before returning next-token logits.
         """
         T, Ht, Wt = foreground_ref["grid"]
         P = Ht * Wt
         fg = foreground_ref["fg"].to(self.device).float()   # [T, P]
-        persist = fg.mean(0, keepdim=True).expand(T, P)      # [T, P]
+        pf_config = PositiveFeatureConfig(
+            alpha=alpha,
+            alpha_s=alpha_s,
+            beta=beta,
+        )
         holder = {}
         handles = []
 
@@ -1115,18 +1118,10 @@ class Qwen25VLAdapter(ModelAdapter):
             assert n_vis == T * P, f"n_vis {n_vis} != T*P {T * P}"
             V = f.view(T, P, D)
 
-            # Spatial: scale by saliency (fg + persist)
-            S = alpha * fg + alpha_s * persist
-            Vp = V * (1.0 + S.unsqueeze(-1))
-
-            # Directed: add motion evidence
-            e = self.torch.zeros_like(V)
-            e[1:] = V[1:] - V[:-1]
-            e = e * fg.unsqueeze(-1)
-            e = e / (e.norm(-1, keepdim=True) + 1e-6) * V.norm(-1, keepdim=True)
-            Vp = Vp + beta * e
-
-            holder["delta"] = ((Vp - V).norm(-1) / (V.norm(-1) + 1e-6)).mean().item()
+            Vp, hook_diagnostics = enhance_visual_embeddings(
+                V, fg, pf_config, self.torch
+            )
+            holder.update(hook_diagnostics)
 
             # Step 2: return in original format
             o = Vp.view(n_vis, D).to(Fv.dtype)
@@ -1156,7 +1151,11 @@ class Qwen25VLAdapter(ModelAdapter):
             for h in handles:
                 h.remove()
 
-        return {"logits": logits, "delta": holder.get("delta")}
+        return {
+            "logits": logits,
+            "delta": holder.get("positive_feature_delta"),
+            "direction_delta": holder.get("positive_feature_direction_delta"),
+        }
 
     def token_id_to_text(self, token_id: int) -> str:
         return self.processor.tokenizer.decode([token_id], skip_special_tokens=True)

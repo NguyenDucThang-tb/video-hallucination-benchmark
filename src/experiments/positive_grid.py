@@ -117,6 +117,9 @@ def validate_run_diagnostics(
         "foreground_spatial_std",
         "foreground_temporal_std",
         "persistence_std",
+        "positive_feature_direction_delta",
+        "foreground_residual_mean_norm",
+        "persistence_residual_mean_norm",
     )
     for key, row in latest.items():
         if row.get("error"):
@@ -140,6 +143,11 @@ def validate_run_diagnostics(
         for name in distribution_fields:
             if metadata.get(name) is None:
                 errors.append(f"{key[0]}: diagnostics.{name} is missing")
+        direction_delta = metadata.get("positive_feature_direction_delta")
+        if direction_delta is not None and float(direction_delta) <= 0.0:
+            errors.append(
+                f"{key[0]}: positive feature enhancement did not change feature direction"
+            )
     return errors
 
 

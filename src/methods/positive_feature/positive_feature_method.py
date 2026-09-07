@@ -10,7 +10,7 @@ class PositiveFeatureMethod(InferenceMethod):
     """Inference method that enhances visual features via a vision-encoder hook.
 
     Hooks into the vision encoder output during ``model.generate()`` to apply:
-    1. Spatial saliency scaling using DINO foreground scores.
+    1. Foreground and persistent context residuals using saliency scores.
     2. Directed temporal motion evidence across consecutive frames.
 
     The method delegates all model-specific details (input preparation, grid

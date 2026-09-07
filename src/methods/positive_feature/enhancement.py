@@ -6,8 +6,9 @@ from any model adapter's vision encoder hook:
 Spatial Enhancement:
     F[t,p]  = foreground mask from BiRefNet (per token per frame)
     P[p]    = persistence map = (1/T) * Σ_t F[t,p]
-    S       = α·F + α_s·P
-    V_spatial = V ⊙ (1 + S)
+    C_f[t]  = foreground-weighted spatial context
+    C_p[p]  = foreground-weighted temporal context
+    V_spatial = V + α·F·C_f + α_s·P·C_p
 
 Temporal Enhancement:
     Diff[t,p]  = V[t,p] - V[t-1,p]  (frame-to-frame change)
@@ -15,7 +16,7 @@ Temporal Enhancement:
     Diff       = (Diff / ||Diff||) * ||V||  (norm-stabilize)
 
 Fusion:
-    V' = V·(1+S) + β·Diff
+    V' = V_spatial + β·Diff
 """
 
 from __future__ import annotations
@@ -31,10 +32,10 @@ class PositiveFeatureConfig:
     """Configuration for BiRefNet-based positive feature enhancement."""
 
     alpha: float = 0.4
-    """Weight for foreground saliency scaling."""
+    """Weight for the foreground-context residual."""
 
     alpha_s: float = 0.4
-    """Weight for foreground persistence scaling."""
+    """Weight for the temporally persistent-context residual."""
 
     beta: float = 0.4
     """Weight for directed temporal motion evidence."""
@@ -568,8 +569,9 @@ def enhance_visual_embeddings(
 
     Formula:
         persist = mean_t(fg)  →  [P]  broadcast to [T, P]
-        S = α·fg + α_s·persist
-        V_spatial = V ⊙ (1 + S)
+        C_fg[t] = foreground-weighted mean_p(V[t,p])
+        C_persist[p] = foreground-weighted mean_t(V[t,p])
+        V_spatial = V + α·fg·C_fg + α_s·persist·C_persist
         Diff[t] = V[t] - V[t-1]  (zero for t=0)
         Diff = Diff * fg          (mask background)
         Diff = (Diff / ||Diff||) * ||V||   (norm-stabilize)
@@ -578,10 +580,34 @@ def enhance_visual_embeddings(
     T, P, D = V.shape
     eps = config.epsilon
 
-    # -- Spatial --
+    def match_token_norm(direction, reference):
+        """Scale a context direction to each reference token's magnitude."""
+        direction_norm = direction.norm(dim=-1, keepdim=True)
+        reference_norm = reference.norm(dim=-1, keepdim=True)
+        return direction / (direction_norm + eps) * reference_norm
+
+    # -- Foreground and persistent spatial context --
     persist = fg.mean(0, keepdim=True).expand(T, P)  # [T, P]
-    S = config.alpha * fg + config.alpha_s * persist  # [T, P]
-    V_spatial = V * (1.0 + S.unsqueeze(-1))           # [T, P, D]
+
+    foreground_weights = fg / (fg.sum(dim=1, keepdim=True) + eps)
+    foreground_context = (
+        foreground_weights.unsqueeze(-1) * V
+    ).sum(dim=1, keepdim=True)  # [T, 1, D]
+    foreground_direction = match_token_norm(foreground_context, V)
+    foreground_residual = fg.unsqueeze(-1) * foreground_direction
+
+    temporal_weights = fg / (fg.sum(dim=0, keepdim=True) + eps)
+    persistence_context = (
+        temporal_weights.unsqueeze(-1) * V
+    ).sum(dim=0, keepdim=True)  # [1, P, D]
+    persistence_direction = match_token_norm(persistence_context, V)
+    persistence_residual = persist.unsqueeze(-1) * persistence_direction
+
+    V_spatial = (
+        V
+        + config.alpha * foreground_residual
+        + config.alpha_s * persistence_residual
+    )
 
     # -- Temporal --
     diff = torch_module.zeros_like(V)
@@ -598,10 +624,24 @@ def enhance_visual_embeddings(
 
     # Diagnostics
     delta = ((V_prime - V).norm(dim=-1) / (V.norm(dim=-1) + eps)).mean().item()
+    if torch_module.equal(V_prime, V):
+        direction_delta = 0.0
+    else:
+        cosine = torch_module.nn.functional.cosine_similarity(
+            V_prime.float(), V.float(), dim=-1, eps=eps
+        )
+        direction_delta = (1.0 - cosine).clamp_min(0.0).mean().item()
     fg_float = fg.float()
     persist_float = persist.float()
     diagnostics = {
         "positive_feature_delta": float(delta),
+        "positive_feature_direction_delta": float(direction_delta),
+        "foreground_residual_mean_norm": float(
+            foreground_residual.norm(dim=-1).mean().item()
+        ),
+        "persistence_residual_mean_norm": float(
+            persistence_residual.norm(dim=-1).mean().item()
+        ),
         "foreground_mean": float(fg_float.mean().item()),
         "foreground_std": float(fg_float.std(unbiased=False).item()),
         "foreground_min": float(fg_float.min().item()),

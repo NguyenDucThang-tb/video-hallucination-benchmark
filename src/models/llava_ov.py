@@ -382,9 +382,9 @@ class LlavaOVAdapter(ModelAdapter):
         """Generate text with BiRefNet-based positive visual-feature enhancement.
 
         Hooks into the multi_modal_projector output to apply:
-        1. Spatial saliency scaling using BiRefNet foreground masks + persistence.
+        1. Foreground and persistence context residuals using BiRefNet masks.
         2. Directed temporal motion evidence across consecutive frames.
-        3. Fusion: V' = V·(1+S) + β·Diff
+        3. Residual fusion before language-model normalization.
         """
         use_birefnet = bool(config.get("use_birefnet", True))
         pf_config = PositiveFeatureConfig(
