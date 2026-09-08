@@ -40,6 +40,11 @@ def parse_args():
     )
     parser.add_argument("--resume", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--max-new-tokens", type=int, default=128)
+    parser.add_argument(
+        "--logit-diagnostics", action="store_true",
+        help="Compare base and enhanced next-token logits for every sample",
+    )
+    parser.add_argument("--logit-top-k", type=int, default=10)
     parser.add_argument("--start-index", type=int, default=1)
     parser.add_argument("--stop-index", type=int, default=None)
     return parser.parse_args()
@@ -98,6 +103,8 @@ def main():
             "methods": ["positive_feature"],
             "method_configs": {"positive_feature": {
                 "alpha": point.alpha, "alpha_s": point.alpha_s, "beta": point.beta,
+                "logit_diagnostics": args.logit_diagnostics,
+                "logit_top_k": args.logit_top_k,
             }},
             "subset_manifest": str(manifest_path),
             "benchmarks": [

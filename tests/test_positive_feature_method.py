@@ -12,7 +12,26 @@ from src.models.base import GenerationConfig
 from src.models.llava_ov import LlavaOVAdapter
 from src.models.llava_video import LlavaVideoAdapter
 from src.models.compatibility import check_compatibility
-from src.models.qwen25_vl import Qwen25VLAdapter
+from src.models.qwen25_vl import Qwen25VLAdapter, summarize_logit_change
+
+
+def test_summarize_logit_change_reports_distribution_and_topk_differences():
+    torch = pytest.importorskip("torch")
+    diagnostics = summarize_logit_change(
+        torch.tensor([1.0, 3.0, 2.0]),
+        torch.tensor([4.0, 2.0, 2.5]),
+        torch,
+        top_k=2,
+    )
+
+    assert diagnostics["positive_feature_logit_mean_abs_delta"] > 0
+    assert diagnostics["positive_feature_logit_max_abs_delta"] == pytest.approx(3.0)
+    assert diagnostics["positive_feature_logit_cosine_distance"] > 0
+    assert diagnostics["positive_feature_logit_top1_changed"] is True
+    assert diagnostics["positive_feature_base_top_token_id"] == 1
+    assert diagnostics["positive_feature_enhanced_top_token_id"] == 0
+    assert diagnostics["positive_feature_base_topk_token_ids"] == [1, 2]
+    assert diagnostics["positive_feature_enhanced_topk_token_ids"] == [0, 2]
 
 
 class FakePositiveFeatureAdapter:

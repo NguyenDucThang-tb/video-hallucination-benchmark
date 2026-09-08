@@ -21,6 +21,39 @@ from src.methods.season.attention_diagnosis import frame_attention
 from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
 
 
+def summarize_logit_change(base_logits, enhanced_logits, torch_module, top_k: int = 10) -> dict:
+    """Return compact, JSON-safe diagnostics for two next-token logit vectors."""
+    base = base_logits.detach().float().reshape(-1)
+    enhanced = enhanced_logits.detach().float().reshape(-1)
+    if base.shape != enhanced.shape:
+        raise ValueError(
+            f"logit shape mismatch: base={tuple(base.shape)} enhanced={tuple(enhanced.shape)}"
+        )
+    if base.numel() == 0:
+        raise ValueError("cannot compare empty logit vectors")
+
+    delta = enhanced - base
+    count = min(max(int(top_k), 1), int(base.numel()))
+    base_values, base_ids = torch_module.topk(base, count)
+    enhanced_values, enhanced_ids = torch_module.topk(enhanced, count)
+    cosine = torch_module.nn.functional.cosine_similarity(
+        base.unsqueeze(0), enhanced.unsqueeze(0), dim=-1
+    ).item()
+
+    return {
+        "positive_feature_logit_mean_abs_delta": float(delta.abs().mean().item()),
+        "positive_feature_logit_max_abs_delta": float(delta.abs().max().item()),
+        "positive_feature_logit_cosine_distance": float(max(0.0, 1.0 - cosine)),
+        "positive_feature_logit_top1_changed": bool(base_ids[0].item() != enhanced_ids[0].item()),
+        "positive_feature_base_top_token_id": int(base_ids[0].item()),
+        "positive_feature_enhanced_top_token_id": int(enhanced_ids[0].item()),
+        "positive_feature_base_topk_token_ids": [int(value) for value in base_ids.tolist()],
+        "positive_feature_base_topk_logits": [float(value) for value in base_values.tolist()],
+        "positive_feature_enhanced_topk_token_ids": [int(value) for value in enhanced_ids.tolist()],
+        "positive_feature_enhanced_topk_logits": [float(value) for value in enhanced_values.tolist()],
+    }
+
+
 def cached_mrope_position_ids(attention_mask, rope_deltas):
     """Build one-token Qwen mRoPE positions without expanding the full prefix."""
     if hasattr(attention_mask, "long"):
@@ -896,6 +929,8 @@ class Qwen25VLAdapter(ModelAdapter):
         Uses BiRefNet for foreground segmentation by default (``use_birefnet=True``).
         """
         use_birefnet = bool(config.get("use_birefnet", True))
+        logit_diagnostics = bool(config.get("logit_diagnostics", False))
+        logit_top_k = int(config.get("logit_top_k", 10))
         pf_config = PositiveFeatureConfig(
             alpha=float(config.get("alpha", 0.4)),
             alpha_s=float(config.get("alpha_s", 0.4)),
@@ -938,6 +973,7 @@ class Qwen25VLAdapter(ModelAdapter):
             "use_birefnet": use_birefnet,
             "birefnet_loaded": False,
             "dino_loaded": False,
+            "logit_diagnostics": logit_diagnostics,
             **dict(getattr(self, "_last_input_audit", {})),
         }
 
@@ -1042,9 +1078,25 @@ class Qwen25VLAdapter(ModelAdapter):
                 return (result,) + out[1:]
             return result
 
+        base_logits = None
+        if logit_diagnostics:
+            with self.torch.inference_mode():
+                base_logits = self.model(
+                    **inputs, use_cache=False
+                ).logits[0, -1].detach().float()
+
         vision = self._get_vision_module()
         handle = vision.register_forward_hook(feat_hook) if vision else None
         try:
+            if logit_diagnostics:
+                with self.torch.inference_mode():
+                    enhanced_logits = self.model(
+                        **inputs, use_cache=False
+                    ).logits[0, -1].detach().float()
+                diagnostics.update(summarize_logit_change(
+                    base_logits, enhanced_logits, self.torch, logit_top_k
+                ))
+                del base_logits, enhanced_logits
             with self.torch.inference_mode():
                 output_ids = self.model.generate(
                     **inputs,

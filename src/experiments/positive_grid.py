@@ -148,6 +148,22 @@ def validate_run_diagnostics(
             errors.append(
                 f"{key[0]}: positive feature enhancement did not change feature direction"
             )
+        if method_config.get("logit_diagnostics"):
+            for name in (
+                "positive_feature_logit_mean_abs_delta",
+                "positive_feature_logit_max_abs_delta",
+                "positive_feature_logit_cosine_distance",
+                "positive_feature_logit_top1_changed",
+                "positive_feature_base_topk_token_ids",
+                "positive_feature_enhanced_topk_token_ids",
+            ):
+                if metadata.get(name) is None:
+                    errors.append(f"{key[0]}: diagnostics.{name} is missing")
+            logit_delta = metadata.get("positive_feature_logit_max_abs_delta")
+            if logit_delta is not None and float(logit_delta) <= 0.0:
+                errors.append(
+                    f"{key[0]}: positive feature enhancement did not change logits"
+                )
     return errors
 
 

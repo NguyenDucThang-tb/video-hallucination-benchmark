@@ -243,3 +243,56 @@ def test_run_diagnostics_reject_norm_only_feature_changes(tmp_path):
 
     errors = validate_run_diagnostics(tmp_path, "run", point)
     assert any("did not change feature direction" in error for error in errors)
+
+
+def test_run_diagnostics_reject_unchanged_logits_when_requested(tmp_path):
+    point = GridPoint("foreground_only", 0.2, 0.0, 0.0)
+    method_config = {
+        "alpha": 0.2,
+        "alpha_s": 0.0,
+        "beta": 0.0,
+        "foreground_threshold": 0.5,
+        "foreground_morph_kernel": 0,
+        "foreground_return_soft": True,
+        "foreground_pair_fusion": "mean",
+        "foreground_pool_avg_weight": 1.0,
+        "logit_diagnostics": True,
+    }
+    metadata = {
+        **method_config,
+        "positive_feature_hook_applied": True,
+        "foreground_mean": 0.5,
+        "foreground_std": 0.2,
+        "foreground_min": 0.1,
+        "foreground_max": 0.9,
+        "foreground_p10": 0.2,
+        "foreground_p50": 0.5,
+        "foreground_p90": 0.8,
+        "foreground_coverage_at_0p5": 0.5,
+        "foreground_spatial_std": 0.2,
+        "foreground_temporal_std": 0.1,
+        "persistence_std": 0.15,
+        "positive_feature_direction_delta": 0.03,
+        "foreground_residual_mean_norm": 1.2,
+        "persistence_residual_mean_norm": 1.1,
+        "positive_feature_logit_mean_abs_delta": 0.0,
+        "positive_feature_logit_max_abs_delta": 0.0,
+        "positive_feature_logit_cosine_distance": 0.0,
+        "positive_feature_logit_top1_changed": False,
+        "positive_feature_base_topk_token_ids": [1, 2],
+        "positive_feature_enhanced_topk_token_ids": [1, 2],
+    }
+    row = {
+        "sample_id": "tsh:1",
+        "model": "m",
+        "method": "positive_feature",
+        "benchmark": "vidhalluc",
+        "task": "tsh",
+        "error": None,
+        "method_config": method_config,
+        "metadata": metadata,
+    }
+    (tmp_path / "run__records.jsonl").write_text(__import__("json").dumps(row) + "\n")
+
+    errors = validate_run_diagnostics(tmp_path, "run", point)
+    assert any("did not change logits" in error for error in errors)
