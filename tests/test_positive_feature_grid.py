@@ -281,6 +281,7 @@ def test_run_diagnostics_reject_unchanged_logits_when_requested(tmp_path):
         "positive_feature_logit_top1_changed": False,
         "positive_feature_base_topk_token_ids": [1, 2],
         "positive_feature_enhanced_topk_token_ids": [1, 2],
+        "positive_feature_hook_output_field": "pooler_output",
     }
     row = {
         "sample_id": "tsh:1",

@@ -54,6 +54,32 @@ def summarize_logit_change(base_logits, enhanced_logits, torch_module, top_k: in
     }
 
 
+def qwen_vision_output_tensor(output):
+    """Select the merged visual features that Qwen passes to the language model."""
+    pooler_output = getattr(output, "pooler_output", None)
+    if pooler_output is not None:
+        return pooler_output, "pooler_output"
+    last_hidden_state = getattr(output, "last_hidden_state", None)
+    if last_hidden_state is not None:
+        return last_hidden_state, "last_hidden_state"
+    if isinstance(output, tuple):
+        return output[0], "tuple"
+    return output, "tensor"
+
+
+def replace_qwen_vision_output_tensor(output, result, field: str):
+    """Replace the selected Qwen visual output while preserving its container."""
+    if field == "pooler_output":
+        output.pooler_output = result
+        return output
+    if field == "last_hidden_state":
+        output.last_hidden_state = result
+        return output
+    if field == "tuple":
+        return (result,) + output[1:]
+    return result
+
+
 def cached_mrope_position_ids(attention_mask, rope_deltas):
     """Build one-token Qwen mRoPE positions without expanding the full prefix."""
     if hasattr(attention_mask, "long"):
@@ -1022,14 +1048,7 @@ class Qwen25VLAdapter(ModelAdapter):
 
         # ── vision hook ──
         def feat_hook(mod, inp, out):
-            if hasattr(out, "last_hidden_state"):
-                Fv = out.last_hidden_state
-            elif hasattr(out, "pooler_output"):
-                Fv = out.pooler_output
-            elif isinstance(out, tuple):
-                Fv = out[0]
-            else:
-                Fv = out
+            Fv, output_field = qwen_vision_output_tensor(out)
 
             if not hasattr(Fv, "shape") or len(Fv.shape) < 2:
                 holder["diagnostics"]["positive_feature_hook_skip_reason"] = (
@@ -1063,20 +1082,13 @@ class Qwen25VLAdapter(ModelAdapter):
             holder["applied"] = True
             holder["diagnostics"].update({
                 **hook_diag,
+                "positive_feature_hook_output_field": output_field,
                 "positive_feature_actual_tokens_per_temporal_position": actual_P,
                 "positive_feature_mask_resampled": actual_P != P,
             })
 
             result = V_prime.reshape(orig_shape).to(orig_dtype)
-            if hasattr(out, "last_hidden_state"):
-                out.last_hidden_state = result
-                return out
-            if hasattr(out, "pooler_output"):
-                out.pooler_output = result
-                return out
-            if isinstance(out, tuple):
-                return (result,) + out[1:]
-            return result
+            return replace_qwen_vision_output_tensor(out, result, output_field)
 
         base_logits = None
         if logit_diagnostics:
@@ -1155,14 +1167,7 @@ class Qwen25VLAdapter(ModelAdapter):
 
         def feat_hook(mod, inp, out):
             # Step 1: extract the feature tensor
-            if hasattr(out, "pooler_output"):
-                Fv = out.pooler_output
-            elif hasattr(out, "last_hidden_state"):
-                Fv = out.last_hidden_state
-            elif isinstance(out, tuple):
-                Fv = out[0]
-            else:
-                Fv = out
+            Fv, output_field = qwen_vision_output_tensor(out)
 
             sq = (Fv.dim() == 3)
             f = (Fv[0] if sq else Fv).float()
@@ -1178,16 +1183,8 @@ class Qwen25VLAdapter(ModelAdapter):
             # Step 2: return in original format
             o = Vp.view(n_vis, D).to(Fv.dtype)
             result = o.unsqueeze(0) if sq else o
-            if hasattr(out, "pooler_output"):
-                out.pooler_output = result
-                return out
-            elif hasattr(out, "last_hidden_state"):
-                out.last_hidden_state = result
-                return out
-            elif isinstance(out, tuple):
-                return (result,) + out[1:]
-            else:
-                return result
+            holder["positive_feature_hook_output_field"] = output_field
+            return replace_qwen_vision_output_tensor(out, result, output_field)
 
         try:
             inputs = self._prepare_inputs(video_frames, prompt)

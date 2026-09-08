@@ -156,6 +156,7 @@ def validate_run_diagnostics(
                 "positive_feature_logit_top1_changed",
                 "positive_feature_base_topk_token_ids",
                 "positive_feature_enhanced_topk_token_ids",
+                "positive_feature_hook_output_field",
             ):
                 if metadata.get(name) is None:
                     errors.append(f"{key[0]}: diagnostics.{name} is missing")
@@ -163,6 +164,10 @@ def validate_run_diagnostics(
             if logit_delta is not None and float(logit_delta) <= 0.0:
                 errors.append(
                     f"{key[0]}: positive feature enhancement did not change logits"
+                )
+            if metadata.get("positive_feature_hook_output_field") != "pooler_output":
+                errors.append(
+                    f"{key[0]}: Qwen positive feature hook did not target pooler_output"
                 )
     return errors
 

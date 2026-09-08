@@ -12,7 +12,12 @@ from src.models.base import GenerationConfig
 from src.models.llava_ov import LlavaOVAdapter
 from src.models.llava_video import LlavaVideoAdapter
 from src.models.compatibility import check_compatibility
-from src.models.qwen25_vl import Qwen25VLAdapter, summarize_logit_change
+from src.models.qwen25_vl import (
+    Qwen25VLAdapter,
+    qwen_vision_output_tensor,
+    replace_qwen_vision_output_tensor,
+    summarize_logit_change,
+)
 
 
 def test_summarize_logit_change_reports_distribution_and_topk_differences():
@@ -32,6 +37,21 @@ def test_summarize_logit_change_reports_distribution_and_topk_differences():
     assert diagnostics["positive_feature_enhanced_top_token_id"] == 0
     assert diagnostics["positive_feature_base_topk_token_ids"] == [1, 2]
     assert diagnostics["positive_feature_enhanced_topk_token_ids"] == [0, 2]
+
+
+def test_qwen_hook_targets_pooler_output_used_by_language_model():
+    class VisionOutput:
+        last_hidden_state = "unmerged"
+        pooler_output = "merged"
+
+    output = VisionOutput()
+    selected, field = qwen_vision_output_tensor(output)
+    replaced = replace_qwen_vision_output_tensor(output, "enhanced", field)
+
+    assert selected == "merged"
+    assert field == "pooler_output"
+    assert replaced.pooler_output == "enhanced"
+    assert replaced.last_hidden_state == "unmerged"
 
 
 class FakePositiveFeatureAdapter:
