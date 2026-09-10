@@ -78,3 +78,29 @@ method_configs:
     beta: 0.6
 subset_manifest: manifests/positive_feature_tuning_seed42.json
 ```
+
+## LLaVA-Video batch runs
+
+The same 109-point grid can be run with the official LLaVA-Video-7B Qwen2
+checkpoint on an H200. Submit one PBS job per point; the scheduler controls how
+many jobs run concurrently:
+
+```bash
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+mkdir -p logs
+
+for POINT in $(seq 1 109); do
+  P=$(printf '%03d' "$POINT")
+  qsub -P hn98 -v POINT="$POINT" \
+    -N "llvpf_p${P}" \
+    -o "$PWD/logs/llvpf_p${P}.h200.out" \
+    -e "$PWD/logs/llvpf_p${P}.h200.err" \
+    pbs/llava_video_positive_grid_h200.pbs
+done
+```
+
+Each point writes an independent `*.grid.csv` and log under the
+`llava_video_positive_pooler_v1_h200_pNNN` prefix. This runner records the
+Positive Feature hook diagnostics and benchmark metrics. It does not claim
+logit deltas because the current LLaVA-Video positive-feature adapter does not
+yet expose the Qwen logit-diagnostics contract.
