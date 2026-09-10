@@ -356,12 +356,13 @@ class LlavaVideoAdapter(ModelAdapter):
             use_birefnet=use_birefnet,
             birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
             dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
-            saliency_device=str(config.get("dino_device", "cpu")),
+            saliency_device=str(config.get("saliency_device", config.get("dino_device", "cpu"))),
             foreground_threshold=float(config.get("foreground_threshold", 0.5)),
             foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
             foreground_return_soft=bool(config.get("foreground_return_soft", True)),
             foreground_pair_fusion=str(config.get("foreground_pair_fusion", "mean")),
             foreground_pool_avg_weight=float(config.get("foreground_pool_avg_weight", 1.0)),
+            birefnet_batch_size=int(config.get("birefnet_batch_size", 8)),
         )
         n_frames = len(video_frames)
         diagnostics: dict = {
@@ -370,57 +371,59 @@ class LlavaVideoAdapter(ModelAdapter):
             "use_birefnet": use_birefnet,
         }
 
-        # Compute foreground saliency
-        # For LLaVA-Video, we don't know exact T,P until the projector fires,
-        # so we pre-compute fg at frame-level and resize inside the hook.
-        fg_per_frame = None
+        started_at = time.perf_counter()
+        fg = None
+        frame_saliency = None
+        birefnet_model = None
+        birefnet_transform = None
         try:
             if use_birefnet:
+                load_started_at = time.perf_counter()
                 birefnet_model, birefnet_transform = self._ensure_birefnet_loaded(
                     pf_config.birefnet_checkpoint, pf_config.saliency_device
                 )
-                # Pre-compute at n_frames x 1 (will be resized in hook)
-                fg_per_frame = compute_birefnet_foreground(
-                    video_frames, n_frames, 1, birefnet_model, birefnet_transform,
-                    self.torch, self.device,
-                    thr=pf_config.foreground_threshold,
-                    kernel=pf_config.foreground_morph_kernel,
-                    return_soft=pf_config.foreground_return_soft,
-                    avg_weight=pf_config.foreground_pool_avg_weight,
-                    pair_fusion=pf_config.foreground_pair_fusion,
-                )  # [n_frames, 1]
+                diagnostics["positive_feature_birefnet_load_seconds"] = (
+                    time.perf_counter() - load_started_at
+                )
                 diagnostics["birefnet_loaded"] = True
             else:
+                saliency_started_at = time.perf_counter()
                 frame_saliency, dino_diag = self._compute_dino_saliency(
                     video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
                 )
                 diagnostics.update(dino_diag)
-                fg_per_frame = self.torch.as_tensor(
-                    np.asarray(frame_saliency, dtype=np.float32),
-                    device=self.device,
-                ).unsqueeze(-1)  # [n_frames, 1]
+                diagnostics["positive_feature_saliency_seconds"] = (
+                    time.perf_counter() - saliency_started_at
+                )
         except Exception as exc:
             diagnostics["saliency_fallback"] = repr(exc)
             if not use_birefnet:
                 raise RuntimeError("DINO foreground extraction failed") from exc
             try:
+                saliency_started_at = time.perf_counter()
                 frame_saliency, dino_diag = self._compute_dino_saliency(
                     video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
                 )
                 diagnostics.update(dino_diag)
                 diagnostics["positive_feature_mode"] = "dino_projector_hook_fallback"
-                fg_per_frame = self.torch.as_tensor(
-                    np.asarray(frame_saliency, dtype=np.float32),
-                    device=self.device,
-                ).unsqueeze(-1)
+                diagnostics["positive_feature_saliency_seconds"] = (
+                    time.perf_counter() - saliency_started_at
+                )
             except Exception as dino_exc:
                 raise RuntimeError(
                     "Both BiRefNet and DINO foreground extraction failed"
                 ) from dino_exc
 
-        holder = {"applied": False, "diagnostics": {}}
+        holder = {
+            "applied": False,
+            "diagnostics": {},
+            "hook_seconds": 0.0,
+            "enhancement_seconds": 0.0,
+            "call_count": 0,
+        }
 
         def projector_hook(module, module_inputs, module_output):
+            hook_started_at = time.perf_counter()
             if not hasattr(module_output, "shape"):
                 return module_output
 
@@ -436,26 +439,55 @@ class LlavaVideoAdapter(ModelAdapter):
 
             V = f.view(T, P, D)
 
-            # Expand fg from [n_frames, 1] to [T, P]
-            nonlocal fg_per_frame
-            if fg_per_frame.shape[1] == 1:
-                fg = fg_per_frame.expand(T, P)
-            elif fg_per_frame.shape[1] != P:
-                fg = self.torch.nn.functional.interpolate(
-                    fg_per_frame.unsqueeze(0).unsqueeze(0),
-                    size=(T, P),
-                    mode="bilinear",
-                    align_corners=False,
-                ).squeeze(0).squeeze(0)
-            else:
-                fg = fg_per_frame
+            # The projector reveals the real patch count. Preserve BiRefNet's
+            # spatial mask instead of reducing every frame to one scalar.
+            nonlocal fg, frame_saliency
+            if fg is None:
+                saliency_started_at = time.perf_counter()
+                try:
+                    if use_birefnet and birefnet_model is not None:
+                        fg = compute_birefnet_foreground(
+                            video_frames, T, P, birefnet_model, birefnet_transform,
+                            self.torch, self.device,
+                            thr=pf_config.foreground_threshold,
+                            kernel=pf_config.foreground_morph_kernel,
+                            return_soft=pf_config.foreground_return_soft,
+                            avg_weight=pf_config.foreground_pool_avg_weight,
+                            pair_fusion=pf_config.foreground_pair_fusion,
+                            batch_size=pf_config.birefnet_batch_size,
+                        )
+                    else:
+                        fg = self.torch.as_tensor(
+                            np.asarray(frame_saliency, dtype=np.float32),
+                            device=self.device,
+                        ).unsqueeze(-1).expand(T, P)
+                except Exception as exc:
+                    if not use_birefnet:
+                        raise
+                    diagnostics["saliency_fallback"] = repr(exc)
+                    frame_saliency, dino_diag = self._compute_dino_saliency(
+                        video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
+                    )
+                    diagnostics.update(dino_diag)
+                    diagnostics["positive_feature_mode"] = "dino_projector_hook_fallback"
+                    fg = self.torch.as_tensor(
+                        np.asarray(frame_saliency, dtype=np.float32),
+                        device=self.device,
+                    ).unsqueeze(-1).expand(T, P)
+                diagnostics["positive_feature_saliency_seconds"] = (
+                    time.perf_counter() - saliency_started_at
+                )
 
+            enhancement_started_at = time.perf_counter()
             V_prime, hook_diag = enhance_visual_embeddings(
                 V, fg, pf_config, self.torch
             )
+            holder["enhancement_seconds"] += time.perf_counter() - enhancement_started_at
 
             holder["applied"] = True
+            holder["call_count"] += 1
             holder["diagnostics"] = hook_diag
+            holder["hook_seconds"] += time.perf_counter() - hook_started_at
 
             return V_prime.reshape(orig_shape).to(orig_dtype)
 
@@ -469,9 +501,12 @@ class LlavaVideoAdapter(ModelAdapter):
 
         handle = projector.register_forward_hook(projector_hook)
         try:
+            input_started_at = time.perf_counter()
             inputs = self._build_inputs(video_frames, prompt)
+            diagnostics["positive_feature_input_seconds"] = time.perf_counter() - input_started_at
             diagnostics.update(self._last_input_audit)
             self._generation_diagnostics = [dict(self._last_input_audit)]
+            generation_started_at = time.perf_counter()
             with self.torch.inference_mode():
                 output_ids = self.model.generate(
                     **inputs,
@@ -481,12 +516,29 @@ class LlavaVideoAdapter(ModelAdapter):
                     num_beams=1,
                     use_cache=True,
                 )
+            diagnostics["positive_feature_generate_seconds"] = (
+                time.perf_counter() - generation_started_at
+            )
+            diagnostics["positive_feature_output_sequence_token_count"] = int(
+                output_ids.shape[-1]
+            )
         finally:
             handle.remove()
 
         diagnostics["positive_feature_hook_applied"] = holder["applied"]
         diagnostics.update(holder["diagnostics"])
         diagnostics.update({
+            "positive_feature_hook_seconds": holder["hook_seconds"],
+            "positive_feature_enhancement_seconds": holder["enhancement_seconds"],
+            "positive_feature_hook_call_count": holder["call_count"],
+            "positive_feature_generate_excluding_hook_seconds": max(
+                0.0,
+                diagnostics["positive_feature_generate_seconds"] - holder["hook_seconds"],
+            ),
+            "positive_feature_total_seconds": time.perf_counter() - started_at,
+            "positive_feature_saliency_device": pf_config.saliency_device,
+            "positive_feature_birefnet_batch_size": pf_config.birefnet_batch_size,
+            "positive_feature_mask_shape": list(fg.shape) if fg is not None else None,
             "foreground_threshold": pf_config.foreground_threshold,
             "foreground_morph_kernel": pf_config.foreground_morph_kernel,
             "foreground_return_soft": pf_config.foreground_return_soft,

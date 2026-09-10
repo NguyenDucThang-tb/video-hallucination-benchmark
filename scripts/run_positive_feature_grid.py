@@ -45,6 +45,8 @@ def parse_args():
         help="Compare base and enhanced next-token logits for every sample",
     )
     parser.add_argument("--logit-top-k", type=int, default=10)
+    parser.add_argument("--saliency-device", choices=("cpu", "cuda"), default=None)
+    parser.add_argument("--birefnet-batch-size", type=int, default=None)
     parser.add_argument("--start-index", type=int, default=1)
     parser.add_argument("--stop-index", type=int, default=None)
     return parser.parse_args()
@@ -123,6 +125,14 @@ def main():
             "manifest_dir": "manifests",
             "resume": args.resume,
         }
+        if args.saliency_device is not None:
+            config["method_configs"]["positive_feature"]["saliency_device"] = args.saliency_device
+        if args.birefnet_batch_size is not None:
+            if args.birefnet_batch_size <= 0:
+                raise SystemExit("--birefnet-batch-size must be positive")
+            config["method_configs"]["positive_feature"]["birefnet_batch_size"] = (
+                args.birefnet_batch_size
+            )
         config_path = config_dir / f"{name}.yaml"
         config_path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
         row = {

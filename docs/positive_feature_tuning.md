@@ -100,7 +100,12 @@ done
 ```
 
 Each point writes an independent `*.grid.csv` and log under the
-`llava_video_positive_pooler_v1_h200_pNNN` prefix. This runner records the
+`llava_video_positive_spatial_batch_v2_h200_pNNN` prefix. This runner records the
 Positive Feature hook diagnostics and benchmark metrics. It does not claim
 logit deltas because the current LLaVA-Video positive-feature adapter does not
 yet expose the Qwen logit-diagnostics contract.
+
+The H200 runner sets `saliency_device=cuda` and batches all eight sampled
+frames in one BiRefNet forward pass. LLaVA-Video diagnostics include the
+BiRefNet, input preparation, projector hook, enhancement, and generation wall
+times, plus the actual spatial foreground-mask shape.

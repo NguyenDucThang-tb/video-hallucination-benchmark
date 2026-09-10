@@ -70,6 +70,9 @@ class PositiveFeatureConfig:
     foreground_pool_avg_weight: float = 1.0
     """Average-pooling weight; one disables foreground-expanding max pooling."""
 
+    birefnet_batch_size: int = 1
+    """Number of sampled frames processed by BiRefNet in one forward pass."""
+
 
 def ensure_birefnet_loaded(holder: dict, checkpoint: str, device: str, torch_module):
     """Lazy-load BiRefNet model and transform, caching on *holder*.
@@ -189,6 +192,7 @@ def compute_birefnet_foreground(
     return_soft: bool = True,
     avg_weight: float = 1.0,
     pair_fusion: str = "mean",
+    batch_size: int | None = None,
 ) -> "torch.Tensor":
     """
     Compute foreground evidence using BiRefNet and align it
@@ -231,6 +235,10 @@ def compute_birefnet_foreground(
             g =
                 avg_weight * avg_pool
                 + (1 - avg_weight) * max_pool
+
+    batch_size:
+        Maximum number of sampled frames in one BiRefNet forward pass.
+        ``None`` processes all sampled frames together.
 
     Returns
     -------
@@ -304,64 +312,37 @@ def compute_birefnet_foreground(
 
         return Image.fromarray(arr).convert("RGB")
 
-    # ============================================================
-    # 3. BiRefNet prediction cho 1 frame
-    # ============================================================
+    # Run sampled frames in batches. The previous per-frame loop paid eight
+    # separate model-dispatch costs for the default sampler.
+    effective_batch_size = n_frames if batch_size is None else int(batch_size)
+    if effective_batch_size <= 0:
+        raise ValueError("batch_size must be positive")
 
-    def predict_one(frame):
-
-        img = to_pil(frame)
-
-        x = birefnet_transform(img).unsqueeze(0)
-
-        x = x.to(
+    transformed = torch_module.stack([
+        birefnet_transform(to_pil(video_frames[i]))
+        for i in range(n_frames)
+    ])
+    all_preds = []
+    for start in range(0, n_frames, effective_batch_size):
+        inputs = transformed[start:start + effective_batch_size].to(
             device=birefnet_device,
             dtype=birefnet_dtype,
         )
-
         with torch_module.inference_mode():
-
-            outputs = birefnet_model(x)
-
-            if isinstance(outputs, (list, tuple)):
-                pred = outputs[-1]
-            else:
-                pred = outputs
-
+            outputs = birefnet_model(inputs)
+            pred = outputs[-1] if isinstance(outputs, (list, tuple)) else outputs
             pred = pred.sigmoid()
 
-        # --------------------------------------------------------
-        # Normalize shape về [H, W]
-        # --------------------------------------------------------
-
-        # thường là [1, 1, H, W]
         if pred.ndim == 4:
-            pred = pred[0, 0]
-
-        elif pred.ndim == 3:
-            pred = pred[0]
-
-        pred = (
-            pred
-            .float()
-            .detach()
-            .cpu()
-        )
-
-        return pred
-
-    # ============================================================
-    # 4. Predict tất cả frame trước
-    #
-    # Tránh chạy BiRefNet lại nếu một frame được sử dụng nhiều lần.
-    # ============================================================
-
-    all_preds = []
-
-    for i in range(n_frames):
-        all_preds.append(
-            predict_one(video_frames[i])
-        )
+            pred = pred[:, 0]
+        elif pred.ndim == 2 and len(inputs) == 1:
+            pred = pred.unsqueeze(0)
+        if pred.ndim != 3 or int(pred.shape[0]) != int(len(inputs)):
+            raise RuntimeError(
+                "Unexpected BiRefNet output shape: "
+                f"expected batch {len(inputs)}, got {tuple(pred.shape)}"
+            )
+        all_preds.extend(pred.float().detach().cpu().unbind(0))
 
     # ============================================================
     # 5. Align frame -> visual temporal slice

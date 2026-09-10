@@ -141,11 +141,13 @@ def test_birefnet_inputs_match_half_precision_model_dtype():
         def __init__(self):
             self.parameter = torch.zeros(1, dtype=torch.float16)
             self.input_dtype = None
+            self.calls = 0
 
         def parameters(self):
             yield self.parameter
 
         def __call__(self, inputs):
+            self.calls += 1
             self.input_dtype = inputs.dtype
             return [inputs[:, :1]]
 
@@ -161,8 +163,48 @@ def test_birefnet_inputs_match_half_precision_model_dtype():
     )
 
     assert model.input_dtype == torch.float16
+    assert model.calls == 1
     assert foreground.shape == (2, 4)
     assert foreground.dtype == torch.float32
+
+
+def test_birefnet_batches_frames_and_preserves_spatial_mask():
+    torch = pytest.importorskip("torch")
+
+    class FakeBiRefNet:
+        def __init__(self):
+            self.parameter = torch.zeros(1)
+            self.batch_sizes = []
+
+        def parameters(self):
+            yield self.parameter
+
+        def __call__(self, inputs):
+            self.batch_sizes.append(len(inputs))
+            return [inputs[:, :1]]
+
+    frames = np.stack([
+        np.full((4, 4, 3), value, dtype=np.uint8)
+        for value in (0, 64, 128, 255)
+    ])
+    model = FakeBiRefNet()
+    foreground = compute_birefnet_foreground(
+        frames,
+        T=4,
+        P=4,
+        birefnet_model=model,
+        birefnet_transform=lambda image: torch.from_numpy(
+            np.asarray(image, dtype=np.float32).copy()
+        ).permute(2, 0, 1) / 255.0,
+        torch_module=torch,
+        target_device=torch.device("cpu"),
+        batch_size=2,
+    )
+
+    assert model.batch_sizes == [2, 2]
+    assert foreground.shape == (4, 4)
+    assert torch.all(foreground.std(dim=1) == 0)
+    assert foreground[:, 0].std() > 0
 
 
 def test_birefnet_defaults_preserve_soft_mask_and_mean_frame_pairs():

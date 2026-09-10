@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 
 import numpy as np
+import pytest
 
 from src.models.base import GenerationConfig
 from src.models.llava_video import LlavaVideoAdapter
@@ -91,6 +92,78 @@ def test_llava_video_generate_uses_upstream_inputs_keyword():
     assert answer == "answer"
     assert "inputs" in adapter.model.kwargs
     assert "input_ids" not in adapter.model.kwargs
+
+
+def test_llava_video_positive_feature_uses_projector_patch_grid_and_reports_timing():
+    torch = pytest.importorskip("torch")
+
+    class FakeBiRefNet:
+        def __init__(self):
+            self.parameter = torch.zeros(1)
+            self.batch_sizes = []
+
+        def parameters(self):
+            yield self.parameter
+
+        def __call__(self, inputs):
+            self.batch_sizes.append(len(inputs))
+            return [inputs[:, :1]]
+
+    class FakeModel:
+        def __init__(self):
+            self.mm_projector = torch.nn.Identity()
+            self.projected = None
+
+        def get_model(self):
+            return self
+
+        def generate(self, **kwargs):
+            features = torch.arange(24, dtype=torch.float32).reshape(2, 4, 3) + 1
+            self.projected = self.mm_projector(features)
+            return torch.tensor([[7, 8]])
+
+    class FakeTokenizer:
+        def batch_decode(self, output_ids, skip_special_tokens):
+            return ["answer"]
+
+    frames = np.zeros((2, 2, 2, 3), dtype=np.uint8)
+    frames[:, 0, 1] = 64
+    frames[:, 1, 0] = 128
+    frames[:, 1, 1] = 255
+    birefnet = FakeBiRefNet()
+    adapter = object.__new__(LlavaVideoAdapter)
+    adapter.torch = torch
+    adapter.device = torch.device("cpu")
+    adapter.model = FakeModel()
+    adapter.tokenizer = FakeTokenizer()
+    adapter._ensure_birefnet_loaded = lambda checkpoint, device: (
+        birefnet,
+        lambda image: torch.from_numpy(np.asarray(image, dtype=np.float32).copy())
+        .permute(2, 0, 1) / 255.0,
+    )
+
+    def build_inputs(video_frames, prompt):
+        adapter._last_input_audit = {"video_modality_supplied": True}
+        return {}
+
+    adapter._build_inputs = build_inputs
+    answer, diagnostics = adapter.generate_positive_feature(
+        frames,
+        "question",
+        GenerationConfig(max_new_tokens=4),
+        {"alpha": 0.2, "alpha_s": 0.0, "beta": 0.0, "birefnet_batch_size": 2},
+    )
+
+    assert answer == "answer"
+    assert birefnet.batch_sizes == [2]
+    assert diagnostics["positive_feature_mask_shape"] == [2, 4]
+    assert diagnostics["foreground_spatial_std"] > 0
+    assert diagnostics["positive_feature_hook_applied"] is True
+    assert diagnostics["positive_feature_hook_call_count"] == 1
+    assert diagnostics["positive_feature_output_sequence_token_count"] == 2
+    assert diagnostics["positive_feature_saliency_seconds"] >= 0
+    assert diagnostics["positive_feature_generate_seconds"] >= 0
+    assert diagnostics["positive_feature_total_seconds"] >= 0
 
 
 def test_llava_video_exposes_tcd_step_logits_contract():
