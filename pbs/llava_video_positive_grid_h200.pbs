@@ -3,6 +3,7 @@
 #PBS -q gpuhopper
 #PBS -l ncpus=12
 #PBS -l ngpus=1
+#PBS -l job_tags=gpuh
 #PBS -l mem=64GB
 #PBS -l jobfs=20GB
 #PBS -l walltime=03:00:00
@@ -23,6 +24,7 @@ PREFIX="llava_video_positive_pooler_v1_h200_p$(printf '%03d' "$POINT")"
 export MODEL_DIR
 export LLAVA_VIDEO_MODEL_DIR="$MODEL_DIR"
 export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
 export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export PYTHONPATH=.
