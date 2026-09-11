@@ -109,3 +109,28 @@ The H200 runner sets `saliency_device=cuda` and batches all eight sampled
 frames in one BiRefNet forward pass. LLaVA-Video diagnostics include the
 BiRefNet, input preparation, projector hook, enhancement, and generation wall
 times, plus the actual spatial foreground-mask shape.
+
+## LLaVA-OV batch runs
+
+LLaVA-OV uses the same 109-point grid and fixed subset. Submit one PBS job per
+point on an H200:
+
+```bash
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+mkdir -p logs
+
+for POINT in $(seq 1 109); do
+  P=$(printf '%03d' "$POINT")
+  qsub -P hn98 -v POINT="$POINT" \
+    -N "llovpf_p${P}" \
+    -o "$PWD/logs/llovpf_p${P}.h200.out" \
+    -e "$PWD/logs/llovpf_p${P}.h200.err" \
+    pbs/llava_ov_positive_grid_h200.pbs
+done
+```
+
+The LLaVA-OV runner uses the native video input (`videos=[video]`), CUDA
+BiRefNet with an eight-frame batch, and records next-token logit deltas for
+each point. If the checkpoint is not already discoverable from the Hugging
+Face cache, export `LLAVA_OV_MODEL_DIR` in the PBS script or pass it with
+`qsub -v`.

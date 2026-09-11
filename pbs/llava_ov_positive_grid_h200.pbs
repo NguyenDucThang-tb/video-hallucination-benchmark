@@ -1,0 +1,50 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=01:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+
+: "${POINT:?Submit with qsub -v POINT=<1..109>}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+PYTHON=/scratch/jp09/dd9648/.venv/bin/python
+SUBSET=manifests/positive_feature_tuning_seed42.json
+PREFIX="llava_ov_positive_pooler_v1_h200_p$(printf '%03d' "$POINT")"
+
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export PYTHONPATH=.
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OMP_NUM_THREADS="${PBS_NCPUS:-12}"
+
+echo "Node:   $(hostname)"
+echo "Point:  $POINT"
+echo "Prefix: $PREFIX"
+nvidia-smi
+
+test -f "$SUBSET"
+
+"$PYTHON" scripts/run_positive_feature_grid.py \
+  --model llava-ov-7b \
+  --subset-manifest "$SUBSET" \
+  --prefix "$PREFIX" \
+  --start-index "$POINT" \
+  --stop-index "$POINT" \
+  --saliency-device cuda \
+  --birefnet-batch-size 8 \
+  --logit-diagnostics \
+  --logit-top-k 10 \
+  --execute \
+  --no-resume
+
+echo "POINT $POINT COMPLETE"

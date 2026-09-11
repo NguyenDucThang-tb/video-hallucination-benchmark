@@ -24,6 +24,7 @@ from src.methods.season.vision_homogenization import (
     replace_hidden_states,
     unwrap_hidden_states,
 )
+from .qwen25_vl import summarize_logit_change
 
 
 class LlavaOVAdapter(ModelAdapter):
@@ -387,6 +388,8 @@ class LlavaOVAdapter(ModelAdapter):
         3. Residual fusion before language-model normalization.
         """
         use_birefnet = bool(config.get("use_birefnet", True))
+        logit_diagnostics = bool(config.get("logit_diagnostics", False))
+        logit_top_k = int(config.get("logit_top_k", 10))
         pf_config = PositiveFeatureConfig(
             alpha=float(config.get("alpha", 0.4)),
             alpha_s=float(config.get("alpha_s", 0.4)),
@@ -408,6 +411,7 @@ class LlavaOVAdapter(ModelAdapter):
             "positive_feature_mode": "birefnet_projector_hook" if use_birefnet else "dino_projector_hook",
             "positive_feature_hook_applied": False,
             "use_birefnet": use_birefnet,
+            "logit_diagnostics": logit_diagnostics,
         }
 
         # Compute foreground saliency.
@@ -464,6 +468,13 @@ class LlavaOVAdapter(ModelAdapter):
 
         holder = {"applied": False, "diagnostics": {}}
 
+        base_logits = None
+        if logit_diagnostics:
+            with self.torch.inference_mode():
+                base_logits = self.model(
+                    **inputs, use_cache=False
+                ).logits[0, -1].detach().float()
+
         def projector_hook(module, module_inputs, module_output):
             if not hasattr(module_output, "shape"):
                 return module_output
@@ -511,6 +522,15 @@ class LlavaOVAdapter(ModelAdapter):
 
         handle = projector.register_forward_hook(projector_hook)
         try:
+            if logit_diagnostics:
+                with self.torch.inference_mode():
+                    enhanced_logits = self.model(
+                        **inputs, use_cache=False
+                    ).logits[0, -1].detach().float()
+                diagnostics.update(summarize_logit_change(
+                    base_logits, enhanced_logits, self.torch, logit_top_k
+                ))
+                del base_logits, enhanced_logits
             with self.torch.inference_mode():
                 output_ids = self.model.generate(
                     **inputs,
