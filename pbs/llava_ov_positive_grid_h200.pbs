@@ -15,7 +15,7 @@ set -euo pipefail
 
 cd /scratch/jp09/dd9648/video-hallucination-benchmark
 
-PYTHON=/scratch/jp09/dd9648/.venv/bin/python
+PYTHON=./.venv/bin/python
 SUBSET=manifests/positive_feature_tuning_seed42.json
 PREFIX="llava_ov_positive_pooler_v1_h200_p$(printf '%03d' "$POINT")"
 
