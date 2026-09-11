@@ -31,6 +31,20 @@ methods:
     alpha: 0.4
     alpha_s: 0.4
     beta: 0.4
+    # Best configurations selected independently for each model family.
+    model_overrides:
+      qwen2.5-vl-7b:
+        alpha: 0.2
+        alpha_s: 0.4
+        beta: 0.8
+      llava-ov-7b:
+        alpha: 0.8
+        alpha_s: 0.1
+        beta: 0.4
+      llava-video-7b:
+        alpha: 0.2
+        alpha_s: 0.2
+        beta: 0.1
     epsilon: 1.0e-6
     foreground_threshold: 0.5
     foreground_morph_kernel: 0

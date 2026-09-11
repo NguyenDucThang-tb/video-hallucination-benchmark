@@ -35,6 +35,29 @@ def test_experiment_method_config_overrides_repository_defaults():
 
 
 @pytest.mark.parametrize(
+    ("model_name", "expected"),
+    [
+        ("qwen2.5-vl-7b", (0.2, 0.4, 0.8)),
+        ("llava-ov-7b", (0.8, 0.1, 0.4)),
+        ("llava-video-7b", (0.2, 0.2, 0.1)),
+    ],
+)
+def test_positive_feature_defaults_follow_selected_model_point(model_name, expected):
+    config = resolve_method_config("positive_feature", model_name=model_name)
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == expected
+    assert "model_overrides" not in config
+
+
+def test_experiment_override_wins_over_model_default():
+    config = resolve_method_config(
+        "positive_feature",
+        {"method_configs": {"positive_feature": {"alpha": 0.6}}},
+        model_name="llava-ov-7b",
+    )
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.6, 0.1, 0.4)
+
+
+@pytest.mark.parametrize(
     ("name", "config"),
     [
         ("foreground_only", PositiveFeatureConfig(alpha=0.2, alpha_s=0.0, beta=0.0)),

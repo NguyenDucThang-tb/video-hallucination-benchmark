@@ -85,8 +85,18 @@ def load_method_configs() -> dict:
     return load_yaml(PROJECT / "configs/methods.yaml")["methods"]
 
 
-def resolve_method_config(name: str, experiment_config: dict | None = None) -> dict:
+def resolve_method_config(
+    name: str,
+    experiment_config: dict | None = None,
+    model_name: str | None = None,
+) -> dict:
     config = dict(load_method_configs()[name])
+    model_overrides = config.pop("model_overrides", {})
+    if model_name:
+        selected = model_overrides.get(model_name, {})
+        if not isinstance(selected, dict):
+            raise ValueError(f"model_overrides.{model_name} must be a mapping")
+        config.update(selected)
     experiment_config = experiment_config or {}
     overrides = experiment_config.get("method_configs", {}).get(name, {})
     if not isinstance(overrides, dict):
@@ -195,7 +205,9 @@ def instantiate_model(name: str):
 
 
 def instantiate_method(name: str, model, experiment_config: dict | None = None):
-    method_config = resolve_method_config(name, experiment_config)
+    method_config = resolve_method_config(
+        name, experiment_config, getattr(model, "name", None)
+    )
     if name == "base":
         return BaseMethod(model, method_config)
     if name == "tcd":
