@@ -40,11 +40,6 @@ methods:
         alpha: 0.4
         alpha_s: 0.4
         beta: 0.8
-      llava-ov-7b:
-        # Point 5
-        alpha: 0.0
-        alpha_s: 0.1
-        beta: 0.0
       llava-video-7b:
         # Point 14
         alpha: 0.2

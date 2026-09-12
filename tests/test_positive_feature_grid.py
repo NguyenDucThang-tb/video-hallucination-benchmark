@@ -38,18 +38,21 @@ def test_experiment_method_config_overrides_repository_defaults():
     ("model_name", "point_index"),
     [
         ("qwen2.5-vl-7b", 64),
-        ("llava-ov-7b", 5),
+        ("llava-ov-7b", None),
         ("llava-video-7b", 14),
     ],
 )
 def test_positive_feature_defaults_follow_selected_model_point(model_name, point_index):
     config = resolve_method_config("positive_feature", model_name=model_name)
-    point = positive_feature_grid()[point_index - 1]
-    assert (config["alpha"], config["alpha_s"], config["beta"]) == (
-        point.alpha,
-        point.alpha_s,
-        point.beta,
-    )
+    if point_index is None:
+        assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.4, 0.4, 0.4)
+    else:
+        point = positive_feature_grid()[point_index - 1]
+        assert (config["alpha"], config["alpha_s"], config["beta"]) == (
+            point.alpha,
+            point.alpha_s,
+            point.beta,
+        )
     assert config["saliency_device"] == "cuda"
     assert config["dino_device"] == "cuda"
     assert config["birefnet_batch_size"] == 8
@@ -62,7 +65,7 @@ def test_experiment_override_wins_over_model_default():
         {"method_configs": {"positive_feature": {"alpha": 0.6}}},
         model_name="llava-ov-7b",
     )
-    assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.6, 0.1, 0.0)
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.6, 0.4, 0.4)
 
 
 @pytest.mark.parametrize(
