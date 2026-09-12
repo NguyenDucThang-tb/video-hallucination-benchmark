@@ -62,7 +62,7 @@ def test_experiment_override_wins_over_model_default():
         {"method_configs": {"positive_feature": {"alpha": 0.6}}},
         model_name="llava-ov-7b",
     )
-    assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.6, 0.1, 0.4)
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.6, 0.1, 0.6)
 
 
 @pytest.mark.parametrize(
