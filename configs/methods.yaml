@@ -27,21 +27,26 @@ methods:
   positive_feature:
     batch_size: 1
     dino_checkpoint: /scratch/jp09/dd9648/huggingface/dinov2-large
-    dino_device: cpu
+    dino_device: cuda
+    saliency_device: cuda
+    birefnet_batch_size: 8
     alpha: 0.4
     alpha_s: 0.4
     beta: 0.4
-    # Best configurations selected independently for each model family.
+    # Best configurations selected independently from the 109-point grid.
     model_overrides:
       qwen2.5-vl-7b:
+        # Point 44
         alpha: 0.2
         alpha_s: 0.4
         beta: 0.8
       llava-ov-7b:
+        # Point 93
         alpha: 0.8
         alpha_s: 0.1
-        beta: 0.4
+        beta: 0.6
       llava-video-7b:
+        # Point 35
         alpha: 0.2
         alpha_s: 0.2
         beta: 0.1

@@ -450,7 +450,7 @@ class Qwen25VLAdapter(ModelAdapter):
             ).eval()
         return self._dino_processor, self._dino_model
 
-    def _ensure_birefnet_loaded(self, checkpoint: str = "ZhengPeng7/BiRefNet", device: str = "cpu"):
+    def _ensure_birefnet_loaded(self, checkpoint: str = "ZhengPeng7/BiRefNet", device: str = "cuda"):
         if getattr(self, "_birefnet_model", None) is not None:
             return self._birefnet_model, self._birefnet_transform
 
@@ -965,13 +965,13 @@ class Qwen25VLAdapter(ModelAdapter):
             use_birefnet=use_birefnet,
             birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
             dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
-            saliency_device=str(config.get("saliency_device", config.get("dino_device", "cpu"))),
+            saliency_device=str(config.get("saliency_device", config.get("dino_device", "cuda"))),
             foreground_threshold=float(config.get("foreground_threshold", 0.5)),
             foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
             foreground_return_soft=bool(config.get("foreground_return_soft", True)),
             foreground_pair_fusion=str(config.get("foreground_pair_fusion", "mean")),
             foreground_pool_avg_weight=float(config.get("foreground_pool_avg_weight", 1.0)),
-            birefnet_batch_size=int(config.get("birefnet_batch_size", 1)),
+            birefnet_batch_size=int(config.get("birefnet_batch_size", 8)),
         )
 
         # ── prepare inputs ──
@@ -1138,6 +1138,8 @@ class Qwen25VLAdapter(ModelAdapter):
             "foreground_return_soft": pf_config.foreground_return_soft,
             "foreground_pair_fusion": pf_config.foreground_pair_fusion,
             "foreground_pool_avg_weight": pf_config.foreground_pool_avg_weight,
+            "positive_feature_saliency_device": pf_config.saliency_device,
+            "positive_feature_birefnet_batch_size": pf_config.birefnet_batch_size,
         })
         return answer, diagnostics
 

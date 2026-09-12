@@ -35,16 +35,24 @@ def test_experiment_method_config_overrides_repository_defaults():
 
 
 @pytest.mark.parametrize(
-    ("model_name", "expected"),
+    ("model_name", "point_index"),
     [
-        ("qwen2.5-vl-7b", (0.2, 0.4, 0.8)),
-        ("llava-ov-7b", (0.8, 0.1, 0.4)),
-        ("llava-video-7b", (0.2, 0.2, 0.1)),
+        ("qwen2.5-vl-7b", 44),
+        ("llava-ov-7b", 93),
+        ("llava-video-7b", 35),
     ],
 )
-def test_positive_feature_defaults_follow_selected_model_point(model_name, expected):
+def test_positive_feature_defaults_follow_selected_model_point(model_name, point_index):
     config = resolve_method_config("positive_feature", model_name=model_name)
-    assert (config["alpha"], config["alpha_s"], config["beta"]) == expected
+    point = positive_feature_grid()[point_index - 1]
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == (
+        point.alpha,
+        point.alpha_s,
+        point.beta,
+    )
+    assert config["saliency_device"] == "cuda"
+    assert config["dino_device"] == "cuda"
+    assert config["birefnet_batch_size"] == 8
     assert "model_overrides" not in config
 
 

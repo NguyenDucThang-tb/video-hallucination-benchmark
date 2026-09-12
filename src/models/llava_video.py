@@ -218,7 +218,7 @@ class LlavaVideoAdapter(ModelAdapter):
             ).eval()
         return self._dino_processor, self._dino_model
 
-    def _ensure_birefnet_loaded(self, checkpoint: str = "ZhengPeng7/BiRefNet", device: str = "cpu"):
+    def _ensure_birefnet_loaded(self, checkpoint: str = "ZhengPeng7/BiRefNet", device: str = "cuda"):
         """Lazy-load BiRefNet model for foreground segmentation."""
         return ensure_birefnet_loaded(self.__dict__, checkpoint, device, self.torch)
 
@@ -356,7 +356,7 @@ class LlavaVideoAdapter(ModelAdapter):
             use_birefnet=use_birefnet,
             birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
             dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
-            saliency_device=str(config.get("saliency_device", config.get("dino_device", "cpu"))),
+            saliency_device=str(config.get("saliency_device", config.get("dino_device", "cuda"))),
             foreground_threshold=float(config.get("foreground_threshold", 0.5)),
             foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
             foreground_return_soft=bool(config.get("foreground_return_soft", True)),

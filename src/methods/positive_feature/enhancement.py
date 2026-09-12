@@ -52,7 +52,7 @@ class PositiveFeatureConfig:
     dino_checkpoint: str = "facebook/dinov2-large"
     """HuggingFace checkpoint for DINO model (fallback)."""
 
-    saliency_device: str = "cpu"
+    saliency_device: str = "cuda"
     """Device to run the saliency model on."""
 
     foreground_threshold: float = 0.5
@@ -70,7 +70,7 @@ class PositiveFeatureConfig:
     foreground_pool_avg_weight: float = 1.0
     """Average-pooling weight; one disables foreground-expanding max pooling."""
 
-    birefnet_batch_size: int = 1
+    birefnet_batch_size: int = 8
     """Number of sampled frames processed by BiRefNet in one forward pass."""
 
 
@@ -342,7 +342,10 @@ def compute_birefnet_foreground(
                 "Unexpected BiRefNet output shape: "
                 f"expected batch {len(inputs)}, got {tuple(pred.shape)}"
             )
-        all_preds.extend(pred.float().detach().cpu().unbind(0))
+        # Keep masks on the accelerator through pooling. Moving every
+        # 1024x1024 prediction to CPU made the eight-frame path needlessly
+        # bounce GPU -> CPU -> GPU for every sample.
+        all_preds.extend(pred.float().detach().unbind(0))
 
     # ============================================================
     # 5. Align frame -> visual temporal slice
@@ -412,7 +415,7 @@ def compute_birefnet_foreground(
 
             import cv2
 
-            pred_np = pred.numpy().astype(
+            pred_np = pred.detach().cpu().numpy().astype(
                 np.float32,
                 copy=False,
             )
@@ -428,9 +431,10 @@ def compute_birefnet_foreground(
                 k,
             )
 
-            pred = torch_module.from_numpy(
-                pred_np
-            ).float()
+            pred = torch_module.from_numpy(pred_np).to(
+                device=birefnet_device,
+                dtype=torch_module.float32,
+            )
 
         # ========================================================
         # 7. Pixel foreground -> visual token grid
