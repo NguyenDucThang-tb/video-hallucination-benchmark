@@ -593,6 +593,7 @@ class Qwen25VLAdapter(ModelAdapter):
             "vision_attn": None,
             "profile": bool(kwargs.get("profile", False)),
             "preserve_logits_on_device": bool(kwargs.get("preserve_logits_on_device", False)),
+            "attention_layers": tuple(kwargs.get("attention_layers", (20, 21, 22, 23))),
             "diagnostics": {
                 **getattr(self, "_last_input_audit", {}),
                 "frame_count": int(len(video_frames)),
@@ -732,34 +733,44 @@ class Qwen25VLAdapter(ModelAdapter):
                 frame_scores = self._summarize_frame_attention(
                     decoder_attentions,
                     int(state["diagnostics"]["frame_count"]),
+                    state.get("attention_layers"),
                 )
         return StepOutput(logits=logits, frame_attention=frame_scores)
 
-    def _summarize_frame_attention(self, attentions, frame_count: int) -> np.ndarray | None:
+    def _summarize_frame_attention(
+        self,
+        attentions,
+        frame_count: int,
+        layer_indices: tuple[int, ...] | None = None,
+    ) -> np.ndarray | None:
         if attentions is None:
             return None
         try:
-            attn_layers = []
             if frame_count <= 0:
                 return None
-            for layer in attentions:
+            indices = tuple(layer_indices or range(len(attentions)))
+            selected = []
+            for layer_index in indices:
+                if layer_index < 0 or layer_index >= len(attentions):
+                    continue
+                layer = attentions[layer_index]
                 if layer is None:
                     continue
-                layer = layer.detach().float().cpu().numpy()
-                if layer.ndim != 4:
+                # Copy only the requested layers and final query to CPU. The
+                # previous implementation copied every layer and query token.
+                layer_np = layer.detach().float().cpu().numpy()
+                if layer_np.ndim != 4:
                     continue
-                per_frame = layer.mean(axis=(0, 1, 3))
-                if per_frame.size == 0:
-                    continue
-                if per_frame.size == frame_count:
-                    attn_layers.append(per_frame)
-                else:
-                    buckets = np.array_split(per_frame, frame_count)
-                    attn_layers.append(np.asarray([bucket.mean() if bucket.size else 0.0 for bucket in buckets], dtype=np.float32))
-            if not attn_layers:
+                query = layer_np[0, :, -1, :]
+                buckets = np.array_split(query, frame_count, axis=-1)
+                per_frame = np.stack(
+                    [bucket.sum(axis=-1) if bucket.size else np.zeros(query.shape[0]) for bucket in buckets],
+                    axis=-1,
+                )
+                selected.append(per_frame[:, :, None])
+            if not selected:
                 return None
-            stacked = np.stack(attn_layers, axis=0).astype(np.float32)
-            return frame_attention(stacked[:, None, :, None]).astype(np.float32)
+            return frame_attention(np.stack(selected, axis=0).astype(np.float32)).astype(np.float32)
         except Exception:
             return None
 

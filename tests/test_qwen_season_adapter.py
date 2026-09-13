@@ -24,9 +24,8 @@ def test_qwen_season_reduces_decoder_attention_to_native_video_frames():
     adapter = Qwen25VLAdapter.__new__(Qwen25VLAdapter)
     attention = FakeAttentionTensor(np.arange(16, dtype=np.float32).reshape(1, 1, 16, 1))
 
-    scores = adapter._summarize_frame_attention((attention,), frame_count=8)
+    scores = adapter._summarize_frame_attention((attention,), frame_count=8, layer_indices=(0,))
 
     assert scores.shape == (8,)
     np.testing.assert_allclose(scores.sum(), 1.0)
     assert np.all(np.isfinite(scores))
-
