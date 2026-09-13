@@ -2,6 +2,7 @@ benchmarks:
   vidhalluc:
     tasks: [bqa, mcq, sth, tsh]
     data_root: /scratch/jp09/dd9648/datasets_video_hallu/vidhalluc/data
+    comparison_protocol: season_table1_controlled_8_frames
     task_sampling:
       sth: {num_frames: 8, strategy: uniform, video_reader: opencv_robust_full_decode}
       tsh: {num_frames: 8, strategy: uniform, video_reader: opencv_robust_full_decode}

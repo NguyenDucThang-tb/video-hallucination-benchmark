@@ -58,14 +58,18 @@ def build_plan(config: dict, allow_unvalidated: bool = False) -> list[dict]:
         if isinstance(benchmark_entry, str):
             benchmark = benchmark_entry
             benchmark_tasks = benchmark_configs[benchmark].get("tasks") or [None]
+            protocol = None
         else:
             benchmark = benchmark_entry["name"]
             benchmark_tasks = benchmark_entry.get("tasks") or benchmark_configs[benchmark].get("tasks") or [None]
+            protocol = benchmark_entry.get("protocol")
         for task in benchmark_tasks:
             for model in config["models"]:
                 for method in config["methods"]:
                     supported, note = check_compatibility(model, method)
                     plan.append({
+                        "experiment": config.get("name", "unnamed_experiment"),
+                        "protocol": protocol,
                         "model": model,
                         "method": method,
                         "benchmark": benchmark,
@@ -75,6 +79,25 @@ def build_plan(config: dict, allow_unvalidated: bool = False) -> list[dict]:
                         "validation_override": bool(allow_unvalidated and not supported),
                     })
     return plan
+
+
+def validate_experiment_protocol(config: dict) -> None:
+    """Fail early when a run claims the controlled SEASON Table 1 protocol."""
+    for entry in config["benchmarks"]:
+        if not isinstance(entry, dict) or entry.get("protocol") != "season_table1":
+            continue
+        if entry.get("name") != "vidhalluc":
+            raise ValueError("season_table1 protocol is only valid for VidHalluc")
+        if entry.get("tsh_prompt_protocol", "official") != "official":
+            raise ValueError("season_table1 requires the verbatim official TSH prompt")
+        for task in entry.get("tasks") or ("sth", "tsh"):
+            if task not in {"sth", "tsh"}:
+                continue
+            sampling = resolve_sampling_config("vidhalluc", task)
+            if sampling.get("num_frames") != 8 or sampling.get("strategy") != "uniform":
+                raise ValueError(
+                    f"season_table1 requires exactly 8 uniform frames for VidHalluc/{task}"
+                )
 
 
 def load_model_configs() -> dict:
@@ -171,7 +194,8 @@ def write_vidhalluc_resolved_config(config: dict, args, plan: list[dict], runtim
         "resume": config.get("resume", True),
         "runtime": runtime or {},
     }
-    (audit_root / "vidhalluc_tsh_sth_resolved_config.json").write_text(
+    resolved_path = audit_root / f"{config['name']}__vidhalluc_tsh_sth_resolved_config.json"
+    resolved_path.write_text(
         json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
     )
 
@@ -312,7 +336,13 @@ def emit_record(
         sampling_config=sampling,
         generation_config=generation_config.__dict__,
         runtime_seconds=runtime_seconds,
-        metadata={**sample.metadata, "manifest": sample_manifest.to_dict(), **method_diagnostics},
+        metadata={
+            **sample.metadata,
+            "experiment": job["experiment"],
+            "benchmark_protocol": job.get("protocol"),
+            "manifest": sample_manifest.to_dict(),
+            **method_diagnostics,
+        },
     )
 
 
@@ -331,6 +361,8 @@ def emit_failure_record(
 ) -> PredictionRecord:
     failure_metadata = {
         **sample.metadata,
+        "experiment": job["experiment"],
+        "benchmark_protocol": job.get("protocol"),
         "failure_stage": stage,
         "manifest": manifest,
         "exception_class": type(error).__name__,
@@ -678,6 +710,7 @@ def main():
     if not config_path.is_absolute():
         config_path = PROJECT / config_path
     config = load_yaml(config_path)
+    validate_experiment_protocol(config)
     subset_manifest = None
     if config.get("subset_manifest"):
         subset_path = Path(config["subset_manifest"])

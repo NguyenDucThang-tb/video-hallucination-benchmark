@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fnmatch
 import json
 import math
 import sys
@@ -13,7 +14,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT))
 
 from src.benchmarks.vidhalluc.evaluator import evaluate_classification
-from src.benchmarks.vidhalluc.loader import VIDEO_SUFFIXES
+from src.benchmarks.vidhalluc.loader import VIDEO_SUFFIXES, build_sth_prompt
 from src.data.jsonl import read_jsonl
 from src.evaluation.parsers import (
     parse_ab_ba,
@@ -28,7 +29,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Audit existing VidHalluc TSH/STH artifacts without inference")
     parser.add_argument("--raw-dir", default="results/raw")
     parser.add_argument("--output-dir", default="results/audit")
-    parser.add_argument("--experiment", default=None)
+    selection = parser.add_mutually_exclusive_group(required=True)
+    selection.add_argument("--experiment", help="Exact experiment name before the first '__'")
+    selection.add_argument(
+        "--experiment-glob",
+        help="Glob for related per-task experiment names, for example 'paper_v1_*'",
+    )
     parser.add_argument("--simcse-model", default=None, help="Local SimCSE checkpoint; omitted means official STH=N/A")
     return parser.parse_args()
 
@@ -40,17 +46,88 @@ def write_csv(path: Path, rows: list[dict], columns: list[str]) -> None:
         writer.writerows(rows)
 
 
-def collect_records(raw_dir: Path, experiment: str | None):
+def collect_records(raw_dir: Path, experiment: str | None, experiment_glob: str | None):
     records = []
     paths = []
     for path in sorted(raw_dir.glob("*__vidhalluc__*.jsonl")):
-        if experiment and not path.name.startswith(f"{experiment}__"):
+        source_experiment = path.name.split("__", 1)[0]
+        if experiment and source_experiment != experiment:
+            continue
+        if experiment_glob and not fnmatch.fnmatchcase(source_experiment, experiment_glob):
             continue
         path_records = [record for record in read_jsonl(path) if record.task in {"tsh", "sth"}]
         if path_records:
+            for record in path_records:
+                record.metadata.setdefault("experiment", source_experiment)
             paths.append(path)
             records.extend(path_records)
     return records, paths
+
+
+def validate_season_table1_records(records) -> dict:
+    expected = {"sth": 445, "tsh": 600}
+    official_tsh_suffix = (
+        "Sort these two actions in the order they occur in the video, and return which action "
+        "happen before which one. If you only detect one action, return that action."
+    )
+    groups = defaultdict(list)
+    for record in records:
+        groups[f"{record.model}/{record.method}/{record.task}"].append(record)
+
+    results = {}
+    for key, items in sorted(groups.items()):
+        task = items[0].task
+        sample_ids = {item.sample_id for item in items}
+        frame_errors = sum(len(item.frame_indices) != 8 for item in items)
+        protocol_errors = sum(
+            item.metadata.get("benchmark_protocol") != "season_table1"
+            for item in items
+        )
+        sampling_errors = sum(
+            item.sampling_config.get("num_frames") != 8
+            or item.sampling_config.get("strategy") != "uniform"
+            for item in items
+        )
+        if task == "sth":
+            prompt_errors = sum(item.prompt != build_sth_prompt() for item in items)
+        else:
+            prompt_errors = sum(
+                item.metadata.get("tsh_prompt_protocol", "official") != "official"
+                or not item.prompt.endswith(official_tsh_suffix)
+                for item in items
+            )
+        config_fingerprints = {
+            json.dumps({
+                "method": item.method_config,
+                "sampling": item.sampling_config,
+                "generation": item.generation_config,
+            }, sort_keys=True, default=str)
+            for item in items
+        }
+        complete = len(sample_ids) == expected[task]
+        config_consistent = len(config_fingerprints) == 1
+        valid = (
+            complete
+            and config_consistent
+            and not protocol_errors
+            and not frame_errors
+            and not sampling_errors
+            and not prompt_errors
+        )
+        results[key] = {
+            "status": "VERIFIED" if valid else "INVALID_OR_INCOMPLETE",
+            "records": len(items),
+            "unique_samples": len(sample_ids),
+            "expected_samples": expected[task],
+            "complete": complete,
+            "frame_count_errors": frame_errors,
+            "protocol_tag_errors": protocol_errors,
+            "sampling_config_errors": sampling_errors,
+            "official_prompt_errors": prompt_errors,
+            "configuration_fingerprints": len(config_fingerprints),
+            "configuration_consistent": config_consistent,
+        }
+    return results
 
 
 def inventory_rows() -> tuple[list[dict], dict]:
@@ -265,8 +342,9 @@ def run_simcse(records, checkpoint: str) -> dict:
     mcc = (tp * tn - fp * fn) / denominator if denominator else 0.0
     classification = ((mcc + 1.0) / 2.0) ** 2
     description = total_description / max_description if max_description else 0.0
+    complete = len(parsed_items) == 445
     return {
-        "official_status": "VERIFIED",
+        "official_status": "VERIFIED" if complete else "INCOMPLETE",
         "simcse_checkpoint": checkpoint,
         "similarity_threshold_low": 0.5,
         "mcc": mcc,
@@ -274,6 +352,7 @@ def run_simcse(records, checkpoint: str) -> dict:
         "description_accuracy": description,
         "overall_score": 0.6 * classification + 0.4 * description,
         "n": len(parsed_items),
+        "expected_n": 445,
     }
 
 
@@ -283,7 +362,9 @@ def main():
     output_dir = (PROJECT / args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    records, paths = collect_records(raw_dir, args.experiment)
+    records, paths = collect_records(raw_dir, args.experiment, args.experiment_glob)
+    if not paths:
+        raise SystemExit("No TSH/STH JSONL files matched the requested experiment selection")
     records, duplicate_count = latest_records(records)
     inventory, inventory_status = inventory_rows()
     mark_evaluated(inventory, records)
@@ -304,6 +385,7 @@ def main():
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
     metrics = group_metrics(records)
+    protocol_validation = validate_season_table1_records(records)
     sth = {
         "official_status": "SIMCSE_NOT_AVAILABLE",
         "reason": "Pass --simcse-model with the official checkpoint to execute description scoring.",
@@ -312,19 +394,44 @@ def main():
         },
     }
     if args.simcse_model:
-        sth["official_runs"] = {
-            key: run_simcse(items, args.simcse_model)
-            for key, items in _group_record_lists(records).items()
-        }
+        official_runs = {}
+        for key, items in _group_record_lists(records).items():
+            result = run_simcse(items, args.simcse_model)
+            validation = protocol_validation.get(f"{key}/sth")
+            if validation and validation["status"] != "VERIFIED":
+                result["official_status"] = "INVALID_PROTOCOL_OR_INCOMPLETE"
+                result["protocol_validation"] = validation
+            official_runs[key] = result
+        sth["official_runs"] = official_runs
         sth["official_status"] = "EXECUTED"
     (output_dir / "vidhalluc_sth_metrics.json").write_text(
         json.dumps(sth, indent=2, sort_keys=True), encoding="utf-8"
     )
+    paper_scores = {}
+    official_sth = sth.get("official_runs", {})
+    for key, value in metrics.items():
+        tsh_metric = value["tsh"]
+        sth_metric = official_sth.get(key, {})
+        paper_scores[key] = {
+            "sth": sth_metric.get("overall_score"),
+            "sth_status": sth_metric.get("official_status", "SIMCSE_NOT_EXECUTED"),
+            "tsh": tsh_metric.get("official_accuracy"),
+            "tsh_parse_coverage": tsh_metric.get("parse_coverage"),
+            "tsh_protocol_status": protocol_validation.get(
+                f"{key}/tsh", {}
+            ).get("status", "MISSING"),
+        }
     summary = {
         "raw_files": [str(path) for path in paths],
         "records_after_deduplication": len(records),
         "duplicate_records_ignored": duplicate_count,
         "inventory": inventory_status,
+        "selection": {
+            "experiment": args.experiment,
+            "experiment_glob": args.experiment_glob,
+        },
+        "season_table1_protocol_validation": protocol_validation,
+        "paper_scores_by_model_method": paper_scores,
         "metrics_by_model_method": metrics,
     }
     (output_dir / "vidhalluc_tsh_sth_audit_summary.json").write_text(

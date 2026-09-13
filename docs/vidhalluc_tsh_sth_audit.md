@@ -111,7 +111,8 @@ source .venv/bin/activate
 
 PYTHONPATH=. ./.venv/bin/python scripts/audit_vidhalluc_tsh_sth.py \
   --raw-dir results/raw \
-  --output-dir results/audit
+  --output-dir results/audit/paper_v1 \
+  --experiment-glob 'paper_v1_*'
 ```
 
 To execute official STH description scoring, pass a local copy of the official model:
@@ -119,9 +120,15 @@ To execute official STH description scoring, pass a local copy of the official m
 ```bash
 PYTHONPATH=. ./.venv/bin/python scripts/audit_vidhalluc_tsh_sth.py \
   --raw-dir results/raw \
-  --output-dir results/audit \
+  --output-dir results/audit/paper_v1 \
+  --experiment-glob 'paper_v1_*' \
   --simcse-model /scratch/jp09/dd9648/huggingface/sup-simcse-roberta-large
 ```
+
+An exact `--experiment` or a deliberately scoped `--experiment-glob` is required.
+This prevents old runs with the same model/method names from being silently merged.
+The audit marks each STH/TSH result `VERIFIED` only when it has the official prompt,
+exactly 8 uniform frames, and the complete 445/600 sample set.
 
 After inspecting the audit artifacts, run a 5-10 sample controlled smoke test before a
 new full run. Legacy records cannot contain rendered chat prompts or vision-input shapes;

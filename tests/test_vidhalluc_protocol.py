@@ -2,7 +2,10 @@ from pathlib import Path
 
 from src.benchmarks.vidhalluc.loader import build_sth_prompt, build_tsh_prompt
 from src.data.sampler import frame_indices, vidhalluc_frame_indices
+from src.data.schema import PredictionRecord
 from src.utils.config import load_yaml
+from scripts.audit_vidhalluc_tsh_sth import validate_season_table1_records
+from scripts.run_benchmark import build_plan, validate_experiment_protocol
 
 
 def test_public_tsh_prompt_appends_official_sorting_instruction():
@@ -55,3 +58,58 @@ def test_vidhalluc_tsh_sth_use_controlled_eight_frame_protocol():
     for task in ("tsh", "sth"):
         assert benchmark["task_sampling"][task]["num_frames"] == 8
         assert benchmark["task_sampling"][task]["strategy"] == "uniform"
+
+
+def test_season_table1_profile_is_explicit_and_valid():
+    project = Path(__file__).resolve().parents[1]
+    config = load_yaml(project / "configs/vidhalluc_season_table1.yaml")
+    validate_experiment_protocol(config)
+    benchmark = config["benchmarks"][0]
+    assert benchmark["protocol"] == "season_table1"
+    assert benchmark["tasks"] == ["sth", "tsh"]
+    assert benchmark["tsh_prompt_protocol"] == "official"
+    plan = build_plan(config, allow_unvalidated=True)
+    assert len(plan) == 24
+    assert all(job["protocol"] == "season_table1" for job in plan)
+
+
+def test_season_table1_rejects_non_official_tsh_prompt():
+    config = {
+        "name": "bad",
+        "benchmarks": [{
+            "name": "vidhalluc",
+            "tasks": ["tsh"],
+            "protocol": "season_table1",
+            "tsh_prompt_protocol": "parser_compatible",
+        }],
+    }
+    try:
+        validate_experiment_protocol(config)
+    except ValueError as exc:
+        assert "official TSH prompt" in str(exc)
+    else:
+        raise AssertionError("non-official TSH prompt must be rejected")
+
+
+def test_audit_rejects_incomplete_or_untagged_table1_records():
+    record = PredictionRecord(
+        sample_id="tsh:1",
+        model="qwen2.5-vl-7b",
+        method="base",
+        benchmark="vidhalluc",
+        task="tsh",
+        prompt=build_tsh_prompt("Question"),
+        frame_indices=list(range(8)),
+        raw_output="AB",
+        normalized_output="AB",
+        ground_truth="AB",
+        is_correct=True,
+        parser_status="valid",
+        sampling_config={"num_frames": 8, "strategy": "uniform"},
+        generation_config={"do_sample": False},
+        metadata={"tsh_prompt_protocol": "official"},
+    )
+    result = validate_season_table1_records([record])["qwen2.5-vl-7b/base/tsh"]
+    assert result["status"] == "INVALID_OR_INCOMPLETE"
+    assert result["protocol_tag_errors"] == 1
+    assert result["unique_samples"] == 1
