@@ -445,9 +445,8 @@ class Qwen25VLAdapter(ModelAdapter):
             self._dino_model = AutoModel.from_pretrained(
                 checkpoint,
                 torch_dtype=self._torch_dtype(),
-                device_map="auto",
                 local_files_only=local_only,
-            ).eval()
+            ).to(device).eval()
         return self._dino_processor, self._dino_model
 
     def _ensure_birefnet_loaded(self, checkpoint: str = "ZhengPeng7/BiRefNet", device: str = "cuda"):

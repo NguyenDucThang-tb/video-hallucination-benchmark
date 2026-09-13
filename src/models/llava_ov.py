@@ -158,9 +158,8 @@ class LlavaOVAdapter(ModelAdapter):
             self._dino_model = AutoModel.from_pretrained(
                 checkpoint,
                 torch_dtype=self._torch_dtype(),
-                device_map="auto",
                 **model_kwargs,
-            ).eval()
+            ).to(device).eval()
         return self._dino_processor, self._dino_model
 
     def _compute_dino_saliency(
