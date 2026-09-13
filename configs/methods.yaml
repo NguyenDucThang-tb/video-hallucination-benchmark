@@ -35,6 +35,11 @@ methods:
     beta: 0.4
     # Best configurations selected independently from the 109-point grid.
     model_overrides:
+      llava-ov-7b:
+        # Point 93
+        alpha: 0.8
+        alpha_s: 0.1
+        beta: 0.6
       qwen2.5-vl-7b:
         # Point 64
         alpha: 0.4
