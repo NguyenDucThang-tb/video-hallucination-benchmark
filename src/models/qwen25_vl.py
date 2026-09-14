@@ -18,7 +18,13 @@ from src.methods.positive_feature.enhancement import (
 )
 from src.methods.season.attention_diagnosis import frame_attention
 
-from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
+from .base import (
+    GenerationConfig,
+    ModelAdapter,
+    StepOutput,
+    decoder_only_generated_ids,
+    select_decode_input_ids,
+)
 
 
 def summarize_logit_change(base_logits, enhanced_logits, torch_module, top_k: int = 10) -> dict:
@@ -260,7 +266,6 @@ class Qwen25VLAdapter(ModelAdapter):
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
-        prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
         self._generation_diagnostics = [
             self._record_input_audit(inputs, text, len(video_frames))
         ]
@@ -275,7 +280,7 @@ class Qwen25VLAdapter(ModelAdapter):
                 use_cache=True,
             )
 
-        generated_ids = output_ids[:, prompt_length:]
+        generated_ids = decoder_only_generated_ids(output_ids, inputs["input_ids"])
         answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
         return answer.strip()
 
@@ -314,7 +319,6 @@ class Qwen25VLAdapter(ModelAdapter):
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
-        prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
         self._generation_diagnostics = [
             {
                 "rendered_prompt": text,
@@ -346,8 +350,10 @@ class Qwen25VLAdapter(ModelAdapter):
             )
 
         answers = []
-        for row_index, prompt_length in enumerate(prompt_lengths):
-            generated_ids = output_ids[row_index, int(prompt_length):]
+        for row_index in range(len(prompts)):
+            generated_ids = decoder_only_generated_ids(
+                output_ids[row_index], inputs["input_ids"]
+            )
             answer = self.processor.batch_decode(
                 generated_ids.unsqueeze(0),
                 skip_special_tokens=True,
@@ -986,8 +992,6 @@ class Qwen25VLAdapter(ModelAdapter):
 
         # ── prepare inputs ──
         inputs = self._prepare_inputs(video_frames, prompt)
-        prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
-
         # ── determine vision grid ──
         grid_thw = inputs.get("video_grid_thw")
         if grid_thw is None:
@@ -1133,7 +1137,8 @@ class Qwen25VLAdapter(ModelAdapter):
                 handle.remove()
 
         answer = self.processor.batch_decode(
-            output_ids[:, prompt_length:], skip_special_tokens=True,
+            decoder_only_generated_ids(output_ids, inputs["input_ids"]),
+            skip_special_tokens=True,
         )[0].strip()
 
         diagnostics["positive_feature_hook_applied"] = holder["applied"]

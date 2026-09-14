@@ -2,6 +2,7 @@ import numpy as np
 
 from src.models.llava_ov import LlavaOVAdapter
 from src.models.qwen25_vl import Qwen25VLAdapter
+from src.models.base import decoder_only_generated_ids
 
 
 class FakeTensor:
@@ -36,6 +37,21 @@ class RecordingProcessor:
 
 def _frames():
     return np.zeros((8, 4, 6, 3), dtype=np.uint8)
+
+
+def test_decoder_only_output_slicing_uses_padded_input_width():
+    input_ids = np.array([
+        [0, 0, 11, 12],
+        [21, 22, 23, 24],
+    ])
+    output_ids = np.array([
+        [0, 0, 11, 12, 31, 32],
+        [21, 22, 23, 24, 41, 42],
+    ])
+
+    generated = decoder_only_generated_ids(output_ids, input_ids)
+
+    assert generated.tolist() == [[31, 32], [41, 42]]
 
 
 def test_llava_uses_one_video_placeholder():

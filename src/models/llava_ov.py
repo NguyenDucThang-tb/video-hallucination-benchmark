@@ -7,7 +7,13 @@ from pathlib import Path
 
 import numpy as np
 
-from .base import GenerationConfig, ModelAdapter, StepOutput, select_decode_input_ids
+from .base import (
+    GenerationConfig,
+    ModelAdapter,
+    StepOutput,
+    decoder_only_generated_ids,
+    select_decode_input_ids,
+)
 from src.methods.dino_heal.fusion import DINOHealConfig, fuse_saliency
 from src.methods.positive_feature.enhancement import (
     PositiveFeatureConfig,
@@ -121,7 +127,7 @@ class LlavaOVAdapter(ModelAdapter):
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
-        prompt_length = int(inputs["attention_mask"].sum(dim=1).item())
+        prompt_length = int(inputs["input_ids"].shape[-1])
         self._last_input_audit = {
             "rendered_prompt": text,
             "model_input_keys": sorted(inputs),
@@ -595,7 +601,6 @@ class LlavaOVAdapter(ModelAdapter):
             key: value.to(self.device) if hasattr(value, "to") else value
             for key, value in inputs.items()
         }
-        prompt_lengths = inputs["attention_mask"].sum(dim=1).tolist()
         common_shapes = {
             key: list(value.shape) for key, value in inputs.items() if hasattr(value, "shape")
         }
@@ -624,8 +629,10 @@ class LlavaOVAdapter(ModelAdapter):
             )
 
         answers = []
-        for row_index, prompt_length in enumerate(prompt_lengths):
-            generated_ids = output_ids[row_index, int(prompt_length):]
+        for row_index in range(len(prompts)):
+            generated_ids = decoder_only_generated_ids(
+                output_ids[row_index], inputs["input_ids"]
+            )
             answer = self.processor.batch_decode(
                 generated_ids.unsqueeze(0),
                 skip_special_tokens=True,

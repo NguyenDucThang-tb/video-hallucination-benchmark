@@ -12,6 +12,12 @@ def select_decode_input_ids(input_ids: Any, past_key_values: Any | None) -> Any:
     return input_ids if past_key_values is None else input_ids[:, -1:]
 
 
+def decoder_only_generated_ids(output_ids: Any, input_ids: Any) -> Any:
+    """Remove the full padded prompt from decoder-only generation output."""
+    input_width = int(input_ids.shape[-1])
+    return output_ids[..., input_width:]
+
+
 @dataclass(frozen=True)
 class GenerationConfig:
     max_new_tokens: int = 128
