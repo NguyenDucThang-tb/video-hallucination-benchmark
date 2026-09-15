@@ -1,0 +1,17 @@
+name: tempcompass_official_prompts_8frame_v1
+seed: 42
+models: [llava-ov-7b, qwen2.5-vl-7b, llava-video-7b]
+methods: [base, tcd, dino_heal, season, positive_feature]
+benchmarks:
+  - name: tempcompass
+    tasks: [multi-choice, yes_no, caption_matching, captioning]
+    protocol: official_prompts_controlled_8_frames
+sampling: configs/sampling.yaml
+generation:
+  max_new_tokens: 128
+  do_sample: false
+  temperature: 0.0
+  num_beams: 1
+output_dir: results/raw
+manifest_dir: manifests
+resume: true

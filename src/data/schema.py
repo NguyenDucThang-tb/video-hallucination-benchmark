@@ -37,4 +37,4 @@ class PredictionRecord:
 
     @property
     def is_valid_for_resume(self) -> bool:
-        return self.error is None and self.parser_status == "valid"
+        return self.error is None and self.parser_status in {"valid", "requires_judge"}

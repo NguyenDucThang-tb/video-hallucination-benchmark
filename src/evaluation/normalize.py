@@ -10,9 +10,22 @@ from src.evaluation.parsers import (
     parse_vidhalluc_sth,
     parse_vidhalluc_tsh_official,
 )
+from src.benchmarks.tempcompass.parsers import (
+    parse_caption_matching,
+    parse_multi_choice,
+    parse_yes_no as parse_tempcompass_yes_no,
+)
 
 
 def normalize_prediction(sample: BenchmarkSample, raw_output: str) -> ParseResult:
+    if sample.answer_type == "tempcompass_multi_choice":
+        return parse_multi_choice(raw_output, sample.metadata["official_answer"])
+    if sample.answer_type == "tempcompass_yes_no":
+        return parse_tempcompass_yes_no(raw_output)
+    if sample.answer_type == "tempcompass_caption_matching":
+        return parse_caption_matching(raw_output, sample.metadata["caption_options"])
+    if sample.answer_type == "tempcompass_captioning":
+        return ParseResult(raw_output.replace("</s>", "").strip(), "valid")
     if sample.answer_type == "yes_no":
         if sample.benchmark == "eventhallusion":
             return parse_leading_yes_no(raw_output)

@@ -13,7 +13,17 @@ benchmarks:
     tasks: [entire, misleading, mix]
     questions_root: external/EventHallusion/questions
     video_root: /scratch/jp09/dd9648/datasets_video_hallu/eventhallusion/videos
-  tempcompass: {data_root: null}
+  tempcompass:
+    tasks: [multi-choice, yes_no, caption_matching, captioning]
+    questions_root: external/TempCompass/questions
+    meta_path: external/TempCompass/meta_info.json
+    video_root: /scratch/jp09/dd9648/datasets_video_hallu/tempcompass
+    comparison_protocol: official_prompts_controlled_8_frames
+    task_sampling:
+      multi-choice: {num_frames: 8, strategy: uniform}
+      yes_no: {num_frames: 8, strategy: uniform}
+      caption_matching: {num_frames: 8, strategy: uniform}
+      captioning: {num_frames: 8, strategy: uniform}
   tvbench: {data_root: null}
   videomme: {data_root: null}
   mvbench: {data_root: null}

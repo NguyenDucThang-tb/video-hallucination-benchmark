@@ -28,6 +28,11 @@ Large checkpoints are deliberately not downloaded by setup scripts. Configure
 local paths in `configs/models.yaml`, inspect the dry run, and only then run a
 real benchmark.
 
+TempCompass is available through `configs/tempcompass_8frame.yaml`. Its four
+official prompt formats are preserved; see
+[`docs/tempcompass_protocol.md`](docs/tempcompass_protocol.md) for data layout
+and the required second-stage LLM judging for caption generation.
+
 If you need to refresh the vendored upstream snapshots, use
 `scripts/clone_repositories.sh` in a temporary checkout and update
 `external/COMMITS.lock` with the exact commits used.

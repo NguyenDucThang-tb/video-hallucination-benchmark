@@ -16,6 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT))
 
 from src.benchmarks.eventhallusion import EventHallusionLoader, evaluate_binary
+from src.benchmarks.tempcompass import TempCompassLoader, evaluate_tempcompass
 from src.benchmarks.videohallucer import VideoHallucerLoader, pair_accuracy
 from src.benchmarks.vidhalluc import VidHallucLoader, evaluate_classification
 from src.data.jsonl import append_jsonl, read_jsonl, valid_resume_keys
@@ -258,6 +259,13 @@ def instantiate_loader(name: str, experiment_config: dict | None = None):
         return VideoHallucerLoader(config["data_root"], config.get("tasks"))
     if name == "eventhallusion":
         return EventHallusionLoader(config["questions_root"], config["video_root"], config.get("tasks"))
+    if name == "tempcompass":
+        return TempCompassLoader(
+            config["questions_root"],
+            config["video_root"],
+            config["meta_path"],
+            config.get("tasks"),
+        )
     raise RuntimeError(f"Benchmark loader not implemented yet for {name}")
 
 
@@ -268,6 +276,8 @@ def evaluate_records(benchmark: str, records: list[PredictionRecord]) -> dict:
         return pair_accuracy(records)
     if benchmark == "eventhallusion":
         return evaluate_binary(records)
+    if benchmark == "tempcompass":
+        return evaluate_tempcompass(records)
     raise RuntimeError(f"No evaluator for benchmark {benchmark}")
 
 
@@ -476,7 +486,11 @@ def flush_batch(
 
     for sample, sample_manifest, raw_output in zip(batch_samples, batch_manifests, raw_outputs):
         parse = normalize_prediction(sample, raw_output.text)
-        is_correct = None if parse.value is None else parse.value == sample.ground_truth
+        is_correct = (
+            None
+            if parse.value is None or sample.metadata.get("requires_llm_judge")
+            else parse.value == sample.ground_truth
+        )
         record = emit_record(
             sample=sample,
             sample_manifest=sample_manifest,
