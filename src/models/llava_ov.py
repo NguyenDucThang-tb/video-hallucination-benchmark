@@ -524,7 +524,7 @@ class LlavaOVAdapter(ModelAdapter):
         if projector is None:
             raise RuntimeError("LLaVA-OneVision multi_modal_projector not found")
 
-        inputs = self._build_inputs(video_frames, prompt)
+        inputs, _ = self._build_inputs(video_frames, prompt)
         diagnostics.update(dict(getattr(self, "_last_input_audit", {})))
 
         base_logits = None
