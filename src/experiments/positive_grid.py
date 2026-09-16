@@ -53,7 +53,12 @@ def experiment_name(prefix: str, point: GridPoint) -> str:
 
 
 def metric_scores(metrics: dict) -> dict[str, float | None]:
-    output = {"tsh": None, "mcq": None, "tph": None, "eventhallusion": None}
+    output = {
+        "tsh": None, "mcq": None, "tph": None, "eventhallusion": None,
+        "tempcompass_multi_choice": None,
+        "tempcompass_yes_no": None,
+        "tempcompass_caption_matching": None,
+    }
     for key, result in metrics.items():
         if key.endswith("/vidhalluc"):
             output["tsh"] = result.get("tsh", {}).get("official_accuracy")
@@ -62,6 +67,17 @@ def metric_scores(metrics: dict) -> dict[str, float | None]:
             output["tph"] = result.get("tph", {}).get("accuracy")
         elif key.endswith("/eventhallusion"):
             output["eventhallusion"] = result.get("overall", {}).get("accuracy")
+        elif key.endswith("/tempcompass"):
+            tasks = result.get("tasks", {})
+            output["tempcompass_multi_choice"] = tasks.get("multi-choice", {}).get(
+                "official_accuracy"
+            )
+            output["tempcompass_yes_no"] = tasks.get("yes_no", {}).get(
+                "official_accuracy"
+            )
+            output["tempcompass_caption_matching"] = tasks.get(
+                "caption_matching", {}
+            ).get("official_accuracy")
     return output
 
 
@@ -121,6 +137,11 @@ def validate_run_diagnostics(
         "foreground_residual_mean_norm",
         "persistence_residual_mean_norm",
     )
+    if any(row.get("benchmark") == "tempcompass" for row in latest.values()):
+        # TempCompass does not require the legacy foreground-distribution
+        # diagnostics used by the VidHalluc grid validator.
+        preprocessing_fields = ()
+        distribution_fields = ()
     for key, row in latest.items():
         if row.get("error"):
             continue
@@ -191,6 +212,8 @@ def write_grid_csv(rows: list[dict], path: str | Path) -> Path:
     columns = [
         "experiment", "ablation", "alpha", "alpha_s", "beta", "status",
         "tsh", "mcq", "tph", "eventhallusion", "mean_score", "record_count",
+        "tempcompass_multi_choice", "tempcompass_yes_no",
+        "tempcompass_caption_matching",
         "expected_records", "failed_records", "return_code", "rank", "is_best", "is_worst", "error",
         "diagnostics_valid",
     ]

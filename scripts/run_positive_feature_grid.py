@@ -31,6 +31,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Run the positive-feature ablation grid")
     parser.add_argument("--model", required=True, choices=("qwen2.5-vl-7b", "llava-ov-7b", "llava-video-7b"))
     parser.add_argument("--subset-manifest", required=True)
+    parser.add_argument(
+        "--benchmark",
+        default="vidhalluc",
+        choices=("vidhalluc", "videohallucer", "eventhallusion", "tempcompass"),
+    )
+    parser.add_argument("--tasks", nargs="+", default=None)
     parser.add_argument("--prefix", default=None)
     parser.add_argument("--include-baseline", action="store_true")
     parser.add_argument("--execute", action="store_true", help="Execute runs; otherwise only write the plan")
@@ -73,8 +79,14 @@ def main():
     manifest = load_subset_manifest(manifest_path)
     seed = int(manifest["seed"])
     expected_records = sum(
-        len(selection["sample_ids"]) for selection in manifest["selections"].values()
+        len(selection["sample_ids"])
+        for key, selection in manifest["selections"].items()
+        if key.startswith(f"{args.benchmark}/")
     )
+    if expected_records == 0:
+        raise SystemExit(
+            f"subset manifest has no selections for benchmark {args.benchmark!r}"
+        )
     prefix = safe_prefix(args.prefix or f"{args.model}_positive_tuning_seed{seed}")
     if args.smoke_ablations:
         prefix = f"{prefix}_smoke_{time.strftime('%Y%m%d_%H%M%S')}"
@@ -98,6 +110,16 @@ def main():
     rows = []
     for index, point in selected:
         name = experiment_name(prefix, point)
+        default_tasks = {
+            "vidhalluc": ["tsh", "mcq"],
+            "videohallucer": ["tph"],
+            "eventhallusion": ["entire", "misleading", "mix"],
+            "tempcompass": ["multi-choice", "yes_no", "caption_matching"],
+        }
+        tasks = args.tasks or default_tasks[args.benchmark]
+        benchmark_entry = {"name": args.benchmark, "tasks": tasks}
+        if args.benchmark == "tempcompass":
+            benchmark_entry["protocol"] = "official_prompts_controlled_8_frames"
         config = {
             "name": name,
             "seed": seed,
@@ -109,11 +131,7 @@ def main():
                 "logit_top_k": args.logit_top_k,
             }},
             "subset_manifest": str(manifest_path),
-            "benchmarks": [
-                {"name": "vidhalluc", "tasks": ["tsh", "mcq"]},
-                {"name": "videohallucer", "tasks": ["tph"]},
-                {"name": "eventhallusion", "tasks": ["entire", "misleading", "mix"]},
-            ],
+            "benchmarks": [benchmark_entry],
             "sampling": "configs/sampling.yaml",
             "generation": {
                 "max_new_tokens": args.max_new_tokens,
@@ -163,7 +181,16 @@ def main():
                 metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
                 scores = metric_scores(metrics)
                 row.update(scores)
-                values = [scores[key] for key in ("tsh", "mcq", "tph", "eventhallusion")]
+                score_keys = (
+                    (
+                        "tempcompass_multi_choice",
+                        "tempcompass_yes_no",
+                        "tempcompass_caption_matching",
+                    )
+                    if args.benchmark == "tempcompass"
+                    else ("tsh", "mcq", "tph", "eventhallusion")
+                )
+                values = [scores[key] for key in score_keys]
                 row["mean_score"] = sum(values) / len(values) if all(v is not None for v in values) else None
                 total, failed = count_run_records(PROJECT / "results" / "raw", name)
                 diagnostic_errors = validate_run_diagnostics(
