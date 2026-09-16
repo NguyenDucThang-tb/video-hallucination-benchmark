@@ -45,6 +45,7 @@ test -f "$SUBSET"
   --prefix "$PREFIX" \
   --start-index "$POINT" \
   --stop-index "$POINT" \
+  --include-baseline \
   --saliency-device cuda \
   --birefnet-batch-size 8 \
   --execute \

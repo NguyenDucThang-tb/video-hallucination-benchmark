@@ -1,0 +1,109 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=01:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+PYTHON=./.venv/bin/python
+PREFIX=qwen_positive_context_v3_h200_p001_smoke
+
+export QWEN25_VL_MODEL_DIR=/scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+export MODEL_DIR="$QWEN25_VL_MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTHONPATH=.
+export OMP_NUM_THREADS="$PBS_NCPUS"
+
+echo "Node: $(hostname)"
+nvidia-smi
+
+test -f "$MODEL_DIR/config.json"
+test -f manifests/positive_feature_tuning_seed42.json
+
+# Tạo config cho point 1:
+# alpha=0.2, alpha_s=0.0, beta=0.0
+"$PYTHON" scripts/run_positive_feature_grid.py \
+  --model qwen2.5-vl-7b \
+  --subset-manifest manifests/positive_feature_tuning_seed42.json \
+  --prefix "$PREFIX" \
+  --start-index 1 \
+  --stop-index 1 \
+  --no-resume
+
+CONFIG="manifests/${PREFIX}_configs/${PREFIX}__foreground_only__a0p2__as0p0__b0p0.yaml"
+
+test -f "$CONFIG"
+echo "Config: $CONFIG"
+
+# Chạy một mẫu trên mỗi task
+"$PYTHON" scripts/run_benchmark.py \
+  --config "$CONFIG" \
+  --limit 1 \
+  --allow-unvalidated \
+  --debug-errors
+
+# Xác nhận hook thực sự thay đổi hướng feature
+"$PYTHON" - <<'PY'
+import json
+from pathlib import Path
+
+prefix = "qwen_positive_context_v3_h200_p001_smoke"
+paths = sorted(Path("results/raw").glob(f"{prefix}__*.jsonl"))
+
+print("Raw files:")
+for path in paths:
+    print(" ", path)
+
+rows = [
+    json.loads(line)
+    for path in paths
+    for line in path.open(encoding="utf-8")
+]
+
+assert rows, "No smoke records were generated"
+
+failed = [row for row in rows if row.get("error")]
+assert not failed, f"Smoke run contains {len(failed)} failed records"
+
+hook_values = [
+    row.get("metadata", {}).get("positive_feature_hook_applied")
+    for row in rows
+]
+assert all(value is True for value in hook_values), (
+    f"Hook was not applied: {hook_values}"
+)
+
+direction_deltas = [
+    row.get("metadata", {}).get("positive_feature_direction_delta")
+    for row in rows
+]
+assert all(
+    value is not None and float(value) > 0
+    for value in direction_deltas
+), f"Invalid direction deltas: {direction_deltas}"
+
+feature_deltas = [
+    float(row["metadata"]["positive_feature_delta"])
+    for row in rows
+]
+
+print()
+print("Smoke records:          ", len(rows))
+print("Feature delta min/max:  ", min(feature_deltas), max(feature_deltas))
+print("Direction delta min/max:", min(map(float, direction_deltas)),
+      max(map(float, direction_deltas)))
+print("Direction-aware hook: PASS")
+PY
+
+echo "Smoke test completed successfully."

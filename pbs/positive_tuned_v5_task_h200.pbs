@@ -1,0 +1,149 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=02:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+
+: "${MODEL_FAMILY:?MODEL_FAMILY is required}"
+: "${BENCHMARK:?BENCHMARK is required}"
+: "${TASK:?TASK is required}"
+: "${PREFIX:?PREFIX is required}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+case "$MODEL_FAMILY" in
+  qwen)
+    PYTHON=./.venv/bin/python
+    MODEL_NAME=qwen2.5-vl-7b
+    MODEL_DIR=/scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+    ALPHA=0.4
+    ALPHA_S=0.4
+    BETA=0.8
+    ;;
+
+  llava_ov)
+    PYTHON=./.venv/bin/python
+    MODEL_NAME=llava-ov-7b
+    MODEL_DIR="$(
+      find /scratch/jp09/dd9648/huggingface \
+        -path '*/models--llava-hf--llava-onevision-qwen2-7b-ov-hf/snapshots/*/config.json' \
+        -print -quit |
+      sed 's#/config.json$##'
+    )"
+    ALPHA=0.0
+    ALPHA_S=0.1
+    BETA=0.0
+    ;;
+
+  llava_video)
+    PYTHON=/scratch/jp09/dd9648/.venv-llava-video/bin/python
+    MODEL_NAME=llava-video-7b
+    MODEL_DIR=/scratch/jp09/dd9648/huggingface/LLaVA-Video-7B-Qwen2
+    ALPHA=0.2
+    ALPHA_S=0.1
+    BETA=0.0
+    ;;
+
+  *)
+    echo "Unknown MODEL_FAMILY: $MODEL_FAMILY"
+    exit 1
+    ;;
+esac
+
+test -x "$PYTHON"
+test -n "$MODEL_DIR"
+test -f "$MODEL_DIR/config.json"
+
+export MODEL_DIR
+export LLAVA_OV_MODEL_DIR="$MODEL_DIR"
+export LLAVA_VIDEO_MODEL_DIR="$MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTHONPATH=.
+export OMP_NUM_THREADS="$PBS_NCPUS"
+
+export MODEL_NAME BENCHMARK TASK PREFIX ALPHA ALPHA_S BETA
+
+echo "Node:       $(hostname)"
+echo "Model:      $MODEL_NAME"
+echo "Benchmark:  $BENCHMARK"
+echo "Task:       $TASK"
+echo "Prefix:     $PREFIX"
+echo "Parameters: alpha=$ALPHA alpha_s=$ALPHA_S beta=$BETA"
+echo "Resume:     true"
+nvidia-smi
+
+"$PYTHON" - <<'PY'
+import os
+from pathlib import Path
+
+import yaml
+
+benchmark = os.environ["BENCHMARK"]
+task = os.environ["TASK"]
+
+if benchmark == "eventhallusion":
+    tasks = ["entire", "misleading", "mix"]
+else:
+    tasks = [task]
+
+config = {
+    "name": os.environ["PREFIX"],
+    "seed": 42,
+    "models": [os.environ["MODEL_NAME"]],
+    "methods": ["positive_feature"],
+    "benchmarks": [
+        {
+            "name": benchmark,
+            "tasks": tasks,
+        }
+    ],
+    "sampling": "configs/sampling.yaml",
+    "generation": {
+        "max_new_tokens": 128,
+        "do_sample": False,
+        "temperature": 0.0,
+        "num_beams": 1,
+    },
+    "method_configs": {
+        "positive_feature": {
+            "alpha": float(os.environ["ALPHA"]),
+            "alpha_s": float(os.environ["ALPHA_S"]),
+            "beta": float(os.environ["BETA"]),
+            "saliency_device": "cuda",
+            "dino_device": "cuda",
+            "birefnet_batch_size": 8,
+            "logit_diagnostics": False,
+        }
+    },
+    "output_dir": "results/raw",
+    "manifest_dir": "manifests",
+    "resume": True,
+}
+
+path = Path("/tmp") / f"{os.environ['PREFIX']}.yaml"
+path.write_text(
+    yaml.safe_dump(config, sort_keys=False),
+    encoding="utf-8",
+)
+
+print("Config:", path)
+print(path.read_text(encoding="utf-8"))
+PY
+
+"$PYTHON" scripts/run_benchmark.py \
+  --config "/tmp/${PREFIX}.yaml" \
+  --allow-unvalidated \
+  --debug-errors
+
+echo "TASK COMPLETE: $MODEL_NAME / $BENCHMARK / $TASK"

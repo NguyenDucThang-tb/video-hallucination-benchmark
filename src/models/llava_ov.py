@@ -379,191 +379,205 @@ class LlavaOVAdapter(ModelAdapter):
         return answer, diagnostics
 
     def generate_positive_feature(
-        self,
-        video_frames,
-        prompt: str,
-        generation_config: GenerationConfig,
-        config: dict,
-    ):
-        """Generate text with BiRefNet-based positive visual-feature enhancement.
+    self,
+    video_frames,
+    prompt: str,
+    generation_config: GenerationConfig,
+    config: dict,
+):
+    """Generate text with BiRefNet-based positive visual-feature enhancement.
 
-        Hooks into the multi_modal_projector output to apply:
-        1. Foreground and persistence context residuals using BiRefNet masks.
-        2. Directed temporal motion evidence across consecutive frames.
-        3. Residual fusion before language-model normalization.
-        """
-        use_birefnet = bool(config.get("use_birefnet", True))
-        logit_diagnostics = bool(config.get("logit_diagnostics", False))
-        logit_top_k = int(config.get("logit_top_k", 10))
-        pf_config = PositiveFeatureConfig(
-            alpha=float(config.get("alpha", 0.4)),
-            alpha_s=float(config.get("alpha_s", 0.4)),
-            beta=float(config.get("beta", 0.4)),
-            epsilon=float(config.get("epsilon", 1e-6)),
-            use_birefnet=use_birefnet,
-            birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
-            dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
-            saliency_device=str(config.get("saliency_device", config.get("dino_device", "cuda"))),
-            foreground_threshold=float(config.get("foreground_threshold", 0.5)),
-            foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
-            foreground_return_soft=bool(config.get("foreground_return_soft", True)),
-            foreground_pair_fusion=str(config.get("foreground_pair_fusion", "mean")),
-            foreground_pool_avg_weight=float(config.get("foreground_pool_avg_weight", 1.0)),
-            birefnet_batch_size=int(config.get("birefnet_batch_size", 8)),
+    Hooks into multi_modal_projector output (before apply_pooling), where each
+    frame has (image_size // patch_size)^2 tokens (27x27 = 729 for SigLIP-384).
+    """
+    use_birefnet = bool(config.get("use_birefnet", True))
+    logit_diagnostics = bool(config.get("logit_diagnostics", False))
+    logit_top_k = int(config.get("logit_top_k", 10))
+    pf_config = PositiveFeatureConfig(
+        alpha=float(config.get("alpha", 0.4)),
+        alpha_s=float(config.get("alpha_s", 0.4)),
+        beta=float(config.get("beta", 0.4)),
+        epsilon=float(config.get("epsilon", 1e-6)),
+        use_birefnet=use_birefnet,
+        birefnet_checkpoint=config.get("birefnet_checkpoint", "ZhengPeng7/BiRefNet"),
+        dino_checkpoint=config.get("dino_checkpoint", "facebook/dinov2-large"),
+        saliency_device=str(config.get("saliency_device", config.get("dino_device", "cuda"))),
+        foreground_threshold=float(config.get("foreground_threshold", 0.5)),
+        foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
+        birefnet_batch_size=int(config.get("birefnet_batch_size", 8)),
+    )
+
+    n_frames = len(video_frames)
+    if n_frames == 0:
+        raise ValueError("video_frames is empty")
+
+    # ── lưới token tại output projector (trước apply_pooling) ──
+    vcfg = self.model.config.vision_config
+    side = int(vcfg.image_size // vcfg.patch_size)      # 384 // 14 = 27
+    P_expected = side * side                             # 729
+
+    diagnostics: dict = {
+        "positive_feature_mode": "birefnet_projector_hook" if use_birefnet else "dino_projector_hook",
+        "positive_feature_hook_applied": False,
+        "use_birefnet": use_birefnet,
+        "birefnet_loaded": False,
+        "logit_diagnostics": logit_diagnostics,
+    }
+
+    # ── foreground mask [n_frames, P_expected] ──
+    fg = None
+    frame_saliency = None
+    try:
+        if use_birefnet:
+            birefnet_model, birefnet_transform = self._ensure_birefnet_loaded(
+                pf_config.birefnet_checkpoint, pf_config.saliency_device
+            )
+            fg = compute_birefnet_foreground(
+                video_frames=video_frames,
+                T=n_frames,
+                Ht=side,
+                Wt=side,
+                birefnet_model=birefnet_model,
+                birefnet_transform=birefnet_transform,
+                torch_module=self.torch,
+                target_device=self.device,
+                thr=pf_config.foreground_threshold,
+                kernel=pf_config.foreground_morph_kernel,
+                batch_size=pf_config.birefnet_batch_size,
+                temporal_stride=1,              # OneVision: 1 frame -> 1 token
+            )
+            diagnostics["birefnet_loaded"] = True
+        else:
+            frame_saliency, dino_diag = self._compute_dino_saliency(
+                video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
+            )
+            diagnostics.update(dino_diag)
+    except (TypeError, ValueError):
+        raise                                   # lỗi lập trình: không fallback im lặng
+    except Exception as exc:
+        if not use_birefnet:
+            raise RuntimeError("DINO foreground extraction failed") from exc
+        warnings.warn(f"BiRefNet failed, falling back to DINO: {exc!r}")
+        diagnostics["saliency_fallback"] = repr(exc)
+        diagnostics["positive_feature_mode"] = "dino_projector_hook_fallback"
+        frame_saliency, dino_diag = self._compute_dino_saliency(
+            video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
         )
-        n_frames = len(video_frames)
-        diagnostics: dict = {
-            "positive_feature_mode": "birefnet_projector_hook" if use_birefnet else "dino_projector_hook",
-            "positive_feature_hook_applied": False,
-            "use_birefnet": use_birefnet,
-            "logit_diagnostics": logit_diagnostics,
-        }
+        diagnostics.update(dino_diag)
 
-        # Compute foreground saliency.
-        # LLaVA-OV projector output shape is unknown until the hook fires,
-        # so pre-compute fg at frame-level and expand inside the hook.
-        fg_per_frame = None
-        try:
-            if use_birefnet:
-                birefnet_model, birefnet_transform = self._ensure_birefnet_loaded(
-                    pf_config.birefnet_checkpoint, pf_config.saliency_device
-                )
-                fg_per_frame = compute_birefnet_foreground(
-                    video_frames, n_frames, 1, birefnet_model, birefnet_transform,
-                    self.torch, self.device,
-                    thr=pf_config.foreground_threshold,
-                    kernel=pf_config.foreground_morph_kernel,
-                    return_soft=pf_config.foreground_return_soft,
-                    avg_weight=pf_config.foreground_pool_avg_weight,
-                    pair_fusion=pf_config.foreground_pair_fusion,
-                    batch_size=pf_config.birefnet_batch_size,
-                )  # [n_frames, 1]
-                diagnostics["birefnet_loaded"] = True
-            else:
-                frame_saliency, dino_diag = self._compute_dino_saliency(
-                    video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
-                )
-                diagnostics.update(dino_diag)
-                fg_per_frame = self.torch.as_tensor(
-                    np.asarray(frame_saliency, dtype=np.float32),
-                    device=self.device,
-                ).unsqueeze(-1)  # [n_frames, 1]
-        except Exception as exc:
-            diagnostics["saliency_fallback"] = repr(exc)
-            if not use_birefnet:
-                raise RuntimeError("DINO foreground extraction failed") from exc
-            try:
-                frame_saliency, dino_diag = self._compute_dino_saliency(
-                    video_frames, pf_config.dino_checkpoint, pf_config.saliency_device
-                )
-                diagnostics.update(dino_diag)
-                diagnostics["positive_feature_mode"] = "dino_projector_hook_fallback"
-                fg_per_frame = self.torch.as_tensor(
-                    np.asarray(frame_saliency, dtype=np.float32),
-                    device=self.device,
-                ).unsqueeze(-1)
-            except Exception as dino_exc:
-                raise RuntimeError(
-                    "Both BiRefNet and DINO foreground extraction failed"
-                ) from dino_exc
+    if fg is None:  # DINO: scalar mỗi frame -> broadcast ra mọi patch
+        fg = self.torch.as_tensor(
+            np.asarray(frame_saliency, dtype=np.float32), device=self.device
+        ).unsqueeze(-1).expand(n_frames, P_expected)
 
-        inputs, prompt_length = self._build_inputs(video_frames, prompt)
-        if inputs.get("pixel_values_videos") is None:
-            raise RuntimeError("LLaVA-OV inputs are missing pixel_values_videos for positive_feature")
+    if tuple(fg.shape) != (n_frames, P_expected):
+        raise RuntimeError(f"fg {tuple(fg.shape)} != {(n_frames, P_expected)}")
 
-        holder = {"applied": False, "diagnostics": {}}
+    holder = {"applied": False, "call_count": 0, "diagnostics": {}}
 
-        base_logits = None
+    # ── hook ──
+    def projector_hook(module, module_inputs, module_output):
+        if not hasattr(module_output, "shape") or module_output.ndim < 2:
+            holder["diagnostics"]["positive_feature_hook_skip_reason"] = "no tensor output"
+            return module_output
+
+        orig_shape, orig_dtype = module_output.shape, module_output.dtype
+        f = module_output.reshape(-1, orig_shape[-1]).float()
+        n_vis, D = f.shape
+
+        if n_vis % n_frames != 0:
+            holder["diagnostics"]["positive_feature_hook_skip_reason"] = (
+                f"n_vis={n_vis} không chia hết n_frames={n_frames}"
+            )
+            return module_output
+
+        P = n_vis // n_frames
+        hook_fg = fg.float()
+        if P != P_expected:
+            # Chỉ chấp nhận lưới vuông, resample 2D (không nội suy 1D)
+            s = int(round(P ** 0.5))
+            if s * s != P:
+                raise RuntimeError(f"P={P} không phải lưới vuông")
+            hook_fg = self.torch.nn.functional.adaptive_max_pool2d(
+                hook_fg.view(n_frames, 1, side, side), (s, s)
+            ).flatten(1)
+
+        V = f.view(n_frames, P, D)
+        hook_fg = hook_fg.to(device=f.device, dtype=f.dtype)
+        V_prime, hook_diag = enhance_visual_embeddings(V, hook_fg, pf_config, self.torch)
+
+        holder["applied"] = True
+        holder["call_count"] += 1
+        holder["diagnostics"].update({
+            **hook_diag,
+            "positive_feature_tokens_per_frame": P,
+            "positive_feature_mask_resampled": P != P_expected,
+        })
+        return V_prime.reshape(orig_shape).to(orig_dtype)
+
+    # ── tìm projector (transformers mới: model.model.multi_modal_projector) ──
+    projector = None
+    for owner in (getattr(self.model, "model", None), self.model):
+        if owner is not None and hasattr(owner, "multi_modal_projector"):
+            projector = owner.multi_modal_projector
+            break
+    if projector is None:
+        raise RuntimeError("LLaVA-OneVision multi_modal_projector not found")
+
+    inputs = self._build_inputs(video_frames, prompt)
+    diagnostics.update(dict(getattr(self, "_last_input_audit", {})))
+
+    base_logits = None
+    if logit_diagnostics:
+        with self.torch.inference_mode():
+            base_logits = self.model(**inputs, use_cache=False).logits[0, -1].detach().float()
+
+    handle = projector.register_forward_hook(projector_hook)
+    try:
         if logit_diagnostics:
             with self.torch.inference_mode():
-                base_logits = self.model(
-                    **inputs, use_cache=False
-                ).logits[0, -1].detach().float()
+                enhanced_logits = self.model(**inputs, use_cache=False).logits[0, -1].detach().float()
+            diagnostics.update(summarize_logit_change(
+                base_logits, enhanced_logits, self.torch, logit_top_k
+            ))
+            del base_logits, enhanced_logits
 
-        def projector_hook(module, module_inputs, module_output):
-            if not hasattr(module_output, "shape"):
-                return module_output
-
-            orig_shape = module_output.shape
-            orig_dtype = module_output.dtype
-            f = module_output.reshape(-1, module_output.shape[-1]).float()
-            n_vis, D = f.shape
-
-            T = n_frames
-            P = n_vis // T
-            if T * P != n_vis:
-                return module_output  # shape mismatch → skip
-
-            V = f.view(T, P, D)
-
-            # Expand fg from [n_frames, 1] to [T, P]
-            nonlocal fg_per_frame
-            if fg_per_frame.shape[1] == 1:
-                fg = fg_per_frame.expand(T, P)
-            elif fg_per_frame.shape[1] != P:
-                fg = self.torch.nn.functional.interpolate(
-                    fg_per_frame.unsqueeze(0).unsqueeze(0),
-                    size=(T, P),
-                    mode="bilinear",
-                    align_corners=False,
-                ).squeeze(0).squeeze(0)
-            else:
-                fg = fg_per_frame
-
-            V_prime, hook_diag = enhance_visual_embeddings(
-                V, fg, pf_config, self.torch
+        calls_before_generate = holder["call_count"]
+        with self.torch.inference_mode():
+            output_ids = self.model.generate(
+                **inputs,
+                max_new_tokens=generation_config.max_new_tokens,
+                do_sample=False, temperature=None, top_p=None, num_beams=1,
+                use_cache=True,
             )
+        generate_calls = holder["call_count"] - calls_before_generate
+    finally:
+        handle.remove()
 
-            holder["applied"] = True
-            holder["diagnostics"] = hook_diag
+    if generate_calls != 1:
+        raise RuntimeError(
+            f"hook fired {generate_calls} lần trong generate (mong đợi 1)"
+        )
 
-            return V_prime.reshape(orig_shape).to(orig_dtype)
+    # HF generate trả về cả prompt -> cắt phần sinh mới
+    prompt_len = inputs["input_ids"].shape[1]
+    answer = self.processor.batch_decode(
+        output_ids[:, prompt_len:], skip_special_tokens=True
+    )[0].strip()
 
-        projector = getattr(getattr(self.model, "model", None), "multi_modal_projector", None)
-        if projector is None:
-            projector = getattr(self.model, "multi_modal_projector", None)
-        if projector is None:
-            raise RuntimeError("LLaVA-OV multi-modal projector not found for positive_feature hook")
-
-        handle = projector.register_forward_hook(projector_hook)
-        try:
-            if logit_diagnostics:
-                with self.torch.inference_mode():
-                    enhanced_logits = self.model(
-                        **inputs, use_cache=False
-                    ).logits[0, -1].detach().float()
-                diagnostics.update(summarize_logit_change(
-                    base_logits, enhanced_logits, self.torch, logit_top_k
-                ))
-                del base_logits, enhanced_logits
-            with self.torch.inference_mode():
-                output_ids = self.model.generate(
-                    **inputs,
-                    max_new_tokens=generation_config.max_new_tokens,
-                    do_sample=False,
-                    temperature=None,
-                    num_beams=1,
-                    use_cache=True,
-                )
-        finally:
-            handle.remove()
-
-        diagnostics["positive_feature_hook_applied"] = holder["applied"]
-        diagnostics.update(holder["diagnostics"])
-        diagnostics.update({
-            "foreground_threshold": pf_config.foreground_threshold,
-            "foreground_morph_kernel": pf_config.foreground_morph_kernel,
-            "foreground_return_soft": pf_config.foreground_return_soft,
-            "foreground_pair_fusion": pf_config.foreground_pair_fusion,
-            "foreground_pool_avg_weight": pf_config.foreground_pool_avg_weight,
-            "positive_feature_saliency_device": pf_config.saliency_device,
-            "positive_feature_birefnet_batch_size": pf_config.birefnet_batch_size,
-        })
-        if not holder["applied"]:
-            raise RuntimeError("LLaVA-OV positive_feature hook did not modify projector output")
-        generated_ids = output_ids[:, prompt_length:]
-        answer = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
-        return answer, diagnostics
+    diagnostics["positive_feature_hook_applied"] = holder["applied"]
+    diagnostics.update(holder["diagnostics"])
+    diagnostics.update({
+        "positive_feature_hook_call_count": holder["call_count"],
+        "positive_feature_mask_shape": list(fg.shape),
+        "grid_side": side,
+        "alpha": pf_config.alpha, "alpha_s": pf_config.alpha_s, "beta": pf_config.beta,
+        "foreground_threshold": pf_config.foreground_threshold,
+        "foreground_morph_kernel": pf_config.foreground_morph_kernel,
+        "positive_feature_saliency_device": pf_config.saliency_device,
+        "positive_feature_birefnet_batch_size": pf_config.birefnet_batch_size,
+    })
+    return answer, diagnostics
 
     def generate_batch(
         self,

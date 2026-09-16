@@ -179,111 +179,391 @@ def ensure_birefnet_loaded(holder: dict, checkpoint: str, device: str, torch_mod
 #             fg[t] = scores[lo:hi].mean(0)
 
 #     return fg.to(target_device)
+# def compute_birefnet_foreground(
+#     video_frames,
+#     T: int,
+#     P: int,
+#     birefnet_model,
+#     birefnet_transform,
+#     torch_module,
+#     target_device,
+#     thr: float = 0.15,
+#     kernel: int = 5,
+#     return_soft: bool = False,
+#     avg_weight: float = 1.0,
+#     pair_fusion: str = "mean",
+#     batch_size: int | None = None,
+# ) -> "torch.Tensor":
+#     """
+#     Compute foreground evidence using BiRefNet and align it
+#     with visual temporal tokens.
+
+#     Parameters
+#     ----------
+#     video_frames:
+#         Numpy array [n_frames, H, W, 3] hoặc list[PIL.Image].
+
+#         Trường hợp quan trọng:
+#             n_frames == T
+#                 -> mỗi temporal slice dùng 1 frame
+
+#             n_frames == 2*T
+#                 -> temporal slice t dùng:
+#                     frame[2*t]
+#                     frame[2*t+1]
+
+#                 foreground được hợp nhất theo ``pair_fusion``.
+
+#     T: Number of temporal positions in vision grid.
+
+#     P: Number of spatial visual tokens per temporal slice:   P = Ht * Wt
+
+#     thr: Threshold dùng khi return_soft=False.
+
+#     kernel:   Morphological closing kernel.  <= 1 hoặc None để disable.
+
+#     return_soft:
+#         True:
+#             return float foreground confidence [0,1]
+
+#         False:
+#             return binary foreground mask.
+
+#     avg_weight:
+#         Hybrid pooling:
+
+#             g =
+#                 avg_weight * avg_pool
+#                 + (1 - avg_weight) * max_pool
+
+#     batch_size:
+#         Maximum number of sampled frames in one BiRefNet forward pass.
+#         ``None`` processes all sampled frames together.
+
+#     Returns
+#     -------
+#     fg:
+#         Tensor [T, P].
+
+#         return_soft=True:
+#             float32
+
+#         return_soft=False:
+#             bool
+#     """
+
+#     import numpy as np
+#     from PIL import Image
+
+#     F = torch_module.nn.functional
+
+#     # ============================================================
+#     # 0. Grid
+#     # ============================================================
+
+#     # Nếu caller có grid thật thì tốt nhất truyền Ht/Wt trực tiếp.
+#     # Với signature hiện tại chỉ có P nên suy ra gần-square grid.
+#     Ht = int(np.sqrt(P))
+#     Wt = P // Ht
+
+#     if Ht * Wt != P:
+#         # fallback an toàn
+#         Ht, Wt = 1, P
+
+#     n_frames = len(video_frames)
+
+#     if pair_fusion not in {"mean", "max"}:
+#         raise ValueError("pair_fusion must be 'mean' or 'max'")
+#     if not 0.0 <= float(avg_weight) <= 1.0:
+#         raise ValueError("avg_weight must be between 0 and 1")
+
+#     if n_frames == 0:
+#         raise ValueError("video_frames is empty")
+
+#     # ============================================================
+#     # 1. Device / dtype của BiRefNet
+#     # ============================================================
+
+#     try:
+#         parameter = next(birefnet_model.parameters())
+#         birefnet_device = parameter.device
+#         birefnet_dtype = parameter.dtype
+#     except StopIteration:
+#         birefnet_device = target_device
+#         birefnet_dtype = torch_module.float32
+
+#     # ============================================================
+#     # 2. Convert frame -> PIL
+#     # ============================================================
+
+#     def to_pil(frame):
+
+#         if isinstance(frame, Image.Image):
+#             return frame.convert("RGB")
+
+#         arr = np.asarray(frame)
+
+#         # tránh lỗi nếu frame float [0,1]
+#         if np.issubdtype(arr.dtype, np.floating):
+#             if arr.max() <= 1.0:
+#                 arr = arr * 255.0
+
+#         arr = np.clip(arr, 0, 255).astype(np.uint8)
+
+#         return Image.fromarray(arr).convert("RGB")
+
+#     # Run sampled frames in batches. The previous per-frame loop paid eight
+#     # separate model-dispatch costs for the default sampler.
+#     effective_batch_size = n_frames if batch_size is None else int(batch_size)
+#     if effective_batch_size <= 0:
+#         raise ValueError("batch_size must be positive")
+
+#     transformed = torch_module.stack([
+#         birefnet_transform(to_pil(video_frames[i]))
+#         for i in range(n_frames)
+#     ])
+#     all_preds = []
+#     for start in range(0, n_frames, effective_batch_size):
+#         inputs = transformed[start:start + effective_batch_size].to(
+#             device=birefnet_device,
+#             dtype=birefnet_dtype,
+#         )
+#         with torch_module.inference_mode():
+#             outputs = birefnet_model(inputs)
+#             pred = outputs[-1] if isinstance(outputs, (list, tuple)) else outputs
+#             pred = pred.sigmoid()
+
+#         if pred.ndim == 4:
+#             pred = pred[:, 0]
+#         elif pred.ndim == 2 and len(inputs) == 1:
+#             pred = pred.unsqueeze(0)
+#         if pred.ndim != 3 or int(pred.shape[0]) != int(len(inputs)):
+#             raise RuntimeError(
+#                 "Unexpected BiRefNet output shape: "
+#                 f"expected batch {len(inputs)}, got {tuple(pred.shape)}"
+#             )
+#         # Keep masks on the accelerator through pooling. Moving every
+#         # 1024x1024 prediction to CPU made the eight-frame path needlessly
+#         # bounce GPU -> CPU -> GPU for every sample.
+#         all_preds.extend(pred.float().detach().unbind(0))
+
+#     # ============================================================
+#     # 5. Align frame -> visual temporal slice
+#     # ============================================================
+
+#     temporal_preds = []
+
+#     for t in range(T):
+
+#         # --------------------------------------------------------
+#         # CASE 1:
+#         #
+#         # 8 sampled frames -> T = 4
+#         #
+#         # temporal token t đại diện frame:
+#         #
+#         #       2t và 2t+1
+#         # --------------------------------------------------------
+
+#         if n_frames == 2 * T:
+#             idx0 = min(  2 * t,  n_frames - 1, )
+
+#             idx1 = min(  2 * t + 1, n_frames - 1, )
+
+#             pred0 = all_preds[idx0]
+#             pred1 = all_preds[idx1]
+
+#             if pair_fusion == "max":
+#                 pred = torch_module.maximum(pred0, pred1)
+#             else:
+#                 pred = (pred0 + pred1) * 0.5
+
+#         # --------------------------------------------------------
+#         # CASE 2:
+#         # n_frames == T
+#         # --------------------------------------------------------
+
+#         elif n_frames == T:
+
+#             pred = all_preds[t]
+
+#         # --------------------------------------------------------
+#         # CASE 3:
+#         # fallback arbitrary number of frames
+#         # --------------------------------------------------------
+
+#         else:
+
+#             idx = round(   t  * (n_frames - 1)    / max(T - 1, 1) )
+
+#             idx = min(     max(idx, 0),  n_frames - 1,  )
+
+#             pred = all_preds[idx]
+
+#         # ========================================================
+#         # 6. Morphological closing
+#         # ========================================================
+
+#         if kernel is not None and kernel > 1:
+
+#             import cv2
+
+#             pred_np = pred.detach().cpu().numpy().astype(  np.float32,copy=False,  )
+
+#             k = np.ones(   (kernel, kernel),dtype=np.uint8, )
+
+#             pred_np = cv2.morphologyEx(    pred_np, cv2.MORPH_CLOSE, k, )
+
+#             pred = torch_module.from_numpy(pred_np).to(
+#                 device=birefnet_device,
+#                 dtype=torch_module.float32,
+#             )
+
+#         # ========================================================
+#         # 7. Pixel foreground -> visual token grid
+#         # ========================================================
+
+#         pred_4d = pred[  None,None, ..., ]
+
+#         # --------------------------------------------------------
+#         # Average pooling
+#         #
+#         # phản ánh tỷ lệ foreground trong patch
+#         # --------------------------------------------------------
+
+#         g_avg = F.adaptive_avg_pool2d(  pred_4d,output_size=(Ht, Wt),)[0, 0]
+
+#         # --------------------------------------------------------
+#         # Max pooling
+#         #
+#         # giúp không bỏ mất object nhỏ
+#         # --------------------------------------------------------
+
+#         g_max = F.adaptive_max_pool2d(
+#             pred_4d,
+#             output_size=(Ht, Wt),
+#         )[0, 0]
+
+#         # --------------------------------------------------------
+#         # Hybrid pooling
+#         # --------------------------------------------------------
+
+#         w_avg = float(avg_weight)
+#         w_max = 1.0 - w_avg
+
+#         g = (
+#             w_avg * g_avg
+#             + w_max * g_max
+#         )
+
+#         g = g.clamp(
+#             0.0,
+#             1.0,
+#         )
+
+#         # ========================================================
+#         # 8. Soft / Binary foreground
+#         # ========================================================
+
+#         if return_soft:
+
+#             foreground = (
+#                 g
+#                 .flatten()
+#                 .float()
+#             )
+
+#         else:
+
+#             foreground = (
+#                 g > thr
+#             ).flatten()
+
+#         temporal_preds.append(
+#             foreground
+#         )
+
+#     # ============================================================
+#     # 9. [T, P]
+#     # ============================================================
+
+#     fg = torch_module.stack(
+#         temporal_preds,
+#         dim=0,
+#     )
+
+#     if fg.shape != (T, P):
+#         raise RuntimeError(
+#             f"Foreground shape mismatch: "
+#             f"expected {(T, P)}, got {tuple(fg.shape)}"
+#         )
+
+#     if return_soft:
+#         return fg.to(
+#             device=target_device,
+#             dtype=torch_module.float32,
+#         )
+
+#     return fg.to(
+#         device=target_device,
+#         dtype=torch_module.bool,
+#     )
+
+import torch  # cần cho decorator bên dưới
+
+
+@torch.inference_mode()
 def compute_birefnet_foreground(
     video_frames,
     T: int,
-    P: int,
+    Ht: int,
+    Wt: int,
     birefnet_model,
     birefnet_transform,
     torch_module,
     target_device,
-    thr: float = 0.5,
-    kernel: int = 0,
-    return_soft: bool = True,
-    avg_weight: float = 1.0,
-    pair_fusion: str = "mean",
+    thr: float = 0.15,
+    kernel: int = 9,
     batch_size: int | None = None,
+    temporal_stride: int = 2,
 ) -> "torch.Tensor":
     """
-    Compute foreground evidence using BiRefNet and align it
-    with visual temporal tokens.
+    Tính foreground mask theo lưới token.
 
-    Parameters
-    ----------
-    video_frames:
-        Numpy array [n_frames, H, W, 3] hoặc list[PIL.Image].
-
-        Trường hợp quan trọng:
-            n_frames == T
-                -> mỗi temporal slice dùng 1 frame
-
-            n_frames == 2*T
-                -> temporal slice t dùng:
-                    frame[2*t]
-                    frame[2*t+1]
-
-                foreground được hợp nhất theo ``pair_fusion``.
-
-    T: Number of temporal positions in vision grid.
-
-    P: Number of spatial visual tokens per temporal slice:   P = Ht * Wt
-
-    thr: Threshold dùng khi return_soft=False.
-
-    kernel:   Morphological closing kernel.  <= 1 hoặc None để disable.
-
-    return_soft:
-        True:
-            return float foreground confidence [0,1]
-
-        False:
-            return binary foreground mask.
-
-    avg_weight:
-        Hybrid pooling:
-
-            g =
-                avg_weight * avg_pool
-                + (1 - avg_weight) * max_pool
-
-    batch_size:
-        Maximum number of sampled frames in one BiRefNet forward pass.
-        ``None`` processes all sampled frames together.
+    - Ht, Wt: lưới token mà LLM thực sự thấy (Qwen2.5-VL: sau spatial merge;
+      LLaVA-Video: 27x27 trước get_2dPool).
+    - temporal_stride: số frame gộp thành 1 temporal token
+      (Qwen2.5-VL: 2 -> lấy frame 2t; LLaVA-Video: 1 -> lấy frame t).
+    - Morphological closing -> adaptive max pooling -> threshold.
 
     Returns
     -------
-    fg:
-        Tensor [T, P].
-
-        return_soft=True:
-            float32
-
-        return_soft=False:
-            bool
+    fg: bool tensor [T, Ht*Wt]
     """
-
+    import cv2
     import numpy as np
     from PIL import Image
 
     F = torch_module.nn.functional
-
-    # ============================================================
-    # 0. Grid
-    # ============================================================
-
-    # Nếu caller có grid thật thì tốt nhất truyền Ht/Wt trực tiếp.
-    # Với signature hiện tại chỉ có P nên suy ra gần-square grid.
-    Ht = int(np.sqrt(P))
-    Wt = P // Ht
-
-    if Ht * Wt != P:
-        # fallback an toàn
-        Ht, Wt = 1, P
-
     n_frames = len(video_frames)
-
-    if pair_fusion not in {"mean", "max"}:
-        raise ValueError("pair_fusion must be 'mean' or 'max'")
-    if not 0.0 <= float(avg_weight) <= 1.0:
-        raise ValueError("avg_weight must be between 0 and 1")
+    P = Ht * Wt
 
     if n_frames == 0:
         raise ValueError("video_frames is empty")
+    if T <= 0:
+        raise ValueError("T must be positive")
+    if Ht <= 0 or Wt <= 0:
+        raise ValueError("Ht and Wt must be positive")
+    if temporal_stride <= 0:
+        raise ValueError("temporal_stride must be positive")
+    if temporal_stride * (T - 1) >= n_frames + temporal_stride - 1:
+        # cho phép pad frame cuối (số frame lẻ ở Qwen), nhưng không cho thiếu cả token
+        raise ValueError(
+            f"T={T} với temporal_stride={temporal_stride} cần khoảng "
+            f"{temporal_stride * T} frame, chỉ nhận {n_frames}"
+        )
 
-    # ============================================================
-    # 1. Device / dtype của BiRefNet
-    # ============================================================
-
+    # 1. Device / dtype theo model
     try:
         parameter = next(birefnet_model.parameters())
         birefnet_device = parameter.device
@@ -292,246 +572,71 @@ def compute_birefnet_foreground(
         birefnet_device = target_device
         birefnet_dtype = torch_module.float32
 
-    # ============================================================
-    # 2. Convert frame -> PIL
-    # ============================================================
-
+    # 2. Frame -> PIL
     def to_pil(frame):
-
         if isinstance(frame, Image.Image):
             return frame.convert("RGB")
-
         arr = np.asarray(frame)
-
-        # tránh lỗi nếu frame float [0,1]
-        if np.issubdtype(arr.dtype, np.floating):
-            if arr.max() <= 1.0:
-                arr = arr * 255.0
-
+        if np.issubdtype(arr.dtype, np.floating) and arr.max() <= 1.0:
+            arr = arr * 255.0
         arr = np.clip(arr, 0, 255).astype(np.uint8)
-
         return Image.fromarray(arr).convert("RGB")
 
-    # Run sampled frames in batches. The previous per-frame loop paid eight
-    # separate model-dispatch costs for the default sampler.
-    effective_batch_size = n_frames if batch_size is None else int(batch_size)
+    frame_indices = [
+        min(temporal_stride * t, n_frames - 1) for t in range(T)
+    ]
+    transformed = torch_module.stack([
+        birefnet_transform(to_pil(video_frames[idx])) for idx in frame_indices
+    ])
+
+    # 3. BiRefNet inference
+    effective_batch_size = T if batch_size is None else int(batch_size)
     if effective_batch_size <= 0:
         raise ValueError("batch_size must be positive")
 
-    transformed = torch_module.stack([
-        birefnet_transform(to_pil(video_frames[i]))
-        for i in range(n_frames)
-    ])
     all_preds = []
-    for start in range(0, n_frames, effective_batch_size):
+    for start in range(0, T, effective_batch_size):
         inputs = transformed[start:start + effective_batch_size].to(
-            device=birefnet_device,
-            dtype=birefnet_dtype,
+            device=birefnet_device, dtype=birefnet_dtype
         )
-        with torch_module.inference_mode():
-            outputs = birefnet_model(inputs)
-            pred = outputs[-1] if isinstance(outputs, (list, tuple)) else outputs
-            pred = pred.sigmoid()
+        outputs = birefnet_model(inputs)
+        pred = outputs[-1] if isinstance(outputs, (list, tuple)) else outputs
+        pred = pred.sigmoid().float()   # float32 cho cv2
 
         if pred.ndim == 4:
             pred = pred[:, 0]
-        elif pred.ndim == 2 and len(inputs) == 1:
+        elif pred.ndim == 2 and inputs.shape[0] == 1:
             pred = pred.unsqueeze(0)
-        if pred.ndim != 3 or int(pred.shape[0]) != int(len(inputs)):
+        if pred.ndim != 3:
             raise RuntimeError(
-                "Unexpected BiRefNet output shape: "
-                f"expected batch {len(inputs)}, got {tuple(pred.shape)}"
+                f"Unexpected BiRefNet output shape: {tuple(pred.shape)}"
             )
-        # Keep masks on the accelerator through pooling. Moving every
-        # 1024x1024 prediction to CPU made the eight-frame path needlessly
-        # bounce GPU -> CPU -> GPU for every sample.
-        all_preds.extend(pred.float().detach().unbind(0))
+        all_preds.extend(pred.detach().unbind(0))
 
-    # ============================================================
-    # 5. Align frame -> visual temporal slice
-    # ============================================================
+    # 4. Morphology + max pooling + threshold
+    use_morph = kernel is not None and kernel > 1
+    if use_morph:
+        morphology_kernel = np.ones((kernel, kernel), dtype=np.uint8)
 
-    temporal_preds = []
+    grids = []
+    for pred in all_preds:
+        if use_morph:
+            pred_np = pred.cpu().numpy().astype(np.float32, copy=False)
+            pred_np = cv2.morphologyEx(pred_np, cv2.MORPH_CLOSE, morphology_kernel)
+            pred = torch_module.from_numpy(pred_np).to(birefnet_device)
 
-    for t in range(T):
-
-        # --------------------------------------------------------
-        # CASE 1:
-        #
-        # 8 sampled frames -> T = 4
-        #
-        # temporal token t đại diện frame:
-        #
-        #       2t và 2t+1
-        # --------------------------------------------------------
-
-        if n_frames == 2 * T:
-            idx0 = min(  2 * t,  n_frames - 1, )
-
-            idx1 = min(  2 * t + 1, n_frames - 1, )
-
-            pred0 = all_preds[idx0]
-            pred1 = all_preds[idx1]
-
-            if pair_fusion == "max":
-                pred = torch_module.maximum(pred0, pred1)
-            else:
-                pred = (pred0 + pred1) * 0.5
-
-        # --------------------------------------------------------
-        # CASE 2:
-        # n_frames == T
-        # --------------------------------------------------------
-
-        elif n_frames == T:
-
-            pred = all_preds[t]
-
-        # --------------------------------------------------------
-        # CASE 3:
-        # fallback arbitrary number of frames
-        # --------------------------------------------------------
-
-        else:
-
-            idx = round(
-                t
-                * (n_frames - 1)
-                / max(T - 1, 1)
-            )
-
-            idx = min(
-                max(idx, 0),
-                n_frames - 1,
-            )
-
-            pred = all_preds[idx]
-
-        # ========================================================
-        # 6. Morphological closing
-        # ========================================================
-
-        if kernel is not None and kernel > 1:
-
-            import cv2
-
-            pred_np = pred.detach().cpu().numpy().astype(
-                np.float32,
-                copy=False,
-            )
-
-            k = np.ones(
-                (kernel, kernel),
-                dtype=np.uint8,
-            )
-
-            pred_np = cv2.morphologyEx(
-                pred_np,
-                cv2.MORPH_CLOSE,
-                k,
-            )
-
-            pred = torch_module.from_numpy(pred_np).to(
-                device=birefnet_device,
-                dtype=torch_module.float32,
-            )
-
-        # ========================================================
-        # 7. Pixel foreground -> visual token grid
-        # ========================================================
-
-        pred_4d = pred[
-            None,
-            None,
-            ...,
-        ]
-
-        # --------------------------------------------------------
-        # Average pooling
-        #
-        # phản ánh tỷ lệ foreground trong patch
-        # --------------------------------------------------------
-
-        g_avg = F.adaptive_avg_pool2d(
-            pred_4d,
-            output_size=(Ht, Wt),
+        grid = F.adaptive_max_pool2d(
+            pred.float()[None, None], output_size=(Ht, Wt)
         )[0, 0]
+        grids.append((grid > thr).flatten())
 
-        # --------------------------------------------------------
-        # Max pooling
-        #
-        # giúp không bỏ mất object nhỏ
-        # --------------------------------------------------------
-
-        g_max = F.adaptive_max_pool2d(
-            pred_4d,
-            output_size=(Ht, Wt),
-        )[0, 0]
-
-        # --------------------------------------------------------
-        # Hybrid pooling
-        # --------------------------------------------------------
-
-        w_avg = float(avg_weight)
-        w_max = 1.0 - w_avg
-
-        g = (
-            w_avg * g_avg
-            + w_max * g_max
-        )
-
-        g = g.clamp(
-            0.0,
-            1.0,
-        )
-
-        # ========================================================
-        # 8. Soft / Binary foreground
-        # ========================================================
-
-        if return_soft:
-
-            foreground = (
-                g
-                .flatten()
-                .float()
-            )
-
-        else:
-
-            foreground = (
-                g > thr
-            ).flatten()
-
-        temporal_preds.append(
-            foreground
-        )
-
-    # ============================================================
-    # 9. [T, P]
-    # ============================================================
-
-    fg = torch_module.stack(
-        temporal_preds,
-        dim=0,
-    )
-
-    if fg.shape != (T, P):
+    # 5. [T, P]
+    fg = torch_module.stack(grids, dim=0)
+    if tuple(fg.shape) != (T, P):
         raise RuntimeError(
-            f"Foreground shape mismatch: "
-            f"expected {(T, P)}, got {tuple(fg.shape)}"
+            f"Foreground shape mismatch: expected {(T, P)}, got {tuple(fg.shape)}"
         )
-
-    if return_soft:
-        return fg.to(
-            device=target_device,
-            dtype=torch_module.float32,
-        )
-
-    return fg.to(
-        device=target_device,
-        dtype=torch_module.bool,
-    )
+    return fg.to(device=target_device, dtype=torch_module.bool)
 
 def enhance_visual_embeddings(
     V: "torch.Tensor",

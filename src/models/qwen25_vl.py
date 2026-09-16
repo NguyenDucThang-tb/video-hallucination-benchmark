@@ -1005,8 +1005,9 @@ class Qwen25VLAdapter(ModelAdapter):
             raise RuntimeError(
                 "Qwen video grid is incompatible with the configured spatial merge size"
             )
-        P = spatial_tokens // (merge_size * merge_size)
-
+        # P = spatial_tokens // (merge_size * merge_size)
+        Hm, Wm = Ht // merge_size, Wt // merge_size
+        P = Hm * Wm
         # ── compute foreground saliency ──
         diagnostics: dict = {
             "positive_feature_mode": "birefnet_vision_hook" if use_birefnet else "dino_vision_hook",
@@ -1025,14 +1026,18 @@ class Qwen25VLAdapter(ModelAdapter):
                     pf_config.birefnet_checkpoint, pf_config.saliency_device
                 )
                 fg = compute_birefnet_foreground(
-                    video_frames, T, P, birefnet_model, birefnet_transform,
-                    self.torch, self.device,
+                    video_frames=video_frames,
+                    T=T,
+                    Ht=Hm,
+                    Wt=Wm,
+                    birefnet_model=birefnet_model,
+                    birefnet_transform=birefnet_transform,
+                    torch_module=self.torch,
+                    target_device=self.device,
                     thr=pf_config.foreground_threshold,
                     kernel=pf_config.foreground_morph_kernel,
-                    return_soft=pf_config.foreground_return_soft,
-                    avg_weight=pf_config.foreground_pool_avg_weight,
-                    pair_fusion=pf_config.foreground_pair_fusion,
                     batch_size=pf_config.birefnet_batch_size,
+                     temporal_stride=2,
                 )
                 diagnostics["birefnet_loaded"] = True
             else:
@@ -1083,16 +1088,10 @@ class Qwen25VLAdapter(ModelAdapter):
                 return out
 
             actual_P = n_vis // T
-            hook_fg = fg
             if actual_P != P:
-                hook_fg = self.torch.nn.functional.interpolate(
-                    fg.float().unsqueeze(1),
-                    size=actual_P,
-                    mode="linear",
-                    align_corners=False,
-                ).squeeze(1)
-
-            V = f.view(T, actual_P, D)
+                raise RuntimeError(f"hook thấy {actual_P} token/temporal, mong đợi {P}")
+            V = f.view(T, P, D)
+            hook_fg = fg.to(device=f.device, dtype=f.dtype)
             V_prime, hook_diag = enhance_visual_embeddings(V, hook_fg, pf_config, self.torch)
 
             holder["applied"] = True

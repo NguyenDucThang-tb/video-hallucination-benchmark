@@ -1,0 +1,89 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=02:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+
+: "${BENCHMARK:?BENCHMARK is required}"
+: "${TASK:?TASK is required}"
+: "${PREFIX:?PREFIX is required}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+PYTHON=./.venv/bin/python
+MODEL_NAME=llava-ov-7b
+
+MODEL_DIR="$(
+  find /scratch/jp09/dd9648/huggingface \
+    -path '*/models--llava-hf--llava-onevision-qwen2-7b-ov-hf/snapshots/*/config.json' \
+    -print -quit |
+  sed 's#/config.json$##'
+)"
+
+test -x "$PYTHON"
+test -f "$MODEL_DIR/config.json"
+
+export MODEL_DIR
+export LLAVA_OV_MODEL_DIR="$MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTHONPATH=.
+export OMP_NUM_THREADS="$PBS_NCPUS"
+
+echo "Node:       $(hostname)"
+echo "Model:      $MODEL_NAME"
+echo "Benchmark:  $BENCHMARK"
+echo "Task:       $TASK"
+echo "Prefix:     $PREFIX"
+echo "Parameters: alpha=0.4 alpha_s=0.0 beta=0.0"
+echo "Resume:     true"
+
+nvidia-smi
+
+cat > "/tmp/${PREFIX}.yaml" <<YAML
+name: ${PREFIX}
+seed: 42
+models:
+  - llava-ov-7b
+methods:
+  - positive_feature
+benchmarks:
+  - name: ${BENCHMARK}
+    tasks:
+      - ${TASK}
+sampling: configs/sampling.yaml
+generation:
+  max_new_tokens: 128
+  do_sample: false
+  temperature: 0.0
+  num_beams: 1
+method_configs:
+  positive_feature:
+    alpha: 0.4
+    alpha_s: 0.0
+    beta: 0.0
+    saliency_device: cuda
+    dino_device: cuda
+    birefnet_batch_size: 8
+    logit_diagnostics: false
+output_dir: results/raw
+manifest_dir: manifests
+resume: true
+YAML
+
+"$PYTHON" scripts/run_benchmark.py \
+  --config "/tmp/${PREFIX}.yaml" \
+  --allow-unvalidated \
+  --debug-errors
+
+echo "TASK COMPLETE: $BENCHMARK/$TASK"

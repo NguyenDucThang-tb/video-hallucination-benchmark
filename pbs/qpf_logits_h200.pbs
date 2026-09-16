@@ -1,0 +1,46 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=02:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+: "${POINT:?POINT must be supplied with qsub -v}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+PYTHON=./.venv/bin/python
+P="$(printf '%03d' "$POINT")"
+PREFIX="qwen_positive_logits_v4_h200_p${P}"
+
+export QWEN25_VL_MODEL_DIR=/scratch/jp09/dd9648/huggingface/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+export MODEL_DIR="$QWEN25_VL_MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTHONPATH=.
+export OMP_NUM_THREADS="$PBS_NCPUS"
+
+echo "Node: $(hostname)"
+echo "Point: $POINT"
+echo "Prefix: $PREFIX"
+nvidia-smi
+
+"$PYTHON" scripts/run_positive_feature_grid.py \
+  --model qwen2.5-vl-7b \
+  --subset-manifest manifests/positive_feature_tuning_seed42.json \
+  --prefix "$PREFIX" \
+  --start-index "$POINT" \
+  --stop-index "$POINT" \
+  --logit-diagnostics \
+  --logit-top-k 10 \
+  --execute \
+  --no-resume
+
+echo "POINT $POINT COMPLETE"

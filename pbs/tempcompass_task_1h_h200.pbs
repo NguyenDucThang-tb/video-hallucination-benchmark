@@ -1,0 +1,109 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=01:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+
+: "${MODEL_FAMILY:?MODEL_FAMILY is required}"
+: "${METHOD:?METHOD is required}"
+: "${TASK:?TASK is required}"
+: "${PREFIX:?PREFIX is required}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+case "$MODEL_FAMILY" in
+  qwen)
+    PYTHON=./.venv/bin/python
+    MODEL_NAME=qwen2.5-vl-7b
+    MODEL_DIR="$(find /scratch/jp09/dd9648/huggingface \
+      -path '*/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/*/config.json' \
+      -print -quit | sed 's#/config.json$##')"
+    ;;
+  llava_ov)
+    PYTHON=./.venv/bin/python
+    MODEL_NAME=llava-ov-7b
+    MODEL_DIR="$(find /scratch/jp09/dd9648/huggingface \
+      -path '*/models--llava-hf--llava-onevision-qwen2-7b-ov-hf/snapshots/*/config.json' \
+      -print -quit | sed 's#/config.json$##')"
+    ;;
+  llava_video)
+    PYTHON=/scratch/jp09/dd9648/.venv-llava-video/bin/python
+    MODEL_NAME=llava-video-7b
+    MODEL_DIR=/scratch/jp09/dd9648/huggingface/LLaVA-Video-7B-Qwen2
+    ;;
+  *)
+    echo "Unknown MODEL_FAMILY: $MODEL_FAMILY"
+    exit 1
+    ;;
+esac
+
+test -f "$MODEL_DIR/config.json"
+
+export MODEL_DIR
+export QWEN25_VL_MODEL_DIR="$MODEL_DIR"
+export LLAVA_OV_MODEL_DIR="$MODEL_DIR"
+export LLAVA_VIDEO_MODEL_DIR="$MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTHONPATH=.
+export OMP_NUM_THREADS=12
+export MODEL_NAME METHOD TASK PREFIX
+
+CONFIG="${PBS_JOBFS:?PBS_JOBFS is required}/${PREFIX}.yaml"
+
+"$PYTHON" - "$CONFIG" <<'PY'
+import os
+import sys
+from pathlib import Path
+import yaml
+
+config = {
+    "name": os.environ["PREFIX"],
+    "seed": 42,
+    "models": [os.environ["MODEL_NAME"]],
+    "methods": [os.environ["METHOD"]],
+    "benchmarks": [{
+        "name": "tempcompass",
+        "tasks": [os.environ["TASK"]],
+        "protocol": "official_prompts_controlled_8_frames",
+    }],
+    "sampling": "configs/sampling.yaml",
+    "generation": {
+        "max_new_tokens": 128,
+        "do_sample": False,
+        "temperature": 0.0,
+        "num_beams": 1,
+    },
+    "output_dir": "results/raw",
+    "manifest_dir": "manifests",
+    "resume": True,
+}
+
+path = Path(sys.argv[1])
+path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+print(path.read_text())
+PY
+
+echo "Node:   $(hostname)"
+echo "Model:  $MODEL_NAME"
+echo "Method: $METHOD"
+echo "Task:   tempcompass/$TASK"
+echo "Prefix: $PREFIX"
+nvidia-smi
+
+"$PYTHON" scripts/run_benchmark.py \
+  --config "$CONFIG" \
+  --allow-unvalidated \
+  --debug-errors
+
+echo "TASK COMPLETE: $MODEL_NAME / $METHOD / tempcompass / $TASK"
