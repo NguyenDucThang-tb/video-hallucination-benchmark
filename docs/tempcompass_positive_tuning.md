@@ -10,6 +10,18 @@ one-third of the resolved instructions for each of:
 
 The subset is created once and reused by every model and grid point.
 
+The selected TempCompass points are also the default Positive Feature
+configuration when a run explicitly uses `benchmark: tempcompass`:
+
+| Model | Point | alpha | alpha_s | beta |
+|---|---:|---:|---:|---:|
+| LLaVA-OV-7B | 014 | 0.2 | 0.1 | 0.0 |
+| Qwen2.5-VL-7B | 012 | 0.0 | 0.0 | 0.6 |
+| LLaVA-Video-7B | 009 | 0.0 | 0.0 | 0.1 |
+
+These benchmark-specific defaults are separate from the legacy model defaults
+used by VidHalluc, VideoHallucer, and EventHallusion.
+
 Create the subset on Gadi:
 
 ```bash

@@ -113,14 +113,26 @@ def resolve_method_config(
     name: str,
     experiment_config: dict | None = None,
     model_name: str | None = None,
+    benchmark: str | None = None,
 ) -> dict:
     config = dict(load_method_configs()[name])
     model_overrides = config.pop("model_overrides", {})
+    benchmark_overrides = config.pop("benchmark_overrides", {})
     if model_name:
         selected = model_overrides.get(model_name, {})
         if not isinstance(selected, dict):
             raise ValueError(f"model_overrides.{model_name} must be a mapping")
         config.update(selected)
+    if benchmark:
+        selected_benchmark = benchmark_overrides.get(benchmark, {})
+        if not isinstance(selected_benchmark, dict):
+            raise ValueError(f"benchmark_overrides.{benchmark} must be a mapping")
+        selected_model = selected_benchmark.get(model_name, {}) if model_name else {}
+        if not isinstance(selected_model, dict):
+            raise ValueError(
+                f"benchmark_overrides.{benchmark}.{model_name} must be a mapping"
+            )
+        config.update(selected_model)
     experiment_config = experiment_config or {}
     overrides = experiment_config.get("method_configs", {}).get(name, {})
     if not isinstance(overrides, dict):
@@ -229,9 +241,17 @@ def instantiate_model(name: str):
     raise RuntimeError(f"Model adapter not implemented yet for {name}")
 
 
-def instantiate_method(name: str, model, experiment_config: dict | None = None):
+def instantiate_method(
+    name: str,
+    model,
+    experiment_config: dict | None = None,
+    benchmark: str | None = None,
+):
     method_config = resolve_method_config(
-        name, experiment_config, getattr(model, "name", None)
+        name,
+        experiment_config,
+        getattr(model, "name", None),
+        benchmark,
     )
     if name == "base":
         return BaseMethod(model, method_config)
@@ -587,7 +607,9 @@ def run_job(
     method=None,
 ) -> dict:
     model = model or instantiate_model(job["model"])
-    method = method or instantiate_method(job["method"], model, config)
+    method = method or instantiate_method(
+        job["method"], model, config, job["benchmark"]
+    )
     loader = instantiate_loader(job["benchmark"])
     task = job.get("task")
     if samples is None:
@@ -782,12 +804,17 @@ def main():
             task_samples = grouped_samples.get(benchmark, {}).get(task, [])
             for job in task_jobs:
                 try:
-                    cache_key = (job["model"], job["method"])
+                    cache_key = (job["model"], job["method"], job["benchmark"])
                     if cache_key not in runtime_cache:
                         cached_model = instantiate_model(job["model"])
                         runtime_cache[cache_key] = (
                             cached_model,
-                            instantiate_method(job["method"], cached_model, config),
+                            instantiate_method(
+                                job["method"],
+                                cached_model,
+                                config,
+                                job["benchmark"],
+                            ),
                         )
                     model, method = runtime_cache[cache_key]
                     results.append(run_job(

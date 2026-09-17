@@ -56,6 +56,28 @@ def test_positive_feature_defaults_follow_selected_model_point(model_name, point
     assert "model_overrides" not in config
 
 
+@pytest.mark.parametrize(
+    ("model_name", "expected"),
+    [
+        ("llava-ov-7b", (0.2, 0.1, 0.0)),
+        ("qwen2.5-vl-7b", (0.0, 0.0, 0.6)),
+        ("llava-video-7b", (0.0, 0.0, 0.1)),
+    ],
+)
+def test_tempcompass_defaults_use_tempcompass_best_point(model_name, expected):
+    config = resolve_method_config(
+        "positive_feature",
+        model_name=model_name,
+        benchmark="tempcompass",
+    )
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == expected
+
+
+def test_legacy_benchmark_defaults_are_not_changed_by_tempcompass_points():
+    config = resolve_method_config("positive_feature", model_name="qwen2.5-vl-7b")
+    assert (config["alpha"], config["alpha_s"], config["beta"]) == (0.4, 0.4, 0.8)
+
+
 def test_experiment_override_wins_over_model_default():
     config = resolve_method_config(
         "positive_feature",

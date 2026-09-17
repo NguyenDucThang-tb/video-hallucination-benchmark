@@ -50,6 +50,26 @@ methods:
         alpha: 0.2
         alpha_s: 0.1
         beta: 0.0
+    # TempCompass-only selections from the fixed one-third tuning subset.
+    # These do not change the defaults used by VidHalluc, VideoHallucer, or
+    # EventHallusion.
+    benchmark_overrides:
+      tempcompass:
+        llava-ov-7b:
+          # TempCompass point 014
+          alpha: 0.2
+          alpha_s: 0.1
+          beta: 0.0
+        qwen2.5-vl-7b:
+          # TempCompass point 012
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.6
+        llava-video-7b:
+          # TempCompass point 009
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.1
     epsilon: 1.0e-6
     foreground_threshold: 0.5
     foreground_morph_kernel: 0
