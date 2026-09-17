@@ -435,6 +435,11 @@ class LlavaVideoAdapter(ModelAdapter):
             P = n_vis // T
             if T * P != n_vis:
                 return module_output  # shape mismatch → skip
+            side = int(round(P ** 0.5))
+            if side * side != P:
+                raise RuntimeError(
+                    f"LLaVA-Video visual token grid is not square: P={P}"
+                )
 
             V = f.view(T, P, D)
 
