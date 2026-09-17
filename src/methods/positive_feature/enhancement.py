@@ -582,7 +582,7 @@ def compute_birefnet_foreground(
         raise ValueError("pair_fusion must be 'mean' or 'max'")
     if not 0.0 <= float(avg_weight) <= 1.0:
         raise ValueError("avg_weight must be between 0 and 1")
-    if temporal_stride * (T - 1) >= n_frames:
+    if not legacy_mode and temporal_stride * (T - 1) >= n_frames:
         # Allow the final sampled token to reuse the final frame.
         raise ValueError(
             f"T={T} với temporal_stride={temporal_stride} cần khoảng "
