@@ -1,0 +1,63 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=64GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=00:30:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+: "${MODEL:?MODEL is required}"
+: "${METHOD:?METHOD is required}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+case "$MODEL" in
+  qwen2.5-vl-7b)
+    PYTHON=./.venv/bin/python
+    MODEL_DIR="$(find /scratch/jp09/dd9648/huggingface -path '*/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/*/config.json' -print -quit | sed 's#/config.json$##')"
+    ;;
+  llava-ov-7b)
+    PYTHON=./.venv/bin/python
+    MODEL_DIR="$(find /scratch/jp09/dd9648/huggingface -path '*/models--llava-hf--llava-onevision-qwen2-7b-ov-hf/snapshots/*/config.json' -print -quit | sed 's#/config.json$##')"
+    ;;
+  llava-video-7b)
+    PYTHON=/scratch/jp09/dd9648/.venv-llava-video/bin/python
+    MODEL_DIR=/scratch/jp09/dd9648/huggingface/LLaVA-Video-7B-Qwen2
+    ;;
+  *) echo "Unknown model: $MODEL" >&2; exit 1 ;;
+esac
+
+test -f "$MODEL_DIR/config.json"
+export MODEL_DIR QWEN25_VL_MODEL_DIR="$MODEL_DIR" LLAVA_OV_MODEL_DIR="$MODEL_DIR" LLAVA_VIDEO_MODEL_DIR="$MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=.
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True OMP_NUM_THREADS=12
+
+SAFE_MODEL="${MODEL//./_}"
+PREFIX="motionbench_smoke_${PBS_JOBID%%.*}_${SAFE_MODEL}_${METHOD}"
+CONFIG="${PBS_JOBFS:?}/${PREFIX}.yaml"
+
+cat > "$CONFIG" <<YAML
+name: ${PREFIX}
+seed: 42
+models: [${MODEL}]
+methods: [${METHOD}]
+benchmarks:
+  - name: motionbench
+    tasks: [dev]
+    protocol: official_mcq_controlled_16_frames
+sampling: configs/sampling.yaml
+generation: {max_new_tokens: 16, do_sample: false, temperature: 0.0, num_beams: 1}
+output_dir: results/raw
+manifest_dir: manifests
+resume: false
+YAML
+
+echo "Node: $(hostname) | Model: $MODEL | Method: $METHOD | Checkpoint: $MODEL_DIR"
+nvidia-smi
+"$PYTHON" scripts/run_benchmark.py --config "$CONFIG" --limit 2 --allow-unvalidated --debug-errors
+echo "MOTIONBENCH SMOKE COMPLETE: $MODEL / $METHOD"

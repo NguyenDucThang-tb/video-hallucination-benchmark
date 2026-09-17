@@ -19,3 +19,4 @@ clone_if_missing() {
 clone_if_missing https://github.com/patrick-tssn/VideoHallucer "$PROJECT_DIR/external/VideoHallucer" 8b785d1680465911cd2ce80c9f652837c0ba2abd
 clone_if_missing https://github.com/Stevetich/EventHallusion "$PROJECT_DIR/external/EventHallusion" aa544c21c7cd93b4685423cb94f77ab441f754bc
 clone_if_missing https://github.com/CyL97/VidHalluc "$PROJECT_DIR/external/VidHalluc" e753864f5c2500c38523f97992355e2352bf8732
+clone_if_missing https://github.com/zai-org/MotionBench "$PROJECT_DIR/external/MotionBench" dcc9b0713c9b92d1c5d4ec7ee0b6dd51f86325a3

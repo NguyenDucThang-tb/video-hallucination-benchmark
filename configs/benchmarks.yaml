@@ -24,6 +24,20 @@ benchmarks:
       yes_no: {num_frames: 8, strategy: uniform}
       caption_matching: {num_frames: 8, strategy: uniform}
       captioning: {num_frames: 8, strategy: uniform}
+  motionbench:
+    tasks: [dev]
+    meta_path: external/MotionBench/data/video_info.meta.jsonl
+    video_root: /scratch/jp09/dd9648/datasets_video_hallu/motionbench
+    comparison_protocol: official_mcq_controlled_16_frames
+    task_sampling:
+      dev: {num_frames: 16, strategy: uniform}
+      test: {num_frames: 16, strategy: uniform}
+      motion_recognition: {num_frames: 16, strategy: uniform}
+      location_related_motion: {num_frames: 16, strategy: uniform}
+      camera_motion: {num_frames: 16, strategy: uniform}
+      motion_related_objects: {num_frames: 16, strategy: uniform}
+      action_order: {num_frames: 16, strategy: uniform}
+      repetition_count: {num_frames: 16, strategy: uniform}
   tvbench: {data_root: null}
   videomme: {data_root: null}
   mvbench: {data_root: null}

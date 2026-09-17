@@ -15,9 +15,12 @@ from src.benchmarks.tempcompass.parsers import (
     parse_multi_choice,
     parse_yes_no as parse_tempcompass_yes_no,
 )
+from src.benchmarks.motionbench.parsers import parse_motionbench_mcq
 
 
 def normalize_prediction(sample: BenchmarkSample, raw_output: str) -> ParseResult:
+    if sample.answer_type == "motionbench_mcq":
+        return parse_motionbench_mcq(raw_output)
     if sample.answer_type == "tempcompass_multi_choice":
         return parse_multi_choice(raw_output, sample.metadata["official_answer"])
     if sample.answer_type == "tempcompass_yes_no":

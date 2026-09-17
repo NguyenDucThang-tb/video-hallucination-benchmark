@@ -16,6 +16,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT))
 
 from src.benchmarks.eventhallusion import EventHallusionLoader, evaluate_binary
+from src.benchmarks.motionbench import MotionBenchLoader, evaluate_motionbench
 from src.benchmarks.tempcompass import TempCompassLoader, evaluate_tempcompass
 from src.benchmarks.videohallucer import VideoHallucerLoader, pair_accuracy
 from src.benchmarks.vidhalluc import VidHallucLoader, evaluate_classification
@@ -286,6 +287,12 @@ def instantiate_loader(name: str, experiment_config: dict | None = None):
             config["meta_path"],
             config.get("tasks"),
         )
+    if name == "motionbench":
+        return MotionBenchLoader(
+            config["meta_path"],
+            config["video_root"],
+            experiment_config.get("tasks") or config.get("tasks"),
+        )
     raise RuntimeError(f"Benchmark loader not implemented yet for {name}")
 
 
@@ -298,6 +305,8 @@ def evaluate_records(benchmark: str, records: list[PredictionRecord]) -> dict:
         return evaluate_binary(records)
     if benchmark == "tempcompass":
         return evaluate_tempcompass(records)
+    if benchmark == "motionbench":
+        return evaluate_motionbench(records)
     raise RuntimeError(f"No evaluator for benchmark {benchmark}")
 
 
