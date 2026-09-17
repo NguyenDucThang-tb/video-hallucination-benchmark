@@ -404,6 +404,9 @@ class LlavaOVAdapter(ModelAdapter):
             saliency_device=str(config.get("saliency_device", config.get("dino_device", "cuda"))),
             foreground_threshold=float(config.get("foreground_threshold", 0.5)),
             foreground_morph_kernel=int(config.get("foreground_morph_kernel", 0)),
+            foreground_return_soft=bool(config.get("foreground_return_soft", True)),
+            foreground_pair_fusion=str(config.get("foreground_pair_fusion", "mean")),
+            foreground_pool_avg_weight=float(config.get("foreground_pool_avg_weight", 1.0)),
             birefnet_batch_size=int(config.get("birefnet_batch_size", 8)),
         )
 
@@ -443,6 +446,9 @@ class LlavaOVAdapter(ModelAdapter):
                     target_device=self.device,
                     thr=pf_config.foreground_threshold,
                     kernel=pf_config.foreground_morph_kernel,
+                    return_soft=pf_config.foreground_return_soft,
+                    avg_weight=pf_config.foreground_pool_avg_weight,
+                    pair_fusion=pf_config.foreground_pair_fusion,
                     batch_size=pf_config.birefnet_batch_size,
                     temporal_stride=1,              # OneVision: 1 frame -> 1 token
                 )

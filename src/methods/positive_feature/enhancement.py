@@ -516,14 +516,19 @@ import torch  # cần cho decorator bên dưới
 def compute_birefnet_foreground(
     video_frames,
     T: int,
-    Ht: int,
-    Wt: int,
-    birefnet_model,
-    birefnet_transform,
-    torch_module,
-    target_device,
-    thr: float = 0.15,
-    kernel: int = 9,
+    Ht: int | None = None,
+    Wt: int | None = None,
+    birefnet_model=None,
+    birefnet_transform=None,
+    torch_module=None,
+    target_device=None,
+    *,
+    P: int | None = None,
+    thr: float = 0.5,
+    kernel: int = 0,
+    return_soft: bool = True,
+    avg_weight: float = 1.0,
+    pair_fusion: str = "mean",
     batch_size: int | None = None,
     temporal_stride: int = 2,
 ) -> "torch.Tensor":
@@ -532,17 +537,34 @@ def compute_birefnet_foreground(
 
     - Ht, Wt: lưới token mà LLM thực sự thấy (Qwen2.5-VL: sau spatial merge;
       LLaVA-Video: 27x27 trước get_2dPool).
+    - P: legacy flattened grid size. When supplied, Ht/Wt are inferred and
+      the historical soft-mask/pair-fusion behavior is preserved.
     - temporal_stride: số frame gộp thành 1 temporal token
       (Qwen2.5-VL: 2 -> lấy frame 2t; LLaVA-Video: 1 -> lấy frame t).
     - Morphological closing -> adaptive max pooling -> threshold.
 
     Returns
     -------
-    fg: bool tensor [T, Ht*Wt]
+    fg: float or bool tensor [T, Ht*Wt]
     """
     import cv2
     import numpy as np
     from PIL import Image
+
+    if torch_module is None:
+        raise ValueError("torch_module is required")
+    legacy_mode = P is not None
+    if P is not None:
+        if Ht is not None or Wt is not None:
+            raise ValueError("pass either P or Ht/Wt, not both")
+        if P <= 0:
+            raise ValueError("P must be positive")
+        Ht = int(np.sqrt(P))
+        Wt = P // Ht
+        if Ht * Wt != P:
+            Ht, Wt = 1, P
+    elif Ht is None or Wt is None:
+        raise ValueError("Ht and Wt are required when P is not provided")
 
     F = torch_module.nn.functional
     n_frames = len(video_frames)
@@ -556,8 +578,12 @@ def compute_birefnet_foreground(
         raise ValueError("Ht and Wt must be positive")
     if temporal_stride <= 0:
         raise ValueError("temporal_stride must be positive")
-    if temporal_stride * (T - 1) >= n_frames + temporal_stride - 1:
-        # cho phép pad frame cuối (số frame lẻ ở Qwen), nhưng không cho thiếu cả token
+    if pair_fusion not in {"mean", "max"}:
+        raise ValueError("pair_fusion must be 'mean' or 'max'")
+    if not 0.0 <= float(avg_weight) <= 1.0:
+        raise ValueError("avg_weight must be between 0 and 1")
+    if temporal_stride * (T - 1) >= n_frames:
+        # Allow the final sampled token to reuse the final frame.
         raise ValueError(
             f"T={T} với temporal_stride={temporal_stride} cần khoảng "
             f"{temporal_stride * T} frame, chỉ nhận {n_frames}"
@@ -582,20 +608,22 @@ def compute_birefnet_foreground(
         arr = np.clip(arr, 0, 255).astype(np.uint8)
         return Image.fromarray(arr).convert("RGB")
 
-    frame_indices = [
-        min(temporal_stride * t, n_frames - 1) for t in range(T)
-    ]
+    if legacy_mode and n_frames == 2 * T:
+        frame_indices = list(range(n_frames))
+    else:
+        frame_indices = [min(temporal_stride * t, n_frames - 1) for t in range(T)]
     transformed = torch_module.stack([
         birefnet_transform(to_pil(video_frames[idx])) for idx in frame_indices
     ])
 
     # 3. BiRefNet inference
-    effective_batch_size = T if batch_size is None else int(batch_size)
+    sample_count = len(frame_indices)
+    effective_batch_size = sample_count if batch_size is None else int(batch_size)
     if effective_batch_size <= 0:
         raise ValueError("batch_size must be positive")
 
     all_preds = []
-    for start in range(0, T, effective_batch_size):
+    for start in range(0, sample_count, effective_batch_size):
         inputs = transformed[start:start + effective_batch_size].to(
             device=birefnet_device, dtype=birefnet_dtype
         )
@@ -613,22 +641,36 @@ def compute_birefnet_foreground(
             )
         all_preds.extend(pred.detach().unbind(0))
 
-    # 4. Morphology + max pooling + threshold
+    # 4. Morphology + spatial pooling + optional threshold.
     use_morph = kernel is not None and kernel > 1
     if use_morph:
         morphology_kernel = np.ones((kernel, kernel), dtype=np.uint8)
 
     grids = []
-    for pred in all_preds:
+    for t in range(T):
+        if legacy_mode and n_frames == 2 * T:
+            pred0 = all_preds[2 * t]
+            pred1 = all_preds[2 * t + 1]
+            pred = (
+                torch_module.maximum(pred0, pred1)
+                if pair_fusion == "max"
+                else (pred0 + pred1) * 0.5
+            )
+        else:
+            pred = all_preds[min(t, len(all_preds) - 1)]
         if use_morph:
             pred_np = pred.cpu().numpy().astype(np.float32, copy=False)
             pred_np = cv2.morphologyEx(pred_np, cv2.MORPH_CLOSE, morphology_kernel)
             pred = torch_module.from_numpy(pred_np).to(birefnet_device)
 
-        grid = F.adaptive_max_pool2d(
-            pred.float()[None, None], output_size=(Ht, Wt)
-        )[0, 0]
-        grids.append((grid > thr).flatten())
+        pred_4d = pred.float()[None, None]
+        avg_grid = F.adaptive_avg_pool2d(pred_4d, output_size=(Ht, Wt))[0, 0]
+        max_grid = F.adaptive_max_pool2d(pred_4d, output_size=(Ht, Wt))[0, 0]
+        grid = (
+            float(avg_weight) * avg_grid
+            + (1.0 - float(avg_weight)) * max_grid
+        ).clamp(0.0, 1.0)
+        grids.append(grid.flatten() if return_soft else (grid > thr).flatten())
 
     # 5. [T, P]
     fg = torch_module.stack(grids, dim=0)
@@ -636,7 +678,8 @@ def compute_birefnet_foreground(
         raise RuntimeError(
             f"Foreground shape mismatch: expected {(T, P)}, got {tuple(fg.shape)}"
         )
-    return fg.to(device=target_device, dtype=torch_module.bool)
+    dtype = torch_module.float32 if return_soft else torch_module.bool
+    return fg.to(device=target_device, dtype=dtype)
 
 def enhance_visual_embeddings(
     V: "torch.Tensor",

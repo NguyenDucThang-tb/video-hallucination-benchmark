@@ -451,6 +451,9 @@ class LlavaVideoAdapter(ModelAdapter):
                             torch_module=self.torch, target_device=f.device,
                             thr=pf_config.foreground_threshold,
                             kernel=pf_config.foreground_morph_kernel,
+                            return_soft=pf_config.foreground_return_soft,
+                            avg_weight=pf_config.foreground_pool_avg_weight,
+                            pair_fusion=pf_config.foreground_pair_fusion,
                             batch_size=pf_config.birefnet_batch_size,
                             temporal_stride=1,
                         )
