@@ -39,6 +39,12 @@ export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=.
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True OMP_NUM_THREADS=12
 export MODEL METHOD TASK PREFIX
 CONFIG="${PBS_JOBFS:?}/${PREFIX}.yaml"
+if [[ "$METHOD" == "season" ]]; then
+  PROTOCOL="motionbench_controlled_8_frames"
+else
+  PROTOCOL="official_mcq_controlled_16_frames"
+fi
+export PROTOCOL
 
 "$PYTHON" - "$CONFIG" <<'PY'
 import os, sys, yaml
@@ -47,7 +53,7 @@ config = {
     "name": os.environ["PREFIX"], "seed": 42,
     "models": [os.environ["MODEL"]], "methods": [os.environ["METHOD"]],
     "benchmarks": [{"name": "motionbench", "tasks": [os.environ["TASK"]],
-                    "protocol": "official_mcq_controlled_16_frames"}],
+                    "protocol": os.environ["PROTOCOL"]}],
     "sampling": "configs/sampling.yaml",
     "generation": {"max_new_tokens": 16, "do_sample": False, "temperature": 0.0, "num_beams": 1},
     "output_dir": "results/raw", "manifest_dir": "manifests", "resume": True,

@@ -5,6 +5,7 @@ from src.benchmarks.motionbench.evaluator import evaluate_motionbench
 from src.benchmarks.motionbench.loader import ANSWER_SUFFIX, MotionBenchLoader
 from src.benchmarks.motionbench.parsers import parse_motionbench_mcq, polish_answer
 from src.data.schema import PredictionRecord
+from scripts.run_benchmark import resolve_sampling_config
 
 
 def _write_fixture(root: Path) -> tuple[Path, Path]:
@@ -57,6 +58,15 @@ def test_loader_category_task_is_dev_only(tmp_path):
     assert len(samples) == 1
     assert samples[0].task == "action_order"
     assert samples[0].metadata["expected_task_records"] == 1
+
+
+def test_motionbench_season_uses_eight_frames_without_changing_other_methods():
+    season = resolve_sampling_config("motionbench", "action_order", "season")
+    base = resolve_sampling_config("motionbench", "action_order", "base")
+    assert season["num_frames"] == 8
+    assert season["strategy"] == "uniform"
+    assert base["num_frames"] == 16
+    assert base["strategy"] == "uniform"
 
 
 def test_parser_ports_upstream_polish_answer():

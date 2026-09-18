@@ -40,6 +40,11 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True OMP_NUM_THREADS=12
 SAFE_MODEL="${MODEL//./_}"
 PREFIX="motionbench_smoke_${PBS_JOBID%%.*}_${SAFE_MODEL}_${METHOD}"
 CONFIG="${PBS_JOBFS:?}/${PREFIX}.yaml"
+if [[ "$METHOD" == "season" ]]; then
+  PROTOCOL="motionbench_controlled_8_frames"
+else
+  PROTOCOL="official_mcq_controlled_16_frames"
+fi
 
 cat > "$CONFIG" <<YAML
 name: ${PREFIX}
@@ -49,7 +54,7 @@ methods: [${METHOD}]
 benchmarks:
   - name: motionbench
     tasks: [dev]
-    protocol: official_mcq_controlled_16_frames
+    protocol: ${PROTOCOL}
 sampling: configs/sampling.yaml
 generation: {max_new_tokens: 16, do_sample: false, temperature: 0.0, num_beams: 1}
 output_dir: results/raw

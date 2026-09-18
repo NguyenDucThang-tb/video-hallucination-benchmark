@@ -149,12 +149,23 @@ def load_benchmark_configs() -> dict:
     return load_yaml(PROJECT / "configs/benchmarks.yaml")["benchmarks"]
 
 
-def resolve_sampling_config(benchmark: str, task: str | None) -> dict:
+def resolve_sampling_config(
+    benchmark: str,
+    task: str | None,
+    method: str | None = None,
+) -> dict:
     sampling = dict(load_yaml(PROJECT / "configs/sampling.yaml"))
     benchmark_config = load_benchmark_configs()[benchmark]
     task_sampling = benchmark_config.get("task_sampling", {})
     if task is not None:
         sampling.update(task_sampling.get(task, {}))
+    if method is not None:
+        method_sampling = benchmark_config.get("method_sampling", {}).get(method, {})
+        if not isinstance(method_sampling, dict):
+            raise ValueError(f"method_sampling.{method} must be a mapping")
+        sampling.update(method_sampling.get("default", {}))
+        if task is not None:
+            sampling.update(method_sampling.get(task, {}))
     return sampling
 
 
@@ -378,6 +389,9 @@ def emit_record(
         metadata={
             **sample.metadata,
             "experiment": job["experiment"],
+            "evaluation_protocol": job.get(
+                "protocol", sample.metadata.get("evaluation_protocol")
+            ),
             "benchmark_protocol": job.get("protocol"),
             "manifest": sample_manifest.to_dict(),
             **method_diagnostics,
@@ -401,6 +415,9 @@ def emit_failure_record(
     failure_metadata = {
         **sample.metadata,
         "experiment": job["experiment"],
+        "evaluation_protocol": job.get(
+            "protocol", sample.metadata.get("evaluation_protocol")
+        ),
         "benchmark_protocol": job.get("protocol"),
         "failure_stage": stage,
         "manifest": manifest,
@@ -632,7 +649,7 @@ def run_job(
     records: list[PredictionRecord] = []
     batch_size = max(1, int(getattr(method, "config", {}).get("batch_size", 1)))
 
-    sampling = resolve_sampling_config(job["benchmark"], task)
+    sampling = resolve_sampling_config(job["benchmark"], task, job["method"])
     if cli_args is not None and plan is not None:
         write_vidhalluc_resolved_config(config, cli_args, plan, runtime={
             "model": job["model"],

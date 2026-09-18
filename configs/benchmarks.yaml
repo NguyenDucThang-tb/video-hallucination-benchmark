@@ -38,6 +38,9 @@ benchmarks:
       motion_related_objects: {num_frames: 16, strategy: uniform}
       action_order: {num_frames: 16, strategy: uniform}
       repetition_count: {num_frames: 16, strategy: uniform}
+    method_sampling:
+      season:
+        default: {num_frames: 8, strategy: uniform}
   tvbench: {data_root: null}
   videomme: {data_root: null}
   mvbench: {data_root: null}
