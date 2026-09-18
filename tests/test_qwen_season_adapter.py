@@ -29,3 +29,17 @@ def test_qwen_season_reduces_decoder_attention_to_native_video_frames():
     assert scores.shape == (8,)
     np.testing.assert_allclose(scores.sum(), 1.0)
     assert np.all(np.isfinite(scores))
+
+
+def test_qwen_pixel_limits_are_opt_in(monkeypatch):
+    adapter = Qwen25VLAdapter.__new__(Qwen25VLAdapter)
+
+    assert adapter._processor_pixel_kwargs() == {}
+
+    monkeypatch.setenv("QWEN25_VL_MIN_PIXELS", str(256 * 28 * 28))
+    monkeypatch.setenv("QWEN25_VL_MAX_PIXELS", str(384 * 28 * 28))
+
+    assert adapter._processor_pixel_kwargs() == {
+        "min_pixels": 256 * 28 * 28,
+        "max_pixels": 384 * 28 * 28,
+    }

@@ -118,6 +118,22 @@ class Qwen25VLConfig:
 class Qwen25VLAdapter(ModelAdapter):
     name = "qwen2.5-vl-7b"
 
+    def _processor_pixel_kwargs(self) -> dict[str, int]:
+        """Return optional Qwen visual-token limits configured by the launcher."""
+        raw_max = os.environ.get("QWEN25_VL_MAX_PIXELS")
+        if raw_max is None:
+            return {}
+
+        max_pixels = int(raw_max)
+        min_pixels = int(
+            os.environ.get("QWEN25_VL_MIN_PIXELS", str(256 * 28 * 28))
+        )
+        if min_pixels <= 0 or max_pixels < min_pixels:
+            raise ValueError(
+                "Qwen pixel limits must satisfy 0 < min_pixels <= max_pixels"
+            )
+        return {"min_pixels": min_pixels, "max_pixels": max_pixels}
+
     def __init__(self, checkpoint: str, local_path: str | None = None):
         self.checkpoint = checkpoint
         self.local_path = local_path
@@ -127,7 +143,11 @@ class Qwen25VLAdapter(ModelAdapter):
         from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
 
         self.torch = torch
-        self.processor = AutoProcessor.from_pretrained(self.model_path, local_files_only=self._is_local_only())
+        self.processor = AutoProcessor.from_pretrained(
+            self.model_path,
+            local_files_only=self._is_local_only(),
+            **self._processor_pixel_kwargs(),
+        )
         self._configure_padding()
         self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             self.model_path,

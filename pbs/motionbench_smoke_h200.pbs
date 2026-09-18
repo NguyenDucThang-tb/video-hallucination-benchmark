@@ -36,6 +36,11 @@ export MODEL_DIR QWEN25_VL_MODEL_DIR="$MODEL_DIR" LLAVA_OV_MODEL_DIR="$MODEL_DIR
 export HF_HOME=/scratch/jp09/dd9648/huggingface HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=.
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True OMP_NUM_THREADS=12
+unset QWEN25_VL_MIN_PIXELS QWEN25_VL_MAX_PIXELS
+if [[ "$MODEL" == "qwen2.5-vl-7b" && "$METHOD" == "season" ]]; then
+  export QWEN25_VL_MIN_PIXELS=$((256 * 28 * 28))
+  export QWEN25_VL_MAX_PIXELS=$((384 * 28 * 28))
+fi
 
 SAFE_MODEL="${MODEL//./_}"
 PREFIX="motionbench_smoke_${PBS_JOBID%%.*}_${SAFE_MODEL}_${METHOD}"
