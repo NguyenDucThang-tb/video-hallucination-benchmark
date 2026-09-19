@@ -58,6 +58,10 @@ def metric_scores(metrics: dict) -> dict[str, float | None]:
         "tempcompass_multi_choice": None,
         "tempcompass_yes_no": None,
         "tempcompass_caption_matching": None,
+        "motionbench_action_order": None,
+        "motionbench_location_related_motion": None,
+        "motionbench_motion_recognition": None,
+        "motionbench_motion_related_objects": None,
     }
     for key, result in metrics.items():
         if key.endswith("/vidhalluc"):
@@ -78,6 +82,15 @@ def metric_scores(metrics: dict) -> dict[str, float | None]:
             output["tempcompass_caption_matching"] = tasks.get(
                 "caption_matching", {}
             ).get("official_accuracy")
+        elif key.endswith("/motionbench"):
+            tasks = result.get("tasks", {})
+            for task in (
+                "action_order",
+                "location_related_motion",
+                "motion_recognition",
+                "motion_related_objects",
+            ):
+                output[f"motionbench_{task}"] = tasks.get(task, {}).get("accuracy")
     return output
 
 
@@ -214,6 +227,8 @@ def write_grid_csv(rows: list[dict], path: str | Path) -> Path:
         "tsh", "mcq", "tph", "eventhallusion", "mean_score", "record_count",
         "tempcompass_multi_choice", "tempcompass_yes_no",
         "tempcompass_caption_matching",
+        "motionbench_action_order", "motionbench_location_related_motion",
+        "motionbench_motion_recognition", "motionbench_motion_related_objects",
         "expected_records", "failed_records", "return_code", "rank", "is_best", "is_worst", "error",
         "diagnostics_valid",
     ]

@@ -3,7 +3,11 @@ from pathlib import Path
 import pytest
 
 from src.benchmarks.base import BenchmarkSample
-from src.experiments.subsets import build_tuning_subset_manifest, filter_samples_by_manifest
+from src.experiments.subsets import (
+    build_motionbench_tuning_subset_manifest,
+    build_tuning_subset_manifest,
+    filter_samples_by_manifest,
+)
 
 
 def sample(sample_id, benchmark, task, video, **metadata):
@@ -94,3 +98,51 @@ def test_subset_generator_excludes_unresolved_videos():
         mcq_videos=1, tph_videos=2, event_videos=3,
     )
     assert "entire:event-0" not in manifest["selections"]["eventhallusion/*"]["selected_units"]
+
+
+def test_motionbench_subset_is_deterministic_and_uses_one_fifth_per_task():
+    tasks = ("action_order", "motion_recognition")
+    samples = [
+        sample(
+            f"{task}:{index}", "motionbench", task, f"{task}-{index}",
+            question_category=task,
+            expected_task_records=count,
+            expected_category_records=count,
+            expected_split_records=16,
+        )
+        for task, count in (("action_order", 6), ("motion_recognition", 10))
+        for index in range(count)
+    ]
+    kwargs = dict(samples=samples, tasks=tasks, seed=42, fraction=0.2)
+
+    first = build_motionbench_tuning_subset_manifest(**kwargs)
+    second = build_motionbench_tuning_subset_manifest(**kwargs)
+
+    assert first == second
+    assert len(first["selections"]["motionbench/action_order"]["sample_ids"]) == 2
+    assert len(first["selections"]["motionbench/motion_recognition"]["sample_ids"]) == 2
+
+
+def test_motionbench_filter_rewrites_subset_denominators():
+    tasks = ("action_order", "motion_recognition")
+    samples = [
+        sample(
+            f"{task}:{index}", "motionbench", task, f"{task}-{index}",
+            question_category=task,
+            expected_task_records=5,
+            expected_category_records=5,
+            expected_split_records=10,
+        )
+        for task in tasks
+        for index in range(5)
+    ]
+    manifest = build_motionbench_tuning_subset_manifest(
+        samples=samples, tasks=tasks, seed=7, fraction=0.2
+    )
+
+    selected = filter_samples_by_manifest(samples, "motionbench", manifest)
+
+    assert len(selected) == 2
+    assert {item.metadata["expected_task_records"] for item in selected} == {1}
+    assert {item.metadata["expected_category_records"] for item in selected} == {1}
+    assert {item.metadata["expected_split_records"] for item in selected} == {2}

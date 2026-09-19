@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import random
 from dataclasses import replace
+from math import ceil
 from pathlib import Path
 from typing import Callable, Iterable
 
@@ -126,6 +127,52 @@ def build_tuning_subset_manifest(
     }
 
 
+def build_motionbench_tuning_subset_manifest(
+    *,
+    samples: Iterable[BenchmarkSample],
+    tasks: Iterable[str],
+    seed: int,
+    fraction: float = 0.2,
+) -> dict:
+    """Select one stable random instruction subset independently per task."""
+    if not 0 < fraction <= 1:
+        raise ValueError("fraction must be in (0, 1]")
+
+    task_names = list(tasks)
+    source = _resolved(samples)
+    rng = random.Random(seed)
+    selections = {}
+    for task in task_names:
+        candidates = sorted(
+            (sample for sample in source if sample.task == task),
+            key=lambda sample: sample.sample_id,
+        )
+        if not candidates:
+            raise ValueError(f"no resolved MotionBench samples for task {task!r}")
+        count = ceil(len(candidates) * fraction)
+        selected = sorted(
+            rng.sample(candidates, count), key=lambda sample: sample.sample_id
+        )
+        sample_ids = [sample.sample_id for sample in selected]
+        selections[f"motionbench/{task}"] = {
+            "unit": "instruction",
+            "requested_fraction": fraction,
+            "source_records": len(candidates),
+            "requested_records": count,
+            "selected_units": sample_ids,
+            "sample_ids": sample_ids,
+        }
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "seed": seed,
+        "benchmark": "motionbench",
+        "tasks": task_names,
+        "selection_policy": "fixed random instruction subset; ceil(fraction) per task",
+        "selections": selections,
+    }
+
+
 def write_subset_manifest(manifest: dict, path: str | Path) -> Path:
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -172,6 +219,28 @@ def filter_samples_by_manifest(
         pair_count = len({sample.metadata.get("pair_id") for sample in output})
         output = [
             replace(sample, metadata={**sample.metadata, "expected_task_pairs": pair_count})
+            for sample in output
+        ]
+    elif benchmark == "motionbench":
+        task_counts: dict[str, int] = {}
+        category_counts: dict[str, int] = {}
+        for sample in output:
+            task_counts[sample.task] = task_counts.get(sample.task, 0) + 1
+            category = str(sample.metadata.get("question_category", sample.task))
+            category_counts[category] = category_counts.get(category, 0) + 1
+        split_count = len(output)
+        output = [
+            replace(
+                sample,
+                metadata={
+                    **sample.metadata,
+                    "expected_task_records": task_counts[sample.task],
+                    "expected_category_records": category_counts[
+                        str(sample.metadata.get("question_category", sample.task))
+                    ],
+                    "expected_split_records": split_count,
+                },
+            )
             for sample in output
         ]
     return output

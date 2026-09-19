@@ -5,6 +5,7 @@ from src.experiments.positive_grid import (
     GridPoint,
     experiment_name,
     finalize_grid_rows,
+    metric_scores,
     positive_feature_grid,
     validate_run_diagnostics,
 )
@@ -19,6 +20,24 @@ def test_positive_feature_grid_has_all_109_unique_ablation_points():
         "foreground_only", "persistence_only", "temporal_only", "spatial", "full",
     }
     assert len({experiment_name("tune", point) for point in points}) == 109
+
+
+def test_motionbench_grid_metrics_extract_all_tuning_tasks():
+    scores = metric_scores({
+        "model/positive_feature/motionbench": {
+            "tasks": {
+                "action_order": {"accuracy": 0.7},
+                "location_related_motion": {"accuracy": 0.6},
+                "motion_recognition": {"accuracy": 0.8},
+                "motion_related_objects": {"accuracy": 0.5},
+            }
+        }
+    })
+
+    assert scores["motionbench_action_order"] == 0.7
+    assert scores["motionbench_location_related_motion"] == 0.6
+    assert scores["motionbench_motion_recognition"] == 0.8
+    assert scores["motionbench_motion_related_objects"] == 0.5
 
 
 def test_experiment_method_config_overrides_repository_defaults():

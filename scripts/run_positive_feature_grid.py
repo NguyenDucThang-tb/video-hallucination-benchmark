@@ -34,7 +34,10 @@ def parse_args():
     parser.add_argument(
         "--benchmark",
         default="vidhalluc",
-        choices=("vidhalluc", "videohallucer", "eventhallusion", "tempcompass"),
+        choices=(
+            "vidhalluc", "videohallucer", "eventhallusion", "tempcompass",
+            "motionbench",
+        ),
     )
     parser.add_argument("--tasks", nargs="+", default=None)
     parser.add_argument("--prefix", default=None)
@@ -115,11 +118,17 @@ def main():
             "videohallucer": ["tph"],
             "eventhallusion": ["entire", "misleading", "mix"],
             "tempcompass": ["multi-choice", "yes_no", "caption_matching"],
+            "motionbench": [
+                "action_order", "location_related_motion",
+                "motion_recognition", "motion_related_objects",
+            ],
         }
         tasks = args.tasks or default_tasks[args.benchmark]
         benchmark_entry = {"name": args.benchmark, "tasks": tasks}
         if args.benchmark == "tempcompass":
             benchmark_entry["protocol"] = "official_prompts_controlled_8_frames"
+        elif args.benchmark == "motionbench":
+            benchmark_entry["protocol"] = "official_mcq_controlled_16_frames"
         config = {
             "name": name,
             "seed": seed,
@@ -188,7 +197,16 @@ def main():
                         "tempcompass_caption_matching",
                     )
                     if args.benchmark == "tempcompass"
-                    else ("tsh", "mcq", "tph", "eventhallusion")
+                    else (
+                        (
+                            "motionbench_action_order",
+                            "motionbench_location_related_motion",
+                            "motionbench_motion_recognition",
+                            "motionbench_motion_related_objects",
+                        )
+                        if args.benchmark == "motionbench"
+                        else ("tsh", "mcq", "tph", "eventhallusion")
+                    )
                 )
                 values = [scores[key] for key in score_keys]
                 row["mean_score"] = sum(values) / len(values) if all(v is not None for v in values) else None
