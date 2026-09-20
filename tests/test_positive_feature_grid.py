@@ -95,8 +95,8 @@ def test_tempcompass_defaults_use_tempcompass_best_point(model_name, expected):
 @pytest.mark.parametrize(
     ("model_name", "expected"),
     [
-        ("llava-ov-7b", (0.0, 0.8, 0.0)),
-        ("llava-video-7b", (0.8, 0.8, 0.0)),
+        ("llava-ov-7b", (0.0, 0.0, 0.2)),
+        ("llava-video-7b", (0.0, 0.0, 0.2)),
         ("qwen2.5-vl-7b", (0.0, 0.0, 0.2)),
     ],
 )

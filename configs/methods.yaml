@@ -72,15 +72,15 @@ methods:
           beta: 0.1
       motionbench:
         llava-ov-7b:
-          # MotionBench point 008; mean accuracy 57.91% on the 1/5 tuning subset.
+          # Controlled MotionBench comparison: use the Qwen configuration.
           alpha: 0.0
-          alpha_s: 0.8
-          beta: 0.0
+          alpha_s: 0.0
+          beta: 0.2
         llava-video-7b:
-          # MotionBench point 029; mean accuracy 61.34% on the 1/5 tuning subset.
-          alpha: 0.8
-          alpha_s: 0.8
-          beta: 0.0
+          # Controlled MotionBench comparison: use the Qwen configuration.
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.2
         qwen2.5-vl-7b:
           # MotionBench point 010; mean accuracy 62.61% on the 1/5 tuning subset.
           alpha: 0.0

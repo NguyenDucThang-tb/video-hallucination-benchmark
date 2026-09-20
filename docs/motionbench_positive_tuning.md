@@ -40,14 +40,14 @@ PYTHONPATH=. ./.venv/bin/python scripts/create_motionbench_tuning_subset.py
 - One H200 and 30 minutes per model/point job.
 - Resume is enabled and each point has a stable experiment prefix.
 
-The selected full-data MotionBench Positive Feature configurations are now
-available automatically through the `motionbench` benchmark override:
+The MotionBench benchmark override is currently set to the common controlled
+comparison configuration below for all three models:
 
 | Model | Point | alpha | alpha_s | beta | Tuning mean |
 |---|---:|---:|---:|---:|---:|
-| LLaVA-OV-7B | 008 | 0.0 | 0.8 | 0.0 | 57.91% |
-| LLaVA-Video-7B | 029 | 0.8 | 0.8 | 0.0 | 61.34% |
-| Qwen2.5-VL-7B | 010 | 0.0 | 0.0 | 0.2 | 62.61% |
+| LLaVA-OV-7B | controlled | 0.0 | 0.0 | 0.2 | - |
+| LLaVA-Video-7B | controlled | 0.0 | 0.0 | 0.2 | - |
+| Qwen2.5-VL-7B | 010 | 0.0 | 0.0 | 0.2 | 62.61% on tuning subset |
 
 These overrides apply only when `benchmark: motionbench` is resolved. They do
 not replace the model defaults used by the older benchmark suites.
