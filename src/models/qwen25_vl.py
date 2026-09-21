@@ -134,7 +134,13 @@ class Qwen25VLAdapter(ModelAdapter):
             )
         return {"min_pixels": min_pixels, "max_pixels": max_pixels}
 
-    def __init__(self, checkpoint: str, local_path: str | None = None):
+    def __init__(
+        self,
+        checkpoint: str,
+        local_path: str | None = None,
+        model_name: str | None = None,
+    ):
+        self.name = model_name or type(self).name
         self.checkpoint = checkpoint
         self.local_path = local_path
         self.model_path = self._resolve_model_path(local_path, checkpoint)
@@ -155,10 +161,33 @@ class Qwen25VLAdapter(ModelAdapter):
             device_map="auto",
             local_files_only=self._is_local_only(),
         ).eval()
+        self._validate_gpu_only_device_map()
         self.device = next(self.model.parameters()).device
         self._dino_processor = None
         self._dino_model = None
         self._generation_diagnostics: list[dict] = []
+
+    def _validate_gpu_only_device_map(self) -> None:
+        """Fail early if a benchmark run silently offloads weights from GPUs."""
+        if os.environ.get("QWEN25_VL_REQUIRE_GPU_ONLY", "0").lower() not in {
+            "1",
+            "true",
+            "yes",
+        }:
+            return
+
+        device_map = getattr(self.model, "hf_device_map", None) or {}
+        invalid = {
+            str(device)
+            for device in device_map.values()
+            if str(device).lower() in {"cpu", "disk", "meta"}
+        }
+        if invalid:
+            raise RuntimeError(
+                "Qwen2.5-VL was partially offloaded to "
+                f"{sorted(invalid)}. Request more GPUs or lower the visual-token "
+                "budget; CPU/disk offload invalidates benchmark latency."
+            )
 
     def _configure_padding(self) -> None:
         tokenizer = getattr(self.processor, "tokenizer", None)

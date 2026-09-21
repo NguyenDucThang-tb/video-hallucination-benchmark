@@ -242,7 +242,11 @@ def instantiate_model(name: str):
                 f"Model config for {name} looks like a LLaVA checkpoint ({checkpoint}); "
                 "please check configs/models.yaml before running qwen25_vl jobs."
             )
-        return Qwen25VLAdapter(config["checkpoint"], config.get("local_path"))
+        return Qwen25VLAdapter(
+            config["checkpoint"],
+            config.get("local_path"),
+            model_name=name,
+        )
     if config["adapter"] == "llava_video":
         checkpoint = str(config["checkpoint"])
         if "llava-video" not in checkpoint.lower() or "qwen2" not in checkpoint.lower():

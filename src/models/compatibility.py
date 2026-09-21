@@ -15,6 +15,20 @@ COMPATIBILITY = {
         "season": (False, "PARTIAL: Qwen SEASON path has not passed end-to-end validation"),
         "positive_feature": (False, "NOT VALIDATED: Qwen positive-feature hook uses frame-level DINO saliency; run with --allow-unvalidated"),
     },
+    "qwen2.5-vl-32b": {
+        "base": (False, "Adapter path is implemented; H200 smoke validation is required"),
+        "tcd": (False, "Step-logit path is implemented; H200 smoke validation is required"),
+        "dino_heal": (False, "Vision-hook path is implemented; H200 smoke validation is required"),
+        "season": (False, "Transferred final-layer policy requires H200 smoke validation"),
+        "positive_feature": (False, "Transferred 7B parameters require H200 smoke validation"),
+    },
+    "qwen2.5-vl-72b": {
+        "base": (False, "Two-H200 adapter path is implemented; smoke validation is required"),
+        "tcd": (False, "Two-H200 step-logit path is implemented; smoke validation is required"),
+        "dino_heal": (False, "Two-H200 vision-hook path is implemented; smoke validation is required"),
+        "season": (False, "Transferred final-layer policy requires two-H200 smoke validation"),
+        "positive_feature": (False, "Transferred 7B parameters require two-H200 smoke validation"),
+    },
     "llava-video-7b": {
         "base": (False, "LLaVA Video checkpoint adapter not GPU-validated in this workspace"),
         "tcd": (False, "Token-level dual-branch adapter not GPU-validated"),

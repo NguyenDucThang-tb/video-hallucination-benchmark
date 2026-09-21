@@ -1,0 +1,115 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=96GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=02:00:00
+#PBS -l storage=scratch/jp09
+#PBS -l wd
+
+set -euo pipefail
+
+: "${MODEL:?MODEL is required}"
+: "${METHOD:?METHOD is required}"
+: "${BENCHMARK:?BENCHMARK is required}"
+: "${TASK:?TASK is required}"
+: "${PREFIX:?PREFIX is required}"
+
+cd /scratch/jp09/dd9648/video-hallucination-benchmark
+
+case "$MODEL" in
+  qwen2.5-vl-32b) CHECKPOINT_SLUG="Qwen2.5-VL-32B-Instruct" ;;
+  qwen2.5-vl-72b) CHECKPOINT_SLUG="Qwen2.5-VL-72B-Instruct" ;;
+  *) echo "Unsupported large Qwen model: $MODEL" >&2; exit 1 ;;
+esac
+
+PYTHON=./.venv/bin/python
+MODEL_DIR="$(find /scratch/jp09/dd9648/huggingface \
+  -path "*/models--Qwen--${CHECKPOINT_SLUG}/snapshots/*/config.json" \
+  -print -quit | sed 's#/config.json$##')"
+
+if [[ -z "$MODEL_DIR" || ! -f "$MODEL_DIR/config.json" ]]; then
+  echo "Checkpoint not found in the Hugging Face cache: $CHECKPOINT_SLUG" >&2
+  exit 1
+fi
+
+GPU_COUNT="$(nvidia-smi --query-gpu=index --format=csv,noheader | wc -l)"
+REQUIRED_GPUS=1
+[[ "$MODEL" == "qwen2.5-vl-72b" ]] && REQUIRED_GPUS=2
+if (( GPU_COUNT < REQUIRED_GPUS )); then
+  echo "$MODEL requires at least $REQUIRED_GPUS H200 GPUs; found $GPU_COUNT" >&2
+  exit 1
+fi
+
+export MODEL_DIR QWEN25_VL_MODEL_DIR="$MODEL_DIR"
+export HF_HOME=/scratch/jp09/dd9648/huggingface
+export HF_HUB_CACHE=/scratch/jp09/dd9648/huggingface
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=.
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OMP_NUM_THREADS="${PBS_NCPUS:-12}"
+export QWEN25_VL_REQUIRE_GPU_ONLY=1
+# Keep the visual-token budget fixed across both large models.
+export QWEN25_VL_MIN_PIXELS=$((256 * 28 * 28))
+export QWEN25_VL_MAX_PIXELS=$((384 * 28 * 28))
+
+export MODEL METHOD BENCHMARK TASK PREFIX
+CONFIG="${PBS_JOBFS:?}/${PREFIX}.yaml"
+export CONFIG
+
+"$PYTHON" - <<'PY'
+import os
+from pathlib import Path
+
+import yaml
+
+from src.experiments.qwen25_vl_large import BENCHMARK_TASKS
+
+benchmark = os.environ["BENCHMARK"]
+task = os.environ["TASK"]
+method = os.environ["METHOD"]
+if benchmark not in BENCHMARK_TASKS or task not in BENCHMARK_TASKS[benchmark]:
+    raise SystemExit(f"Invalid benchmark/task pair: {benchmark}/{task}")
+
+entry = {"name": benchmark, "tasks": [task]}
+if benchmark == "tempcompass":
+    entry["protocol"] = "official_prompts_controlled_8_frames"
+elif benchmark == "motionbench":
+    entry["protocol"] = (
+        "motionbench_controlled_8_frames"
+        if method == "season"
+        else "official_mcq_controlled_16_frames"
+    )
+
+config = {
+    "name": os.environ["PREFIX"],
+    "seed": 42,
+    "models": [os.environ["MODEL"]],
+    "methods": [method],
+    "benchmarks": [entry],
+    "sampling": "configs/sampling.yaml",
+    "generation": {
+        "max_new_tokens": 16 if benchmark == "motionbench" else 128,
+        "do_sample": False,
+        "temperature": 0.0,
+        "num_beams": 1,
+    },
+    "output_dir": "results/raw",
+    "manifest_dir": "manifests",
+    "resume": not bool(os.environ.get("LIMIT")),
+}
+Path(os.environ["CONFIG"]).write_text(
+    yaml.safe_dump(config, sort_keys=False), encoding="utf-8"
+)
+PY
+
+echo "Node: $(hostname) | GPUs: $GPU_COUNT | Model: $MODEL | Method: $METHOD | Task: $BENCHMARK/$TASK"
+nvidia-smi
+
+ARGS=(scripts/run_benchmark.py --config "$CONFIG" --allow-unvalidated --debug-errors)
+if [[ -n "${LIMIT:-}" ]]; then
+  ARGS+=(--limit "$LIMIT")
+fi
+"$PYTHON" "${ARGS[@]}"
+echo "QWEN LARGE TASK COMPLETE: $MODEL / $METHOD / $BENCHMARK / $TASK"

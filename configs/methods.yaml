@@ -22,6 +22,13 @@ methods:
     homogenization_beta: 0.33
     spatial_noise_std: 0.1
     attention_layers: [20, 21, 22, 23]
+    model_overrides:
+      qwen2.5-vl-32b:
+        # Transfer the final-four-layer policy used by the 7B setup.
+        attention_layers: [60, 61, 62, 63]
+      qwen2.5-vl-72b:
+        # Transfer the final-four-layer policy used by the 7B setup.
+        attention_layers: [76, 77, 78, 79]
     expected_frame_count: 8
     epsilon: 1.0e-8
   positive_feature:
@@ -45,6 +52,16 @@ methods:
         alpha: 0.4
         alpha_s: 0.4
         beta: 0.8
+      qwen2.5-vl-32b:
+        # Untuned transfer from qwen2.5-vl-7b Point 64.
+        alpha: 0.4
+        alpha_s: 0.4
+        beta: 0.8
+      qwen2.5-vl-72b:
+        # Untuned transfer from qwen2.5-vl-7b Point 64.
+        alpha: 0.4
+        alpha_s: 0.4
+        beta: 0.8
       llava-video-7b:
         # Point 14
         alpha: 0.2
@@ -62,6 +79,16 @@ methods:
           beta: 0.0
         qwen2.5-vl-7b:
           # TempCompass point 012
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.6
+        qwen2.5-vl-32b:
+          # Untuned transfer from the TempCompass qwen2.5-vl-7b point.
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.6
+        qwen2.5-vl-72b:
+          # Untuned transfer from the TempCompass qwen2.5-vl-7b point.
           alpha: 0.0
           alpha_s: 0.0
           beta: 0.6
@@ -83,6 +110,16 @@ methods:
           beta: 0.2
         qwen2.5-vl-7b:
           # MotionBench point 010; mean accuracy 62.61% on the 1/5 tuning subset.
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.2
+        qwen2.5-vl-32b:
+          # Untuned transfer from the MotionBench qwen2.5-vl-7b point.
+          alpha: 0.0
+          alpha_s: 0.0
+          beta: 0.2
+        qwen2.5-vl-72b:
+          # Untuned transfer from the MotionBench qwen2.5-vl-7b point.
           alpha: 0.0
           alpha_s: 0.0
           beta: 0.2

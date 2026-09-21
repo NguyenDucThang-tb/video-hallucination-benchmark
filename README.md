@@ -33,6 +33,11 @@ official prompt formats are preserved; see
 [`docs/tempcompass_protocol.md`](docs/tempcompass_protocol.md) for data layout
 and the required second-stage LLM judging for caption generation.
 
+Qwen2.5-VL 32B and 72B use the staged H200 launcher documented in
+[`docs/qwen25_vl_large_benchmark.md`](docs/qwen25_vl_large_benchmark.md).
+The full large-model matrix contains 220 resumable jobs, so run its mandatory
+smoke stage before submitting one model/benchmark group at a time.
+
 If you need to refresh the vendored upstream snapshots, use
 `scripts/clone_repositories.sh` in a temporary checkout and update
 `external/COMMITS.lock` with the exact commits used.
