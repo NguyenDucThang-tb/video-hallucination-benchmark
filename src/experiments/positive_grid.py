@@ -55,6 +55,9 @@ def experiment_name(prefix: str, point: GridPoint) -> str:
 def metric_scores(metrics: dict) -> dict[str, float | None]:
     output = {
         "tsh": None, "mcq": None, "tph": None, "eventhallusion": None,
+        "eventhallusion_entire": None,
+        "eventhallusion_misleading": None,
+        "eventhallusion_mix": None,
         "tempcompass_multi_choice": None,
         "tempcompass_yes_no": None,
         "tempcompass_caption_matching": None,
@@ -71,6 +74,8 @@ def metric_scores(metrics: dict) -> dict[str, float | None]:
             output["tph"] = result.get("tph", {}).get("accuracy")
         elif key.endswith("/eventhallusion"):
             output["eventhallusion"] = result.get("overall", {}).get("accuracy")
+            for task in ("entire", "misleading", "mix"):
+                output[f"eventhallusion_{task}"] = result.get(task, {}).get("accuracy")
         elif key.endswith("/tempcompass"):
             tasks = result.get("tasks", {})
             output["tempcompass_multi_choice"] = tasks.get("multi-choice", {}).get(
@@ -207,7 +212,11 @@ def validate_run_diagnostics(
 
 
 def finalize_grid_rows(rows: list[dict]) -> list[dict]:
-    complete = [row for row in rows if row.get("status") == "complete" and row.get("mean_score") is not None]
+    complete = [
+        row for row in rows
+        if row.get("status") in {"complete", "complete_with_errors"}
+        and row.get("mean_score") is not None
+    ]
     ranked = sorted(complete, key=lambda row: (-row["mean_score"], row["experiment"]))
     rank_by_name = {row["experiment"]: rank for rank, row in enumerate(ranked, 1)}
     worst_name = ranked[-1]["experiment"] if ranked else None
@@ -225,6 +234,7 @@ def write_grid_csv(rows: list[dict], path: str | Path) -> Path:
     columns = [
         "experiment", "ablation", "alpha", "alpha_s", "beta", "status",
         "tsh", "mcq", "tph", "eventhallusion", "mean_score", "record_count",
+        "eventhallusion_entire", "eventhallusion_misleading", "eventhallusion_mix",
         "tempcompass_multi_choice", "tempcompass_yes_no",
         "tempcompass_caption_matching",
         "motionbench_action_order", "motionbench_location_related_motion",

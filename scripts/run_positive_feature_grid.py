@@ -205,7 +205,15 @@ def main():
                             "motionbench_motion_related_objects",
                         )
                         if args.benchmark == "motionbench"
-                        else ("tsh", "mcq", "tph", "eventhallusion")
+                        else (
+                            (
+                                "eventhallusion_entire",
+                                "eventhallusion_misleading",
+                                "eventhallusion_mix",
+                            )
+                            if args.benchmark == "eventhallusion"
+                            else ("tsh", "mcq", "tph", "eventhallusion")
+                        )
                     )
                 )
                 values = [scores[key] for key in score_keys]
@@ -225,13 +233,24 @@ def main():
                     }
                     expected_for_run = 3 + len(event_tasks)
                     row["expected_records"] = expected_for_run
-                row["status"] = (
-                    "complete"
-                    if return_code == 0 and total == expected_for_run and failed == 0
+                run_is_complete = (
+                    return_code == 0
+                    and total == expected_for_run
                     and not diagnostic_errors
                     and (args.smoke_ablations or row["mean_score"] is not None)
-                    else "failed"
                 )
+                if run_is_complete:
+                    # EventHallusion's full mix split currently contains
+                    # unresolved videos. Keep its denominator and task score,
+                    # but expose the data errors instead of discarding the
+                    # point from the tuning table.
+                    row["status"] = (
+                        "complete_with_errors"
+                        if args.benchmark == "eventhallusion" and failed
+                        else "complete"
+                    )
+                else:
+                    row["status"] = "failed"
                 if diagnostic_errors:
                     row["error"] = "; ".join(diagnostic_errors[:10])
             except Exception as exc:

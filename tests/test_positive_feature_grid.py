@@ -40,6 +40,20 @@ def test_motionbench_grid_metrics_extract_all_tuning_tasks():
     assert scores["motionbench_motion_related_objects"] == 0.5
 
 
+def test_eventhallusion_grid_metrics_extract_all_tasks():
+    scores = metric_scores({
+        "model/positive_feature/eventhallusion": {
+            "entire": {"accuracy": 0.7},
+            "misleading": {"accuracy": 0.6},
+            "mix": {"accuracy": 0.5},
+            "overall": {"accuracy": 0.6},
+        }
+    })
+    assert scores["eventhallusion_entire"] == 0.7
+    assert scores["eventhallusion_misleading"] == 0.6
+    assert scores["eventhallusion_mix"] == 0.5
+
+
 def test_experiment_method_config_overrides_repository_defaults():
     config = resolve_method_config("positive_feature", {
         "method_configs": {"positive_feature": {"alpha": 0.2, "alpha_s": 0.1, "beta": 0.6}}
