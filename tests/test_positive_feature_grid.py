@@ -54,6 +54,17 @@ def test_eventhallusion_grid_metrics_extract_all_tasks():
     assert scores["eventhallusion_mix"] == 0.5
 
 
+def test_videohallucer_grid_metrics_extract_tph_and_sdh():
+    scores = metric_scores({
+        "model/positive_feature/videohallucer": {
+            "tph": {"accuracy": 0.7},
+            "sdh": {"accuracy": 0.6},
+        }
+    })
+    assert scores["videohallucer_tph"] == 0.7
+    assert scores["videohallucer_sdh"] == 0.6
+
+
 def test_experiment_method_config_overrides_repository_defaults():
     config = resolve_method_config("positive_feature", {
         "method_configs": {"positive_feature": {"alpha": 0.2, "alpha_s": 0.1, "beta": 0.6}}

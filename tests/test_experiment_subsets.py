@@ -87,6 +87,36 @@ def test_filter_rewrites_videohallucer_subset_denominator():
     assert {item.metadata["expected_task_pairs"] for item in selected} == {2}
 
 
+def test_filter_keeps_videohallucer_denominators_separate_per_task():
+    samples = [
+        sample(
+            f"{task}:{index}:{branch}", "videohallucer", task,
+            f"{task}-{index}-{branch}", pair_id=f"{task}:{index}",
+            branch=branch, expected_task_pairs=99,
+        )
+        for task, count in (("tph", 2), ("sdh", 3))
+        for index in range(count)
+        for branch in ("basic", "hallucination")
+    ]
+    manifest = {
+        "selections": {
+            "videohallucer/tph": {
+                "sample_ids": [item.sample_id for item in samples if item.task == "tph"],
+            },
+            "videohallucer/sdh": {
+                "sample_ids": [item.sample_id for item in samples if item.task == "sdh"],
+            },
+        }
+    }
+
+    selected = filter_samples_by_manifest(samples, "videohallucer", manifest)
+
+    assert {
+        task: {item.metadata["expected_task_pairs"] for item in selected if item.task == task}
+        for task in ("tph", "sdh")
+    } == {"tph": {2}, "sdh": {3}}
+
+
 def test_subset_generator_excludes_unresolved_videos():
     vidhalluc, videohallucer, event = fixture_samples()
     for item in event:

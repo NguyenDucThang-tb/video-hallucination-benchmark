@@ -216,9 +216,17 @@ def filter_samples_by_manifest(
         raise ValueError(f"subset manifest references {len(missing)} missing {benchmark} samples: {preview}")
 
     if benchmark == "videohallucer":
-        pair_count = len({sample.metadata.get("pair_id") for sample in output})
+        pair_counts: dict[str, set[str]] = {}
+        for sample in output:
+            pair_counts.setdefault(sample.task, set()).add(sample.metadata.get("pair_id"))
         output = [
-            replace(sample, metadata={**sample.metadata, "expected_task_pairs": pair_count})
+            replace(
+                sample,
+                metadata={
+                    **sample.metadata,
+                    "expected_task_pairs": len(pair_counts[sample.task]),
+                },
+            )
             for sample in output
         ]
     elif benchmark == "motionbench":

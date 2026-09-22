@@ -55,6 +55,8 @@ def experiment_name(prefix: str, point: GridPoint) -> str:
 def metric_scores(metrics: dict) -> dict[str, float | None]:
     output = {
         "tsh": None, "mcq": None, "tph": None, "eventhallusion": None,
+        "videohallucer_tph": None,
+        "videohallucer_sdh": None,
         "eventhallusion_entire": None,
         "eventhallusion_misleading": None,
         "eventhallusion_mix": None,
@@ -72,6 +74,8 @@ def metric_scores(metrics: dict) -> dict[str, float | None]:
             output["mcq"] = result.get("mcq", {}).get("accuracy")
         elif key.endswith("/videohallucer"):
             output["tph"] = result.get("tph", {}).get("accuracy")
+            output["videohallucer_tph"] = result.get("tph", {}).get("accuracy")
+            output["videohallucer_sdh"] = result.get("sdh", {}).get("accuracy")
         elif key.endswith("/eventhallusion"):
             output["eventhallusion"] = result.get("overall", {}).get("accuracy")
             for task in ("entire", "misleading", "mix"):
@@ -234,6 +238,7 @@ def write_grid_csv(rows: list[dict], path: str | Path) -> Path:
     columns = [
         "experiment", "ablation", "alpha", "alpha_s", "beta", "status",
         "tsh", "mcq", "tph", "eventhallusion", "mean_score", "record_count",
+        "videohallucer_tph", "videohallucer_sdh",
         "eventhallusion_entire", "eventhallusion_misleading", "eventhallusion_mix",
         "tempcompass_multi_choice", "tempcompass_yes_no",
         "tempcompass_caption_matching",

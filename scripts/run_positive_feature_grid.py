@@ -212,7 +212,11 @@ def main():
                                 "eventhallusion_mix",
                             )
                             if args.benchmark == "eventhallusion"
-                            else ("tsh", "mcq", "tph", "eventhallusion")
+                            else (
+                                ("videohallucer_tph", "videohallucer_sdh")
+                                if args.benchmark == "videohallucer"
+                                else ("tsh", "mcq", "tph", "eventhallusion")
+                            )
                         )
                     )
                 )
@@ -246,7 +250,7 @@ def main():
                     # point from the tuning table.
                     row["status"] = (
                         "complete_with_errors"
-                        if args.benchmark == "eventhallusion" and failed
+                        if args.benchmark in {"eventhallusion", "videohallucer"} and failed
                         else "complete"
                     )
                 else:
