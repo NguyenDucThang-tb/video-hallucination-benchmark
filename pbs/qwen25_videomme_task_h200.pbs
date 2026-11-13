@@ -123,5 +123,8 @@ echo "Node=$(hostname) | model=$MODEL | method=$METHOD | duration=$TASK | data=$
 nvidia-smi
 ARGS=(scripts/run_benchmark.py --config "$CONFIG" --allow-unvalidated --debug-errors)
 if [[ -n "${LIMIT:-}" ]]; then ARGS+=(--limit "$LIMIT"); fi
+if [[ -n "${SHARD_COUNT:-}" ]]; then
+  ARGS+=(--shard-index "${SHARD_INDEX:-0}" --shard-count "$SHARD_COUNT")
+fi
 "$PYTHON" "${ARGS[@]}"
 echo "VIDEOMME TASK COMPLETE: $MODEL / $METHOD / $TASK"

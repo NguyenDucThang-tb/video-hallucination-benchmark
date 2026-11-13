@@ -33,6 +33,7 @@ from src.methods.tcd import TCDMethod
 from src.models import GenerationConfig, LlavaOVAdapter, LlavaVideoAdapter, Qwen25VLAdapter
 from src.models.compatibility import check_compatibility
 from src.experiments.subsets import filter_samples_by_manifest, load_subset_manifest
+from src.experiments.sharding import select_shard
 from src.utils.config import load_yaml
 
 
@@ -45,6 +46,8 @@ def parse_args():
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--smoke-test", action="store_true")
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--shard-index", type=int, default=0)
+    parser.add_argument("--shard-count", type=int, default=1)
     parser.add_argument("--debug-errors", action="store_true")
     parser.add_argument(
         "--allow-unvalidated",
@@ -663,6 +666,12 @@ def run_job(
         samples = list(loader.iter_samples())
     elif task is not None:
         samples = [sample for sample in samples if sample.task == task]
+    if cli_args is not None:
+        samples = select_shard(
+            samples,
+            getattr(cli_args, "shard_index", 0),
+            getattr(cli_args, "shard_count", 1),
+        )
     predictions_path, summary_path, manifest_path = output_paths(
         config, job["model"], job["method"], job["benchmark"], task
     )
@@ -683,7 +692,9 @@ def run_job(
     total_samples = len(samples)
     print_progress(
         f"START {job['model']} / {job['method']} / {job['benchmark']} / {task or 'all'} | total={total_samples} "
-        f"| resume_valid={len(resume_keys)} | limit={limit if limit is not None else 'full'}"
+        f"| resume_valid={len(resume_keys)} | limit={limit if limit is not None else 'full'} "
+        f"| shard={getattr(cli_args, 'shard_index', 0) + 1}/"
+        f"{getattr(cli_args, 'shard_count', 1)}"
     )
     seen = 0
     skipped = 0
@@ -788,6 +799,8 @@ def run_job(
 def main():
     global DEBUG_ERRORS
     args = parse_args()
+    if args.shard_count < 1 or not 0 <= args.shard_index < args.shard_count:
+        raise SystemExit("Require --shard-count >= 1 and 0 <= --shard-index < --shard-count")
     DEBUG_ERRORS = args.debug_errors
     config_path = Path(args.config)
     if not config_path.is_absolute():
