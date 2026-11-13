@@ -107,6 +107,13 @@ def cached_mrope_position_ids(attention_mask, rope_deltas):
     return position_ids + deltas
 
 
+def qwen_decode_cache_position(input_ids, is_first_iteration: bool, torch_module):
+    """Build GenerationMixin cache indices for the prompt or next uncached token."""
+    input_length = input_ids.shape[-1]
+    start = 0 if is_first_iteration else input_length - 1
+    return torch_module.arange(start, input_length, device=input_ids.device)
+
+
 @dataclass(frozen=True)
 class Qwen25VLConfig:
     checkpoint: str
@@ -739,6 +746,9 @@ class Qwen25VLAdapter(ModelAdapter):
         inputs = state["model_inputs"]
         is_first_iteration = state["past_key_values"] is None
         position_ids = self._branch_position_ids(state, is_first_iteration)
+        cache_position = qwen_decode_cache_position(
+            inputs["input_ids"], is_first_iteration, self.torch
+        )
         mm_token_type_ids = inputs.get("mm_token_type_ids")
         if mm_token_type_ids is not None:
             mm_token_type_ids = select_decode_input_ids(mm_token_type_ids, state["past_key_values"])
@@ -748,6 +758,7 @@ class Qwen25VLAdapter(ModelAdapter):
             past_key_values=state["past_key_values"],
             attention_mask=inputs.get("attention_mask"),
             position_ids=position_ids,
+            cache_position=cache_position,
             inputs_embeds=inputs.get("inputs_embeds"),
             pixel_values=inputs.get("pixel_values") if is_first_iteration else None,
             pixel_values_videos=inputs.get("pixel_values_videos") if is_first_iteration else None,

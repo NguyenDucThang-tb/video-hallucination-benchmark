@@ -1,6 +1,28 @@
 import numpy as np
 
-from src.models.qwen25_vl import Qwen25VLAdapter
+from src.models.qwen25_vl import Qwen25VLAdapter, qwen_decode_cache_position
+
+
+class FakeInputIds:
+    shape = (1, 5)
+    device = "cuda:0"
+
+
+class FakeTorch:
+    @staticmethod
+    def arange(start, end, device):
+        return list(range(start, end)), device
+
+
+def test_qwen_cache_position_covers_prompt_then_only_next_token():
+    input_ids = FakeInputIds()
+
+    assert qwen_decode_cache_position(input_ids, True, FakeTorch) == (
+        [0, 1, 2, 3, 4], "cuda:0"
+    )
+    assert qwen_decode_cache_position(input_ids, False, FakeTorch) == (
+        [4], "cuda:0"
+    )
 
 
 class FakeAttentionTensor:
