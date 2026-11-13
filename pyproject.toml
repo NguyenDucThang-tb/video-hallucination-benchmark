@@ -13,6 +13,7 @@ dependencies = ["numpy>=1.24", "PyYAML>=6.0"]
 video = ["opencv-python-headless>=4.8"]
 models = ["torch>=2.1", "transformers>=4.49", "accelerate>=0.27", "Pillow>=10"]
 dino = ["torchvision>=0.16"]
+videomme = ["pyarrow>=14"]
 test = ["pytest>=7.4"]
 
 [tool.setuptools.packages.find]

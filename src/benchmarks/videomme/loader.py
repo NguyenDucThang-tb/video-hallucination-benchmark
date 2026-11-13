@@ -25,13 +25,25 @@ def _read_rows(root: Path) -> list[dict]:
     candidates.extend(sorted(root.glob("*.jsonl")))
     candidates.extend(sorted(root.glob("*.csv")))
     candidates.extend(sorted(root.glob("*.json")))
+    candidates.extend(sorted(root.rglob("*.parquet")))
     path = next((item for item in candidates if item.is_file()), None)
     if path is None:
         raise FileNotFoundError(
             f"No Video-MME annotation file found under {root}; expected videomme.json, "
-            "questions.json, data.json, JSONL, or CSV"
+            "questions.json, data.json, JSONL, CSV, or Parquet"
         )
-    if path.suffix == ".jsonl":
+    if path.suffix == ".parquet":
+        try:
+            import pyarrow.parquet as parquet
+        except ImportError as exc:
+            raise RuntimeError(
+                "Video-MME Parquet annotations require PyArrow. Install the project extra "
+                "with `pip install -e '.[videomme]'`."
+            ) from exc
+        columns = parquet.read_table(path).to_pydict()
+        names = list(columns)
+        rows = [dict(zip(names, values)) for values in zip(*(columns[name] for name in names))]
+    elif path.suffix == ".jsonl":
         rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     elif path.suffix == ".csv":
         with path.open(newline="", encoding="utf-8") as handle:

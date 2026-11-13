@@ -16,7 +16,7 @@ set -euo pipefail
 : "${PREFIX:?PREFIX is required}"
 : "${VIDEOMME_DATA_ROOT:?VIDEOMME_DATA_ROOT is required}"
 
-cd /scratch/jp09/"$USER"/video-hallucination-benchmark
+cd "${PBS_O_WORKDIR:?PBS did not provide the submission working directory}"
 PYTHON=./.venv/bin/python
 MODEL=qwen2.5-vl-7b
 MODEL_DIR="$(find /scratch/jp09/"$USER"/huggingface \

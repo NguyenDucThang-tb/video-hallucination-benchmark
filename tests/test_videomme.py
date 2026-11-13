@@ -1,7 +1,9 @@
 import json
+import sys
+import types
 
 from src.benchmarks.videomme.evaluator import evaluate_videomme
-from src.benchmarks.videomme.loader import PROMPT_PREFIX, VideoMMELoader
+from src.benchmarks.videomme.loader import PROMPT_PREFIX, VideoMMELoader, _read_rows
 from src.data.schema import PredictionRecord
 from scripts.run_benchmark import build_plan, instantiate_loader, load_yaml
 
@@ -45,6 +47,28 @@ def test_loader_keeps_missing_video_as_unresolved_path(tmp_path):
     sample = list(VideoMMELoader(tmp_path, ["long"]).iter_samples())[0]
     assert sample.metadata["video_resolved"] is False
     assert sample.video_path.name == "vid-missing.mp4"
+
+
+def test_loader_reads_nested_parquet_annotations_without_pandas(tmp_path, monkeypatch):
+    annotation = tmp_path / "annotations" / "videomme" / "test-00000-of-00001.parquet"
+    annotation.parent.mkdir(parents=True)
+    annotation.touch()
+    row = {
+        "videoID": "vid-short", "question_id": "q-parquet", "duration": "short",
+        "question": "Which event occurs?", "options": ["A. First", "B. Second"],
+        "answer": "B", "domain": "Knowledge", "sub_category": "General",
+        "task_type": "Temporal",
+    }
+
+    fake_parquet = types.SimpleNamespace(
+        read_table=lambda path: types.SimpleNamespace(
+            to_pydict=lambda: {key: [value] for key, value in row.items()}
+        )
+    )
+    monkeypatch.setitem(sys.modules, "pyarrow", types.ModuleType("pyarrow"))
+    monkeypatch.setitem(sys.modules, "pyarrow.parquet", fake_parquet)
+
+    assert _read_rows(tmp_path) == [row]
 
 
 def test_videomme_evaluator_breaks_down_duration_and_domain():
