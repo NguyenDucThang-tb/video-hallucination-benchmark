@@ -4,7 +4,7 @@
 #PBS -l ncpus=12
 #PBS -l ngpus=1
 #PBS -l mem=96GB
-#PBS -l jobfs=20GB
+#PBS -l jobfs=40GB
 #PBS -l walltime=04:00:00
 #PBS -l storage=scratch/jp09+gdata/hn98
 #PBS -l wd
@@ -15,16 +15,44 @@ set -euo pipefail
 : "${TASK:?TASK is required}"
 : "${PREFIX:?PREFIX is required}"
 : "${VIDEOMME_DATA_ROOT:?VIDEOMME_DATA_ROOT is required}"
+: "${ENV_ARCHIVE:?ENV_ARCHIVE is required}"
+: "${HF_HOME:?HF_HOME is required}"
 
 cd "${PBS_O_WORKDIR:?PBS did not provide the submission working directory}"
-PYTHON=./.venv/bin/python
+module load python3/3.11.7 cuda/12.3.2
+ENV_ROOT="$PBS_JOBFS/env"
+mkdir -p "$ENV_ROOT"
+tar -xzf "$ENV_ARCHIVE" -C "$ENV_ROOT"
+unset PYTHONHOME PYTHONPATH
+export PYTHONNOUSERSITE=1
+PYTHON="$ENV_ROOT/bin/python"
+[[ -x "$PYTHON" && -x "$ENV_ROOT/bin/conda-unpack" ]] || {
+  echo "Packed Python environment is incomplete: $ENV_ROOT" >&2; exit 2;
+}
+"$PYTHON" "$ENV_ROOT/bin/conda-unpack"
+export PATH="$ENV_ROOT/bin:$PATH"
+export CONDA_PREFIX="$ENV_ROOT" CONDA_DEFAULT_ENV="$ENV_ROOT"
+export HF_HUB_CACHE="${HF_HUB_CACHE:-$HF_HOME}"
+"$PYTHON" - <<'PY'
+import torch
+import transformers
+import pyarrow
+import yaml
+
+print(
+    "Environment OK:",
+    "torch", torch.__version__,
+    "transformers", transformers.__version__,
+    "pyarrow", pyarrow.__version__,
+)
+PY
 MODEL=qwen2.5-vl-7b
-MODEL_DIR="$(find /scratch/jp09/"$USER"/huggingface \
+MODEL_DIR="$(find "$HF_HUB_CACHE" "$HF_HOME" \
   -path '*/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/*/config.json' \
   -print -quit | sed 's#/config.json$##')"
 DINO_DIR=""
 if [[ "$METHOD" == dino_heal || "$METHOD" == positive_feature ]]; then
-  DINO_DIR="$(find /scratch/jp09/"$USER"/huggingface \
+  DINO_DIR="$(find "$HF_HUB_CACHE" "$HF_HOME" \
     \( -path '*/models--facebook--dinov2-large/snapshots/*/config.json' \
        -o -path '*/dinov2-large/config.json' \) \
     -print -quit | sed 's#/config.json$##')"
@@ -39,14 +67,13 @@ if [[ "$METHOD" == dino_heal || "$METHOD" == positive_feature ]]; then
   }
 fi
 if [[ "$METHOD" == positive_feature ]] &&
-   ! find /scratch/jp09/"$USER"/huggingface -path '*/models--ZhengPeng7--BiRefNet/snapshots/*/config.json' -print -quit | grep -q .; then
+   ! find "$HF_HUB_CACHE" "$HF_HOME" -path '*/models--ZhengPeng7--BiRefNet/snapshots/*/config.json' -print -quit | grep -q .; then
   echo 'BiRefNet checkpoint missing from Hugging Face cache' >&2; exit 2
 fi
 [[ -d "$VIDEOMME_DATA_ROOT" ]] || { echo "Dataset root missing: $VIDEOMME_DATA_ROOT" >&2; exit 2; }
 
 export MODEL_DIR QWEN25_VL_MODEL_DIR="$MODEL_DIR"
-export HF_HOME=/scratch/jp09/"$USER"/huggingface
-export HF_HUB_CACHE="$HF_HOME"
+export HF_HOME HF_HUB_CACHE
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=.
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export OMP_NUM_THREADS="${PBS_NCPUS:-12}"

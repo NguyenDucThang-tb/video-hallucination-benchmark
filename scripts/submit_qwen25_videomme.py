@@ -17,6 +17,8 @@ TASKS = ("short", "medium", "long")
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-root", required=True)
+    parser.add_argument("--env-archive", required=True)
+    parser.add_argument("--hf-home", required=True)
     parser.add_argument("--run-tag", default="qwen25_videomme_8frame_v1")
     parser.add_argument("--project", default="hn98")
     parser.add_argument("--queue", default="gpuhopper")
@@ -45,13 +47,16 @@ def main() -> None:
                 "TASK": task,
                 "PREFIX": prefix,
                 "VIDEOMME_DATA_ROOT": str(data_root),
+                "ENV_ARCHIVE": str(Path(args.env_archive).expanduser()),
+                "HF_HOME": str(Path(args.hf_home).expanduser()),
+                "HF_HUB_CACHE": str(Path(args.hf_home).expanduser()),
             }
             if args.smoke:
                 variables["LIMIT"] = "2"
             command = [
                 "qsub", "-P", args.project, "-q", args.queue,
                 "-l", "ncpus=12", "-l", "ngpus=1", "-l", "mem=96GB",
-                "-l", "jobfs=20GB", "-l", f"walltime={args.walltime}",
+                "-l", "jobfs=40GB", "-l", f"walltime={args.walltime}",
                 "-l", "storage=scratch/jp09+gdata/hn98",
                 "-v", ",".join(f"{key}={value}" for key, value in variables.items()),
                 "-N", f"q25vm_{method}_{task}"[:236],
