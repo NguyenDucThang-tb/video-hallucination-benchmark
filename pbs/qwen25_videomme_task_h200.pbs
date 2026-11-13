@@ -1,0 +1,100 @@
+#!/bin/bash
+#PBS -P hn98
+#PBS -q gpuhopper
+#PBS -l ncpus=12
+#PBS -l ngpus=1
+#PBS -l mem=96GB
+#PBS -l jobfs=20GB
+#PBS -l walltime=04:00:00
+#PBS -l storage=scratch/jp09+gdata/hn98
+#PBS -l wd
+
+set -euo pipefail
+
+: "${METHOD:?METHOD is required}"
+: "${TASK:?TASK is required}"
+: "${PREFIX:?PREFIX is required}"
+: "${VIDEOMME_DATA_ROOT:?VIDEOMME_DATA_ROOT is required}"
+
+cd /scratch/jp09/"$USER"/video-hallucination-benchmark
+PYTHON=./.venv/bin/python
+MODEL=qwen2.5-vl-7b
+MODEL_DIR="$(find /scratch/jp09/"$USER"/huggingface \
+  -path '*/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/*/config.json' \
+  -print -quit | sed 's#/config.json$##')"
+DINO_DIR=""
+if [[ "$METHOD" == dino_heal || "$METHOD" == positive_feature ]]; then
+  DINO_DIR="$(find /scratch/jp09/"$USER"/huggingface \
+    \( -path '*/models--facebook--dinov2-large/snapshots/*/config.json' \
+       -o -path '*/dinov2-large/config.json' \) \
+    -print -quit | sed 's#/config.json$##')"
+fi
+
+[[ -n "$MODEL_DIR" && -f "$MODEL_DIR/config.json" ]] || {
+  echo 'Qwen2.5-VL-7B checkpoint missing from Hugging Face cache' >&2; exit 2;
+}
+if [[ "$METHOD" == dino_heal || "$METHOD" == positive_feature ]]; then
+  [[ -n "$DINO_DIR" && -f "$DINO_DIR/config.json" ]] || {
+    echo 'DINOv2-large checkpoint missing from Hugging Face cache' >&2; exit 2;
+  }
+fi
+if [[ "$METHOD" == positive_feature ]] &&
+   ! find /scratch/jp09/"$USER"/huggingface -path '*/models--ZhengPeng7--BiRefNet/snapshots/*/config.json' -print -quit | grep -q .; then
+  echo 'BiRefNet checkpoint missing from Hugging Face cache' >&2; exit 2
+fi
+[[ -d "$VIDEOMME_DATA_ROOT" ]] || { echo "Dataset root missing: $VIDEOMME_DATA_ROOT" >&2; exit 2; }
+
+export MODEL_DIR QWEN25_VL_MODEL_DIR="$MODEL_DIR"
+export HF_HOME=/scratch/jp09/"$USER"/huggingface
+export HF_HUB_CACHE="$HF_HOME"
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH=.
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OMP_NUM_THREADS="${PBS_NCPUS:-12}"
+export QWEN25_VL_REQUIRE_GPU_ONLY=1
+export DINO_CHECKPOINT="$DINO_DIR"
+
+CONFIG="$PBS_JOBFS/$PREFIX.yaml"
+export CONFIG METHOD TASK PREFIX VIDEOMME_DATA_ROOT DINO_CHECKPOINT
+"$PYTHON" - <<'PY'
+import os
+from pathlib import Path
+import yaml
+
+method = os.environ["METHOD"]
+task = os.environ["TASK"]
+if method not in {"base", "tcd", "dino_heal", "season", "positive_feature"}:
+    raise SystemExit(f"Unsupported method: {method}")
+if task not in {"short", "medium", "long"}:
+    raise SystemExit(f"Unsupported Video-MME duration: {task}")
+
+config = {
+    "name": os.environ["PREFIX"],
+    "seed": 42,
+    "models": ["qwen2.5-vl-7b"],
+    "methods": [method],
+    "benchmarks": [{
+        "name": "videomme", "tasks": [task],
+        "data_root": os.environ["VIDEOMME_DATA_ROOT"],
+    }],
+    "sampling": "configs/sampling.yaml",
+    "generation": {
+        "max_new_tokens": 16, "do_sample": False,
+        "temperature": 0.0, "num_beams": 1,
+    },
+    "method_configs": {
+        "dino_heal": {"dino_checkpoint": os.environ["DINO_CHECKPOINT"]},
+        "positive_feature": {"dino_checkpoint": os.environ["DINO_CHECKPOINT"]},
+    },
+    "output_dir": "results/raw",
+    "manifest_dir": "manifests",
+    "resume": True,
+}
+Path(os.environ["CONFIG"]).write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+PY
+
+echo "Node=$(hostname) | model=$MODEL | method=$METHOD | duration=$TASK | data=$VIDEOMME_DATA_ROOT"
+nvidia-smi
+ARGS=(scripts/run_benchmark.py --config "$CONFIG" --allow-unvalidated --debug-errors)
+if [[ -n "${LIMIT:-}" ]]; then ARGS+=(--limit "$LIMIT"); fi
+"$PYTHON" "${ARGS[@]}"
+echo "VIDEOMME TASK COMPLETE: $MODEL / $METHOD / $TASK"

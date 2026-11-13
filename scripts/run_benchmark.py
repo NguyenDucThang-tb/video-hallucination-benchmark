@@ -20,6 +20,7 @@ from src.benchmarks.motionbench import MotionBenchLoader, evaluate_motionbench
 from src.benchmarks.tempcompass import TempCompassLoader, evaluate_tempcompass
 from src.benchmarks.videohallucer import VideoHallucerLoader, pair_accuracy
 from src.benchmarks.vidhalluc import VidHallucLoader, evaluate_classification
+from src.benchmarks.videomme import VideoMMELoader, evaluate_videomme
 from src.data.jsonl import append_jsonl, read_jsonl, valid_resume_keys
 from src.data.sampler import sample_video
 from src.data.schema import PredictionRecord
@@ -308,6 +309,11 @@ def instantiate_loader(name: str, experiment_config: dict | None = None):
             config["video_root"],
             experiment_config.get("tasks") or config.get("tasks"),
         )
+    if name == "videomme":
+        return VideoMMELoader(
+            experiment_config.get("data_root") or config.get("data_root"),
+            experiment_config.get("tasks") or config.get("tasks"),
+        )
     raise RuntimeError(f"Benchmark loader not implemented yet for {name}")
 
 
@@ -322,6 +328,8 @@ def evaluate_records(benchmark: str, records: list[PredictionRecord]) -> dict:
         return evaluate_tempcompass(records)
     if benchmark == "motionbench":
         return evaluate_motionbench(records)
+    if benchmark == "videomme":
+        return evaluate_videomme(records)
     raise RuntimeError(f"No evaluator for benchmark {benchmark}")
 
 
@@ -640,7 +648,16 @@ def run_job(
     method = method or instantiate_method(
         job["method"], model, config, job["benchmark"]
     )
-    loader = instantiate_loader(job["benchmark"])
+    benchmark_entry = next(
+        (
+            entry for entry in config["benchmarks"]
+            if (entry if isinstance(entry, str) else entry.get("name")) == job["benchmark"]
+        ),
+        None,
+    )
+    loader = instantiate_loader(
+        job["benchmark"], benchmark_entry if isinstance(benchmark_entry, dict) else None
+    )
     task = job.get("task")
     if samples is None:
         samples = list(loader.iter_samples())

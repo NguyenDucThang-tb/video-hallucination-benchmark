@@ -42,5 +42,11 @@ benchmarks:
       season:
         default: {num_frames: 8, strategy: uniform}
   tvbench: {data_root: null}
-  videomme: {data_root: null}
+  videomme:
+    tasks: [short, medium, long]
+    data_root: null
+    task_sampling:
+      short: {num_frames: 8, strategy: uniform}
+      medium: {num_frames: 8, strategy: uniform}
+      long: {num_frames: 8, strategy: uniform}
   mvbench: {data_root: null}

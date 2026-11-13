@@ -1,0 +1,13 @@
+name: qwen25_videomme_8frame_v1
+seed: 42
+models: [qwen2.5-vl-7b]
+methods: [base, tcd, dino_heal, season, positive_feature]
+benchmarks:
+  - name: videomme
+    tasks: [short, medium, long]
+    data_root: null
+sampling: configs/sampling.yaml
+generation: {max_new_tokens: 16, do_sample: false, temperature: 0.0, num_beams: 1}
+output_dir: results/raw
+manifest_dir: manifests
+resume: true
